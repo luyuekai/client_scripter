@@ -468,3 +468,186 @@ function resetCssClass(element_id, css_class) {
     $('#' + element_id).removeClass();
     $('#' + element_id).addClass(css_class);
 }
+
+
+var ScrollPOJO = {
+  listener: null,
+  page: 1,
+  pageMaxSize: 10,
+  hasNewData: true,
+  displayResult: [],
+  keywords: null,
+  reset:function(){
+    ScrollPOJO.hasNewData = true;
+    ScrollPOJO.page = 1;
+    ScrollPOJO.displayResult = [];
+  },
+  search: function() {
+    if (ScrollPOJO.listener) {
+      ScrollPOJO.listener();
+    }
+  },
+  scrollListener: function() {
+    if (ScrollPOJO.hasNewData) {
+      if ($(window).scrollTop() + $(window).height() >= ($(document).height() - 100)) {
+        console.log("retrieve the new data ");
+        ScrollPOJO.page += 1;
+        ScrollPOJO.search();
+      } else {
+        // var a = $(window).scrollTop() + $(window).height();
+        // var b = $(document).height() - 100;
+        // console.log('a is ' + a + ' and b is ' + b);
+      }
+    }
+  }
+}
+
+
+var QueryChainPOJO = QueryChainPOJO || {};
+QueryChainPOJO = {
+    query_prototype:{
+      'id':null,
+      'tag':null,
+      'query':null
+    },
+    query_result_prototype:{
+      'query':'',
+      'status':'',
+      'response':null
+    },
+    queryArray: [],
+    currentQuery: null,
+    queryResults:[],
+
+    query: function() {
+        if (QueryChainPOJO.queryArray.length > 0) {
+            QueryChainPOJO.currentQuery = QueryChainPOJO.queryArray.pop();
+            if (typeof(QueryChainPOJO.currentQuery) == 'undefined' || QueryChainPOJO.currentQuery == null) {} else {
+                $.serverRequest($.getServerRoot() + '/service_generic_query/api/query', QueryChainPOJO.currentQuery.query, "query_chain_success", "query_chain_wrong", "query_chain_exception");
+            }
+        }else{
+          $.publish("query_chain_finished", QueryChainPOJO);
+        }
+    },
+    query_chain_success: function() {
+        if (arguments && arguments[1] && QueryChainPOJO.currentQuery != null) {
+            var result = {
+              'query':QueryChainPOJO.currentQuery,
+              'status':'success',
+              'response':arguments[1]
+            };
+            QueryChainPOJO.queryResults.push(result);
+            QueryChainPOJO.currentQuery = null;
+            QueryChainPOJO.query();
+        }
+    },
+    query_chain_wrong: function() {
+      if (arguments && arguments[1] && QueryChainPOJO.currentQuery != null) {
+          var result = {
+            'query':QueryChainPOJO.currentQuery,
+            'status':'wrong',
+            'response':arguments[1]
+          };
+          QueryChainPOJO.queryResults.push(result);
+          QueryChainPOJO.currentQuery = null;
+          QueryChainPOJO.query();
+      }
+    },
+    query_chain_exception: function() {
+      if (QueryChainPOJO.currentQuery != null) {
+          var result = {
+            'query':QueryChainPOJO.currentQuery,
+            'status':'exception',
+            'response':null
+          };
+          QueryChainPOJO.queryResults.push(result);
+          QueryChainPOJO.currentQuery = null;
+          QueryChainPOJO.query();
+      }
+    },
+
+}
+
+$.subscribe("query_chain_success", QueryChainPOJO.query_chain_success);
+$.subscribe("query_chain_wrong", QueryChainPOJO.query_chain_wrong);
+$.subscribe("query_chain_exception", QueryChainPOJO.query_chain_exception);
+
+
+var QueryChainTestPOJO ={
+
+  query1:{
+    'queryJson': $.toJSON({
+      "className": "Share",
+      "pageMaxSize": 1,
+      "currentPageNumber": 1,
+      "eqMap": {
+        "username": 'matrix',
+        "type": "MATRIX_REPORT_DRAFT",
+        "tag":"SHARE",
+        "deleted": false
+      },
+      "inMap": {},
+    })
+  },
+
+  query2:{
+    'queryJson': $.toJSON({
+      "className": "Share",
+      "pageMaxSize": 1,
+      "currentPageNumber": 1,
+      "eqMap": {
+        "username": 'matrix',
+        "type": "MATRIX_REPORT_DRAFT",
+        "deleted": false
+      },
+      "inMap": {},
+    })
+  },
+
+  query3:{
+    'queryJson': $.toJSON({
+      "className": "Share",
+      "pageMaxSize": 1,
+      "currentPageNumber": 1,
+      "eqMap": {
+        "type": "MATRIX_REPORT_DRAFT",
+        "tag":"SHARE",
+        "deleted": false
+      },
+      "inMap": {},
+    })
+  },
+
+  query4:{
+    'queryJson': $.toJSON({
+      "className": "Share",
+      "pageMaxSize": 1,
+      "currentPageNumber": 1,
+      "likeORMap": {
+        "stringbeta":'TEMPLATE'
+      },
+      "eqMap": {
+        "type": "MATRIX_REPORT_DRAFT",
+        "tag":"SHARE",
+        "deleted": false
+      },
+      "inMap": {},
+    })
+  },
+
+  chain_query_test:function(){
+    QueryChainPOJO.queryArray = [];
+    QueryChainPOJO.queryArray.push({'id':1,'query':QueryChainTestPOJO.query1});
+    QueryChainPOJO.queryArray.push({'id':2,'query':QueryChainTestPOJO.query2});
+    QueryChainPOJO.queryArray.push({'id':3,'query':QueryChainTestPOJO.query3});
+    QueryChainPOJO.queryArray.push({'id':4,'query':QueryChainTestPOJO.query4});
+    $.subscribe("query_chain_finished", QueryChainTestPOJO.query_result_listener);
+    QueryChainPOJO.query();
+  },
+  query_result_listener: function() {
+    var results = QueryChainPOJO.queryResults;
+    $.each(results,function(index,value){
+      console.log(value);
+    })
+  }
+}

@@ -39,22 +39,48 @@
       <div class="seperate_div_class" style="margin-top:118px"></div>
 
       <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <i class="fa fa-diamond">&nbsp;Report Gallery (My Saved Reports)&nbsp;&nbsp;&nbsp;</i>
+        <div class="col-xs-12" style="margin-bottom:0px">
+          <div class="flat-matrix">
+            <div id="response_div">
+              <div class="alert fresh-color " data-bind="css:styleClass,visible:resultVisible">
+                <button type="button" class="close" data-bind="click:function(){resultVisible(false)}" aria-label="Close"><i class="fa fa-close"></i></button>
+                <strong>
+                <span data-bind="text:resultTitle"></span>
+              </strong>
+                <span data-bind="text:resultSubTitle"></span>
+                <div data-bind="text:resultContent"></div>
               </div>
-
-            </div>
-            <div class="card-body flat-matrix">
-              TBD
             </div>
           </div>
         </div>
+      </div>
 
+      <div class="row" id="content_div">
+        <!--ko foreach: viewData-->
+        <div class="col-xs-12" style="margin-bottom:18px;">
+          <a class="card card-banner card-blue-light" data-bind="event:{dblclick:function(){redirect2editor($data)}}">
+            <div class="card-body">
+              <i class="icon fa fa-edit fa-4x"></i>
+              <div class="content">
+                <div class="title">
+                  <span data-bind="if:stringbeta">
+                    <!-- ko foreach: stringbeta.split(',') -->
+                    <span class="label label-info" data-bind="text:$data"></span> &nbsp;
+                    <!-- /ko -->
+                  </span>
+                  <span data-bind="text:(function(){return new Date(parseInt(createtime)).toLocaleString()})()" style="margin-right: 8px;"></span>
+                  <button type="button" data-bind="event:{click:function(){redirect2editor($data)}}" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-pencil "></i>&nbsp;</button>
+                  <button type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Remove report draft', '/assets/self-owned/html/report/modal_content_remove_draft.html',$data);})" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-trash "></i>&nbsp;</button>
+                </div>
+                <div class="value">
 
-
+                  <span data-bind="text:stringalpha" style="font-size:28px"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <!-- /ko -->
       </div>
 
 
@@ -70,7 +96,19 @@
         </div>
       </footer>
 
-
+      <div class="modal fade" id="popupModalPro" tabindex="-1" role="dialog" aria-labelledby="matrixModalLabel">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <i class="fa fa-power-off"></i> &nbsp; <span class="modal-title" id="popupModalLabelPro"></span>
+            </div>
+            <div class="modal-body">
+              <div id="modalContentDIVPro"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script type="text/javascript" src="assets/reference/flat-admin/assets/js/vendor_min.js"></script>
@@ -87,6 +125,7 @@
     <script src="assets/reference/markdown/markdown.min.js"></script>
 
     <!-- Javascript for Matrix Self Owned -->
+    <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
     <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
     <script src="assets/self-owned/js/generic/generic_cache.js"></script>
     <script src="assets/self-owned/js/generic/generic_charting.js"></script>
@@ -100,6 +139,8 @@
     <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
 
 
+    <script src="assets/self-owned/js/module/gallery/logic.js"></script>
+    <script src="assets/self-owned/js/module/gallery/vm.js"></script>
 
 
 
@@ -108,10 +149,25 @@
       $(document).ready(function() {
         $('#sidebar').load($.getRootPath() + '/components/left_side.html');
         $('#navbar').load($.getRootPath() + '/components/header.html');
+
         setTimeout(function() {
-          resetCssClass('li_dashboard', 'active');
+          $('#navbar_title_li').html('My Report Gallery (Saved Reports)');
+          $('#navbar_search_li').css('display', '');
+          SearchPOJO.listener = search_saved_self;
+          ScrollPOJO.listener = retrieveData_saved_self;
         }, 200);
+
+        setTimeout(function() {
+          initialize();
+        }, 500);
       });
+
+      // *******Data Bind JS Code*******
+      var responseViewModel = new ResponseViewModel();
+      ko.applyBindings(responseViewModel, document.getElementById('response_div'));
+
+      var viewModel = new ServerPagingViewModel();
+      ko.applyBindings(viewModel, document.getElementById('content_div'));
     </script>
 
 </body>
