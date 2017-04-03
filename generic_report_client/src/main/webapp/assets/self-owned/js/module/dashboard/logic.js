@@ -98,12 +98,33 @@ var statistic_result_listener = function() {
     }
     if(value.query.tag=='statistic_self_shared'){
       viewModel.self_shared_counts(value.response.totalCounts);
+      var tableModel = new ServerPagingViewModel();
+      tableModel.buildSearchData(value.response);
+      viewModel.self_shared_top10(tableModel);
     }
     if(value.query.tag=='statistic_all_shared'){
       viewModel.total_shared_counts(value.response.totalCounts);
+      var tableModel = new ServerPagingViewModel();
+      tableModel.buildSearchData(value.response);
+      viewModel.all_saved_top10(tableModel);
     }
     if(value.query.tag=='statistic_all_template'){
       viewModel.total_template_counts(value.response.totalCounts);
+      var tableModel = new ServerPagingViewModel();
+      tableModel.buildSearchData(value.response);
+      viewModel.all_template_top10(tableModel);
     }
   })
+}
+
+function redirect2editor(currentData) {
+  if (currentData && currentData[6]) {
+    window.open($.getRootPath() + '/module_report_editor.html?token=' + currentData[6]);
+  }
+}
+
+function redirect2viewer(currentData) {
+  if (currentData && currentData[6]) {
+    window.open($.getRootPath() + '/module_report_viewer.html?token=' + currentData[6]);
+  }
 }

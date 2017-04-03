@@ -85,6 +85,10 @@ SharePOJO = {
 $.subscribe("MATRIX_SHARE_SUCCESS", successListener);
 $.subscribe("MATRIX_SHARE_FAILED", failedListener);
 $.subscribe("MATRIX_SHARE_SERVICE_FAILED", failedServiceListener);
+$.subscribe("get_user_detail_chain_finished", environment_check);
+function environment_check(){
+  SharePOJO.environmentCheck();
+}
 
 function successListener() {
   if (arguments && arguments[1]) {
@@ -92,9 +96,20 @@ function successListener() {
     if (reportViewModel) {
       reportViewModel.deserialize_report(json);
       reportViewModel.hasNewContent(false);
+      userCheck();
     }
   }
 }
+
+function userCheck(){
+  if(UserPOJO.user&& UserPOJO.user.userName && reportViewModel.data && reportViewModel.data.username){
+    if(UserPOJO.user.userName!=reportViewModel.data.username){
+      console.log('user vlidation finished, to forbidden page');
+      SharePOJO.redirect('INVALID');
+    }
+  }
+}
+
 
 function failedListener() {
   console.log("Server Failed!");
@@ -124,7 +139,7 @@ reportViewModel.addCell();
 
 ko.applyBindings(reportViewModel, document.getElementById('main_content_div'));
 
-SharePOJO.environmentCheck();
+
 
 
 

@@ -197,7 +197,6 @@ function redirect2editor(currentData) {
 
 function redirect2viewer(currentData) {
   if (currentData && currentData.token) {
-    // window.open($.getRootPath() + '/module_report_editor.html?token=' + currentData.token);
-    alert('TBD')
+    window.open($.getRootPath() + '/module_report_viewer.html?token=' + currentData.token);
   }
 }
