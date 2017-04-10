@@ -64,7 +64,7 @@
 
   <div class="app app-blue-sky" id="contentDIV">
 
-    <aside class="app-sidebar" id="sidebar"></aside>
+    <aside class="app-sidebar" id="sidebar" style="position:fixed;top:0px;"></aside>
     <div class="app-container" id="main_content_div">
 
       <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="margin-left: 180px;"></nav>
@@ -207,7 +207,7 @@
     <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
     <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
     <script src="assets/self-owned/js/generic/generic_cache.js"></script>
-    <script src="assets/self-owned/js/generic/generic_charting.js"></script>
+    <script src="assets/self-owned/js/generic/generic_charting_v3.js"></script>
     <script src="assets/self-owned/js/generic/generic_csv.js"></script>
     <script src="assets/self-owned/js/generic/generic_cud.js"></script>
     <script src="assets/self-owned/js/generic/generic_modal.js"></script>
@@ -233,6 +233,7 @@
           $('#navbar_title_li').html('Matrix Report Editor');
           $('#navbar_search_li').css('display','none');
           add_shortcut_key_listener();
+          current_mode = 'EDIT';
         }, 200);
       });
     </script>
