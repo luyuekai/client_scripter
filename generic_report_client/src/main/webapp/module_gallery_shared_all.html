@@ -65,7 +65,7 @@
                 <div class="title">
                   <span data-bind="if:stringbeta">
                     <!-- ko foreach: stringbeta.split(',') -->
-                    <span class="label label-info" data-bind="text:$data"></span> &nbsp;
+                      <span class="label label-info" data-bind="text:$data"></span> &nbsp;
                     <!-- /ko -->
                   </span>
                   <span data-bind="text:(function(){return new Date(parseInt(createtime)).toLocaleString()})()" style="margin-right: 8px;"></span>

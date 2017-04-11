@@ -150,6 +150,16 @@
         }
         return result;
       }
+      self.checkTag = function(){
+        var tags = self.availableTags();
+        var result = 0;
+        $.each(tags, function(index, value) {
+          if(value.is_select){
+            result++;
+          }
+        });
+        return result;
+      }
     }
     var businessPOJO = new BusinessPOJO();
     var tags = tag_list;//tag_list is defined in the logic.js
@@ -193,7 +203,9 @@
 
     //validate
     ValidationPOJO.validate("Report Name", genericModalViewModel.businessPOJO().report_name(), errorMessages, ['KEY_NOT_NULL']);
-
+    if(genericModalViewModel.businessPOJO().checkTag()>3){
+      errorMessages.push('The number of tags selected cannot be greater than 3');
+    }
     return errorMessages;
   }
 
