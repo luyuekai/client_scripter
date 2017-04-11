@@ -31,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers("/assets/**","/api/**","/login.html","/401.html","/403.html","/404.html").permitAll()
-                    .antMatchers("/index**").hasAnyRole("MATRIX_USER")
+                    .antMatchers("/index**")
+                    .hasAnyRole("MATRIX_USER","SCRIPTER_FILE","SCRIPTER_PIG","SCRIPTER_HIVE","SCRIPTER_HDFS","SCRIPTER_RDMS","SCRIPTER_CONFIG","SCRIPTER_CLUSTER")
                     .anyRequest().authenticated()
             .and()
                 .exceptionHandling().accessDeniedPage("/403.html")

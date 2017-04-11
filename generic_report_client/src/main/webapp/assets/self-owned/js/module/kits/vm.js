@@ -216,6 +216,22 @@ function ReportViewModel() {
     self.hasNewContent(true);
   }
 
+  self.dropCell = function() {
+    if (!self.active_cell) {
+      return;
+    }
+    var index = self.cells.indexOf(self.active_cell);
+
+    var nearest_cell = self.cells().length == index + 1 ? (index == 0 ? null : self.cells()[index - 1]) : self.cells()[index + 1];
+
+    self.cells.remove(self.active_cell);
+
+    if (nearest_cell) {
+      nearest_cell.listener_focus_in();
+    }
+    self.hasNewContent(true);
+  }
+
   self.copyCell = function() {
     if (!self.active_cell) {
       return;
@@ -522,7 +538,12 @@ function CellViewModel(parent) {
     });
     editor.on('focus', function() {
       self.listener_focus_in();
-    })
+    });
+    editor.on('change', function() {
+      if(!self.parent.hasNewContent()){
+        self.parent.hasNewContent(true);
+      }
+    });
     self.editor_CodeMirror = editor;
   }
 

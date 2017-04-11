@@ -9,6 +9,13 @@ function switchMode(){
     viewMode();
   }
 }
+
+function save_report(){
+  $('#new_modal_clost_button').click();
+    setTimeout(function() {
+      $('#button_save').click();
+    }, 500);
+}
 function viewMode() {
   if(isView){
     return;
@@ -283,6 +290,12 @@ function keyDownSearch(e) {
     // shift+v
     if(reportViewModel){
       reportViewModel.pasteCell();
+    }
+  }
+  if (event.keyCode == 68 && event.shiftKey) {
+    // shift+v
+    if(reportViewModel){
+      reportViewModel.dropCell();
     }
   }
   if (event.keyCode == 65 && event.shiftKey) {

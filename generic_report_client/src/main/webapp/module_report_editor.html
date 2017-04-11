@@ -83,11 +83,12 @@
             <div class="card-header">
               <div class="card-title">
                 <button title="New report(shift+n)" type="button" onclick="ModalUtil.popup_modal('New report', '/assets/self-owned/html/report/modal_content_new.html', null, null, null);" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-edit"></i></button>
-                <button title="Save(shift+s)" type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Save report draft', '/assets/self-owned/html/report/modal_content_save_draft.html',$data);})" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-save"></i></button>
+                <button id="button_save" title="Save(shift+s)" type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Save report draft', '/assets/self-owned/html/report/modal_content_save_draft.html',$data);})" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-save"></i></button>
                 <!-- <button title="Save as template" onclick="ModalUtil.popup_modal('Save report as template', '/assets/self-owned/html/report/modal_content_save_template.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-bookmark-o"></i></button> -->
                 <button title="Cut selected cell(shift+x)" type="button" data-bind="click:cutCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-cut"></i></button>
                 <button title="Copy selected cell(shift+c)" type="button" data-bind="click:copyCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-copy"></i></button>
                 <button title="Paste selected cell(shift+v)" type="button" data-bind="click:pasteCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-paste"></i></button>
+                <button title="Drop selected cell(shift+d)" type="button" data-bind="click:dropCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-trash"></i></button>
                 <button title="Up selected cell(shift+up)" type="button" data-bind="click:upCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-arrow-up"></i></button>
                 <button title="Down selected cell(shift+down)" type="button" data-bind="click:downCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-arrow-down"></i></button>
                 <button title="Insert a markdown cell below selected cell(shift+a)" type="button" data-bind="click:addCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-plus"></i></button>
@@ -227,13 +228,13 @@
 
     <script>
       $(document).ready(function() {
+        current_mode = 'EDIT';
         $('#sidebar').load($.getRootPath() + '/components/left_side.html');
         $('#navbar').load($.getRootPath() + '/components/header.html');
         setTimeout(function() {
           $('#navbar_title_li').html('Matrix Report Editor');
           $('#navbar_search_li').css('display','none');
           add_shortcut_key_listener();
-          current_mode = 'EDIT';
         }, 200);
       });
     </script>

@@ -92,7 +92,7 @@
       <br>
       <div class="pull-right">
         <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
-        <button type="button" onclick="execute()" class="btn btn-sm btn-success">Confirm</button>
+        <button id="confirm_button" type="button" onclick="execute()" class="btn btn-sm btn-success">Confirm</button>
       </div>
 
       <br>
@@ -219,6 +219,7 @@
       setTimeout(function() {
         genericModalViewModel.response(true, "Entity Operation", "[Successed]", "Operation Successed, please close the console and reload the data.");
         LoaderUtil.remove_v3('genericModalDiv');
+        $('#confirm_button').attr("disabled",true);
       }, 2000);
     }
   }
@@ -264,6 +265,7 @@
           setTimeout(function() {
             genericModalViewModel.response(true, "Entity Operation", "[Successed]", "Operation Successed, please close the console and reload the data.");
             LoaderUtil.remove_v3('genericModalDiv');
+            $('#confirm_button').attr("disabled",true);
           }, 2000);
       }
   }

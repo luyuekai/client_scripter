@@ -185,13 +185,13 @@
 
     <script>
       $(document).ready(function() {
+        current_mode = 'VIEW';
         $('#sidebar').load($.getRootPath() + '/components/left_side.html');
         $('#navbar').load($.getRootPath() + '/components/header.html');
         setTimeout(function() {
           $('#navbar_title_li').html('Matrix Report Viewer');
           $('#navbar_search_li').css('display','none');
           add_shortcut_key_listener_view();
-          current_mode = 'VIEW';
         }, 200);
       });
     </script>
