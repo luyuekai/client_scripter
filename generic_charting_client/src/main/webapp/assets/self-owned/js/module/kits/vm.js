@@ -17,9 +17,27 @@ function ChartViewModel(parent) {
   }
 
   self.reset_chart_type = function(){
-    self.chart_check();
+    self.initialize_chart();
     var select_type = $('#chart_type_select')[0].options[$('#chart_type_select')[0].options.selectedIndex].value;
     self.chart = ChartPOJO.reset_chart_type(self.chart,select_type);
+  }
+
+  self.resize_chart = function(){
+    if(self.chart){
+      setTimeout(function() {
+        self.chart.resize();
+      }, 200);
+    }
+  }
+
+  // self.render_tutorial = function(){
+  //   var select_type = $('#chart_type_select')[0].options[$('#chart_type_select')[0].options.selectedIndex].value;
+  //   switch_tutorial_function(select_type);
+  // }
+
+  self.switch_chart_type_listener = function(){
+    self.reset_chart_type();
+    // self.render_tutorial();
   }
 }
 

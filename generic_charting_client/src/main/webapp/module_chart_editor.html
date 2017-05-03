@@ -47,8 +47,8 @@
               <div class="card-title">
 
                 <span class="pull-right" style="margin-right:0px">
-                  <button id="dispaly_config_button" onclick="show_div('configuration_div');resetCssClass('chart_content_div','col-md-8');hide_div('dispaly_config_button');show_div('undispaly_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-wrench"></i></button>
-                  <button id="undispaly_config_button" onclick="hide_div('configuration_div');resetCssClass('chart_content_div','col-md-12');show_div('dispaly_config_button');hide_div('undispaly_config_button')" title="Hide" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-eye-slash"></i></button>
+                  <button id="dispaly_config_button" onclick="show_configuration_panel();" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-wrench"></i></button>
+                  <button id="undispaly_config_button" onclick="hide_configuration_panel();" title="Hide" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-eye-slash"></i></button>
                 </span>
               </div>
             </div>
@@ -61,11 +61,27 @@
 
       <div id="chart_content_seperate_div" class="seperate_div_class" style="margin-top:188px"></div>
 
-      <div class="row">
-        <div class="col-md-8" id="chart_content_div" style="margin-top:30px">
+      <div class="row" onresize="alert('You have changed the size of the window')">
+        <div class="col-md-8" id="chart_content_div" style="margin-top:30px" onresize="console.log(1)">
           <div class="card card-mini">
             <div class="card-body" id="chart_content_body_div" style="min-height:360px">
               <div id="main_chart" style="width: 100%;height:100%;min-height:360px"></div>
+            </div>
+          </div>
+          <br>
+          <div class="card card-mini">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa fa-diamond">&nbsp;Chart Tutorials&nbsp;&nbsp;&nbsp;</i>
+                <span class="pull-right" style="margin-right:0px">
+                  <button id="undispaly_chart_tutorials_button" onclick="hide_div('chart_tutorials_content_div');show_div('dispaly_chart_tutorials_button');hide_div('undispaly_chart_tutorials_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
+                  <button id="dispaly_chart_tutorials_button" onclick="show_div('chart_tutorials_content_div');hide_div('dispaly_chart_tutorials_button');show_div('undispaly_chart_tutorials_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
+                </span>
+              </div>
+            </div>
+            <div class="card-body" id="chart_tutorials_content_div">
+
+
             </div>
           </div>
         </div>
@@ -84,18 +100,21 @@
             <div class="card-body" id="basic_config_content_div">
               <div>
                 <form class="form-horizontal">
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <label class="col-sm-3 control-label">Initialize Chart</label>
                     <div class="col-sm-2 col-sm-offset-7">
                       <button data-bind="click:initialize_chart" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">Chart Type</label>
-                    <div class="col-sm-7">
-                      <select id="chart_type_select" class="select2" onchange="" style="z-index:100016;">
-                        <option value="axis">Chart-Descartes coordinates</option>
-                        <option value="scatter">Chart-Scatter</option>
+                    <label class="col-sm-2 control-label">Type</label>
+                    <div class="col-sm-8">
+                      <select id="chart_type_select" class="select2" onchange="rerender_children_dom(this.options[this.options.selectedIndex].value)" style="z-index:100016;">
+                      <!-- <select id="chart_type_select" class="select2" style="z-index:100016;"> -->
+                        <option value="bar">Chart-Descartes Bar</option>
+                        <option value="line">Chart-Descartes Line</option>
+                        <option value="area">Chart-Descartes Area</option>
+                        <option value="scatter">Chart-Descartes Scatter</option>
                         <option value="parallel">Chart-Parallel </option>
                         <option value="force">Chart-Force </option>
                         <option value="graph">Chart-Graph </option>
@@ -110,10 +129,15 @@
                       </select>
                     </div>
                     <div class="col-sm-2">
-                      <button data-bind="click:reset_chart_type" title="Manual minus stacks" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+                      <button data-bind="click:switch_chart_type_listener" title="Manual minus stacks" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
                     </div>
                   </div>
-
+                  <!-- <div class="form-group">
+                    <label class="col-sm-3 control-label">Series Setting</label>
+                    <div class="col-sm-2 col-sm-offset-7">
+                      <button data-bind="click:initialize_chart" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+                    </div>
+                  </div> -->
                 </form>
               </div>
             </div>
@@ -232,8 +256,6 @@
           $('#navbar_search_li').css('display', 'none');
         }, 200);
       });
-
-
     </script>
 
 </body>

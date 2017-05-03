@@ -234,7 +234,17 @@ ClonePOJO = {
         return jQuery.extend({}, oldObject);
     },
     deepClone: function (oldObject) {
-        return jQuery.extend(true, {}, oldObject);
+        if(jQuery.isArray(oldObject)){
+          var result = [];
+          $.each(oldObject, function (index, value) {
+              if (value) {
+                result.push(jQuery.extend(true, {}, value));
+              }
+          });
+          return result;
+        }else{
+          return jQuery.extend(true, {}, oldObject);
+        }
     }
 };
 

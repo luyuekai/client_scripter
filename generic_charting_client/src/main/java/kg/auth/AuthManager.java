@@ -11,13 +11,13 @@ import kg.auth.model.http.HttpRequestPOJO;
 import kg.auth.model.http.HttpResponsePOJO;
 import kg.auth.utils.HttpClientUtil;
 import kg.auth.utils.JsonUtil;
-import kg.auth.utils.StringUtil;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.util.Assert;
+import v2.service.generic.library.utils.StringUtil;
 
 public class AuthManager {
 

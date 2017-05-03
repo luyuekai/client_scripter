@@ -1,0 +1,163 @@
+<div>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Nodes</label>
+      <div class="col-sm-8">
+        <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+      </div>
+
+      <div class="col-sm-1">
+        <button onclick="reset_sankey_nodes()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Links</label>
+      <div class="col-sm-8">
+        <textarea id="links_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+      </div>
+
+      <div class="col-sm-1">
+        <button onclick="reset_sankey_links()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Node+</label>
+      <div class="col-sm-8">
+        <div class="input-group" title="From Source">
+          <span class="input-group-addon" id="basic-addon2">
+            <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+          <input id="add_node_value_input" type="text" class="form-control" placeholder="Node Name" aria-describedby="basic-addon2">
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <button onclick="add_sankey_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Node-</label>
+      <div class="col-sm-8">
+        <div class="input-group" title="From Source">
+          <span class="input-group-addon" id="basic-addon2">
+            <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+          <input id="remove_node_value_input" type="text" class="form-control" placeholder="Node Name" aria-describedby="basic-addon2">
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <button onclick="remove_sankey_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Link+</label>
+      <div class="col-sm-3">
+        <input id="add_link_source_input" type="text" class="form-control" placeholder="Source" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-3">
+        <input id="add_link_target_input" type="text" class="form-control" placeholder="Target" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-2">
+        <input id="add_link_value_input" type="text" class="form-control" placeholder="Value" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-1">
+        <button onclick="add_sankey_link()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Link-</label>
+      <div class="col-sm-3">
+        <input id="remove_link_source_input" type="text" class="form-control" placeholder="Source" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-3">
+        <input id="remove_link_target_input" type="text" class="form-control" placeholder="Target" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-1 col-sm-offset-2">
+        <button onclick="remove_sankey_link()" title="Manual add series" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+
+
+<script>
+
+
+  function reset_sankey_nodes(){
+    var tmp = $('#nodes_value_input').val();
+    tmp = $.parseJSON(tmp);
+    if (chartViewModel && chartViewModel.chart) {
+      chartViewModel.chart = Sankey_ChartPOJO.initialize_chart(chartViewModel.chart,tmp,null,true);
+    }
+  }
+  function reset_sankey_links(){
+    var tmp = $('#links_value_input').val();
+    tmp = $.parseJSON(tmp);
+    if (chartViewModel && chartViewModel.chart) {
+      chartViewModel.chart = Sankey_ChartPOJO.initialize_chart(chartViewModel.chart,null,tmp,true);
+    }
+  }
+
+  function add_sankey_data(){
+    var data_name = $('#add_node_value_input').val();
+    if(!data_name){
+      return;
+    }
+    var node = {
+      'name': data_name
+    }
+    if (chartViewModel && chartViewModel.chart) {
+      chartViewModel.chart = ChartPOJO.add_series_data_item(chartViewModel.chart,node);
+    }
+  }
+  function remove_sankey_data() {
+    var data_name = $('#remove_node_value_input').val();
+    if (chartViewModel && chartViewModel.chart) {
+      var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+      var search_index = -1;
+      $.each(option.series[0].data, function(index, value) {
+        if (value.name == data_name) {
+          search_index = index;
+        }
+      });
+      if (search_index != -1) {
+        chartViewModel.chart = ChartPOJO.remove_series_data_item(chartViewModel.chart, search_index);
+      }
+    }
+  }
+
+  function add_sankey_link() {
+    var source = $('#add_link_source_input').val();
+    var target = $('#add_link_target_input').val();
+    var value = Number($('#add_link_value_input').val());
+    if (chartViewModel && chartViewModel.chart) {
+      var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+      var link = {
+        "source": source,
+        "target": target,
+        "value": value
+      }
+
+      option.series[0].links.push(link);
+      chartViewModel.chart = ChartPOJO.reset_chart_option(chartViewModel.chart, option);
+    }
+  }
+
+  function remove_sankey_link(chart, source, target) {
+    var source = $('#remove_link_source_input').val();
+    var target = $('#remove_link_target_input').val();
+    if (chartViewModel && chartViewModel.chart) {
+      var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+      var search_index = -1;
+      $.each(option.series[0].links, function(index, value) {
+        if (value.source == source && value.target == target) {
+          search_index = index;
+        }
+      });
+      if (search_index != -1) {
+        option.series[0].links.splice(search_index, 1);
+        chartViewModel.chart = ChartPOJO.reset_chart_option(chartViewModel.chart, option);
+      }
+    }
+  }
+
+</script>
