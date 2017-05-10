@@ -1,0 +1,239 @@
+<div>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Nodes</label>
+      <div class="col-sm-7">
+        <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+      </div>
+
+      <div class="col-sm-1">
+        <button onclick="reset_series()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Node+</label>
+      <div class="col-sm-3">
+        <input id="add_node_name_input" type="text" class="form-control" placeholder="Name" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-3">
+        <input id="add_node_value_input" type="text" class="form-control" placeholder="Size" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-2">
+        <input id="add_node_category_input" type="text" class="form-control" placeholder="Category" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-1">
+        <button onclick="add_force_data2()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Node-</label>
+      <div class="col-sm-8">
+        <div class="input-group" title="From Source">
+          <span class="input-group-addon" id="basic-addon2">
+            <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+          <input id="remove_node_value_input" type="text" class="form-control" placeholder="Node Name" aria-describedby="basic-addon2">
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <button onclick="remove_force_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Link+</label>
+      <div class="col-sm-4">
+        <input id="add_link_source_input" type="text" class="form-control" placeholder="Source" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-4">
+        <input id="add_link_target_input" type="text" class="form-control" placeholder="Target" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-1">
+        <button onclick="add_force_link()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Link-</label>
+      <div class="col-sm-4">
+        <input id="remove_link_source_input" type="text" class="form-control" placeholder="Source" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-4">
+        <input id="remove_link_target_input" type="text" class="form-control" placeholder="Target" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-1">
+        <button onclick="remove_force_link()" title="Manual add series" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+
+<script>
+
+
+function reset_series() {
+  debugger;
+  var tmp = $('#nodes_value_input').val();
+  tmp = $.parseJSON(tmp);
+  if (chartViewModel && chartViewModel.chart) {
+
+    var d = chartViewModel.chart.getOption().series[0].data;
+    var l = chartViewModel.chart.getOption().series[0].links;
+    var c = chartViewModel.chart.getOption().series[0].categories;
+    // chartViewModel.chart = Circular_ChartPOJO.initialize_chart(chartViewModel.chart,tmp,l,c);
+    // chartViewModel.chart = Circular_ChartPOJO.initialize_chart(chartViewModel.chart, data,link,category);
+    chartViewModel.chart = Circular_ChartPOJO.initialize_chart(chartViewModel.chart,data);
+  }
+}
+
+function add_force_data(){
+  var data_name=$('#add_node_name_input').val();
+  var data_value = Number($('#add_node_value_input').val());
+  var category = $('#add_node_category_input').val();
+  if (chartViewModel && chartViewModel.chart) {
+    var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+    var search_index = -1;
+    $.each(option.series[0].data, function(index, value) {
+      if (value.name == data_name) {
+        search_index = index;
+      }
+    });
+    if (search_index > -1) {
+      return ;
+    }
+    var node = {
+      'name': data_name,
+      'value': data_value,
+      'symbolSize':data_value,
+      'label':{
+            normal: {
+                show: data_value > 10
+            }
+        },
+      'category': category
+    }
+    chartViewModel.chart = ChartPOJO.add_series_data_item(chartViewModel.chart,node);
+  }
+}
+var labelStyle = {
+  //color: 'white',
+  fontWeight: 'bold',
+  fontSize: '12'
+};
+function generateForceChart() {
+  var chart = chartViewModel.chart;
+  var option_chart = {};
+  option_chart = {
+    color: ['#1ABC9C', '#5DADE2', '#FFC153', '#EC7063', '#CC99CC', '#666666', '#5E5E73', '#FFBC11'],
+    chart_div_id: 'chart_div_id',
+    title: {
+      show: true,
+      x: 'left',
+      padding: [0, 0, 0, 20],
+      textStyle: labelStyle,
+      text: 'title' || "Untitled",
+    },
+    tooltip: {
+      position: 'top'
+    },
+
+    series: [{
+      type: 'graph',
+      layout: 'force',
+      data: [],
+      links: [],
+      categories: [],
+    }]
+  };
+
+
+
+  // 使用刚指定的配置项和数据显示图表。
+  chart.setOption(option_chart);
+
+  $(window).resize(function() {
+    setTimeout(function() {
+      chart.resize();
+    }, 500);
+  });
+  return chart;
+}
+function add_force_data2(){
+  var data_name=$('#add_node_name_input').val();
+  var data_value = Number($('#add_node_value_input').val());
+  var category = $('#add_node_category_input').val();
+  var chart = generateForceChart();
+  var option = ClonePOJO.deepClone(chart.getOption());
+
+  var search_index = -1;
+  $.each(option.series[0].data, function(index, value) {
+    if (value.name == data_name) {
+      search_index = index;
+    }
+  });
+  if (search_index > -1) {
+    return chart;
+  }
+  var node = {
+    'name': data_name,
+    'value': data_value,
+    'draggable': true,
+    'category': category
+  }
+  option.series[0].data.push(node);
+  chart.clear();
+  chart.setOption(option);
+  return chart;
+}
+function remove_force_data() {
+  var data_name = $('#remove_node_value_input').val();
+  if (chartViewModel && chartViewModel.chart) {
+    var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+    var search_index = -1;
+    $.each(option.series[0].data, function(index, value) {
+      if (value.name == data_name) {
+        search_index = index;
+      }
+    });
+    if (search_index == -1) {
+      return;
+    }
+    chartViewModel.chart = ChartPOJO.remove_series_data_item(chartViewModel.chart,search_index);
+  }
+}
+
+function add_force_link() {
+  var source = $('#add_link_source_input').val();
+  var target = $('#add_link_target_input').val();
+  if (chartViewModel && chartViewModel.chart) {
+    var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+    var link = {
+      "source": source,
+      "target": target
+    }
+    option.series[0].links.push(link);
+    chartViewModel.chart = ChartPOJO.reset_chart_option(chartViewModel.chart,option);
+  }
+}
+function remove_force_link(){
+  var source = $('#remove_link_source_input').val();
+  var target = $('#remove_link_target_input').val();
+  if (chartViewModel && chartViewModel.chart) {
+    var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+    var search_index = -1;
+    $.each(option.series[0].links, function(index, value) {
+      if (value.source == source && value.target == target) {
+        search_index = index;
+      }
+    });
+    if (search_index == -1) {
+      return;
+    }
+    option.series[0].links.splice(search_index, 1);
+    chartViewModel.chart = ChartPOJO.reset_chart_option(chartViewModel.chart,option);
+  }
+}
+
+
+
+
+</script>
