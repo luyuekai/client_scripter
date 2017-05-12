@@ -149,7 +149,7 @@
         </div>
       </footer>
 
-      <div id="copyDiv" tabindex="100" style="display:none;width:80%" class="compile_mode_focus_in">
+      <div id="copyDiv" tabindex="100" style="display:none;" class="compile_mode_focus_in">
         <span class="cell_div_view">Please double click to edit the content...</span>
         <textarea class="cell_div_edit" style="display:none">Please double click to edit the content...</textarea>
       </div>
@@ -241,7 +241,15 @@
           $('#navbar_search_li').css('display','none');
           add_shortcut_key_listener();
         }, 200);
-        
+        window.addEventListener("beforeunload", function (e) {
+                if(reportViewModel.hasNewContent()){
+                    console.log('ssss'+reportViewModel.hasNewContent());
+                    var confirmationMessage = 'if you see this, you are definitely the chosen one';
+                    (e || window.event).returnValue = confirmationMessage;     // Gecko and Trident
+                        return confirmationMessage;  // Gecko and WebKit
+                }
+            });  
+      });
         // 离开时是否保存验证
 //        $(window).on('beforeunload',function(){
 //            debugger;
@@ -252,19 +260,7 @@
 //
 //            }); 
 
-            window.addEventListener("beforeunload", function (e) {
-                if(reportViewModel.hasNewContent()){
-                    console.log('ssss'+reportViewModel.hasNewContent());
-                    var confirmationMessage = 'if you see this, you are definitely the chosen one';
-                    (e || window.event).returnValue = confirmationMessage;     // Gecko and Trident
-                        return confirmationMessage;  // Gecko and WebKit
-                }
-
-                                              
-
-});
-           
-      });
+            
     </script>
 
 </body>
