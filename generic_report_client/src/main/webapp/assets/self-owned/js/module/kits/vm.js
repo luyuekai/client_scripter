@@ -9,6 +9,7 @@ function ReportViewModel() {
   self.template = null;
   self.name = ko.observable();
   self.hasNewContent = ko.observable(false);
+  self.will_block=ko.observable(false);         //正在下载时block操作区。这个字段表征是否要被block
   self.template_name = ko.observable();
   self.active_cell = null;
 
@@ -38,6 +39,8 @@ function ReportViewModel() {
   }
 
   self.download = function(type) {
+      self.will_block(true);
+      self.blockCheck();
     type = type || 'PDF';
     self.download_type = type;
     var content = self.getMarkdownContent();
@@ -51,6 +54,15 @@ function ReportViewModel() {
     };
     $.serverRequest($.getServerRoot() + '/service_scripter_report/api/generic/download', data, "DOWNLOAD_SUCCESS", "DOWNLOAD_FAILED", "DOWNLOAD_SERVICE_GENERIC_QUERY_FAILED");
   }
+  self.blockCheck = function () {
+    if (self.will_block()) {
+        $('#tools').block({
+            message: null
+        });
+    } else {
+        $('#tools').unblock();
+    }
+}
 
 
   self.reset = function() {
@@ -532,6 +544,7 @@ function CellViewModel(parent) {
       mode: 'markdown',
       lineNumbers: false,
       theme: "default",
+      lineWrapping:true, // 不滚动
       extraKeys: {
         "Enter": "newlineAndIndentContinueMarkdownList"
       }
@@ -659,21 +672,21 @@ $.subscribe("DOWNLOAD_FAILED", download_failed);
 $.subscribe("DOWNLOAD_SERVICE_GENERIC_QUERY_FAILED", download_service_failed);
 
 function download_failed() {
-  // self.will_block(false);
-  // self.blockCheck();
+   reportViewModel.will_block(false);
+   reportViewModel.blockCheck();
 
   console.log('download failed')
 }
 
 function download_service_failed() {
-  // self.will_block(false);
-  // self.blockCheck();
+   reportViewModel.will_block(false);
+   reportViewModel.blockCheck();
   console.log('download service failed')
 }
 
 function download_success() {
-  // self.will_block(false);
-  // self.blockCheck();
+   reportViewModel.will_block(false);
+   reportViewModel.blockCheck();
   if (arguments && arguments[1]) {
     //            console.log(arguments[1]);
     if (arguments[1].hasError) {

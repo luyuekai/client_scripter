@@ -143,11 +143,11 @@ function failedServiceListener() {
 var converter = new showdown.Converter();
 converter.setOption("tables", true);
 
-var reportViewModel = new ReportViewModel();
-
-reportViewModel.addCell();
-
-ko.applyBindings(reportViewModel, document.getElementById('main_content_div'));
+//var reportViewModel = new ReportViewModel();
+//
+//reportViewModel.addCell();
+//
+//ko.applyBindings(reportViewModel, document.getElementById('main_content_div'));
 
 
 
