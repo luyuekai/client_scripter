@@ -1,7 +1,7 @@
 <div id="tutorial_chart" style="width: 100%;height:100%;min-height:660px"></div>
 <br>
 
-<span class="cell_div_view markdown-body" ><h2 id="">Circular</h2>
+<span class="cell_div_view markdown-body" ><h2 id="">Force</h2>
 <p>用于展现节点以及节点之间的关系数据</p>
 <h3 id="-1">数据模型样例</h3>
 <ul>
@@ -27,7 +27,7 @@
   var chart;
   function initialize() {
     var c = ChartPOJO.generate_default_chart('tutorial_chart');
-    chart = c = Circular_ChartPOJO.initialize_chart(c, data,link,category);
+    chart = c = Graph_ChartPOJO.initialize_chart(c, data,link,category);
   }
 
   initialize();

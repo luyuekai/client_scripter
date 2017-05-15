@@ -115,6 +115,10 @@ var default_series_object = {
 var ChartPOJO = ChartPOJO || {};
 ChartPOJO = {
 
+
+
+
+
   generate_default_chart: function(chart_div_id) {
     $('#' + chart_div_id).empty();
     var option_chart = {};
@@ -195,15 +199,42 @@ ChartPOJO = {
     }
   },
 
+  has_series_data_item:function(chart,data_item_name){
+    return (ChartPOJO.get_series_data_item_index(chart,data_item_name)>-1);
+  },
+  get_series_data_item_index: function(chart, data_item_name) {
+    var option = chart.getOption();
+    var search_index = -1;
+    $.each(option.series[0].data, function(index, value) {
+      if (value.name == data_item_name) {
+        search_index = index;
+      }
+    });
+    return search_index;
+  },
   add_series_data_item:function(chart,data_item){
     var option = ClonePOJO.deepClone(chart.getOption());
     option.series[0].data.push(data_item);
     return ChartPOJO.reset_chart_option(chart, option);
   },
   remove_series_data_item:function(chart,data_item_index){
-    var option = ClonePOJO.deepClone(chart.getOption());
-    option.series[0].data.splice(data_item_index, 1);
-    return ChartPOJO.reset_chart_option(chart, option);
+    if(chart && (data_item_index>-1)){
+      var option = ClonePOJO.deepClone(chart.getOption());
+      option.series[0].data.splice(data_item_index, 1);
+      return ChartPOJO.reset_chart_option(chart, option);
+    }else{
+      return chart;
+    }
+  },
+  remove_series_data_item_by_name:function(chart,data_item_name){
+    var data_item_index = ChartPOJO.get_series_data_item_index(chart,data_item_name);
+    if(chart && (data_item_index>-1)){
+      var option = ClonePOJO.deepClone(chart.getOption());
+      option.series[0].data.splice(data_item_index, 1);
+      return ChartPOJO.reset_chart_option(chart, option);
+    }else{
+      return chart;
+    }
   },
 
   addSeries: function(chart, series_name, series_type, series_data, scale_setting) {
@@ -752,74 +783,123 @@ Pie_ChartPOJO = {
 
 var Force_ChartPOJO = Force_ChartPOJO || {};
 Force_ChartPOJO = {
-  initialize_chart:function(chart){
+  initialize_chart:function(chart,nodes, links, categories){
     if(!chart){
       return null;
     }
-    var chart_parent_div_id = chart.parent_div_id;
-    var option = chart.getOption();
-    option.series.push({
-      type: 'graph',
-      layout: 'force',
-      data: [],
-      links: [],
-      categories: [],
-    });
+    var option = {
+      color: ['#1ABC9C', '#5DADE2', '#FFC153', '#EC7063', '#CC99CC', '#666666', '#5E5E73', '#FFBC11'],
+      title: default_title,
+      tooltip: {
+        position: 'top'
+      },
+
+      series: [{
+        type: 'graph',
+        layout: 'force',
+        data: nodes||[],
+        links: links||[],
+        categories: categories||[],
+      }]
+    };
+    chart.clear();
     return ChartPOJO.reset_chart_option(chart,option);
   },
 }
 
 var Graph_ChartPOJO = Graph_ChartPOJO || {};
 Graph_ChartPOJO = {
-  initialize_chart:function(chart){
+  initialize_chart:function(chart,nodes, links, categories){
     if(!chart){
       return null;
     }
     var chart_parent_div_id = chart.parent_div_id;
-    var option = chart.getOption();
-    option.series.push({
-      type: 'graph',
-      layout: 'none',
-      data: [],
-      links: [],
-      categories: [],
-    });
+    // var option = chart.getOption();
+    // option.series.push({
+    //   type: 'graph',
+    //   layout: 'none',
+    //   data: nodes||[],
+    //   links: links||[],
+    //   categories: categories||[],
+    // });
+    var option = {
+      color: ['#1ABC9C', '#5DADE2', '#FFC153', '#EC7063', '#CC99CC', '#666666', '#5E5E73', '#FFBC11'],
+      title: default_title,
+      tooltip: {
+        position: 'top'
+      },
+
+      series: [{
+        type: 'graph',
+        layout: 'none',
+        data: nodes||[],
+        links: links||[],
+        categories: categories||[],
+      }]
+    };
+    chart.clear();
     return ChartPOJO.reset_chart_option(chart,option);
   },
 }
 
 var Circular_ChartPOJO = Circular_ChartPOJO || {};
 Circular_ChartPOJO = {
+
   initialize_chart:function(chart,nodes, links, categories){
     if(!chart){
       return null;
     }
-    var chart_parent_div_id = chart.parent_div_id;
-    var option = chart.getOption();
-    option.series.push({
-      type: 'graph',
-      layout: 'circular',
-      circular: {
-        rotateLabel: true
+    var option = {
+      color: ['#1ABC9C', '#5DADE2', '#FFC153', '#EC7063', '#CC99CC', '#666666', '#5E5E73', '#FFBC11'],
+      title: default_title,
+      tooltip: {
+        position: 'top'
       },
-      data: nodes||[],
-      links: links||[],
-      categories: categories||[],
-      label: {
-        normal: {
-          position: 'right',
-          formatter: '{b}'
+
+      series: [{
+        type: 'graph',
+        layout:'circular',
+        circular: {
+          rotateLabel: true
+        },
+        data: nodes||[],
+        links: links||[],
+        categories: categories||[],
+        label: {
+          normal: {
+            position: 'right',
+            formatter: '{b}'
+          }
+        },
+        lineStyle: {
+          normal: {
+            color: 'source',
+            curveness: 0.3
+          }
         }
-      },
-      lineStyle: {
-        normal: {
-          color: 'source',
-          curveness: 0.3
-        }
-      }
-    });
+      }]
+    };
+    chart.clear();
     return ChartPOJO.reset_chart_option(chart,option);
   },
+  add_data: function(chart, data_name, data_value, category) {
+    if(ChartPOJO.has_series_data_item(chart,data_name)){
+      return chart;
+    }
+    var node = {
+      'name': data_name,
+      'value': data_value,
+      'symbolSize':data_value,
+      'label':{
+            normal: {
+                show: data_value > 0
+            }
+        },
+      'category': category
+    }
+    return ChartPOJO.add_series_data_item(chart,node);
+  },
+
 }
 
 var Parallel_ChartPOJO = Parallel_ChartPOJO || {};
@@ -857,13 +937,13 @@ Parallel_ChartPOJO = {
       }
     }
   },
-  initialize_chart:function(chart){
+  initialize_chart:function(chart,parallel_axis_data_input,data){
     if(!chart){
       return null;
     }
     var chart_parent_div_id = chart.parent_div_id;
     var option = chart.getOption();
-    var parallel_axis_data = [];
+    var parallel_axis_data = parallel_axis_data_input || [];
     var computed_axis = [];
     $.each(parallel_axis_data, function(index, value) {
       var tmp = {
@@ -873,18 +953,44 @@ Parallel_ChartPOJO = {
       computed_axis.push(tmp);
     });
     option.parallelAxis = computed_axis;
-    option.parallel = Parallel_ChartPOJO.default_parallel;
+    // option.parallelAxis = [
+    //     {dim: 0, name: schema[0].text, inverse: true, max: 31, nameLocation: 'start'},
+    //     {dim: 1, name: schema[1].text},
+    //     {dim: 2, name: schema[2].text},
+    //     {dim: 3, name: schema[3].text},
+    //     {dim: 4, name: schema[4].text},
+    //     {dim: 5, name: schema[5].text},
+    //     {dim: 6, name: schema[6].text},
+    //     {dim: 7, name: schema[7].text,
+    //     type: 'category', data: ['优', '良', '轻度污染', '中度污染', '重度污染', '严重污染']}
+    // ];
+
+    option.parallel = ClonePOJO.deepClone(Parallel_ChartPOJO.default_parallel);
     option.series.push({
       name: 'Matrix Parallel',
       type: 'parallel',
       itemStyle: {
         normal: {}
       },
-      data: []
+      data:data||[]
     });
     return ChartPOJO.reset_chart_option(chart,option);
   },
 }
+
+
+
+var schema = [
+    {name: 'date', index: 0, text: '日期'},
+    {name: 'AQIindex', index: 1, text: 'AQI'},
+    {name: 'PM25', index: 2, text: 'PM2.5'},
+    {name: 'PM10', index: 3, text: 'PM10'},
+    {name: 'CO', index: 4, text: ' CO'},
+    {name: 'NO2', index: 5, text: 'NO2'},
+    {name: 'SO2', index: 6, text: 'SO2'},
+    {name: '等级', index: 7, text: '等级'}
+];
+
 
 var Descartes_ChartPOJO = Descartes_ChartPOJO || {};
 Descartes_ChartPOJO = {

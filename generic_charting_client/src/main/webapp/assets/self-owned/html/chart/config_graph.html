@@ -85,7 +85,7 @@ function reset_data(){
   var nodes = eval($('#nodes_value_input').val())||[];
   var links = eval($('#links_value_input').val())||[];
   var categories = eval($('#categories_value_input').val())||[];
-  chartViewModel.chart =Circular_ChartPOJO.initialize_chart(chartViewModel.chart,nodes,links,categories);
+  chartViewModel.chart =Graph_ChartPOJO.initialize_chart(chartViewModel.chart,nodes,links,categories);
 }
 
 function remove_force_data() {
