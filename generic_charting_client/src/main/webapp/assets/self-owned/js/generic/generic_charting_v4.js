@@ -1,13 +1,13 @@
-var default_chart_type = ['grid_heatmap','sankey','boxplot','treemap','river','radar','pie','circular','graph','force','parallel','scatter','line','bar','area'];
+var default_chart_type = ['grid_heatmap', 'sankey', 'boxplot', 'treemap', 'river', 'radar', 'pie', 'circular', 'graph', 'force', 'parallel', 'scatter', 'line', 'bar', 'area'];
 
-var default_color=['#1ABC9C', '#5DADE2', '#FFC153', '#EC7063', '#CC99CC', '#666666', '#5E5E73', '#FFBC11'];
+var default_color = ['#1ABC9C', '#5DADE2', '#FFC153', '#EC7063', '#CC99CC', '#666666', '#5E5E73', '#FFBC11'];
 
-var default_tooltip={
+var default_tooltip = {
   position: 'top',
   trigger: 'item',
   formatter: "{a} <br/>{b} : {c}"
 };
-var default_labelStyle={
+var default_labelStyle = {
   //color: 'white',
   fontWeight: 'bold',
   fontSize: '12'
@@ -25,21 +25,21 @@ var default_legend = {
 };
 
 
-var default_title={
+var default_title = {
   show: true,
   x: 'left',
   padding: [0, 0, 0, 20],
-  textStyle:default_labelStyle,
+  textStyle: default_labelStyle,
   text: "Matrix Chart",
 };
 
 
-var default_scatterScale={
+var default_scatterScale = {
   min_scale: 10,
   max_scale: 50
 };
 
-var default_scale_setting={
+var default_scale_setting = {
   enable: false,
   useData: false,
   min_scale: 10,
@@ -55,7 +55,7 @@ var default_grid = {
 };
 
 var default_xAxis = {
-  data:[],
+  data: [],
   axisLabel: {
     // interval: 0, // 强制显示所有标签
     // rotate: -45,
@@ -72,7 +72,7 @@ var default_xAxis = {
 };
 
 var default_yAxis = {
-  data:null,
+  data: null,
   axisLabel: {
     // rotate: 45,
     textStyle: default_labelStyle,
@@ -132,11 +132,11 @@ ChartPOJO = {
     var chart = echarts.init(document.getElementById(chart_div_id));
 
     chart.parent_div_id = chart_div_id;
-    return ChartPOJO.reset_chart_option(chart,option_chart);
+    return ChartPOJO.reset_chart_option(chart, option_chart);
   },
 
-  reset_chart_option:function(chart,option,cleanFlag){
-    if(cleanFlag){
+  reset_chart_option: function(chart, option, cleanFlag) {
+    if (cleanFlag) {
       chart.clear()
     }
     chart.setOption(option);
@@ -148,59 +148,59 @@ ChartPOJO = {
     return chart;
   },
 
-  reset_chart_type:function(chart,chart_type){
-    if(!chart || !chart_type){
+  reset_chart_type: function(chart, chart_type) {
+    if (!chart || !chart_type) {
       return null;
     }
-    if(chart_type == 'grid_heatmap'){
+    if (chart_type == 'grid_heatmap') {
       return HeatMap_Grid_ChartPOJO.initialize_chart(chart);
     }
-    if(chart_type == 'sankey'){
+    if (chart_type == 'sankey') {
       return Sankey_ChartPOJO.initialize_chart(chart);
     }
-    if(chart_type == 'boxplot'){
+    if (chart_type == 'boxplot') {
       return Boxplot_ChartPOJO.initialize_chart(chart);
     }
-    if(chart_type == 'treemap'){
+    if (chart_type == 'treemap') {
       return Treemap_ChartPOJO.initialize_chart(chart);
     }
-    if(chart_type == 'river'){
+    if (chart_type == 'river') {
       return River_ChartPOJO.initialize_chart(chart);
     }
-    if(chart_type == 'radar'){
+    if (chart_type == 'radar') {
       return Radar_ChartPOJO.initialize_chart(chart);
     }
-    if(chart_type == 'pie'){
+    if (chart_type == 'pie') {
       return Pie_ChartPOJO.initialize_chart(chart);
     }
-    if(chart_type == 'circular'){
+    if (chart_type == 'circular') {
       return Circular_ChartPOJO.initialize_chart(chart);
     }
-    if(chart_type == 'graph'){
+    if (chart_type == 'graph') {
       return Graph_ChartPOJO.initialize_chart(chart);
     }
-    if(chart_type == 'force'){
+    if (chart_type == 'force') {
       return Force_ChartPOJO.initialize_chart(chart);
     }
-    if(chart_type == 'parallel'){
+    if (chart_type == 'parallel') {
       return Parallel_ChartPOJO.initialize_chart(chart);
     }
-    if(chart_type == 'scatter'){
-      return Descartes_ChartPOJO.initialize_chart(chart,'scatter');
+    if (chart_type == 'scatter') {
+      return Descartes_ChartPOJO.initialize_chart(chart, 'scatter');
     }
-    if(chart_type == 'line'){
-      return Descartes_ChartPOJO.initialize_chart(chart,'line');
+    if (chart_type == 'line') {
+      return Descartes_ChartPOJO.initialize_chart(chart, 'line');
     }
-    if(chart_type == 'area'){
-      return Descartes_ChartPOJO.initialize_chart(chart,'area');
+    if (chart_type == 'area') {
+      return Descartes_ChartPOJO.initialize_chart(chart, 'area');
     }
-    if(chart_type == 'bar'){
-      return Descartes_ChartPOJO.initialize_chart(chart,'bar');
+    if (chart_type == 'bar') {
+      return Descartes_ChartPOJO.initialize_chart(chart, 'bar');
     }
   },
 
-  has_series_data_item:function(chart,data_item_name){
-    return (ChartPOJO.get_series_data_item_index(chart,data_item_name)>-1);
+  has_series_data_item: function(chart, data_item_name) {
+    return (ChartPOJO.get_series_data_item_index(chart, data_item_name) > -1);
   },
   get_series_data_item_index: function(chart, data_item_name) {
     var option = chart.getOption();
@@ -212,27 +212,27 @@ ChartPOJO = {
     });
     return search_index;
   },
-  add_series_data_item:function(chart,data_item){
+  add_series_data_item: function(chart, data_item) {
     var option = ClonePOJO.deepClone(chart.getOption());
     option.series[0].data.push(data_item);
     return ChartPOJO.reset_chart_option(chart, option);
   },
-  remove_series_data_item:function(chart,data_item_index){
-    if(chart && (data_item_index>-1)){
+  remove_series_data_item: function(chart, data_item_index) {
+    if (chart && (data_item_index > -1)) {
       var option = ClonePOJO.deepClone(chart.getOption());
       option.series[0].data.splice(data_item_index, 1);
       return ChartPOJO.reset_chart_option(chart, option);
-    }else{
+    } else {
       return chart;
     }
   },
-  remove_series_data_item_by_name:function(chart,data_item_name){
-    var data_item_index = ChartPOJO.get_series_data_item_index(chart,data_item_name);
-    if(chart && (data_item_index>-1)){
+  remove_series_data_item_by_name: function(chart, data_item_name) {
+    var data_item_index = ChartPOJO.get_series_data_item_index(chart, data_item_name);
+    if (chart && (data_item_index > -1)) {
       var option = ClonePOJO.deepClone(chart.getOption());
       option.series[0].data.splice(data_item_index, 1);
       return ChartPOJO.reset_chart_option(chart, option);
-    }else{
+    } else {
       return chart;
     }
   },
@@ -286,7 +286,7 @@ ChartPOJO = {
           type: series_type,
           data: series_data,
           symbolSize: function(val, param) {
-            return ChartPOJO.getScaleBySeries(chart,val, param.seriesIndex, ChartPOJO.current_scale_setting.min_value, ChartPOJO.current_scale_setting.max_value);
+            return ChartPOJO.getScaleBySeries(chart, val, param.seriesIndex, ChartPOJO.current_scale_setting.min_value, ChartPOJO.current_scale_setting.max_value);
           }
         };
       } else {
@@ -326,10 +326,10 @@ ChartPOJO = {
     option.series = tmp_series;
     option.legend[0].data = tmp_legends;
 
-    return ChartPOJO.reset_chart_option(chart, option,true);
+    return ChartPOJO.reset_chart_option(chart, option, true);
   },
 
-  removeAllSeries:function(chart){
+  removeAllSeries: function(chart) {
     var option = ClonePOJO.deepClone(chart.getOption());
 
     var tmp_series = [];
@@ -337,7 +337,7 @@ ChartPOJO = {
     option.series = tmp_series;
     option.legend[0].data = tmp_legends;
 
-    return ChartPOJO.reset_chart_option(chart, option,true);
+    return ChartPOJO.reset_chart_option(chart, option, true);
   },
 
   getScale: function(value, value_min, value_max, scale_min, scale_max) {
@@ -353,7 +353,7 @@ ChartPOJO = {
     return result;
   },
 
-  getScaleBySeries: function(chart,value, seriesIndex, min, max) {
+  getScaleBySeries: function(chart, value, seriesIndex, min, max) {
     if (chart && seriesIndex) {
       var series = chart.getOption().series[seriesIndex];
       if (!min && !max) {
@@ -403,7 +403,7 @@ ChartPOJO = {
         end: 100
       }];
     }
-    return ChartPOJO.reset_chart_option(chart, option,true);
+    return ChartPOJO.reset_chart_option(chart, option, true);
   },
 
   addStack: function(chart, stack_name, series_name) {
@@ -414,7 +414,7 @@ ChartPOJO = {
       }
     });
 
-    return ChartPOJO.reset_chart_option(chart, option,true);
+    return ChartPOJO.reset_chart_option(chart, option, true);
   },
 
   removeStack: function(chart, stack_name) {
@@ -427,7 +427,7 @@ ChartPOJO = {
         value.stack = null;
       }
     });
-    return ChartPOJO.reset_chart_option(chart, option,true);
+    return ChartPOJO.reset_chart_option(chart, option, true);
   },
 
   getStacks: function(chart) {
@@ -444,7 +444,7 @@ ChartPOJO = {
     var option = $.parseJSON(json);
     return option;
   },
-  
+
   renderChart: function(parent_div_id, option) {
     if (parent_div_id && option) {
       var chart = echarts.init(document.getElementById(parent_div_id));
@@ -459,8 +459,8 @@ ChartPOJO = {
       return chart;
     }
   },
-  
-    serialize_chart_option: function(option) {
+
+  serialize_chart_option: function(option) {
     return $.toJSON(option);
   },
 }
@@ -470,33 +470,33 @@ ChartPOJO = {
 var HeatMap_Grid_ChartPOJO = HeatMap_Grid_ChartPOJO || {};
 HeatMap_Grid_ChartPOJO = {
 
-  data_prototype:{
-    x_data:null,
-    y_data:null,
-    min_scale:null,
-    max_scale:null,
-    series_data:null
+  data_prototype: {
+    x_data: null,
+    y_data: null,
+    min_scale: null,
+    max_scale: null,
+    series_data: null
   },
 
-  default_grid:{
+  default_grid: {
     height: '80%',
     y: '10%'
   },
-  default_xAxis:{
+  default_xAxis: {
     type: 'category',
     data: [],
     splitArea: {
       show: true
     }
   },
-  default_yAxis:{
+  default_yAxis: {
     type: 'category',
     data: [],
     splitArea: {
       show: true
     }
   },
-  default_visualMap:{
+  default_visualMap: {
     min: 0,
     max: 10,
     calculable: true,
@@ -504,7 +504,7 @@ HeatMap_Grid_ChartPOJO = {
     left: 'right',
     top: '5%'
   },
-  default_series:[{
+  default_series: [{
     name: 'Matrix Heatmap Series',
     type: 'heatmap',
     data: [],
@@ -521,50 +521,52 @@ HeatMap_Grid_ChartPOJO = {
     }
   }],
 
-  initialize_chart:function(chart,data_prototype){
-    if(!chart){
+  initialize_chart: function(chart, data_prototype) {
+    if (!chart) {
       return null;
     }
-    if(!data_prototype){
+    if (!data_prototype) {
       data_prototype = ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.data_prototype);
     }
     var chart_parent_div_id = chart.parent_div_id;
     var option = ClonePOJO.deepClone(chart.getOption());
-    option.grid=HeatMap_Grid_ChartPOJO.default_grid;
-    if(!option.xAxis || option.xAxis.length<1){
-      option.xAxis= ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.default_xAxis);
-      option.xAxis.data = data_prototype.x_data||option.xAxis.data||[];
-    }else{
-      option.xAxis[0].data = data_prototype.x_data||option.xAxis[0].data||[];
+    option.grid = HeatMap_Grid_ChartPOJO.default_grid;
+    if (!option.xAxis || option.xAxis.length < 1) {
+      option.xAxis = ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.default_xAxis);
+      option.xAxis.data = data_prototype.x_data || option.xAxis.data || [];
+    } else {
+      option.xAxis[0].data = data_prototype.x_data || option.xAxis[0].data || [];
     }
-    if(!option.yAxis || option.yAxis.length<1){
-      option.yAxis= ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.default_yAxis);
-      option.yAxis.data = data_prototype.y_data||option.yAxis.data||[];
-    }else{
-      option.yAxis[0].data = data_prototype.y_data||option.yAxis[0].data||[];
+    if (!option.yAxis || option.yAxis.length < 1) {
+      option.yAxis = ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.default_yAxis);
+      option.yAxis.data = data_prototype.y_data || option.yAxis.data || [];
+    } else {
+      option.yAxis[0].data = data_prototype.y_data || option.yAxis[0].data || [];
     }
-    if(!option.visualMap || option.visualMap.length<1){
-      option.visualMap= ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.default_visualMap);
-      option.visualMap.min = data_prototype.min_scale||option.visualMap.min||0;
-      option.visualMap.max = data_prototype.max_scale||option.visualMap.max||10;
-    }else{
-      option.visualMap[0].min = data_prototype.min_scale||option.visualMap[0].min||0;
-      option.visualMap[0].max = data_prototype.max_scale||option.visualMap[0].max||10;
+    if (!option.visualMap || option.visualMap.length < 1) {
+      option.visualMap = ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.default_visualMap);
+      option.visualMap.min = data_prototype.min_scale || option.visualMap.min || 0;
+      option.visualMap.max = data_prototype.max_scale || option.visualMap.max || 10;
+    } else {
+      option.visualMap[0].min = data_prototype.min_scale || option.visualMap[0].min || 0;
+      option.visualMap[0].max = data_prototype.max_scale || option.visualMap[0].max || 10;
     }
-    if(!option.series || option.series.length<1){
-      option.series= ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.default_series);
+    if (!option.series || option.series.length < 1) {
+      option.series = ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.default_series);
     }
-    option.series[0].data = data_prototype.series_data||option.series[0].data||[];
-    return ChartPOJO.reset_chart_option(chart,option);
+    option.series[0].data = data_prototype.series_data || option.series[0].data || [];
+    return ChartPOJO.reset_chart_option(chart, option);
   },
 }
 
 
 var Sankey_ChartPOJO = Sankey_ChartPOJO || {};
 Sankey_ChartPOJO = {
-  default_series:[{
+  default_series: [{
     type: 'sankey',
-    data: [{'name':'matrix'}],
+    data: [{
+      'name': 'matrix'
+    }],
     links: [],
     itemStyle: {
       normal: {
@@ -579,30 +581,34 @@ Sankey_ChartPOJO = {
       }
     }
   }],
-  initialize_chart:function(chart,nodes,links,update){
-    if(!chart){
+  initialize_chart: function(chart, nodes, links, update) {
+    if (!chart) {
       return null;
     }
     var chart_parent_div_id = chart.parent_div_id;
     var option = chart.getOption();
-    if(!update || !option.series || option.series.length<1){
-      option.series= ClonePOJO.deepClone(Sankey_ChartPOJO.default_series);
+    if (!update || !option.series || option.series.length < 1) {
+      option.series = ClonePOJO.deepClone(Sankey_ChartPOJO.default_series);
     }
-    if(nodes){
-      option.series[0].data=nodes;
+    if (nodes) {
+      option.series[0].data = nodes;
     }
-    if(links){
-      option.series[0].links=links;
+    if (links) {
+      option.series[0].links = links;
     }
-    return ChartPOJO.reset_chart_option(chart,option);
+    return ChartPOJO.reset_chart_option(chart, option);
   },
 
 }
 
-var default_boxplot_data = echarts.dataTool.prepareBoxplotData([[]]);
+var default_boxplot_data = echarts.dataTool.prepareBoxplotData([
+  []
+]);
 var Boxplot_ChartPOJO = Boxplot_ChartPOJO || {};
 Boxplot_ChartPOJO = {
-  default_data:[[]],
+  default_data: [
+    []
+  ],
 
   default_tooltip: {
     trigger: 'item',
@@ -610,7 +616,7 @@ Boxplot_ChartPOJO = {
       type: 'shadow'
     }
   },
-  default_xAxis:{
+  default_xAxis: {
     type: 'category',
     data: default_boxplot_data.axisData,
     boundaryGap: true,
@@ -625,14 +631,14 @@ Boxplot_ChartPOJO = {
       show: false
     }
   },
-  default_yAxis:{
+  default_yAxis: {
     type: 'value',
     splitArea: {
       show: true
     }
   },
 
-  default_series:[{
+  default_series: [{
     name: 'boxplot',
     type: 'boxplot',
     data: default_boxplot_data.boxplot_data,
@@ -669,18 +675,18 @@ Boxplot_ChartPOJO = {
     },
     data: default_boxplot_data.outliers
   }],
-  initialize_chart:function(chart){
-    if(!chart){
+  initialize_chart: function(chart) {
+    if (!chart) {
       return null;
     }
     var chart_parent_div_id = chart.parent_div_id;
     var option = chart.getOption();
     option.origin_data = Boxplot_ChartPOJO.default_data;
-    option.xAxis= Boxplot_ChartPOJO.default_xAxis;
-    option.yAxis=Boxplot_ChartPOJO.default_yAxis;;
-    option.tooltip=Boxplot_ChartPOJO.default_tooltip;
-    option.series= Boxplot_ChartPOJO.default_series;
-    return ChartPOJO.reset_chart_option(chart,option);
+    option.xAxis = Boxplot_ChartPOJO.default_xAxis;
+    option.yAxis = Boxplot_ChartPOJO.default_yAxis;;
+    option.tooltip = Boxplot_ChartPOJO.default_tooltip;
+    option.series = Boxplot_ChartPOJO.default_series;
+    return ChartPOJO.reset_chart_option(chart, option);
   },
 
 }
@@ -688,7 +694,7 @@ Boxplot_ChartPOJO = {
 
 var Treemap_ChartPOJO = Treemap_ChartPOJO || {};
 Treemap_ChartPOJO = {
-  default_series:[{
+  default_series: [{
     name: 'Matrix Treemap',
     type: 'treemap',
     leafDepth: null,
@@ -712,27 +718,28 @@ Treemap_ChartPOJO = {
       }
     }
   }],
-  initialize_chart:function(chart,data,leafDepth){
-    if(!chart){
+  initialize_chart: function(chart, data, leafDepth) {
+    if (!chart) {
       return null;
     }
     var chart_parent_div_id = chart.parent_div_id;
     var option = chart.getOption();
-    option.series= ClonePOJO.deepClone(Treemap_ChartPOJO.default_series);
-    if(data){
-      option.series[0].data=data;
+    option.series = ClonePOJO.deepClone(Treemap_ChartPOJO.default_series);
+    if (data) {
+      option.series[0].data = data;
     }
-    if(leafDepth){
-      option.series[0].leafDepth=leafDepth;
+    if (leafDepth) {
+      option.series[0].leafDepth = leafDepth;
     }
-    return ChartPOJO.reset_chart_option(chart,option);
+    return ChartPOJO.reset_chart_option(chart, option);
   },
 
 }
 
+
 var River_ChartPOJO = River_ChartPOJO || {};
 River_ChartPOJO = {
-  default_series:[{
+  default_series: [{
     type: 'themeRiver',
     data: [],
     label: {
@@ -741,12 +748,12 @@ River_ChartPOJO = {
       }
     }
   }],
-  default_singleAxis:{
+  default_singleAxis: {
     max: 'dataMax',
     min: 'dataMin',
     type: 'value'
   },
-  initialize_chart:function(chart, data,river_type){
+  initialize_chart: function(chart, data, river_type) {
     if(!chart){
       return null;
     }
@@ -762,37 +769,37 @@ River_ChartPOJO = {
       option.singleAxis.type=river_type;
     }
     return ChartPOJO.reset_chart_option(chart,option);
-  },
+  }
 }
 
 var Radar_ChartPOJO = Radar_ChartPOJO || {};
 Radar_ChartPOJO = {
-  initialize_chart:function(chart,series_data,indicator){
-    if(!chart){
+  initialize_chart: function(chart, series_data, indicator) {
+    if (!chart) {
       return null;
     }
     var chart_parent_div_id = chart.parent_div_id;
     var option = chart.getOption();
     option.radar = {
       // shape: 'circle',
-      indicator: indicator||[]
+      indicator: indicator || []
     };
-      if(option.series[2]){
+    if (option.series[2]) {
       console.log(option.series.pop())
-      }
-      option.series.push({
+    }
+    option.series.push({
       type: 'radar',
-      data: series_data||[]
+      data: series_data || []
     });
 
-    return ChartPOJO.reset_chart_option(chart,option);
+    return ChartPOJO.reset_chart_option(chart, option);
   },
 }
 
 var Pie_ChartPOJO = Pie_ChartPOJO || {};
 Pie_ChartPOJO = {
-  initialize_chart:function(chart,data){
-    if(!chart){
+  initialize_chart: function(chart, data) {
+    if (!chart) {
       return null;
     }
     var chart_parent_div_id = chart.parent_div_id;
@@ -800,16 +807,16 @@ Pie_ChartPOJO = {
     option.series.push({
       name: 'Matrix Pie',
       type: 'pie',
-      data: data||[]
+      data: data || []
     });
-    return ChartPOJO.reset_chart_option(chart,option);
+    return ChartPOJO.reset_chart_option(chart, option);
   },
 }
 
 var Force_ChartPOJO = Force_ChartPOJO || {};
 Force_ChartPOJO = {
-  initialize_chart:function(chart,nodes, links, categories){
-    if(!chart){
+  initialize_chart: function(chart, nodes, links, categories) {
+    if (!chart) {
       return null;
     }
     var option = {
@@ -822,20 +829,20 @@ Force_ChartPOJO = {
       series: [{
         type: 'graph',
         layout: 'force',
-        data: nodes||[],
-        links: links||[],
-        categories: categories||[],
+        data: nodes || [],
+        links: links || [],
+        categories: categories || [],
       }]
     };
     chart.clear();
-    return ChartPOJO.reset_chart_option(chart,option);
+    return ChartPOJO.reset_chart_option(chart, option);
   },
 }
 
 var Graph_ChartPOJO = Graph_ChartPOJO || {};
 Graph_ChartPOJO = {
-  initialize_chart:function(chart,nodes, links, categories){
-    if(!chart){
+  initialize_chart: function(chart, nodes, links, categories) {
+    if (!chart) {
       return null;
     }
     var chart_parent_div_id = chart.parent_div_id;
@@ -857,21 +864,21 @@ Graph_ChartPOJO = {
       series: [{
         type: 'graph',
         layout: 'none',
-        data: nodes||[],
-        links: links||[],
-        categories: categories||[],
+        data: nodes || [],
+        links: links || [],
+        categories: categories || [],
       }]
     };
     chart.clear();
-    return ChartPOJO.reset_chart_option(chart,option);
+    return ChartPOJO.reset_chart_option(chart, option);
   },
 }
 
 var Circular_ChartPOJO = Circular_ChartPOJO || {};
 Circular_ChartPOJO = {
 
-  initialize_chart:function(chart,nodes, links, categories){
-    if(!chart){
+  initialize_chart: function(chart, nodes, links, categories) {
+    if (!chart) {
       return null;
     }
     var option = {
@@ -883,13 +890,13 @@ Circular_ChartPOJO = {
 
       series: [{
         type: 'graph',
-        layout:'circular',
+        layout: 'circular',
         circular: {
           rotateLabel: true
         },
-        data: nodes||[],
-        links: links||[],
-        categories: categories||[],
+        data: nodes || [],
+        links: links || [],
+        categories: categories || [],
         label: {
           normal: {
             position: 'right',
@@ -905,31 +912,31 @@ Circular_ChartPOJO = {
       }]
     };
     chart.clear();
-    return ChartPOJO.reset_chart_option(chart,option);
+    return ChartPOJO.reset_chart_option(chart, option);
   },
   add_data: function(chart, data_name, data_value, category) {
-    if(ChartPOJO.has_series_data_item(chart,data_name)){
+    if (ChartPOJO.has_series_data_item(chart, data_name)) {
       return chart;
     }
     var node = {
       'name': data_name,
       'value': data_value,
-      'symbolSize':data_value,
-      'label':{
-            normal: {
-                show: data_value > 0
-            }
-        },
+      'symbolSize': data_value,
+      'label': {
+        normal: {
+          show: data_value > 0
+        }
+      },
       'category': category
     }
-    return ChartPOJO.add_series_data_item(chart,node);
+    return ChartPOJO.add_series_data_item(chart, node);
   },
 
 }
 
 var Parallel_ChartPOJO = Parallel_ChartPOJO || {};
 Parallel_ChartPOJO = {
-  default_parallel:{
+  default_parallel: {
     left: '5%',
     right: '18%',
     bottom: 100,
@@ -962,8 +969,8 @@ Parallel_ChartPOJO = {
       }
     }
   },
-  initialize_chart:function(chart,parallel_axis_data_input,data){
-    if(!chart){
+  initialize_chart: function(chart, parallel_axis_data_input, data) {
+    if (!chart) {
       return null;
     }
     var chart_parent_div_id = chart.parent_div_id;
@@ -997,42 +1004,65 @@ Parallel_ChartPOJO = {
       itemStyle: {
         normal: {}
       },
-      data:data||[]
+      data: data || []
     });
-    return ChartPOJO.reset_chart_option(chart,option);
+    return ChartPOJO.reset_chart_option(chart, option);
   },
 }
 
 
 
-var schema = [
-    {name: 'date', index: 0, text: '日期'},
-    {name: 'AQIindex', index: 1, text: 'AQI'},
-    {name: 'PM25', index: 2, text: 'PM2.5'},
-    {name: 'PM10', index: 3, text: 'PM10'},
-    {name: 'CO', index: 4, text: ' CO'},
-    {name: 'NO2', index: 5, text: 'NO2'},
-    {name: 'SO2', index: 6, text: 'SO2'},
-    {name: '等级', index: 7, text: '等级'}
-];
+var schema = [{
+  name: 'date',
+  index: 0,
+  text: '日期'
+}, {
+  name: 'AQIindex',
+  index: 1,
+  text: 'AQI'
+}, {
+  name: 'PM25',
+  index: 2,
+  text: 'PM2.5'
+}, {
+  name: 'PM10',
+  index: 3,
+  text: 'PM10'
+}, {
+  name: 'CO',
+  index: 4,
+  text: ' CO'
+}, {
+  name: 'NO2',
+  index: 5,
+  text: 'NO2'
+}, {
+  name: 'SO2',
+  index: 6,
+  text: 'SO2'
+}, {
+  name: '等级',
+  index: 7,
+  text: '等级'
+}];
 
 
 var Descartes_ChartPOJO = Descartes_ChartPOJO || {};
 Descartes_ChartPOJO = {
-  initialize_chart:function(chart,type,show_split_line, x_Axis_data, series_name, series_data){
-    if(!chart){
+  initialize_chart: function(chart, type, show_split_line, x_Axis_data, series_name, series_data) {
+    if (!chart) {
       return null;
     }
     var chart_parent_div_id = chart.parent_div_id;
     var option = chart.getOption();
 
 
-    option.grid =ClonePOJO.deepClone(default_grid);
+    option.grid = ClonePOJO.deepClone(default_grid);
     option.xAxis = ClonePOJO.deepClone(default_xAxis);
 
     option.xAxis.splitLine.show = show_split_line;
-    if(x_Axis_data){
-      option.xAxis.data= x_Axis_data;
+    if (x_Axis_data) {
+      option.xAxis.data = x_Axis_data;
     }
 
     option.yAxis = ClonePOJO.deepClone(default_yAxis);
@@ -1042,10 +1072,10 @@ Descartes_ChartPOJO = {
     option.yAxis.splitLine.show = show_split_line;
     option.dataZoom = ClonePOJO.deepClone(default_dataZoom);
 
-    chart = ChartPOJO.reset_chart_option(chart,option);
-    if(series_name && series_data){
+    chart = ChartPOJO.reset_chart_option(chart, option);
+    if (series_name && series_data) {
 
-      chart = ChartPOJO.addSeries(chart,series_name,type,series_data);
+      chart = ChartPOJO.addSeries(chart, series_name, type, series_data);
     }
 
 
@@ -1054,23 +1084,23 @@ Descartes_ChartPOJO = {
   },
 
   //[{"name":"name1","data":[1,2]},{"name":"name2","data":[2,3]}]
-  reset_series_data:function(chart,series_data,type,scale_setting){
+  reset_series_data: function(chart, series_data, type, scale_setting) {
     ChartPOJO.removeAllSeries(chart);
     $.each(series_data, function(index, value) {
       var series_item_name = value.name;
       var series_item_data = value.data;
-      if(series_item_name && series_item_data){
-        chart = ChartPOJO.addSeries(chart,series_item_name,type,series_item_data,scale_setting);
+      if (series_item_name && series_item_data) {
+        chart = ChartPOJO.addSeries(chart, series_item_name, type, series_item_data, scale_setting);
       }
     });
     return chart;
   },
 
-  build_series_data:function(chart){
+  build_series_data: function(chart) {
     var result = [];
-    if(chart){
+    if (chart) {
       var s = chart.getOption().series;
-      $.each(s,function(index,value){
+      $.each(s, function(index, value) {
         var series_object = {
           name: value.name,
           type: value.type,
@@ -1084,26 +1114,6 @@ Descartes_ChartPOJO = {
     return result;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
