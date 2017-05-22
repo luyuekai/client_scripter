@@ -440,6 +440,29 @@ ChartPOJO = {
     return stacks;
   },
 
+  deserialize_chart_option: function(json) {
+    var option = $.parseJSON(json);
+    return option;
+  },
+  
+  renderChart: function(parent_div_id, option) {
+    if (parent_div_id && option) {
+      var chart = echarts.init(document.getElementById(parent_div_id));
+      // 使用刚指定的配置项和数据显示图表。
+      chart.setOption(option);
+
+      $(window).resize(function() {
+        setTimeout(function() {
+          chart.resize();
+        }, 500);
+      });
+      return chart;
+    }
+  },
+  
+    serialize_chart_option: function(option) {
+    return $.toJSON(option);
+  },
 }
 
 
@@ -754,8 +777,10 @@ Radar_ChartPOJO = {
       // shape: 'circle',
       indicator: indicator||[]
     };
-
-    option.series.push({
+      if(option.series[2]){
+      console.log(option.series.pop())
+      }
+      option.series.push({
       type: 'radar',
       data: series_data||[]
     });

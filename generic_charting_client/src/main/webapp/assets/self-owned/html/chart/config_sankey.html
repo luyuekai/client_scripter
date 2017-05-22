@@ -1,9 +1,9 @@
-<div>
+<div id="sankey_content">
   <form class="form-horizontal">
     <div class="form-group">
       <label class="col-sm-2 control-label">Nodes</label>
       <div class="col-sm-8">
-        <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+          <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:nodes"></textarea>
       </div>
 
       <div class="col-sm-1">
@@ -13,7 +13,7 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">Links</label>
       <div class="col-sm-8">
-        <textarea id="links_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+          <textarea id="links_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:links"></textarea>
       </div>
 
       <div class="col-sm-1">
@@ -80,7 +80,13 @@
 
 
 <script>
+var sankeyViewModel = {
+    nodes: ko.observable(),
+    links: ko.observable()
+}
 
+    ko.cleanNode($('#sankey_content'))
+    ko.applyBindings(sankeyViewModel, document.getElementById('sankey_content'))
 
   function reset_sankey_nodes(){
     var tmp = $('#nodes_value_input').val();

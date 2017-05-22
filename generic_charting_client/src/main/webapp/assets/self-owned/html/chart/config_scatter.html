@@ -1,194 +1,202 @@
-<div>
-  <form class="form-horizontal">
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Axis Base</label>
-      <div class="col-sm-7">
-        <div>
-          <div class="radio radio-inline">
-            <input type="radio" name="radio_axis" id="radio_axis_x" value="x" checked>
-            <label for="radio_axis_x" title="left">
-              &nbsp;X Axis
-            </label>
-          </div>
-          <div class="radio radio-inline">
-            <input type="radio" name="radio_axis" id="radio_axis_y" value="y">
-            <label for="radio_axis_y" title="center">
-              &nbsp;Y Axis
-            </label>
-          </div>
+<div id="scatter_content">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Axis Base</label>
+            <div class="col-sm-7">
+                <div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_axis" id="radio_axis_x" value="x" data-bind="checked:xOry" checked>
+                        <label for="radio_axis_x" title="left">
+                            &nbsp;X Axis
+                        </label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_axis" id="radio_axis_y" value="y" data-bind="checked:xOry">
+                        <label for="radio_axis_y" title="center">
+                            &nbsp;Y Axis
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Axis Value</label>
-      <div class="col-sm-7">
-        <div class="input-group">
-          <span class="input-group-addon" id="basic-addon1">
-            <i class="fa fa-bars" aria-hidden="true"></i>&nbsp;</span>
-          <input id="axis_value_input" type="text" class="form-control" placeholder="Axis value:cat,dog,bird,fish" aria-describedby="basic-addon1">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Axis Value</label>
+            <div class="col-sm-7">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">
+                        <i class="fa fa-bars" aria-hidden="true"></i>&nbsp;</span>
+                    <input id="axis_value_input" type="text" class="form-control" placeholder="Axis value:cat,dog,bird,fish" aria-describedby="basic-addon1" data-bind="value:axis">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button onclick="reset_axis_base()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+            </div>
         </div>
-      </div>
-      <div class="col-sm-2">
-        <button onclick="reset_axis_base()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Series Data</label>
-      <div class="col-sm-7">
-        <div class="input-group" title="From Source">
-          <span class="input-group-addon" id="basic-addon2">
-            <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
-          <input id="add_name_input" type="text" class="form-control" placeholder="Series Name" aria-describedby="basic-addon2">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Series Data</label>
+            <div class="col-sm-7">
+                <div class="input-group" title="From Source">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
+                    <input id="add_name_input" type="text" class="form-control" placeholder="Series Name" aria-describedby="basic-addon2">
+                </div>
+                <div class="input-group" title="From Source">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+                    <input id="add_value_input" type="text" class="form-control" placeholder="Series Value" aria-describedby="basic-addon2">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button onclick="add_series_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+                <button onclick="ModalUtil.popup_modal('Manual minus series', '/assets/self-owned/html/chart/modal/modal_content_minus_series.html', null, null, null);" title="Manual remove series" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
+            </div>
         </div>
-        <div class="input-group" title="From Source">
-          <span class="input-group-addon" id="basic-addon2">
-            <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
-          <input id="add_value_input" type="text" class="form-control" placeholder="Series Value" aria-describedby="basic-addon2">
-        </div>
-      </div>
-      <div class="col-sm-2">
-        <button onclick="add_series_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
-        <button onclick="ModalUtil.popup_modal('Manual minus series', '/assets/self-owned/html/chart/modal/modal_content_minus_series.html', null, null, null);" title="Manual remove series" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Series</label>
-      <div class="col-sm-7">
-        <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
-      </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Series</label>
+            <div class="col-sm-7">
+                <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value: series"></textarea>
+            </div>
 
-      <div class="col-sm-1">
-        <button onclick="reset_series()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Scale</label>
-      <div class="col-sm-7">
-        <div>
-          <div class="radio radio-inline">
-            <input type="radio" name="radio_scale" id="radio_scale_default" value="default"  checked onchange="scale_setting_listener()">
-            <label for="radio_scale_default" title="Use default">
-              &nbsp;Use default
-            </label>
-          </div>
-          <div class="radio radio-inline">
-            <input type="radio" name="radio_scale" id="radio_scale_series" value="series" onchange="scale_setting_listener()">
-            <label for="radio_scale_series" title="Use series">
-              &nbsp;Use series
-            </label>
-          </div>
-          <div class="radio radio-inline">
-            <input type="radio" name="radio_scale" id="radio_scale_manual" value="manual" onchange="scale_setting_listener()">
-            <label for="radio_scale_manual" title="Manual">
-              &nbsp;Manual
-            </label>
-          </div>
-          <div class="radio radio-inline">
-            <input type="radio" name="radio_scale" id="radio_scale_disable" value="disable" onchange="scale_setting_listener()">
-            <label for="radio_scale_disable" title="Disable">
-              &nbsp;Disable
-            </label>
-          </div>
+            <div class="col-sm-1">
+                <button onclick="reset_series()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+            </div>
         </div>
-      </div>
-      <div class="col-sm-2">
-        <button onclick="reset_scale()" title="Manual reset scale" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
-      </div>
-    </div>
-    <div class="form-group" id="scale_manual_div" style="display:none">
-      <label class="col-sm-3 control-label">Scale Value</label>
-      <div class="col-sm-3">
-        <div class="input-group">
-          <span class="input-group-addon" id="basic-addon1">
-            <i class="fa fa-tag" aria-hidden="true"></i>&nbsp;Min</span>
-          <input type="text" class="form-control" placeholder="Min Value" aria-describedby="basic-addon1" id="scale_min_value_input">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Scale</label>
+            <div class="col-sm-7">
+                <div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_scale" id="radio_scale_default" value="default"  checked onchange="scale_setting_listener()">
+                        <label for="radio_scale_default" title="Use default">
+                            &nbsp;Use default
+                        </label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_scale" id="radio_scale_series" value="series" onchange="scale_setting_listener()">
+                        <label for="radio_scale_series" title="Use series">
+                            &nbsp;Use series
+                        </label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_scale" id="radio_scale_manual" value="manual" onchange="scale_setting_listener()">
+                        <label for="radio_scale_manual" title="Manual">
+                            &nbsp;Manual
+                        </label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_scale" id="radio_scale_disable" value="disable" onchange="scale_setting_listener()">
+                        <label for="radio_scale_disable" title="Disable">
+                            &nbsp;Disable
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button onclick="reset_scale()" title="Manual reset scale" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+            </div>
         </div>
-      </div>
-      <div class="col-sm-3">
-        <div class="input-group">
-          <span class="input-group-addon" id="basic-addon1">
-            <i class="fa fa-tag" aria-hidden="true"></i>&nbsp;Max</span>
-          <input type="text" class="form-control" placeholder="Max Value" aria-describedby="basic-addon1" id="scale_max_value_input">
+        <div class="form-group" id="scale_manual_div" style="display:none">
+            <label class="col-sm-3 control-label">Scale Value</label>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">
+                        <i class="fa fa-tag" aria-hidden="true"></i>&nbsp;Min</span>
+                    <input type="text" class="form-control" placeholder="Min Value" aria-describedby="basic-addon1" id="scale_min_value_input">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">
+                        <i class="fa fa-tag" aria-hidden="true"></i>&nbsp;Max</span>
+                    <input type="text" class="form-control" placeholder="Max Value" aria-describedby="basic-addon1" id="scale_max_value_input">
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </form>
+    </form>
 </div>
 
 
 <script>
-  function add_series_data() {
-    var data_name = $('#add_name_input').val();
-    var data_value = $('#add_value_input').val().split(',');
-    if (data_name && data_value && chartViewModel && chartViewModel.chart) {
-      chartViewModel.chart = ChartPOJO.addSeries(chartViewModel.chart, data_name, 'scatter', data_value);
+    var scatterViewModel = {
+        xOry : ko.observable('x'),
+        axis: ko.observable(''),
+        series: ko.observable('')
     }
-  }
+    ko.cleanNode($('#scatter_content'))
+    ko.applyBindings(scatterViewModel, document.getElementById('scatter_content'))
 
-
-
-
-  function reset_series() {
-    var tmp = $('#nodes_value_input').val();
-    tmp = $.parseJSON(tmp);
-    if (tmp && chartViewModel && chartViewModel.chart) {
-      // chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart,tmp,'scatter');
-      reset_scale(tmp);
-    }
-  }
-
-
-  function reset_axis_base() {
-    var checked = $("[name='radio_axis']").filter(":checked");
-    var axis_base = $(checked[0]).val();
-    var axis_data = $('#axis_value_input').val().split(',');
-    // alert(axis_base)
-    if (chartViewModel && chartViewModel.chart) {
-      chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, axis_base, axis_data);
-    }
-  }
-
-  function reset_scale(series_data) {
-    var checked = $("[name='radio_scale']").filter(":checked");
-    var scale_type = $(checked[0]).val();
-
-    if (chartViewModel && chartViewModel.chart) {
-      var scale_setting = null;
-        scale_setting ={
-          enable:false,
-          useData:false,
-          min_scale:10,
-          max_scale:50,
-          min_value:1,
-          max_value:10000
-        };
-        if(scale_type == 'default' || scale_type == 'disable'){
-
-        }else if(scale_type == 'series'){
-          scale_setting.enable=true;
-          scale_setting.useData = true;
-        }else if(scale_type == 'manual'){
-          scale_setting.enable=true;
-          var min_value = $('#scale_min_value_input').val();
-          var max_value = $('#scale_max_value_input').val();
-          scale_setting.min_value = min_value || 10;
-          scale_setting.max_value = max_value || 50;
+    function add_series_data() {
+        var data_name = $('#add_name_input').val();
+        var data_value = $('#add_value_input').val().split(',');
+        if (data_name && data_value && chartViewModel && chartViewModel.chart) {
+            chartViewModel.chart = ChartPOJO.addSeries(chartViewModel.chart, data_name, 'scatter', data_value);
         }
-        if(!series_data){
-          series_data = Descartes_ChartPOJO.build_series_data(chart);
+    }
+
+
+
+
+    function reset_series() {
+        var tmp = $('#nodes_value_input').val();
+        tmp = $.parseJSON(tmp);
+        if (tmp && chartViewModel && chartViewModel.chart) {
+            // chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart,tmp,'scatter');
+            reset_scale(tmp);
         }
-        chartViewModel.chart =  Descartes_ChartPOJO.reset_series_data(chartViewModel.chart,series_data,'scatter',scale_setting)
-    }
-  }
-
-  function scale_setting_listener(){
-    var checked = $("[name='radio_scale']").filter(":checked");
-    var scale_type = $(checked[0]).val();
-    if(scale_type == 'manual'){
-      show_div("scale_manual_div")
-    }else{
-      hide_div("scale_manual_div")
     }
 
-  }
+
+    function reset_axis_base() {
+        var checked = $("[name='radio_axis']").filter(":checked");
+        var axis_base = $(checked[0]).val();
+        var axis_data = $('#axis_value_input').val().split(',');
+        // alert(axis_base)
+        if (chartViewModel && chartViewModel.chart) {
+            chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, axis_base, axis_data);
+        }
+    }
+
+    function reset_scale(series_data) {
+        var checked = $("[name='radio_scale']").filter(":checked");
+        var scale_type = $(checked[0]).val();
+
+        if (chartViewModel && chartViewModel.chart) {
+            var scale_setting = null;
+            scale_setting = {
+                enable: false,
+                useData: false,
+                min_scale: 10,
+                max_scale: 50,
+                min_value: 1,
+                max_value: 10000
+            };
+            if (scale_type == 'default' || scale_type == 'disable') {
+
+            } else if (scale_type == 'series') {
+                scale_setting.enable = true;
+                scale_setting.useData = true;
+            } else if (scale_type == 'manual') {
+                scale_setting.enable = true;
+                var min_value = $('#scale_min_value_input').val();
+                var max_value = $('#scale_max_value_input').val();
+                scale_setting.min_value = min_value || 10;
+                scale_setting.max_value = max_value || 50;
+            }
+            if (!series_data) {
+                series_data = Descartes_ChartPOJO.build_series_data(chart);
+            }
+            chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, series_data, 'scatter', scale_setting)
+        }
+    }
+
+    function scale_setting_listener() {
+        var checked = $("[name='radio_scale']").filter(":checked");
+        var scale_type = $(checked[0]).val();
+        if (scale_type == 'manual') {
+            show_div("scale_manual_div")
+        } else {
+            hide_div("scale_manual_div")
+        }
+
+    }
 </script>

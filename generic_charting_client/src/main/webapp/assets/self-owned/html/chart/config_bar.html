@@ -1,17 +1,17 @@
-<div>
+<div id="bar_content">
   <form class="form-horizontal">
     <div class="form-group">
       <label class="col-sm-3 control-label">Axis Base</label>
       <div class="col-sm-7">
         <div>
           <div class="radio radio-inline">
-            <input type="radio" name="radio_axis" id="radio_axis_x" value="x" checked>
+            <input type="radio" name="radio_axis" id="radio_axis_x" value="x" data-bind="checked:xOry" checked>
             <label for="radio_axis_x" title="left">
               &nbsp;X Axis
             </label>
           </div>
           <div class="radio radio-inline">
-            <input type="radio" name="radio_axis" id="radio_axis_y" value="y">
+            <input type="radio" name="radio_axis" id="radio_axis_y" value="y" data-bind="checked:xOry">
             <label for="radio_axis_y" title="center">
               &nbsp;Y Axis
             </label>
@@ -25,7 +25,7 @@
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon1">
             <i class="fa fa-bars" aria-hidden="true"></i>&nbsp;</span>
-          <input id="axis_value_input" type="text" class="form-control" placeholder="Axis value:cat,dog,bird,fish" aria-describedby="basic-addon1">
+          <input id="axis_value_input" type="text" class="form-control" placeholder="Axis value:cat,dog,bird,fish" aria-describedby="basic-addon1" data-bind="value:axis">
         </div>
       </div>
       <div class="col-sm-2">
@@ -61,7 +61,7 @@
     <div class="form-group">
       <label class="col-sm-3 control-label">Series</label>
       <div class="col-sm-7">
-        <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+        <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value: series"></textarea>
       </div>
 
       <div class="col-sm-1">
@@ -73,6 +73,14 @@
 
 
 <script>
+     var barViewModel = {
+        xOry : ko.observable('x'),
+        axis: ko.observable(''),
+        series: ko.observable('')
+    }
+    ko.cleanNode($('#bar_content'))
+    ko.applyBindings(barViewModel, document.getElementById('bar_content'))
+    
   function add_series_data() {
     var data_name = $('#add_name_input').val();
     var data_value = $('#add_value_input').val().split(',');
