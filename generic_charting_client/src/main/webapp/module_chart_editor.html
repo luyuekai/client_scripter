@@ -122,7 +122,7 @@
                                                     <option value="circular">Chart-Circular </option>
                                                     <option value="pie">Chart-Pie </option>
                                                     <option value="radar">Chart-Radar</option>
-                                                    <option value="river">Chart-River</option>
+                                                    <option value="themeRiver">Chart-River</option>
                                                     <option value="treemap">Chart-TreeMap</option>
                                                     <option value="boxplot">Chart-BoxPlot</option>
                                                     <option value="sankey">Chart-Sankey</option>
@@ -170,7 +170,21 @@
                                 </div>
                             </div>
                             <div class="card-body" id="detail_config_content_div">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Title</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" id="basic-addon1">
+                                                    <i class="fa fa-bars" aria-hidden="true"></i>&nbsp;</span>
+                                                <input id="title_value_input" type="text" class="form-control" placeholder="default:matrix chart" aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button onclick="reset_title()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -208,67 +222,72 @@
             </div>
         </div>
 
-            <script type="text/javascript" src="assets/reference/flat-admin/assets/js/vendor_min.js"></script>
-            <script type="text/javascript" src="assets/reference/flat-admin/assets/js/app.js"></script>
+        <script type="text/javascript" src="assets/reference/flat-admin/assets/js/vendor_min.js"></script>
+        <script type="text/javascript" src="assets/reference/flat-admin/assets/js/app.js"></script>
 
-            <script src="assets/reference/codemirror/codemirror.js"></script>
-            <script src="assets/reference/codemirror/mode/javascript/javascript.js"></script>
-            <script src="assets/reference/codemirror/mode/markdown/markdown.js"></script>
+        <script src="assets/reference/codemirror/codemirror.js"></script>
+        <script src="assets/reference/codemirror/mode/javascript/javascript.js"></script>
+        <script src="assets/reference/codemirror/mode/markdown/markdown.js"></script>
 
-            <script src="assets/reference/jquery/jquery.json.js"></script>
-            <script src="assets/reference/jquery/jquery.blockUI.js"></script>
-            <script src="assets/reference/knockout.js/knockout-3.3.0.js"></script>
-            <script src="assets/reference/jquery-tiny-pubsub/tiny-pubsub.js"></script>
-            <script src="assets/reference/markdown/showdown.js"></script>
-            <script src="assets/reference/echarts/echarts-min.js"></script>
-            <script src="assets/reference/echarts/dataTools.js"></script>
-            <script src="assets/reference/echarts/geo/world.js"></script>
+        <script src="assets/reference/jquery/jquery.json.js"></script>
+        <script src="assets/reference/jquery/jquery.blockUI.js"></script>
+        <script src="assets/reference/knockout.js/knockout-3.3.0.js"></script>
+        <script src="assets/reference/jquery-tiny-pubsub/tiny-pubsub.js"></script>
+        <script src="assets/reference/markdown/showdown.js"></script>
+        <script src="assets/reference/echarts/echarts-min.js"></script>
+        <script src="assets/reference/echarts/dataTools.js"></script>
+        <script src="assets/reference/echarts/geo/world.js"></script>
 
-            <script src="assets/reference/bootstrap-fileinput/js/fileinput_ly.js"></script>
-            <script src="assets/reference/bootstrap-fileinput/js/locales/zh.js"></script>
+        <script src="assets/reference/bootstrap-fileinput/js/fileinput_ly.js"></script>
+        <script src="assets/reference/bootstrap-fileinput/js/locales/zh.js"></script>
 
-            <!-- Javascript for Matrix Self Owned -->
-            <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
-            <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
-            <script src="assets/self-owned/js/generic/generic_cache.js"></script>
-            <script src="assets/self-owned/js/generic/generic_charting_v4.js"></script>
-            <script src="assets/self-owned/js/generic/generic_csv.js"></script>
-            <script src="assets/self-owned/js/generic/generic_cud.js"></script>
-            <script src="assets/self-owned/js/generic/generic_modal.js"></script>
-            <script src="assets/self-owned/js/generic/generic_query.js"></script>
-            <script src="assets/self-owned/js/generic/generic_table.js"></script>
-            <script src="assets/self-owned/js/generic/generic_util.js"></script>
-            <script src="assets/self-owned/js/generic/generic_validation.js"></script>
-            <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
-            <script src="assets/self-owned/js/generic/generic_upload.js"></script>
-            <!-- Javascript for Matrix chart Editor Self Owned -->
-            <script src="assets/self-owned/js/module/kits/vm.js"></script>
-            <script src="assets/self-owned/js/module/kits/logic.js"></script>
+        <!-- Javascript for Matrix Self Owned -->
+        <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
+        <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
+        <script src="assets/self-owned/js/generic/generic_cache.js"></script>
+        <script src="assets/self-owned/js/generic/generic_charting_v4.js"></script>
+        <script src="assets/self-owned/js/generic/generic_csv.js"></script>
+        <script src="assets/self-owned/js/generic/generic_cud.js"></script>
+        <script src="assets/self-owned/js/generic/generic_modal.js"></script>
+        <script src="assets/self-owned/js/generic/generic_query.js"></script>
+        <script src="assets/self-owned/js/generic/generic_table.js"></script>
+        <script src="assets/self-owned/js/generic/generic_util.js"></script>
+        <script src="assets/self-owned/js/generic/generic_validation.js"></script>
+        <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
+        <script src="assets/self-owned/js/generic/generic_upload.js"></script>
+        <!-- Javascript for Matrix chart Editor Self Owned -->
+        <script src="assets/self-owned/js/module/kits/vm.js"></script>
+        <script src="assets/self-owned/js/module/kits/logic.js"></script>
 
-            <script src="assets/self-owned/js/chart/matrix_chart_model.js"></script>
-            <script src="assets/self-owned/js/chart/matrix_chart_logic.js"></script>
+        <script src="assets/self-owned/js/chart/matrix_chart_model.js"></script>
+        <script src="assets/self-owned/js/chart/matrix_chart_logic.js"></script>
 
 
 
-            <script>
-                                            $(document).ready(function () {
-                                                $('#sidebar').load($.getRootPath() + '/components/left_side.html');
-                                                $('#navbar').load($.getRootPath() + '/components/header.html');
-                                                setTimeout(function () {
-                                                    $('#navbar_title_li').html('Matrix Chart Editor');
-                                                    $('#navbar_search_li').css('display', 'none');                                                
-                                                }, 200);
+        <script>
+                    $(document).ready(function () {
+                        $('#sidebar').load($.getRootPath() + '/components/left_side.html');
+                        $('#navbar').load($.getRootPath() + '/components/header.html');
+                        setTimeout(function () {
+                            $('#navbar_title_li').html('Matrix Chart Editor');
+                            $('#navbar_search_li').css('display', 'none');
+                        }, 200);
 
-                                                setTimeout(function () {
-                                                    if($.hasUrlParam('token')){
-                                                        SharePOJO.environmentCheck();
-                                                        
-                                                    }else{
-                                                    rerender_children_dom('bar')
-                                                }
-                                                }, 800);
-                                            });
-            </script>
+                        setTimeout(function () {
+                            if ($.hasUrlParam('token')) {
+                                SharePOJO.environmentCheck();
 
-</body>
+                            } else {
+                                rerender_children_dom('bar')
+                            }
+                        }, 800);
+                    });
+                    
+                    function reset_title(){
+                        var chart_title = $('#title_value_input').val();
+                        chartViewModel.chart.setOption({title:{text: chart_title}})
+                    }
+        </script>
+
+    </body>
 </html>

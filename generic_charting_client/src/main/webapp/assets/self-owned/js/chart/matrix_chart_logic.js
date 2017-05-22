@@ -69,7 +69,7 @@ function successListener() {
         var option = ChartPOJO.deserialize_chart_option(json_chart);
         console.log(option)
         var chart_type = option.series[0].type;
-        if (chart_type !== 'graph') {
+        if (chart_type !== 'graph' && chart_type !== 'line') {
             rerender_children_dom(chart_type);
         }
         setTimeout(function () {
@@ -81,7 +81,8 @@ function successListener() {
                     } else {
                         barViewModel.xOry('y');
                         barViewModel.axis(JSON.stringify(option.yAxis[0].data).replace(/[\[\]"]/g, ''));
-                    };
+                    }
+                    ;
                     var a = [];
                     option.series.forEach(function (item) {
                         a.push({"name": item.name, "data": item.data})
@@ -89,18 +90,41 @@ function successListener() {
                     barViewModel.series(JSON.stringify(a));
                     break;
                 case 'line':
-                    if (option.xAxis[0].data) {
-                        lineViewModel.xOry('x');
-                        lineViewModel.axis(JSON.stringify(option.xAxis[0].data).replace(/[\[\]"]/g, ''));
+                    if (!option.series[0].areaStyle) {
+                        rerender_children_dom('line');
+                        setTimeout(function () {
+                            if (option.xAxis[0].data) {
+                                lineViewModel.xOry('x');
+                                lineViewModel.axis(JSON.stringify(option.xAxis[0].data).replace(/[\[\]"]/g, ''));
+                            } else {
+                                lineViewModel.xOry('y');
+                                lineViewModel.axis(JSON.stringify(option.yAxis[0].data).replace(/[\[\]"]/g, ''));
+                            }
+                            ;
+                            var a = [];
+                            option.series.forEach(function (item) {
+                                a.push({"name": item.name, "data": item.data})
+                            });
+                            lineViewModel.series(JSON.stringify(a));
+                        }, 200);
                     } else {
-                        lineViewModel.xOry('y');
-                        lineViewModel.axis(JSON.stringify(option.yAxis[0].data).replace(/[\[\]"]/g, ''));
-                    };
-                    var a = [];
-                    option.series.forEach(function (item) {
-                        a.push({"name": item.name, "data": item.data})
-                    });
-                    lineViewModel.series(JSON.stringify(a));
+                        rerender_children_dom('area');
+                        setTimeout(function () {
+                            if (option.xAxis[0].data) {
+                                areaViewModel.xOry('x');
+                                areaViewModel.axis(JSON.stringify(option.xAxis[0].data).replace(/[\[\]"]/g, ''));
+                            } else {
+                                areaViewModel.xOry('y');
+                                areaViewModel.axis(JSON.stringify(option.yAxis[0].data).replace(/[\[\]"]/g, ''));
+                            }
+                            ;
+                            var a = [];
+                            option.series.forEach(function (item) {
+                                a.push({"name": item.name, "data": item.data})
+                            });
+                            areaViewModel.series(JSON.stringify(a));
+                        }, 200);
+                    }
                     break;
                 case 'scatter':
                     if (option.xAxis[0].data) {
@@ -160,6 +184,8 @@ function successListener() {
                     parallelViewModel.series(b);
                     break;
                 case 'themeRiver':
+                    riverViewModel.type(option.singleAxis[0].type);
+                    riverViewModel.series(JSON.stringify(option.series[0].data))
                     break;
                 case 'sankey':
                     sankeyViewModel.nodes(JSON.stringify(option.series[0].data));

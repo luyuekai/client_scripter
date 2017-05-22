@@ -1,17 +1,17 @@
-<div>
+<div id="river_content">
   <form class="form-horizontal">
     <div class="form-group">
       <label for="inputPassword3" class="col-sm-2 control-label">Type</label>
       <div class="col-sm-8">
         <div>
           <div class="radio radio-inline">
-            <input type="radio" name="radio_river_type" id="radio_river_type_0" value="value" checked>
+              <input type="radio" name="radio_river_type" id="radio_river_type_0" value="value" data-bind="checked: type" checked>
             <label for="radio_river_type_0" title="left">
               &nbsp;Value
             </label>
           </div>
           <div class="radio radio-inline">
-            <input type="radio" name="radio_river_type" id="radio_river_type_1" value="time" >
+            <input type="radio" name="radio_river_type" id="radio_river_type_1" value="time" data-bind="checked: type">
             <label for="radio_river_type_1" title="center">
               &nbsp;Time
             </label>
@@ -32,7 +32,7 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">Series</label>
       <div class="col-sm-8">
-        <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+          <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value: series"></textarea>
       </div>
 
       <div class="col-sm-1">
@@ -76,6 +76,13 @@
 
 
 <script>
+var riverViewModel = {
+    type: ko.observable('value'),
+    series: ko.observable('')
+}
+    ko.cleanNode($('#river_content'))
+    ko.applyBindings(riverViewModel, document.getElementById('river_content'))
+    
 function reset_river_type(chart, river_type) {
   if (chartViewModel && chartViewModel.chart) {
     var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
