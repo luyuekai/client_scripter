@@ -1,4 +1,4 @@
-<div>
+<div id="pie_content">
   <form class="form-horizontal">
     <div class="form-group">
       <label class="col-sm-3 control-label">Add Data</label>
@@ -34,7 +34,7 @@
     <div class="form-group">
       <label class="col-sm-3 control-label">Series</label>
       <div class="col-sm-7">
-        <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+          <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:series"></textarea>
       </div>
 
       <div class="col-sm-1">
@@ -46,8 +46,11 @@
 
 
 <script>
-
-
+var pieViewModel = {
+    series: ko.observable('')
+}
+ko.cleanNode($('#pie_content'))
+ko.applyBindings(pieViewModel,document.getElementById('pie_content'))
 
 function add_pie_data(){
   var data_name = $('#add_name_input').val();

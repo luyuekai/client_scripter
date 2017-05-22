@@ -1,4 +1,4 @@
-<div>
+<div id="heatmap_content">
   <form class="form-horizontal">
     <div class="form-group">
       <label class="col-sm-2 control-label">X Axis</label>
@@ -6,7 +6,7 @@
         <div class="input-group" title="From Source">
           <span class="input-group-addon" id="basic-addon2">
             <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
-          <input id="x_axis_value_input" type="text" class="form-control" placeholder="X Axis" aria-describedby="basic-addon2">
+          <input id="x_axis_value_input" type="text" class="form-control" placeholder="X Axis" aria-describedby="basic-addon2" data-bind="value:xAxis">
         </div>
       </div>
       <div class="col-sm-1">
@@ -19,7 +19,7 @@
         <div class="input-group" title="From Source">
           <span class="input-group-addon" id="basic-addon2">
             <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
-          <input id="y_axis_value_input" type="text" class="form-control" placeholder="Y Axis" aria-describedby="basic-addon2">
+            <input id="y_axis_value_input" type="text" class="form-control" placeholder="Y Axis" aria-describedby="basic-addon2" data-bind="value:yAxis">
         </div>
       </div>
       <div class="col-sm-1">
@@ -29,10 +29,10 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">Scale</label>
       <div class="col-sm-3">
-        <input id="min_value_input" type="text" class="form-control" placeholder="min" aria-describedby="basic-addon2">
+          <input id="min_value_input" type="text" class="form-control" placeholder="min" aria-describedby="basic-addon2" data-bind="value:scale_min">
       </div>
       <div class="col-sm-3">
-        <input id="max_value_input" type="text" class="form-control" placeholder="max" aria-describedby="basic-addon2">
+        <input id="max_value_input" type="text" class="form-control" placeholder="max" aria-describedby="basic-addon2" data-bind="value:scale_max">
       </div>
       <div class="col-sm-1 col-sm-offset-2">
         <button onclick="reset_grid_heatmap_min_max()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
@@ -41,7 +41,7 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">Series</label>
       <div class="col-sm-8">
-        <textarea id="series_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+          <textarea id="series_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:series"></textarea>
       </div>
 
       <div class="col-sm-1">
@@ -81,6 +81,17 @@
 </div>
 
 <script>
+    var heatmapViewModel = {
+        xAxis: ko.observable(''),
+        yAxis: ko.observable(''),
+        series: ko.observable(''),
+        scale_max: ko.observable(''),
+        scale_min: ko.observable('')
+    }
+    
+    ko.cleanNode($('#heatmap_content'));
+    ko.applyBindings(heatmapViewModel, document.getElementById('heatmap_content'));
+    
   function reset_grid_heatmap_x() {
     var data_prototype = ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.data_prototype);
     data_prototype.x_data = $('#x_axis_value_input').val().split(',');

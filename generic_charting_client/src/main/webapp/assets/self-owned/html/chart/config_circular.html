@@ -1,4 +1,4 @@
-<div>
+<div id="circular_content">
   <form class="form-horizontal">
 
     <div class="form-group">
@@ -56,19 +56,19 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">Categories</label>
       <div class="col-sm-8">
-        <textarea id="categories_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+          <textarea id="categories_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:categories"></textarea>
       </div>
     </div>
     <div class="form-group">
       <label class="col-sm-2 control-label">Nodes</label>
       <div class="col-sm-8">
-        <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+          <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:nodes"></textarea>
       </div>
     </div>
     <div class="form-group">
       <label class="col-sm-2 control-label">Links</label>
       <div class="col-sm-8">
-        <textarea id="links_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+          <textarea id="links_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:links"></textarea>
       </div>
       <div class="col-sm-1">
         <button onclick="reset_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
@@ -80,6 +80,13 @@
 
 
 <script>
+var circularViewModel = {
+        categories: ko.observable(''),
+        nodes: ko.observable(''),
+        links: ko.observable('')
+}
+    ko.cleanNode($('#circular_content'))
+    ko.applyBindings(circularViewModel, document.getElementById('circular_content'))
 
 function reset_data(){
   var nodes = eval($('#nodes_value_input').val())||[];
