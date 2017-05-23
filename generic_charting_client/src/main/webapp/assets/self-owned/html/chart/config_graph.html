@@ -1,37 +1,14 @@
 <div id="graph_content">
     <form class="form-horizontal">
 
-    <div class="form-group">
-      <label class="col-sm-2 control-label">Node+</label>
-      <div class="col-sm-4">
-        <input id="add_node_name_input" type="text" class="form-control" placeholder="Name" aria-describedby="basic-addon2">
-      </div>
-      <div class="col-sm-4">
-        <input id="add_node_category_input" type="text" class="form-control" placeholder="Category" aria-describedby="basic-addon2">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-2 control-label"></label>
-      <div class="col-sm-2">
-        <input id="add_node_x_input" type="text" class="form-control" placeholder="X" aria-describedby="basic-addon2">
-      </div>
-      <div class="col-sm-2">
-        <input id="add_node_y_input" type="text" class="form-control" placeholder="Y" aria-describedby="basic-addon2">
-      </div>
-      <div class="col-sm-4">
-        <input id="add_node_value_input" type="text" class="form-control" placeholder="Value" aria-describedby="basic-addon2">
-      </div>
-      <div class="col-sm-1">
-        <button onclick="chartViewModel.chart = Graph_ChartPOJO.add_data(chartViewModel.chart ,$('#add_node_name_input').val(),Number($('#add_node_x_input').val()),Number($('#add_node_y_input').val()),Number($('#add_node_value_input').val()),$('#add_node_category_input').val())" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-2 control-label">Node-</label>
-      <div class="col-sm-8">
-        <div class="input-group" title="From Source">
-          <span class="input-group-addon" id="basic-addon2">
-            <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
-          <input id="remove_node_value_input" type="text" class="form-control" placeholder="Node Name" aria-describedby="basic-addon2">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Node+</label>
+            <div class="col-sm-4">
+                <input id="add_node_name_input" type="text" class="form-control" placeholder="Name" aria-describedby="basic-addon2">
+            </div>
+            <div class="col-sm-4">
+                <input id="add_node_category_input" type="text" class="form-control" placeholder="Category" aria-describedby="basic-addon2">
+            </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label"></label>
@@ -88,19 +65,19 @@
         <div class="form-group">
             <label class="col-sm-2 control-label">Categories</label>
             <div class="col-sm-8">
-                <textarea id="categories_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:categories"></textarea>
+                <textarea id="categories_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">Nodes</label>
             <div class="col-sm-8">
-                <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:nodes"></textarea>
+                <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">Links</label>
             <div class="col-sm-8">
-                <textarea id="links_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:links"></textarea>
+                <textarea id="links_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
             </div>
             <div class="col-sm-1">
                 <button onclick="reset_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
