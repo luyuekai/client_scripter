@@ -193,12 +193,12 @@ function successListener() {
                     break;
                 case 'graph':
                     var layout = option.series[0].layout;
-
-                    setTimeout(function () {
                         if (layout == 'none') {
                             rerender_children_dom('graph');
                             setTimeout(function () {
-
+                                graphViewModel.categories(JSON.stringify(option.series[0].categories));
+                                graphViewModel.nodes(JSON.stringify(option.series[0].data));
+                                graphViewModel.links(JSON.stringify(option.series[0].links));
                             }, 200);
                         } else if (layout == 'circular') {
                             rerender_children_dom('circular');
@@ -215,8 +215,6 @@ function successListener() {
                                 forceViewModel.links(JSON.stringify(option.series[0].links));
                             }, 200);
                         }
-                    }, 200)
-
                     break;
                 default:
             }
