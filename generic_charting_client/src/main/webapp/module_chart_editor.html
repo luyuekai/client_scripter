@@ -1,107 +1,107 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Matrix</title>
-        <link rel="shortcut icon" href="assets/self-owned/ico/favicon.ico">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Matrix</title>
+  <link rel="shortcut icon" href="assets/self-owned/ico/favicon.ico">
 
-        <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/vendor.css">
-        <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/flat-admin.css">
-        <!-- Theme -->
-        <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/blue-sky.css">
-        <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/blue.css">
-        <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/red.css">
-        <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/yellow.css">
+  <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/vendor.css">
+  <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/flat-admin.css">
+  <!-- Theme -->
+  <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/blue-sky.css">
+  <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/blue.css">
+  <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/red.css">
+  <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/yellow.css">
 
-        <link rel="stylesheet" href="assets/reference/codemirror/codemirror.css">
+  <link rel="stylesheet" href="assets/reference/codemirror/codemirror.css">
 
-        <link rel="stylesheet" href="assets/reference/github-markdown-css/github-markdown.css">
+  <link rel="stylesheet" href="assets/reference/github-markdown-css/github-markdown.css">
 
-        <link rel="stylesheet" type="text/css" href="assets/self-owned/css/matrix_v3.css">
+  <link rel="stylesheet" type="text/css" href="assets/self-owned/css/matrix_v3.css">
 
-        <link rel="stylesheet" type="text/css" href="assets/reference/bootstrap-fileinput/css/fileinput_ly.css" media="all">
+  <link rel="stylesheet" type="text/css" href="assets/reference/bootstrap-fileinput/css/fileinput_ly.css" media="all">
 
-    </head>
+</head>
 
-    <body>
+<body>
 
-        <div class="app app-blue-sky" id="contentDIV">
+  <div class="app app-blue-sky" id="contentDIV">
 
-            <aside class="app-sidebar" id="sidebar" style="position:fixed;top:0px;"></aside>
-            <div class="app-container" id="main_content_div">
+    <aside class="app-sidebar" id="sidebar" style="position:fixed;top:0px;"></aside>
+    <div class="app-container" id="main_content_div">
 
-                <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="margin-left: 180px;"></nav>
+      <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="margin-left: 180px;"></nav>
 
-                <div id="hidden_div" class="row" style="position:fixed;top:88px;left: 180px;right: 0px;z-index:100006;background-color: #E7EDEE;height:30px">
-                    <div class="col-xs-12">
-                    </div>
-                </div>
+      <div id="hidden_div" class="row" style="position:fixed;top:88px;left: 180px;right: 0px;z-index:100006;background-color: #E7EDEE;height:30px">
+        <div class="col-xs-12">
+        </div>
+      </div>
 
-                <div class="row" id="menubar_div" style="position:fixed;top:118px;left: 180px;right: 0px;z-index:100006">
+      <div class="row" id="menubar_div" style="position:fixed;top:118px;left: 180px;right: 0px;z-index:100006">
 
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0px;">
-                        <div class="card card-mini">
-                            <div class="card-header">
-                                <div class="card-title">
-                                    <button title="Clean" type="button" onclick="ModalUtil.popup_modal('New Chart', '/assets/self-owned/html/chart/modal/modal_content_new_chart.html', null, null, null);" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-edit"></i></button>
-                                    <button id="button_save" title="Save" type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Save Chart', '/assets/self-owned/html/chart/modal/modal_content_save_chart.html',$data);})" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-save"></i></button>
-                                    <span class="pull-right" style="margin-right:0px">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0px;">
+          <div class="card card-mini">
+            <div class="card-header">
+              <div class="card-title">
+                <button title="Clean" type="button" onclick="ModalUtil.popup_modal('New Chart', '/assets/self-owned/html/chart/modal/modal_content_new_chart.html', null, null, null);" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-edit"></i></button>
+                <button id="button_save" title="Save" type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Save Chart', '/assets/self-owned/html/chart/modal/modal_content_save_chart.html',$data);})" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-save"></i></button>
+                <span class="pull-right" style="margin-right:0px">
                                         <button id="dispaly_config_button" onclick="show_configuration_panel();" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-wrench"></i></button>
                                         <button id="undispaly_config_button" onclick="hide_configuration_panel();" title="Hide" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-eye-slash"></i></button>
                                     </span>
-                                </div>
-                            </div>
-                            <div class="card-body no-padding table-responsive">
+              </div>
+            </div>
+            <div class="card-body no-padding table-responsive">
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                <div id="chart_content_seperate_div" class="seperate_div_class" style="margin-top:188px"></div>
+      <div id="chart_content_seperate_div" class="seperate_div_class" style="margin-top:188px"></div>
 
-                <div class="row" onresize="alert('You have changed the size of the window')">
-                    <div class="col-md-8" id="chart_content_div" style="margin-top:30px" onresize="console.log(1)">
-                        <div class="card card-mini">
-                            <div class="card-body" id="chart_content_body_div" style="min-height:360px">
-                                <div id="main_chart" style="width: 100%;height:100%;min-height:660px"></div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="card card-mini">
-                            <div class="card-header">
-                                <div class="card-title">
-                                    <i class="fa fa-diamond">&nbsp;Chart Tutorials&nbsp;&nbsp;&nbsp;</i>
-                                    <span class="pull-right" style="margin-right:0px">
+      <div class="row" onresize="alert('You have changed the size of the window')">
+        <div class="col-md-8" id="chart_content_div" style="margin-top:30px" onresize="console.log(1)">
+          <div class="card card-mini">
+            <div class="card-body" id="chart_content_body_div" style="min-height:360px">
+              <div id="main_chart" style="width: 100%;height:100%;min-height:660px"></div>
+            </div>
+          </div>
+          <br>
+          <div class="card card-mini">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa fa-diamond">&nbsp;Chart Tutorials&nbsp;&nbsp;&nbsp;</i>
+                <span class="pull-right" style="margin-right:0px">
                                         <button id="undispaly_chart_tutorials_button" onclick="hide_div('chart_tutorials_content_div');show_div('dispaly_chart_tutorials_button');hide_div('undispaly_chart_tutorials_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
                                         <button id="dispaly_chart_tutorials_button" onclick="show_div('chart_tutorials_content_div');hide_div('dispaly_chart_tutorials_button');show_div('undispaly_chart_tutorials_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
                                     </span>
-                                </div>
-                            </div>
-                            <div class="card-body" id="chart_tutorials_content_div">
+              </div>
+            </div>
+            <div class="card-body" id="chart_tutorials_content_div">
 
 
-                            </div>
-                        </div>
-                    </div>
+            </div>
+          </div>
+        </div>
 
-                    <div id="configuration_div" class="col-md-4" style="margin-top:30px">
-                        <div class="card card-mini">
-                            <div class="card-header">
-                                <div class="card-title">
-                                    <i class="fa fa-diamond">&nbsp;Basic Configuration&nbsp;&nbsp;&nbsp;</i>
-                                    <span class="pull-right" style="margin-right:0px">
+        <div id="configuration_div" class="col-md-4" style="margin-top:30px">
+          <div class="card card-mini">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa fa-diamond">&nbsp;Basic Configuration&nbsp;&nbsp;&nbsp;</i>
+                <span class="pull-right" style="margin-right:0px">
                                         <button id="undispaly_basic_config_button" onclick="hide_div('basic_config_content_div');show_div('dispaly_basic_config_button');hide_div('undispaly_basic_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
                                         <button id="dispaly_basic_config_button" onclick="show_div('basic_config_content_div');hide_div('dispaly_basic_config_button');show_div('undispaly_basic_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
                                     </span>
-                                </div>
-                            </div>
-                            <div class="card-body" id="basic_config_content_div">
-                                <div>
-                                    <form class="form-horizontal">
-                                        <!-- <div class="form-group">
+              </div>
+            </div>
+            <div class="card-body" id="basic_config_content_div">
+              <div>
+                <form class="form-horizontal">
+                  <!-- <div class="form-group">
                                           <label class="col-sm-3 control-label">Initialize Chart</label>
                                           <div class="col-sm-2 col-sm-offset-7">
                                             <button data-bind="click:initialize_chart" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
@@ -139,31 +139,31 @@
                                             <button data-bind="click:initialize_chart" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
                                           </div>
                                         </div> -->
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="card card-mini">
-                            <div class="card-header">
-                                <div class="card-title">
-                                    <i class="fa fa-diamond">&nbsp;Data Source&nbsp;&nbsp;&nbsp;</i>
-                                    <span class="pull-right" style="margin-right:0px">
+                </form>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="card card-mini">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa fa-diamond">&nbsp;Data Source&nbsp;&nbsp;&nbsp;</i>
+                <span class="pull-right" style="margin-right:0px">
                                         <button id="undispaly_data_config_button" onclick="hide_div('data_config_content_div');show_div('dispaly_data_config_button');hide_div('undispaly_data_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
                                         <button id="dispaly_data_config_button" onclick="show_div('data_config_content_div');hide_div('dispaly_data_config_button');show_div('undispaly_data_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
                                     </span>
-                                </div>
-                            </div>
-                            <div class="card-body" id="data_config_content_div">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-                            </div>
-                        </div>
-                        <br>
-                        <div class="card card-mini">
-                            <div class="card-header">
-                                <div class="card-title">
-                                    <i class="fa fa-diamond">&nbsp;Detail Configuration&nbsp;&nbsp;&nbsp;</i>
-                                    <span class="pull-right" style="margin-right:0px">
+              </div>
+            </div>
+            <div class="card-body" id="data_config_content_div">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+            </div>
+          </div>
+          <br>
+          <div class="card card-mini">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa fa-diamond">&nbsp;Detail Configuration&nbsp;&nbsp;&nbsp;</i>
+                <span class="pull-right" style="margin-right:0px">
                                         <button id="undispaly_detail_config_button" onclick="hide_div('detail_config_content_div');show_div('dispaly_detail_config_button');hide_div('undispaly_detail_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
                                         <button id="dispaly_detail_config_button" onclick="show_div('detail_config_content_div');hide_div('dispaly_detail_config_button');show_div('undispaly_detail_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
                                     </span>
@@ -220,6 +220,10 @@
                 </div>
 
             </div>
+            <div class="card-body" id="detail_config_content_div">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+            </div>
+          </div>
         </div>
 
         <script type="text/javascript" src="assets/reference/flat-admin/assets/js/vendor_min.js"></script>

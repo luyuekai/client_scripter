@@ -1,29 +1,28 @@
 <div id="graph_content">
     <form class="form-horizontal">
 
-<<<<<<< OURS
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Node+</label>
-            <div class="col-sm-4">
-                <input id="add_node_name_input" type="text" class="form-control" placeholder="Name" aria-describedby="basic-addon2">
-            </div>
-            <div class="col-sm-4">
-                <input id="add_node_category_input" type="text" class="form-control" placeholder="Category" aria-describedby="basic-addon2">
-            </div>
-=======
     <div class="form-group">
       <label class="col-sm-2 control-label">Node+</label>
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         <input id="add_node_name_input" type="text" class="form-control" placeholder="Name" aria-describedby="basic-addon2">
       </div>
-      <div class="col-sm-3">
-        <input id="add_node_value_input" type="text" class="form-control" placeholder="Size" aria-describedby="basic-addon2">
-      </div>
-      <div class="col-sm-2">
+      <div class="col-sm-4">
         <input id="add_node_category_input" type="text" class="form-control" placeholder="Category" aria-describedby="basic-addon2">
       </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label"></label>
+      <div class="col-sm-2">
+        <input id="add_node_x_input" type="text" class="form-control" placeholder="X" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-2">
+        <input id="add_node_y_input" type="text" class="form-control" placeholder="Y" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-4">
+        <input id="add_node_value_input" type="text" class="form-control" placeholder="Value" aria-describedby="basic-addon2">
+      </div>
       <div class="col-sm-1">
-        <button onclick="chartViewModel.chart = Circular_ChartPOJO.add_data(chartViewModel.chart ,$('#add_node_name_input').val(),Number($('#add_node_value_input').val()),$('#add_node_category_input').val())" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+        <button onclick="chartViewModel.chart = Graph_ChartPOJO.add_data(chartViewModel.chart ,$('#add_node_name_input').val(),Number($('#add_node_x_input').val()),Number($('#add_node_y_input').val()),Number($('#add_node_value_input').val()),$('#add_node_category_input').val())" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
       </div>
     </div>
     <div class="form-group">
@@ -33,7 +32,6 @@
           <span class="input-group-addon" id="basic-addon2">
             <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
           <input id="remove_node_value_input" type="text" class="form-control" placeholder="Node Name" aria-describedby="basic-addon2">
->>>>>>> THEIRS
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label"></label>

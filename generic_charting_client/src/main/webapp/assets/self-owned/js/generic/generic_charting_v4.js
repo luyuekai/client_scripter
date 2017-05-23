@@ -754,21 +754,21 @@ River_ChartPOJO = {
     type: 'value'
   },
   initialize_chart: function(chart, data, river_type) {
-    if(!chart){
+    if (!chart) {
       return null;
     }
     var chart_parent_div_id = chart.parent_div_id;
     var option = chart.getOption();
-    option.series= ClonePOJO.deepClone(River_ChartPOJO.default_series);
-    option.singleAxis=  ClonePOJO.deepClone(River_ChartPOJO.default_singleAxis);
+    option.series = ClonePOJO.deepClone(River_ChartPOJO.default_series);
+    option.singleAxis = ClonePOJO.deepClone(River_ChartPOJO.default_singleAxis);
 
-    if(data){
-      option.series[0].data=data;
+    if (data) {
+      option.series[0].data = data;
     }
-    if(river_type){
-      option.singleAxis.type=river_type;
+    if (river_type) {
+      option.singleAxis.type = river_type;
     }
-    return ChartPOJO.reset_chart_option(chart,option);
+    return ChartPOJO.reset_chart_option(chart, option);
   }
 }
 
@@ -846,21 +846,21 @@ Graph_ChartPOJO = {
       return null;
     }
     var chart_parent_div_id = chart.parent_div_id;
-    // var option = chart.getOption();
-    // option.series.push({
-    //   type: 'graph',
-    //   layout: 'none',
-    //   data: nodes||[],
-    //   links: links||[],
-    //   categories: categories||[],
-    // });
+    var legend = [];
+    if (categories) {
+      legend = [{
+        data: categories.map(function(a) {
+          return a.name;
+        })
+      }];
+    };
     var option = {
       color: ['#1ABC9C', '#5DADE2', '#FFC153', '#EC7063', '#CC99CC', '#666666', '#5E5E73', '#FFBC11'],
       title: default_title,
       tooltip: {
         position: 'top'
       },
-
+      legend: legend,
       series: [{
         type: 'graph',
         layout: 'none',
@@ -871,6 +871,26 @@ Graph_ChartPOJO = {
     };
     chart.clear();
     return ChartPOJO.reset_chart_option(chart, option);
+  },
+
+  add_data: function(chart, data_name, x_value, y_value, data_value, category) {
+    if (ChartPOJO.has_series_data_item(chart, data_name)) {
+      return chart;
+    }
+    var node = {
+      'name': data_name,
+      'value': data_value,
+      'symbolSize': data_value,
+      'x': x_value,
+      'y': y_value,
+      'label': {
+        normal: {
+          show: data_value > 0
+        }
+      },
+      'category': category
+    }
+    return ChartPOJO.add_series_data_item(chart, node);
   },
 }
 
