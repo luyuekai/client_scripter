@@ -41,7 +41,7 @@
       <div class="seperate_div_class" style="margin-top:118px"></div>
 
 
-      
+
 
       <div class="row">
         <div class="col-md-12">
@@ -79,7 +79,9 @@
     <script src="assets/reference/knockout.js/knockout-3.3.0.js"></script>
     <script src="assets/reference/jquery-tiny-pubsub/tiny-pubsub.js"></script>
     <script src="assets/reference/markdown/markdown.min.js"></script>
-
+    <script src="assets/reference/echarts/echarts-min.js"></script>
+    <script src="assets/reference/echarts/dataTools.js"></script>
+    <script src="assets/reference/echarts/geo/world.js"></script>
 
     <script src="assets/reference/jquery-ui/jquery-ui.js"></script>
     <script src="assets/reference/lodash/lodash-4.15.0.js"></script>
@@ -90,7 +92,7 @@
     <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
     <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
     <script src="assets/self-owned/js/generic/generic_cache.js"></script>
-    <script src="assets/self-owned/js/generic/generic_charting.js"></script>
+    <script src="assets/self-owned/js/generic/generic_charting_v4.js"></script>
     <script src="assets/self-owned/js/generic/generic_csv.js"></script>
     <script src="assets/self-owned/js/generic/generic_cud.js"></script>
     <script src="assets/self-owned/js/generic/generic_modal.js"></script>
@@ -110,6 +112,7 @@
       $(document).ready(function() {
         $('#sidebar').load($.getRootPath() + '/components/left_side.html');
         $('#navbar').load($.getRootPath() + '/components/header.html');
+        // $('#contentDIV').load($.getRootPath() + '/assets/self-owned/html/dashboard/dashboard_content_prototype.html');
         $('#contentDIV').load($.getRootPath() + '/assets/self-owned/html/dashboard/dashboard_content.html');
         setTimeout(function() {
           resetCssClass('li_dashboard', 'active');

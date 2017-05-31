@@ -23,13 +23,15 @@
 
   <link rel="stylesheet" type="text/css" href="assets/reference/bootstrap-fileinput/css/fileinput_ly.css" media="all">
 
+  <link rel="stylesheet" type="text/css" href="assets/reference/gridstack/gridstack.css" />
+  <link rel="stylesheet" type="text/css" href="assets/reference/gridstack/gridstack-extra.css" />
 
 
 </head>
 
 <body>
 
-  <div class="app app-blue-sky" id="contentDIV">
+  <div class="app app-blue-sky">
 
     <aside class="app-sidebar" id="sidebar" style="position:fixed;top:0px;"></aside>
     <div class="app-container" id="main_content_div">
@@ -39,17 +41,15 @@
       <div class="seperate_div_class" style="margin-top:118px"></div>
 
 
+
+
       <div class="row">
         <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <i class="fa fa-diamond">&nbsp;TBD&nbsp;&nbsp;&nbsp;</i>
-              </div>
-            </div>
-          </div>
+          <!-- 应用具体内容DIV-->
+          <div id="contentDIV"></div>
         </div>
       </div>
+
 
 
       <div class="seperate_div_class" style="margin-top:58px"></div>
@@ -79,6 +79,14 @@
     <script src="assets/reference/knockout.js/knockout-3.3.0.js"></script>
     <script src="assets/reference/jquery-tiny-pubsub/tiny-pubsub.js"></script>
     <script src="assets/reference/markdown/markdown.min.js"></script>
+    <script src="assets/reference/echarts/echarts-min.js"></script>
+    <script src="assets/reference/echarts/dataTools.js"></script>
+    <script src="assets/reference/echarts/geo/world.js"></script>
+
+    <script src="assets/reference/jquery-ui/jquery-ui.js"></script>
+    <script src="assets/reference/lodash/lodash-4.15.0.js"></script>
+    <script src="assets/reference/gridstack/gridstack.all.js"></script>
+
 
     <!-- Javascript for Matrix Self Owned -->
     <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
@@ -104,11 +112,13 @@
       $(document).ready(function() {
         $('#sidebar').load($.getRootPath() + '/components/left_side.html');
         $('#navbar').load($.getRootPath() + '/components/header.html');
+        $('#contentDIV').load($.getRootPath() + '/assets/self-owned/html/dashboard/dashboard_content_prototype.html');
         setTimeout(function() {
           resetCssClass('li_dashboard', 'active');
           $('#navbar_title_li').html('Matrix Chart Dashboard');
         }, 200);
       });
+
 
     </script>
 
