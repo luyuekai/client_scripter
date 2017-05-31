@@ -107,33 +107,33 @@
                                             <button data-bind="click:initialize_chart" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
                                           </div>
                                         </div> -->
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label">Type</label>
-                    <div class="col-sm-8">
-                      <select id="chart_type_select" class="select2" onchange="rerender_children_dom(this.options[this.options.selectedIndex].value)" style="z-index:100016;">
-                        <!-- <select id="chart_type_select" class="select2" style="z-index:100016;"> -->
-                        <option value="bar">Chart-Descartes Bar</option>
-                        <option value="line">Chart-Descartes Line</option>
-                        <option value="area">Chart-Descartes Area</option>
-                        <option value="scatter">Chart-Descartes Scatter</option>
-                        <option value="parallel">Chart-Parallel </option>
-                        <option value="force">Chart-Force </option>
-                        <option value="graph">Chart-Graph </option>
-                        <option value="circular">Chart-Circular </option>
-                        <option value="pie">Chart-Pie </option>
-                        <option value="radar">Chart-Radar</option>
-                        <option value="river">Chart-River</option>
-                        <option value="treemap">Chart-TreeMap</option>
-                        <option value="boxplot">Chart-BoxPlot</option>
-                        <option value="sankey">Chart-Sankey</option>
-                        <option value="heatmap">Chart-Descartes-Heatmap</option>
-                      </select>
-                    </div>
-                    <div class="col-sm-2">
-                      <button data-bind="click:switch_chart_type_listener" title="Manual minus stacks" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
-                    </div>
-                  </div>
-                  <!-- <div class="form-group">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Type</label>
+                                            <div class="col-sm-8">
+                                                <select id="chart_type_select" class="select2" onchange="rerender_children_dom(this.options[this.options.selectedIndex].value)" style="z-index:100016;">
+                                                    <!-- <select id="chart_type_select" class="select2" style="z-index:100016;"> -->
+                                                    <option value="bar">Chart-Descartes Bar</option>
+                                                    <option value="line">Chart-Descartes Line</option>
+                                                    <option value="area">Chart-Descartes Area</option>
+                                                    <option value="scatter">Chart-Descartes Scatter</option>
+                                                    <option value="parallel">Chart-Parallel </option>
+                                                    <option value="force">Chart-Force </option>
+                                                    <option value="graph">Chart-Graph </option>
+                                                    <option value="circular">Chart-Circular </option>
+                                                    <option value="pie">Chart-Pie </option>
+                                                    <option value="radar">Chart-Radar</option>
+                                                    <option value="themeRiver">Chart-River</option>
+                                                    <option value="treemap">Chart-TreeMap</option>
+                                                    <option value="boxplot">Chart-BoxPlot</option>
+                                                    <option value="sankey">Chart-Sankey</option>
+                                                    <option value="heatmap">Chart-Descartes-Heatmap</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <button data-bind="click:switch_chart_type_listener" title="Manual minus stacks" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="form-group">
                                           <label class="col-sm-3 control-label">Series Setting</label>
                                           <div class="col-sm-2 col-sm-offset-7">
                                             <button data-bind="click:initialize_chart" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
@@ -167,109 +167,131 @@
                                         <button id="undispaly_detail_config_button" onclick="hide_div('detail_config_content_div');show_div('dispaly_detail_config_button');hide_div('undispaly_detail_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
                                         <button id="dispaly_detail_config_button" onclick="show_div('detail_config_content_div');hide_div('dispaly_detail_config_button');show_div('undispaly_detail_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
                                     </span>
-              </div>
+                                </div>
+                            </div>
+                            <div class="card-body" id="detail_config_content_div">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Title</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" id="basic-addon1">
+                                                    <i class="fa fa-bars" aria-hidden="true"></i>&nbsp;</span>
+                                                <input id="title_value_input" type="text" class="form-control" placeholder="default:matrix chart" aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button onclick="reset_title()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="seperate_div_class" style="margin-top:58px"></div>
+
+                <footer id="footer_div" class="app-footer" style="position:absolute;bottom:0;margin:0 auto;">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="footer-copyright">
+                                Copyright © 2016 MATRIX Company Co,Ltd.
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+
+
+                <div class="modal fade" id="popupModalPro" tabindex="-1" role="dialog" aria-labelledby="matrixModalLabel">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <i class="fa fa-power-off"></i> &nbsp; <span class="modal-title" id="popupModalLabelPro"></span>
+                            </div>
+                            <div class="modal-body">
+                                <div id="modalContentDIVPro"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="card-body" id="detail_config_content_div">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
             </div>
           </div>
         </div>
-      </div>
+
+        <script type="text/javascript" src="assets/reference/flat-admin/assets/js/vendor_min.js"></script>
+        <script type="text/javascript" src="assets/reference/flat-admin/assets/js/app.js"></script>
+
+        <script src="assets/reference/codemirror/codemirror.js"></script>
+        <script src="assets/reference/codemirror/mode/javascript/javascript.js"></script>
+        <script src="assets/reference/codemirror/mode/markdown/markdown.js"></script>
+
+        <script src="assets/reference/jquery/jquery.json.js"></script>
+        <script src="assets/reference/jquery/jquery.blockUI.js"></script>
+        <script src="assets/reference/knockout.js/knockout-3.3.0.js"></script>
+        <script src="assets/reference/jquery-tiny-pubsub/tiny-pubsub.js"></script>
+        <script src="assets/reference/markdown/showdown.js"></script>
+        <script src="assets/reference/echarts/echarts-min.js"></script>
+        <script src="assets/reference/echarts/dataTools.js"></script>
+        <script src="assets/reference/echarts/geo/world.js"></script>
+
+        <script src="assets/reference/bootstrap-fileinput/js/fileinput_ly.js"></script>
+        <script src="assets/reference/bootstrap-fileinput/js/locales/zh.js"></script>
+
+        <!-- Javascript for Matrix Self Owned -->
+        <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
+        <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
+        <script src="assets/self-owned/js/generic/generic_cache.js"></script>
+        <script src="assets/self-owned/js/generic/generic_charting_v4.js"></script>
+        <script src="assets/self-owned/js/generic/generic_csv.js"></script>
+        <script src="assets/self-owned/js/generic/generic_cud.js"></script>
+        <script src="assets/self-owned/js/generic/generic_modal.js"></script>
+        <script src="assets/self-owned/js/generic/generic_query.js"></script>
+        <script src="assets/self-owned/js/generic/generic_table.js"></script>
+        <script src="assets/self-owned/js/generic/generic_util.js"></script>
+        <script src="assets/self-owned/js/generic/generic_validation.js"></script>
+        <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
+        <script src="assets/self-owned/js/generic/generic_upload.js"></script>
+        <!-- Javascript for Matrix chart Editor Self Owned -->
+        <script src="assets/self-owned/js/module/kits/vm.js"></script>
+        <script src="assets/self-owned/js/module/kits/logic.js"></script>
+
+        <script src="assets/self-owned/js/chart/matrix_chart_model.js"></script>
+        <script src="assets/self-owned/js/chart/matrix_chart_logic.js"></script>
 
 
 
-      <div class="seperate_div_class" style="margin-top:58px"></div>
+        <script>
+                    $(document).ready(function () {
+                        $('#sidebar').load($.getRootPath() + '/components/left_side.html');
+                        $('#navbar').load($.getRootPath() + '/components/header.html');
+                        setTimeout(function () {
+                            $('#navbar_title_li').html('Matrix Chart Editor');
+                            $('#navbar_search_li').css('display', 'none');
+                        }, 200);
 
-      <footer id="footer_div" class="app-footer" style="position:absolute;bottom:0;margin:0 auto;">
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="footer-copyright">
-              Copyright © 2016 MATRIX Company Co,Ltd.
-            </div>
-          </div>
-        </div>
-      </footer>
+                        setTimeout(function () {
+                            if ($.hasUrlParam('token')) {
+                                SharePOJO.environmentCheck();
 
+                            } else {
+                                rerender_children_dom('bar')
+                            }
+                        }, 800);
+                    });
+                    
+                    function reset_title(){
+                        var chart_title = $('#title_value_input').val();
+                        chartViewModel.chart.setOption({title:{text: chart_title}})
+                    }
+        </script>
 
-      <div class="modal fade" id="popupModalPro" tabindex="-1" role="dialog" aria-labelledby="matrixModalLabel">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <i class="fa fa-power-off"></i> &nbsp; <span class="modal-title" id="popupModalLabelPro"></span>
-            </div>
-            <div class="modal-body">
-              <div id="modalContentDIVPro"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <script type="text/javascript" src="assets/reference/flat-admin/assets/js/vendor_min.js"></script>
-  <script type="text/javascript" src="assets/reference/flat-admin/assets/js/app.js"></script>
-
-  <script src="assets/reference/codemirror/codemirror.js"></script>
-  <script src="assets/reference/codemirror/mode/javascript/javascript.js"></script>
-  <script src="assets/reference/codemirror/mode/markdown/markdown.js"></script>
-
-  <script src="assets/reference/jquery/jquery.json.js"></script>
-  <script src="assets/reference/jquery/jquery.blockUI.js"></script>
-  <script src="assets/reference/knockout.js/knockout-3.3.0.js"></script>
-  <script src="assets/reference/jquery-tiny-pubsub/tiny-pubsub.js"></script>
-  <script src="assets/reference/markdown/showdown.js"></script>
-  <script src="assets/reference/echarts/echarts-min.js"></script>
-  <script src="assets/reference/echarts/dataTools.js"></script>
-  <script src="assets/reference/echarts/geo/world.js"></script>
-
-  <script src="assets/reference/bootstrap-fileinput/js/fileinput_ly.js"></script>
-  <script src="assets/reference/bootstrap-fileinput/js/locales/zh.js"></script>
-
-  <!-- Javascript for Matrix Self Owned -->
-  <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
-  <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
-  <script src="assets/self-owned/js/generic/generic_cache.js"></script>
-  <script src="assets/self-owned/js/generic/generic_charting_v4.js"></script>
-  <script src="assets/self-owned/js/generic/generic_csv.js"></script>
-  <script src="assets/self-owned/js/generic/generic_cud.js"></script>
-  <script src="assets/self-owned/js/generic/generic_modal.js"></script>
-  <script src="assets/self-owned/js/generic/generic_query.js"></script>
-  <script src="assets/self-owned/js/generic/generic_table.js"></script>
-  <script src="assets/self-owned/js/generic/generic_util.js"></script>
-  <script src="assets/self-owned/js/generic/generic_validation.js"></script>
-  <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
-  <script src="assets/self-owned/js/generic/generic_upload.js"></script>
-  <!-- Javascript for Matrix chart Editor Self Owned -->
-  <script src="assets/self-owned/js/module/kits/vm.js"></script>
-  <script src="assets/self-owned/js/module/kits/logic.js"></script>
-
-  <script src="assets/self-owned/js/chart/matrix_chart_model.js"></script>
-  <script src="assets/self-owned/js/chart/matrix_chart_logic.js"></script>
-
-
-
-  <script>
-    $(document).ready(function() {
-      $('#sidebar').load($.getRootPath() + '/components/left_side.html');
-      $('#navbar').load($.getRootPath() + '/components/header.html');
-      setTimeout(function() {
-        $('#navbar_title_li').html('Matrix Chart Editor');
-        $('#navbar_search_li').css('display', 'none');
-      }, 200);
-
-      setTimeout(function() {
-        if ($.hasUrlParam('token')) {
-          SharePOJO.environmentCheck();
-
-        } else {
-          rerender_children_dom('graph')
-        }
-      }, 800);
-    });
-  </script>
-
-</body>
-
+    </body>
 </html>
