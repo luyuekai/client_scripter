@@ -81,21 +81,21 @@
           <div class="card card-mini" id="tools">
             <div class="card-header">
               <div class="card-title">
-                <button title="New report(shift+n)" type="button" onclick="ModalUtil.popup_modal('New report', '/assets/self-owned/html/report/modal_content_new.html', null, null, null);" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-edit"></i></button>
-                <button id="button_save" title="Save(shift+s)" type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Save report draft', '/assets/self-owned/html/report/modal_content_save_draft.html',$data);})" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-save"></i></button>
+                <button title="New report(alt+shift+n)" type="button" onclick="ModalUtil.popup_modal('New report', '/assets/self-owned/html/report/modal_content_new.html', null, null, null);" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-edit"></i></button>
+                <button id="button_save" title="Save(alt+shift+s)" type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Save report draft', '/assets/self-owned/html/report/modal_content_save_draft.html',$data);})" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-save"></i></button>
                 <!-- <button title="Save as template" onclick="ModalUtil.popup_modal('Save report as template', '/assets/self-owned/html/report/modal_content_save_template.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-bookmark-o"></i></button> -->
-                <button title="Cut selected cell(shift+x)" type="button" data-bind="click:cutCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-cut"></i></button>
-                <button title="Copy selected cell(shift+c)" type="button" data-bind="click:copyCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-copy"></i></button>
-                <button title="Paste selected cell(shift+v)" type="button" data-bind="click:pasteCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-paste"></i></button>
-                <button title="Drop selected cell(shift+d)" type="button" data-bind="click:dropCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-trash"></i></button>
-                <button title="Up selected cell(shift+up)" type="button" data-bind="click:upCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-arrow-up"></i></button>
-                <button title="Down selected cell(shift+down)" type="button" data-bind="click:downCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-arrow-down"></i></button>
-                <button title="Insert a markdown cell below selected cell(shift+a)" type="button" data-bind="click:addCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-plus"></i></button>
-                <button title="Insert a image cell(shift+i)" onclick="ModalUtil.popup_modal('Insert a new image', '/assets/self-owned/html/report/modal_content_upload_image.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-image"></i></button>
-                <button title="Insert a table cell(shift+t)" onclick="ModalUtil.popup_modal('Insert a new table cell', '/assets/self-owned/html/report/modal_content_insert_table.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-table"></i></button>
-                <button title="Insert a chart cell(shift+e)" onclick="ModalUtil.popup_modal('Insert a new chart', '/assets/self-owned/html/report/modal_content_insert_chart.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-bar-chart"></i></button>
+                <button title="Cut selected cell(alt+shift+x)" type="button" data-bind="click:cutCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-cut"></i></button>
+                <button title="Copy selected cell(alt+shift+c)" type="button" data-bind="click:copyCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-copy"></i></button>
+                <button title="Paste selected cell(alt+shift+v)" type="button" data-bind="click:pasteCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-paste"></i></button>
+                <button title="Drop selected cell(alt+shift+d)" type="button" data-bind="click:dropCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-trash"></i></button>
+                <button title="Up selected cell(alt+shift+up)" type="button" data-bind="click:upCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-arrow-up"></i></button>
+                <button title="Down selected cell(alt+shift+down)" type="button" data-bind="click:downCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-arrow-down"></i></button>
+                <button title="Insert a markdown cell below selected cell(alt+shift+a)" type="button" data-bind="click:addCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-plus"></i></button>
+                <button title="Insert a image cell(alt+shift+i)" onclick="ModalUtil.popup_modal('Insert a new image', '/assets/self-owned/html/report/modal_content_upload_image.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-image"></i></button>
+                <button title="Insert a table cell(alt+shift+t)" onclick="ModalUtil.popup_modal('Insert a new table cell', '/assets/self-owned/html/report/modal_content_insert_table.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-table"></i></button>
+                <button title="Insert a chart cell(alt+shift+e)" onclick="ModalUtil.popup_modal('Insert a new chart', '/assets/self-owned/html/report/modal_content_insert_chart.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-bar-chart"></i></button>
 
-                <button title="Run cell(shift+r)" type="button" data-bind="click:compileCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-play"></i></button>
+                <button title="Run cell(alt+shift+r)" type="button" data-bind="click:compileCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-play"></i></button>
                 <button title="Export PDF" type="button" data-bind="click:function(){reportViewModel.download('PDF')}" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-file-pdf-o"></i></button>
                 <button title="Export HTML" type="button" data-bind="click:function(){reportViewModel.download('HTML')}" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-html5"></i></button>
                 <button title="Export Markdown" type="button" data-bind="click:function(){reportViewModel.download('MD')}" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-file-code-o"></i></button>
@@ -190,9 +190,9 @@
     <script src="assets/reference/codemirror/codemirror.js"></script>
     <script src="assets/reference/codemirror/mode/javascript/javascript.js"></script>
     <script src="assets/reference/codemirror/mode/markdown/markdown.js"></script>
-    
+
     <script src="assets/reference/jquery/jquery.hotkeys.js"></script>
-    
+
     <script src="assets/reference/jquery/jquery.json.js"></script>
     <script src="assets/reference/jquery/jquery.blockUI.js"></script>
     <script src="assets/reference/knockout.js/knockout-3.3.0.js"></script>
@@ -248,19 +248,19 @@
                     (e || window.event).returnValue = confirmationMessage;     // Gecko and Trident
                         return confirmationMessage;  // Gecko and WebKit
                 }
-            });  
+            });
       });
         // 离开时是否保存验证
 //        $(window).on('beforeunload',function(){
 //            debugger;
 //                if(reportViewModel.has_unsaved_content()){
-//                   return 'if you see this, you are definitely the chosen one'; 
+//                   return 'if you see this, you are definitely the chosen one';
 //                }
-//                
 //
-//            }); 
+//
+//            });
 
-            
+
     </script>
 
 </body>

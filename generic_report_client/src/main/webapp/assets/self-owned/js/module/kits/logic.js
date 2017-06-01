@@ -250,80 +250,80 @@ function keyDownSearch(e) {
     switchMode();
     // return false;
   }
-  if (event.keyCode == 38 && event.shiftKey) {
-    // shift+up
+  if (event.keyCode == 38 && event.shiftKey && event.altKey) {
+    // alt+shift+up
     if(reportViewModel){
       reportViewModel.upCell();
     }
   }
-  if (event.keyCode == 40 && event.shiftKey) {
-    // shift+down
+  if (event.keyCode == 40 && event.shiftKey && event.altKey) {
+    // alt+shift+down
     if(reportViewModel){
       reportViewModel.downCell();
     }
   }
-  if (event.keyCode == 78 && event.shiftKey) {
-    // shift+n
+  if (event.keyCode == 78 && event.shiftKey && event.altKey) {
+    // alt+shift+n
     if(reportViewModel){
       ModalUtil.popup_modal('New report', '/assets/self-owned/html/report/modal_content_new.html', null, null, null);
     }
   }
-  if (event.keyCode == 83 && event.shiftKey) {
-    // shift+s
+  if (event.keyCode == 83 && event.shiftKey && event.altKey) {
+    // alt+shift+s
     if(reportViewModel){
       ModalUtil.popup_modal_with_businessPOJO('Save report draft', '/assets/self-owned/html/report/modal_content_save_draft.html',reportViewModel);
     }
   }
-  if (event.keyCode == 88 && event.shiftKey) {
-    // shift+x
+  if (event.keyCode == 88 && event.shiftKey && event.altKey) {
+    // alt+shift+x
     if(reportViewModel){
       reportViewModel.cutCell();
     }
   }
-  if (event.keyCode == 67 && event.shiftKey) {
-    // shift+c
+  if (event.keyCode == 67 && event.shiftKey && event.altKey) {
+    // alt+shift+c
     if(reportViewModel){
       reportViewModel.copyCell();
     }
   }
-  if (event.keyCode == 86 && event.shiftKey) {
-    // shift+v
+  if (event.keyCode == 86 && event.shiftKey && event.altKey) {
+    // alt+shift+v
     if(reportViewModel){
       reportViewModel.pasteCell();
     }
   }
-  if (event.keyCode == 68 && event.shiftKey) {
-    // shift+v
+  if (event.keyCode == 68 && event.shiftKey && event.altKey) {
+    // alt+shift+v
     if(reportViewModel){
       reportViewModel.dropCell();
     }
   }
-  if (event.keyCode == 65 && event.shiftKey) {
-    // shift+a
+  if (event.keyCode == 65 && event.shiftKey && event.altKey) {
+    // alt+shift+a
     if(reportViewModel){
       reportViewModel.addCell();
     }
   }
-  if (event.keyCode == 73 && event.shiftKey) {
-    // shift+i
+  if (event.keyCode == 73 && event.shiftKey && event.altKey) {
+    // alt+shift+i
     if(reportViewModel){
       ModalUtil.popup_modal('Insert a new image', '/assets/self-owned/html/report/modal_content_upload_image.html', null, null, null);
     }
   }
-  if (event.keyCode == 84 && event.shiftKey) {
-    // shift+t
+  if (event.keyCode == 84 && event.shiftKey && event.altKey) {
+    // alt+shift+t
     if(reportViewModel){
       ModalUtil.popup_modal('Insert a new table cell', '/assets/self-owned/html/report/modal_content_insert_table.html', null, null, null);
     }
   }
-  if (event.keyCode == 69 && event.shiftKey) {
-    // shift+e
+  if (event.keyCode == 69 && event.shiftKey && event.altKey) {
+    // alt+shift+e
     if(reportViewModel){
       ModalUtil.popup_modal('Insert a new chart', '/assets/self-owned/html/report/modal_content_insert_chart.html', null, null, null);
     }
   }
-  if (event.keyCode == 82 && event.shiftKey) {
-    // shift+r
+  if (event.keyCode == 82 && event.shiftKey && event.altKey) {
+    // alt+shift+r
     if(reportViewModel){
       reportViewModel.compileCell();
     }
