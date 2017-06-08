@@ -210,7 +210,43 @@ function keyDownSearch(e) {
     switchMode();
     // return false;
   }
-  // return true;
+  if (event.keyCode == 78 && event.shiftKey && event.altKey) {
+    // alt+shift+n
+    if(viewModel){
+      ModalUtil.popup_modal('New Dashboard', '/assets/self-owned/html/dashboard/modal_content_new.html', null, null, null);
+    }
+  }
+  if (event.keyCode == 83 && event.shiftKey && event.altKey) {
+    // alt+shift+s
+    if(viewModel){
+      ModalUtil.popup_modal('Save Dashboard', '/assets/self-owned/html/dashboard/modal_content_save.html');
+    }
+  }
+
+  if (event.keyCode == 69 && event.shiftKey && event.altKey) {
+    // alt+shift+e
+    if(viewModel){
+      ModalUtil.popup_modal('Insert a new chart', '/assets/self-owned/html/dashboard/modal_content_insert_chart.html', null, null, null);
+    }
+  }
+  if (event.keyCode == 85 && event.shiftKey && event.altKey) {
+    // alt+shift+u
+    if(viewModel){
+      remove_css_class('dragContainer_div', 'dragContainer')
+    }
+  }
+  if (event.keyCode == 86 && event.shiftKey && event.altKey) {
+    // alt+shift+v
+    if(viewModel){
+      add_css_class('dragContainer_div', 'dragContainer')
+    }
+  }
+  if (event.keyCode == 82 && event.shiftKey && event.altKey) {
+    // alt+shift+r
+    if(viewModel){
+      refresh_workbench()
+    }
+  }
 }
 function keyDownSearch_view(e) {
   // 兼容FF和IE和Opera

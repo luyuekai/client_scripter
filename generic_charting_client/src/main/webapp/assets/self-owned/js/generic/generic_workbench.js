@@ -263,7 +263,13 @@ var setup_default_workbench = function(){
 var chartCache={
 
 };
-
+var refresh_workbench = function(){
+  $.each(chartCache,function(index,chart){
+    if(chart){
+      chart.resize();
+    }
+  });
+}
 
 var initialize_workbench = function(){
 
