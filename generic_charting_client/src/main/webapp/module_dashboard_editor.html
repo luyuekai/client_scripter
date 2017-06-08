@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Matrix</title>
   <link rel="shortcut icon" href="assets/self-owned/ico/favicon.ico">
-
   <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/vendor.css">
   <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/flat-admin.css">
   <!-- Theme -->
@@ -14,66 +13,37 @@
   <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/blue.css">
   <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/red.css">
   <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/yellow.css">
-
   <link rel="stylesheet" href="assets/reference/codemirror/codemirror.css">
-
   <link rel="stylesheet" href="assets/reference/github-markdown-css/github-markdown.css">
-
   <link rel="stylesheet" type="text/css" href="assets/self-owned/css/matrix_v3.css">
-
   <link rel="stylesheet" type="text/css" href="assets/reference/bootstrap-fileinput/css/fileinput_ly.css" media="all">
-
   <link rel="stylesheet" type="text/css" href="assets/reference/gridstack/gridstack.css" />
   <link rel="stylesheet" type="text/css" href="assets/reference/gridstack/gridstack-extra.css" />
-
-
 </head>
-
 <body>
-
   <div class="app app-blue-sky">
-
     <aside class="app-sidebar" id="sidebar" style="position:fixed;top:0px;"></aside>
     <div class="app-container" id="main_content_div">
-
       <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="margin-left: 180px;"></nav>
-
-      <div class="seperate_div_class" style="margin-top:118px"></div>
-
-
-
-
-      <div class="row">
-        <div class="col-md-12">
-          <!-- 应用具体内容DIV-->
-          <div id="contentDIV"></div>
+      <div id="hidden_div" class="row" style="position:fixed;top:88px;left: 180px;right: 0px;z-index:100006;background-color: #E7EDEE;height:30px">
+        <div class="col-xs-12">
         </div>
       </div>
 
-
-
-      <div class="seperate_div_class" style="margin-top:58px"></div>
-
-      <footer id="footer_div" class="app-footer" style="position:absolute;bottom:0;margin:0 auto;">
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="footer-copyright">
-              Copyright © 2016 MATRIX Company Co,Ltd.
-            </div>
-          </div>
+      <div class="row">
+        <div class="col-md-12" style="margin-bottom: 30px;">
+          <div id="contentDIV"></div>
         </div>
-      </footer>
-
-
+      </div>
+      <span data-bind="text:name"></span>
+      <div id="footer_parent_div"></div>
     </div>
-
+    <!-- Javascript for Matrix Referenced -->
     <script type="text/javascript" src="assets/reference/flat-admin/assets/js/vendor_min.js"></script>
     <script type="text/javascript" src="assets/reference/flat-admin/assets/js/app.js"></script>
-
     <script src="assets/reference/codemirror/codemirror.js"></script>
     <script src="assets/reference/codemirror/mode/javascript/javascript.js"></script>
     <script src="assets/reference/codemirror/mode/markdown/markdown.js"></script>
-
     <script src="assets/reference/jquery/jquery.json.js"></script>
     <script src="assets/reference/jquery/jquery.blockUI.js"></script>
     <script src="assets/reference/knockout.js/knockout-3.3.0.js"></script>
@@ -82,12 +52,9 @@
     <script src="assets/reference/echarts/echarts-min.js"></script>
     <script src="assets/reference/echarts/dataTools.js"></script>
     <script src="assets/reference/echarts/geo/world.js"></script>
-
     <script src="assets/reference/jquery-ui/jquery-ui.js"></script>
     <script src="assets/reference/lodash/lodash-4.15.0.js"></script>
     <script src="assets/reference/gridstack/gridstack.all.js"></script>
-
-
     <!-- Javascript for Matrix Self Owned -->
     <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
     <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
@@ -101,28 +68,32 @@
     <script src="assets/self-owned/js/generic/generic_util.js"></script>
     <script src="assets/self-owned/js/generic/generic_validation.js"></script>
     <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
-
     <script src="assets/self-owned/js/module/dashboard/logic.js"></script>
     <script src="assets/self-owned/js/module/dashboard/vm.js"></script>
-
-
-
-
     <script>
       $(document).ready(function() {
-        $('#sidebar').load($.getRootPath() + '/components/left_side.html');
-        $('#navbar').load($.getRootPath() + '/components/header.html');
-        // $('#contentDIV').load($.getRootPath() + '/assets/self-owned/html/dashboard/dashboard_content_prototype.html');
-        $('#contentDIV').load($.getRootPath() + '/assets/self-owned/html/dashboard/dashboard_content.html');
-        setTimeout(function() {
-          resetCssClass('li_dashboard', 'active');
-          $('#navbar_title_li').html('Matrix Chart Dashboard');
-        }, 200);
+        init();
+        
       });
 
 
+      function init(){
+        // render dom elements
+        $('#sidebar').load($.getRootPath() + '/components/left_side.html');
+        $('#navbar').load($.getRootPath() + '/components/header.html');
+        $('#footer_parent_div').load($.getRootPath() + '/components/footer.html');
+        $('#contentDIV').load($.getRootPath() + '/assets/self-owned/html/dashboard/dashboard_content.html');
+        setTimeout(function() {
+          $('#navbar_title_li').html('Matrix Chart Dashboard');
+          add_shortcut_key_listener();
+        }, 200);
+        // environment check
+        setTimeout(function() {
+          SharePOJO.environmentCheck();
+        }, 500);
+      }
+
+
     </script>
-
 </body>
-
 </html>
