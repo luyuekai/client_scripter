@@ -1,0 +1,66 @@
+<div id="genericModalDiv">
+
+  <div class="business_div_class" data-bind="if:businessPOJO()">
+    <div data-bind="with:businessPOJO">
+      <p>
+        This operation will start a new dashboard editor, please confirm to continue...
+      </p>
+      <div class="row" data-bind="if:hasNewContent">
+        <div class="col-xs-12">
+          <div class="row flat-matrix">
+            <div class="col-md-12">
+              <div class="alert alert-warning alert-dismissible fresh-color" role="alert" style="margin-top: 16px;">
+                <strong><i class="fa fa-warning fa-1x"></i>&nbsp;Tips:</strong> This dashboard has content modified, save it first.
+                <button type="button" onclick="save_dashboard()"  class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-save"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="pull-right">
+        <button id="new_modal_clost_button" type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+        <button type="button" onclick="reset_dashboard()" class="btn btn-sm btn-success">Confirm</button>
+      </div>
+      <br>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function reset_dashboard() {
+    if (viewModel) {
+      viewModel.reset();
+      ModalUtil.modal_close('popupModalPro');
+    } else {
+      alert("The system view model is not setup correctly, please contact the system admin.")
+    }
+
+  }
+</script>
+
+<script>
+  // Initialize the View Model
+  // Clean the paging binding nodes
+  // Binding the view Model
+  var genericModalViewModel = new GenericModalViewModel();
+  ko.cleanNode($('#genericModalDiv')[0]);
+  ko.applyBindings(genericModalViewModel, document.getElementById('genericModalDiv'));
+
+  // Setup the business model with view model
+  (function initialize() {
+    // *******YOUR SHOULD CODING IN HERE:*******
+    function BusinessPOJO() {
+      var self = this;
+      self.hasNewContent = ko.observable(false);
+    }
+    var businessPOJO = new BusinessPOJO();
+    if (viewModel) {
+      businessPOJO.hasNewContent(viewModel.hasNewContent());
+    }
+    genericModalViewModel.businessPOJO(businessPOJO);
+  })();
+
+
+</script>

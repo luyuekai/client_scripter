@@ -1,4 +1,3 @@
-var tmp;
 function DashboardViewModel(parent) {
   var self = this;
   self.data = null;
@@ -6,52 +5,35 @@ function DashboardViewModel(parent) {
   self.cells = ko.observableArray();
   self.name = ko.observable();
   self.hasNewContent = ko.observable(false);
-
-  self.reset = function() {
-    self.data = null;
-    self.name();
-    self.hasNewContent(true);
-    cleanWidget();
-  };
-
   self.serialize_dashboard = function() {
     var result = {
-      'name':null,
-      'data':null
+      cells: []
     };
-    WorkbenchCache.updateCache();
-    var persist_data = WorkbenchCache.array_elements;
-    result.data = persist_data;
-    result.name = self.name();
-    var json = ko.toJSON(result);
-    console.log(json);
-    tmp = json;
-    return json;
+    $.each(self.cells(), function(idx, cell) {
+      var cellShareModel = cell.buildShareModel();
+      result.cells.push(cellShareModel);
+    });
+
+    return ko.toJSON(result);
   }
 
   self.deserialize_dashboard = function(inputData) {
-    self.data = inputData;
-
     var json = inputData.json;
+    self.data = inputData;
     var result = $.parseJSON(json);
-    self.name(inputData.stringalpha);
-    if(result.data){
-      cleanWidget();
-      $.each(result.data,function(index,value){
-        if(value.widget_id){
-          var widget = value.widget_element;
-          if(widget.isChart){
-            var content = $.parseJSON(widget.data);
-            var chart = addWidget_chart(content,widget.widget_x,widget.widget_y,widget.widget_width,widget.widget_height);
-          }else{
-            var content = deserialize_dom(widget.data);
-            add_content_div(content,widget.widget_x,widget.widget_y,widget.widget_width,widget.widget_height)
-          }
-        }
-      })
-    }
-  }
 
+    self.cells.removeAll();
+    $.each(result.cells, function(idx, cellShareModel) {
+      var cell = self.buildCell(cellShareModel);
+      self.cells.push(cell);
+    });
+  }
+  self.buildCell = function(model) {
+    var cell = new CellViewModel(self);
+    cell.cell_attributes = model.cell_attributes;
+    cell.cell_data = model.cell_data;
+    return cell;
+  }
 
   self.persist2server = function() {
     //'type': 'MATRIX_DASHBOARD'
@@ -59,7 +41,7 @@ function DashboardViewModel(parent) {
     var shareJson = {
       'type': 'MATRIX_DASHBOARD',
       'tag': 'SAVE',
-      'json': self.serialize_dashboard(),
+      'json': self.serialize_report(),
       'stringalpha': 'report draft demo',
       'username': UserPOJO.user.userName
     }
@@ -70,7 +52,38 @@ function DashboardViewModel(parent) {
   }
 }
 
+function CellViewModel(parent) {
+  var self = this;
+  self.parent = parent;
+  self.cell_attributes = null;
+  self.cell_data = null;
+  self.buildShareModel = function() {
+    var model = new CellShareModel();
+    model.cell_attributes = self.cell_attributes;
+    model.cell_data = self.cell_data;
+    return model;
+  }
+}
 
+function CellShareModel() {
+  var self = this;
+  self.cell_attributes = null;
+  self.cell_data = null;
+}
+
+
+var prototype_cell_attributes = {
+  id: 'id_prototype_cell_attributes',
+  x: 0,
+  y: 0,
+  width: 6,
+  height: 5
+};
+
+var prototype_cell_data = {
+  id: 'prototype_cell_data',
+  data: null
+}
 
 $.subscribe("TOKEN_SUCCESS", successListener);
 $.subscribe("TOKEN_FAILED", failedListener);
@@ -79,8 +92,8 @@ $.subscribe("TOKEN_SERVICE_FAILED", failedServiceListener);
 function successListener() {
   if (arguments && arguments[1]) {
     console.log("Save operation successed");
-    console.log(arguments[1]);
-    var token = arguments[1].result[0]; //ab38e4a4ede0768a8e1b8bde73b3e7a6a893d048a0f3882a68217733ce314240
+    // console.log(arguments);
+    // genericModalViewModel.response(true, "保存操作", "[成功]", "");
   }
 }
 

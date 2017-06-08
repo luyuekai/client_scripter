@@ -60,6 +60,12 @@
                 Generate sharable unique token moreover
               </label>
             </div>
+            <div class="checkbox" data-bind="visible:id">
+              <input data-bind="checked: is_new" type="checkbox" id="checkbox_new_dashboard">
+              <label for="checkbox_new_dashboard">
+                Save as a new dashboard
+              </label>
+            </div>
           </div>
         </div>
       </div>
@@ -104,6 +110,12 @@
     //   businessPOJO.is_new(false);
     //   businessPOJO.parseTag();
     // }
+    if(viewModel && viewModel.data){
+        businessPOJO.id(viewModel.data.id);
+        businessPOJO.dashboard_name(viewModel.data.stringalpha);
+        businessPOJO.is_share(viewModel.data.tag == 'SHARE');
+        businessPOJO.is_new(false);
+    }
     genericModalViewModel.businessPOJO(businessPOJO);
   })();
 
@@ -135,7 +147,7 @@
     LoaderUtil.add_v3('genericModalDiv');
       persist_dashboard();
   }
-  $.subscribe("SUCCESS_LISTENER", successAddListener_modal);
+  $.subscribe("SUCCESS_LISTENER_UPDATE", successAddListener_modal);
   $.subscribe("SUCCESS_LISTENER_SHARE", successAddListener_share);
   $.subscribe("FAILED_LISTENER", failedAddListener_modal);
   $.subscribe("SERVER_FAILED_LISTENER", failedServiceListener_modal);
@@ -144,9 +156,9 @@
     if (arguments && arguments[1]) {
       console.log(arguments[1]);
       var json = arguments[1].result[0];
-      if(dashboardViewModel){
-        dashboardViewModel.deserialize_dashboard(json);
-        dashboardViewModel.hasNewContent(false);
+      if(viewModel){
+        viewModel.deserialize_dashboard(json);
+        viewModel.hasNewContent(false);
       }
       setTimeout(function() {
         genericModalViewModel.response(true, "Entity Operation", "[Successed]", "Operation Successed, please close the console and reload the data.");
@@ -190,9 +202,9 @@
   function successListener() {
       if (arguments && arguments[1]) {
           var json = arguments[1].result[0];
-          if(dashboardViewModel){
-            dashboardViewModel.deserialize_dashboard(json);
-            dashboardViewModel.hasNewContent(false);
+          if(viewModel){
+            viewModel.deserialize_dashboard(json);
+            viewModel.hasNewContent(false);
           }
           setTimeout(function() {
             genericModalViewModel.response(true, "Entity Operation", "[Successed]", "Operation Successed, please close the console and reload the data.");
@@ -208,14 +220,14 @@
 <script>
 
   function persist_dashboard() {
-    if (!dashboardViewModel) {
+    if (!viewModel) {
       return;
     }
     //'type': 'MATRIX_DASHBOARD'
     //'tag': SAVE,SHARE
 
     var tag = genericModalViewModel.businessPOJO().is_share() ? 'SHARE' : 'SAVE';
-    var json = dashboardViewModel.serialize_dashboard();
+    var json = viewModel.serialize_dashboard();
 
     if (!genericModalViewModel.businessPOJO().is_new() && genericModalViewModel.businessPOJO().id()) {
       var requestPOJO= {
@@ -233,7 +245,7 @@
       };
 
       console.log("update dashboard");
-      $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/update',data,"SUCCESS_LISTENER", "FAILED_LISTENER", "SERVER_FAILED_LISTENER");
+      $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/update',data,"SUCCESS_LISTENER_UPDATE", "FAILED_LISTENER", "SERVER_FAILED_LISTENER");
     } else {
       var shareJson = {
         'type': 'MATRIX_DASHBOARD',
