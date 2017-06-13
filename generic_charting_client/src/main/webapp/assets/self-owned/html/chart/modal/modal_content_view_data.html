@@ -1,0 +1,44 @@
+<div id='data_content_modal'>
+    <button id="csv_button" onclick="hide_div('Table_style');show_div('CSV_style');" title="CSV" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-file-text-o"></i></button>
+    <button id="table_button" onclick="show_div('Table_style');hide_div('CSV_style');" title="Table" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-table"></i></button>
+    <button id="transfer_button" onclick="dataViewModel.data(transferT(dataViewModel.data()))" title="Transpose" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-share"></i></button>
+    <table id="Table_style" style="overflow: auto">
+        <thead>
+        <th>Table</th>
+        </thead>
+        <tbody data-bind="foreach: data">
+            <tr data-bind="foreach:$data">
+                <td data-bind="text: $data" style="padding-left: 15px"></td>
+
+            </tr>
+        </tbody>
+    </table>
+    <table id="CSV_style" style="display: none;overflow: auto">
+        <thead>
+        <th>CSV</th>
+        </thead>
+        <tbody data-bind="foreach: data">
+        <td data-bind="text: $data" style="padding-left: 15px"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    ko.cleanNode($('#data_content_modal'))
+ko.applyBindings(dataViewModel,document.getElementById('data_content_modal'))
+
+function transferT(data){
+    var dataT = [];
+    for(var i=0;i<data[0].length;i++){
+        dataT[i] = [];
+    }
+    for(var i=0;i<data.length;i++){
+    for(var j=0;j<data[i].length;j++){
+        dataT[j][i] = data[i][j];
+    }
+}
+
+    return dataT;
+}
+</script>

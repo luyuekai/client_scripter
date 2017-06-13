@@ -1,0 +1,513 @@
+<div id="genericModalDiv">
+
+    <!--LOADER DIV BEGIN-->
+    <div class="loader-container text-center">
+        <div class="icon">
+            <div class="sk-wave">
+                <div class="sk-rect sk-rect1"></div>
+                <div class="sk-rect sk-rect2"></div>
+                <div class="sk-rect sk-rect3"></div>
+                <div class="sk-rect sk-rect4"></div>
+                <div class="sk-rect sk-rect5"></div>
+            </div>
+        </div>
+        <div class="title">Loading</div>
+    </div>
+    <!--LOADER DIV BEGIN-->
+
+    <!--RESULT DISPLAY DIV BEGIN-->
+    <div class="flat-matrix">
+        <div id="resultDIV" data-bind="visible: hasResult,css: styleClass" class="alert fresh-color">
+            <button type="button" class="close" data-bind="click:function(){hasResult(!hasResult)}" aria-label="Close"><i class="fa fa-close"></i></button>
+            <strong>
+                <span data-bind="text:resultTitle"></span>
+            </strong>
+            <span data-bind="text:resultSubTitle"></span>
+            <div data-bind="text:resultContent"></div>
+        </div>
+    </div>
+    <!--RESULT DISPLAY DIV END-->
+
+    <!--Validation DIV BEGIN-->
+    <div class="flat-matrix">
+        <div data-bind="visible: hasError" class="alert alert-warning alert-dismissible fresh-color" role="alert">
+            <button type="button" data-bind="click:function(){hasError(!hasError)}" class="close" aria-label="Close">
+                <i class="fa fa-close"></i>
+            </button>
+            <strong>警告:</strong>
+            <div id="errorMessagesDIV" data-bind="foreach:errorMessage">
+                <div data-bind="text:$data"></div>
+            </div>
+        </div>
+    </div>
+    <!--Validation DIV END-->
+
+    <!--CONTENT DIV BEGIN-->
+
+    <!-- *******YOUR SHOULD CODING IN HERE:[BEGIN]*******-->
+    <div class="business_div_class" data-bind="if:businessPOJO()">
+        <div class="step-v2-success" data-bind="with:businessPOJO">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li role="step" class="active">
+                    <a href="#step1-v3-horizantal" id="step1-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                        <div class="icon fa fa-database"></div>
+                        <div class="heading">
+                            <div class="title">Step 1</div>
+                            <div class="description"><strong>选择数据库类型</strong></div>
+                        </div>
+                    </a>
+                </li>
+                <li role="step">
+                    <a href="#step2-v3-horizantal" id="step1-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                        <div class="icon fa fa-filter"></div>
+                        <div class="heading">
+                            <div class="title">Step 2</div>
+                            <div class="description"><strong>自定义名称,用户名及密码 </strong></div>
+                        </div>
+                    </a>
+                </li>
+                <li role="step">
+                    <a href="#step3-v3-horizantal" id="step1-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                        <div class="icon fa fa-flag-checkered"></div>
+                        <div class="heading">
+                            <div class="title">Step 3</div>
+                            <div class="description"><strong>确认及连接数据库 </strong></div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="step1-v3-horizantal">
+                        <div class="card-header flat-matrix" style="height:50px">
+                            <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
+                                <div class="title"><i class="fa fa-cogs"></i> 选择外接数据库类型及驱动名称 :</div>
+                            </div>
+                            <div class="clear-both"></div>
+                        </div>
+                        <div class="row">
+                                <div class="col-xs-10 col-xs-offset-1">
+                                    <label class="col-sm-2 control-label">
+                                        <span style="font-weight: bold;font-size: 1.1em;">DbType</span>
+                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select data-bind="options:dataBases,optionsText:'dbType',value:selectedDb" class="form-control"></select>
+                                    </div>
+
+                                </div>
+                                <div class="col-xs-10 col-xs-offset-1">
+                                    <label class="col-sm-2 control-label">
+                                        <span style="font-weight: bold;">DbDriver</span>
+                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input data-bind="value:databaseDriver" readonly="true" type="text" class="form-control" placeholder="">
+
+                                    </div>
+                                </div>
+                                <div class="col-xs-10 col-xs-offset-1">
+                                    <label class="col-sm-2 control-label">
+                                        <span style="font-weight: bold;font-size: 1.1em;">DbURL</span>
+                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input data-bind="value:databaseUrl" type="text" class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                        </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="step2-v3-horizantal">
+                        <div class="card-header flat-matrix" style="height:50px">
+                            <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
+                                <div class="title"><i class="fa fa-cogs"></i> 数据库的用户名及密码 :
+                                </div>
+                            </div>
+                            <div class="clear-both"></div>
+                        </div>
+                        <div class="card-body no-padding">
+                            <br>
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        <span style="font-weight: bold;font-size: 1.1em;">自定义名称</span>
+                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input data-bind="value:connectionName" type="text" class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        <span style="font-weight: bold;font-size: 1.1em;">用户名</span>
+                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input data-bind="value:username" type="text" class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        <span style="font-weight: bold;font-size: 1.1em;">密码</span>
+                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input id="DBpassword" data-bind="value:passwd" type="password" class="form-control" placeholder="">
+                                    </div>
+                                    <div class="col-sm-0">
+                                        <button class="btn btn-primary btn-sm" type="button" onclick="test()"> 
+                                            <span class="fa fa-eye" aria-hidden="true" title="chart">&nbsp;查看</span>
+                                            <iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="step3-v3-horizantal">
+                    <div class="card card-success">
+                        <div class="card-header" style="height:50px">
+                            <div class="card-title" style="padding: 8px 20px;">
+                                <div class="title"><i class="fa fa-cogs"></i> 验证信息 :
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body no-padding">
+                            <br>
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        <span style="font-weight: bold;font-size: 1.1em;">数据库类型</span>
+                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                    </label>
+                                    <div class="col-sm-4">
+                                        <p class="form-control-static" data-bind="text:databaseType"></p>
+                                    </div>
+                                    <label class="col-sm-2 control-label">
+                                        <span style="font-weight: bold;font-size: 1.1em;">数据库驱动</span>
+                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                    </label>
+                                    <div class="col-sm-4">
+                                        <p class="form-control-static" data-bind="text:databaseDriver"></p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        <span style="font-weight: bold;font-size: 1.1em;">数据库用户</span>
+                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                    </label>
+                                    <div class="col-sm-4">
+                                        <p class="form-control-static" data-bind="text:username"></p>
+                                    </div>
+                                    <label class="col-sm-2 control-label">
+                                        <span style="font-weight: bold;font-size: 1.1em;">自定义名称</span>
+                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                    </label>
+                                    <div class="col-sm-4">
+                                        <p class="form-control-static" data-bind="text:connectionName"></p>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label class="col-sm-2 control-label">
+                                        <span style="font-weight: bold;font-size: 1.1em;">数据库Url</span>
+                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <p class="form-control-static" data-bind="text:databaseUrl"></p>
+                                    </div>
+
+
+                                </div>
+
+
+                            </form>
+                        </div>
+                    <br>
+                    <div class="pull-right">
+                        <button class="btn btn-primary btn-wide" onclick="testConnection()">测试连接</button>
+                        <button id="excuteNew" class="btn btn-primary btn-wide" onclick="execute()">执行</button>
+                        <button class="btn btn-inverse btn-wide" onclick="ModalUtil.modal_close('popupModalPro')">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- *******YOUR SHOULD CODING IN HERE:[END]*******-->
+
+    <!--CONTENT DIV END-->
+</div>
+
+<script>
+    var count = 0;
+    function test() {
+        if ((count % 2) == 0) {
+            $("#DBpassword").attr("type", "text");
+        } else {
+            $("#DBpassword").attr("type", "password");
+        }
+        count++;
+    }
+
+
+
+</script>
+
+<script>
+    // Initialize the View Model
+    // Clean the paging binding nodes
+    // Binding the view Model
+    var genericModalViewModel = new GenericModalViewModel();
+    ko.cleanNode($('#genericModalDiv')[0]);
+    ko.applyBindings(genericModalViewModel, document.getElementById('genericModalDiv'));
+</script>
+<script>
+    var databaseCf = function (dbType, dbDriver) {
+        this.dbType = dbType;
+        this.dbDriver = dbDriver;
+//        this.dbUrl = dbUrl;
+    }
+</script>
+
+<script>
+    // Setup the business model with view model
+    (function initialize() {
+        // *******YOUR SHOULD CODING IN HERE:*******
+        function BusinessPOJO() {
+            var self = this;
+            self.dataBases = ko.observableArray([
+                new databaseCf("Postgresql", "org.postgresql.Driver"),
+                new databaseCf("MySql", "com.mysql.jdbc.Driver"),
+                new databaseCf("Oracle", "oracleDriver", "oracleUrl"),
+                new databaseCf("GreenPlum", "org.postgresql.Driver")
+            ]);
+
+            self.selectedDb = ko.observable(new databaseCf("Postgresql", "org.postgresql.Driver"));
+
+            self.databaseType = ko.computed(function () {
+                return self.selectedDb().dbType;
+            });
+            self.databaseDriver = ko.computed(function () {
+                return self.selectedDb().dbDriver;
+            });
+            self.databaseUrl = ko.observable("jdbc:postgresql://localhost:5432/scripter_db");
+            self.connectionName = ko.observable('');
+            self.username = ko.observable('postgres');
+            self.passwd = ko.observable('');
+        }
+        var businessPOJO = new BusinessPOJO();
+        genericModalViewModel.businessPOJO(businessPOJO);
+    })();
+
+    $("#excuteNew").prop("disabled", true);
+
+    function execute() {
+        if (!genericModalViewModel.validation(businessValidation)) {
+            return;
+        } else {
+            runService();
+            $("#excuteNew").prop("disabled", true);
+        }
+
+    }
+
+    // *******YOUR SHOULD CODING IN HERE:*******
+    var businessValidation = function () {
+        var errorMessages = [];
+        //validate logic...
+
+        //validate
+
+        ValidationPOJO.validate("数据库类型", genericModalViewModel.businessPOJO().databaseType(), errorMessages, ['KEY_NOT_MAX']);
+        ValidationPOJO.validate("数据库驱动", genericModalViewModel.businessPOJO().databaseDriver(), errorMessages, ['KEY_NOT_MAX']);
+        ValidationPOJO.validate("自定义名称", genericModalViewModel.businessPOJO().connectionName(), errorMessages, ['KEY_NOT_MAX'], false);
+        ValidationPOJO.validate("数据库url", genericModalViewModel.businessPOJO().databaseUrl(), errorMessages, ['KEY_NOT_MAX'], false);
+        ValidationPOJO.validate("用户名", genericModalViewModel.businessPOJO().username(), errorMessages, ['KEY_NOT_MAX'], false);
+        ValidationPOJO.validate("密码", genericModalViewModel.businessPOJO().passwd(), errorMessages, ['KEY_NOT_MAX'], false);
+
+
+
+        return errorMessages;
+    }
+
+    // *******YOUR SHOULD CODING IN HERE:*******
+
+
+
+    var runService = function () {
+
+        var requestPOJO = {
+            "className": "v2.service.generic.query.entity.Genericentity",
+            "attributes": {
+                "description": genericModalViewModel.businessPOJO().databaseType().trim(),
+                "name": genericModalViewModel.businessPOJO().connectionName().trim(),
+                "stringalpha": genericModalViewModel.businessPOJO().databaseDriver().trim(),
+                "stringbeta": genericModalViewModel.businessPOJO().databaseUrl().trim(),
+                "stringdelta": genericModalViewModel.businessPOJO().username().trim(),
+                "stringepsilon": genericModalViewModel.businessPOJO().passwd().trim(),
+                "stringeta": UserPOJO.user.userName,
+                "deleted": false,
+                "type": "SOURCE_DATABASE_CONFIGURATION"
+            }
+
+        };
+
+
+        var database_data = {
+            'queryJson': $.toJSON(requestPOJO)
+        };
+
+
+//        -------刷新tree-------------
+        console.log("run service function invoked!");
+
+
+
+        $('#assistDIV').load($.getRootPath() + '/assets/self-owned/html/database_admin/assist_DBconnection_mgmt.html');
+//        ---------刷新tree--------------
+
+
+// ------------写入genericentity表中----------------
+
+        $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/add', database_data, "ADD_SUCCESS_LISTENER_DATABASE",
+                "ADD_FAILED_LISTENER_DATABASE", "ADD_SERVER_FAILED_LISTENER_DATABASE");
+
+    };
+
+
+
+    $.subscribe("ADD_SUCCESS_LISTENER_DATABASE", successAddListener_database);
+    $.subscribe("ADD_FAILED_LISTENER_DATABASE", failedAddListener_database);
+    $.subscribe("ADD_SERVER_FAILED_LISTENER_DATABASE", failedServiceListener_database);
+
+    function successAddListener_database() {
+        if (arguments && arguments[1]) {
+            genericModalViewModel.response(true, "添加数据库", "[成功]", "添加操作成功，请关闭此模态框.");
+//            var databasePOJO = {
+//                "dbType": genericModalViewModel.businessPOJO().databaseType().trim(),
+//                "dbDriver": genericModalViewModel.businessPOJO().databaseDriver().trim(),
+//                "dbConName": genericModalViewModel.businessPOJO().connectionName().trim(),
+//                "dbUsername": genericModalViewModel.businessPOJO().username().trim(),
+//                "dbPasswd": genericModalViewModel.businessPOJO().passwd().trim(),
+//                "dbUrl": genericModalViewModel.businessPOJO().databaseUrl().trim(),
+//                "attributes": {
+//                    "dbName": "",
+//                    "tableName": ""
+//                }
+//            };
+//
+//            var data = {
+//                "DBConfig": $.toJSON(databasePOJO)
+//            };
+//
+//            $.serverRequest($.getServerRoot() + "/service_scripter_database/api/connection/databases", data, "successSwitchConnection",
+//                    "failedSwitchConnection", "serverSwitchConnection");
+
+        }
+    }
+
+    function failedAddListener_database() {
+        if (arguments && arguments[1]) {
+            var errorMessage = arguments[1].data;
+            genericModalViewModel.response(false, "添加数据库", "[失败]", errorMessage);
+        }
+    }
+
+    function failedServiceListener_database() {
+        genericModalViewModel.response(false, "添加数据库", "[失败]", "系统服务错误，请联系管理人员...");
+
+    }
+
+    $.subscribe("successSwitchConnection", successSwitchConnection);
+    $.subscribe("failedSwitchConnection", failedSwitchConnection);
+    $.subscribe("serverSwitchConnection", serverSwitchConnection);
+
+    function successSwitchConnection() {
+        var databasePOJO = {
+            "dbType": genericModalViewModel.businessPOJO().databaseType().trim(),
+            "dbDriver": genericModalViewModel.businessPOJO().databaseDriver().trim(),
+            "dbConName": genericModalViewModel.businessPOJO().connectionName().trim(),
+            "dbUsername": genericModalViewModel.businessPOJO().username().trim(),
+            "dbPasswd": genericModalViewModel.businessPOJO().passwd().trim(),
+            "dbUrl": genericModalViewModel.businessPOJO().databaseUrl().trim(),
+            "attributes": {
+                "dbName": "",
+                "tableName": ""
+            }
+        };
+        genericModalViewModel.response(true, "切换数据库", "[成功]", "添加操作成功，请关闭此模态框.");
+        docCookies.setItem("dbData", $.toJSON(databasePOJO), Infinity, "/");
+        dbReloadTree = databasePOJO;
+        nameFlag = genericModalViewModel.businessPOJO().databaseType().trim() + "   (" + genericModalViewModel.businessPOJO().connectionName().trim() + ")";
+        docCookies.setItem("nameFlag", nameFlag, Infinity, "/");
+        rdmsBrowserViewModel.databaseName(nameFlag.split("(")[1].split(")")[0]);
+        $("#databaseDIV").load($.getRootPath() + "/assets/self-owned/html/database_admin/rdms_tree_reload.html");
+        $('#rdmsFolderDIV').load($.getRootPath() + '/assets/self-owned/html/database_admin/database_browser_tree.html');
+
+    }
+    function failedSwitchConnection() {
+        genericModalViewModel.response(false, "切换数据库连接", "[失败]", " 切换数据库连接失败,请查看信息是否正确");
+
+    }
+    function serverSwitchConnection() {
+        genericModalViewModel.response(false, "切换数据库连接", "[失败]", " 切换数据库连接失败,服务器错误");
+
+    }
+
+
+
+    var testConnection = function () {
+
+
+        if (!genericModalViewModel.validation(businessValidation)) {
+            return;
+        } else {
+            runTest();
+        }
+    };
+    var runTest = function () {
+        var requestPOJO = {
+            "dbType": genericModalViewModel.businessPOJO().databaseType().trim(),
+            "dbDriver": genericModalViewModel.businessPOJO().databaseDriver().trim(),
+            "dbConName": genericModalViewModel.businessPOJO().connectionName().trim(),
+            "dbUsername": genericModalViewModel.businessPOJO().username().trim(),
+            "dbPasswd": genericModalViewModel.businessPOJO().passwd().trim(),
+            "dbUrl": genericModalViewModel.businessPOJO().databaseUrl().trim()
+        };
+
+        var data = {
+            "DBConfig": $.toJSON(requestPOJO)
+        };
+
+        $.serverRequest($.getServerRoot() + "/generic_charting_client/api/connection/testconnection", data, "successTestConnection", "failedTestConnection",
+                "failedServerConnection");
+    };
+
+    $.subscribe("successTestConnection", successTestConnection);
+    $.subscribe("failedTestConnection", failedTestConnection);
+    $.subscribe("failedServerConnection", failedServerConnection);
+
+    function successTestConnection() {
+        if (arguments && arguments[1]) {
+            genericModalViewModel.response(true, "测试数据库连接", "[成功]", " 测试数据库连接成功,请点击执行按钮");
+            $("#excuteNew").prop("disabled", false);
+        }
+    }
+    function failedTestConnection() {
+        if (arguments && arguments[1]) {
+            var errorMessage = arguments[1].data;
+            genericModalViewModel.response(false, "测试数据库连接", "[失败]", errorMessage);
+        }
+    }
+    function failedServerConnection() {
+        genericModalViewModel.response(false, "测试数据库连接", "[失败]", " 测试数据库连接失败,服务器错误");
+
+    }
+
+
+
+</script>
