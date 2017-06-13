@@ -1,0 +1,369 @@
+<div id="genericModalDiv">
+
+    <!--LOADER DIV BEGIN-->
+    <div class="loader-container text-center">
+        <div class="icon">
+            <div class="sk-wave">
+                <div class="sk-rect sk-rect1"></div>
+                <div class="sk-rect sk-rect2"></div>
+                <div class="sk-rect sk-rect3"></div>
+                <div class="sk-rect sk-rect4"></div>
+                <div class="sk-rect sk-rect5"></div>
+            </div>
+        </div>
+        <div class="title">Loading</div>
+    </div>
+    <!--LOADER DIV BEGIN-->
+
+    <!--RESULT DISPLAY DIV BEGIN-->
+    <div class="flat-matrix">
+        <div id="resultDIV" data-bind="visible: hasResult,css: styleClass" class="alert fresh-color">
+            <button type="button" class="close" data-bind="click:function(){hasResult(!hasResult)}" aria-label="Close"><i class="fa fa-close"></i></button>
+            <strong>
+                <span data-bind="text:resultTitle"></span>
+            </strong>
+            <span data-bind="text:resultSubTitle"></span>
+            <div data-bind="text:resultContent"></div>
+        </div>
+    </div>
+    <!--RESULT DISPLAY DIV END-->
+
+    <!--Validation DIV BEGIN-->
+    <div class="flat-matrix">
+        <div data-bind="visible: hasError" class="alert alert-warning alert-dismissible fresh-color" role="alert">
+            <button type="button" data-bind="click:function(){hasError(!hasError)}" class="close" aria-label="Close">
+                <i class="fa fa-close"></i>
+            </button>
+            <strong>警告:</strong>
+            <div id="errorMessagesDIV" data-bind="foreach:errorMessage">
+                <div data-bind="text:$data"></div>
+            </div>
+        </div>
+    </div>
+    <!--Validation DIV END-->
+
+    <!--CONTENT DIV BEGIN-->
+
+    <!-- *******YOUR SHOULD CODING IN HERE:[BEGIN]*******-->
+    <div class="business_div_class" data-bind="if:businessPOJO()">
+        <div class="step-v2-success" data-bind="with:businessPOJO">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li role="step" class="active">
+                    <a href="#step1-v3-horizantal" id="step1-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                        <div class="icon fa fa-database"></div>
+                        <div class="heading">
+                            <div class="title">Step 1</div>
+                            <div class="description"><strong>选择数据库</strong></div>
+                        </div>
+                    </a>
+                </li>
+                <li role="step">
+                    <a href="#step2-v3-horizantal" id="step2-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                        <div class="icon fa fa-filter"></div>
+                        <div class="heading">
+                            <div class="title">Step 2</div>
+                            <div class="description"><strong>查看数据表信息 </strong></div>
+                        </div>
+                    </a>
+                </li>
+                <li role="step">
+                    <a href="#step3-v3-horizantal" id="step3-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                        <div class="icon fa fa-flag-checkered"></div>
+                        <div class="heading">
+                            <div class="title">Step 3</div>
+                            <div class="description"><strong>编辑查询语句 </strong></div>
+                        </div>
+                    </a>
+                </li>
+                <li role="step">
+                    <a href="#step4-v3-horizantal" id="step4-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                        <div class="icon fa fa-flag-checkered"></div>
+                        <div class="heading">
+                            <div class="title">Step 4</div>
+                            <div class="description"><strong>确认信息并提交 </strong></div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="step1-v3-horizantal">
+                    <div class="card-header flat-matrix" style="height:50px">
+                        <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
+                            <div class="title"><i class="fa fa-cogs"></i> 选择数据库</div>
+                        </div>
+                        <div class="clear-both"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-10 col-xs-offset-1" style="padding-bottom: 15px">
+                            <label class="col-sm-3 control-label">
+                                <span style="font-weight: bold;font-size: 1.1em;">Database</span>
+                                <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                            </label>
+                            <div class="col-sm-7">
+                                <select data-bind="options: database.availableDatabase,optionsText: function(item) {
+             return item[14] + ' (' +item[31] + ')'
+         },value: database.selectedDatabase,
+             optionsCaption: '选择...',
+                                        " class="form-control" style="width:400px"></select>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-10 col-xs-offset-1" data-bind="if:database.availableTable">
+                            <div data-bind="foreach:database.availableTable">
+                                <button type="button" class="btn btn-info" style="padding:5px 25px">
+                                    <span class="badge" style="border-radius: 10px;text-transform: none">
+                                        <strong data-bind="text:$data"></strong>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="step2-v3-horizantal">
+                    <div class="card-header flat-matrix" style="height:50px">
+                        <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
+                            <div class="title"><i class="fa fa-cogs"></i> 查看数据表信息
+                            </div>
+                        </div>
+                        <div class="clear-both"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-10 col-xs-offset-1" style="padding-bottom: 15px">
+                            <label class="col-sm-3 control-label">
+                                <span style="font-weight: bold;font-size: 1.1em;">Table</span>
+                                <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                            </label>
+                            <div class="col-sm-7">
+                                <select data-bind="options: database.availableTable,optionsText: function(item) {
+             return item
+         },value: database.selectedTable,
+             optionsCaption: '选择...',
+                                        " class="form-control" style="width:400px"></select>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-10 col-xs-offset-1" data-bind="if:database.column">
+                            <div data-bind="foreach:database.column">
+                                <button type="button" class="btn btn-info" style="padding:5px 25px">
+                                    <span class="badge" style="border-radius: 10px;text-transform: none">
+                                        <strong data-bind="text:$data"></strong>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="step3-v3-horizantal">
+                    <div class="card-header flat-matrix" style="height:50px">
+                        <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
+                            <div class="title"><i class="fa fa-cogs"></i> 编辑sql语句
+                            </div>
+                        </div>
+                        <div class="clear-both"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-10 col-xs-offset-1">
+                            <textarea class="form-control" data-bind="value:sql"  rows="4" placeholder="请在这里键入sql"></textarea>
+                        </div>
+                        <div class="col-xs-10 col-xs-offset-1" data-bind="if:database.column">
+                            <div data-bind="foreach:database.column">
+                                <button type="button" class="btn btn-info" style="padding:5px 25px">
+                                    <span class="badge" style="border-radius: 10px;text-transform: none">
+                                        <strong data-bind="text:$data"></strong>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="step4-v3-horizantal">
+                    <div class="card card-success">
+                        <div class="card-header" style="height:50px">
+                            <div class="card-title" style="padding: 8px 20px;">
+                                <div class="title"><i class="fa fa-cogs"></i> 确认信息并执行
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="pull-right">
+                            <button id="excuteNew" class="btn btn-primary btn-wide" onclick="execute()">执行</button>
+                            <button class="btn btn-inverse btn-wide" onclick="ModalUtil.modal_close('popupModalPro')">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- *******YOUR SHOULD CODING IN HERE:[END]*******-->
+
+        <!--CONTENT DIV END-->
+    </div>
+    <script>
+        // Initialize the View Model
+        // Clean the paging binding nodes
+        // Binding the view Model
+        var genericModalViewModel = new GenericModalViewModel();
+        ko.cleanNode($('#genericModalDiv')[0]);
+        ko.applyBindings(genericModalViewModel, document.getElementById('genericModalDiv'));
+    </script>
+    <script>
+        var databaseChooseViewModel = {
+            availableDatabase: ko.observableArray([]),
+            selectedDatabase: ko.observable(),
+            availableTable: ko.observableArray([]),
+            selectedTable: ko.observable(),
+            column: ko.observableArray([])
+        }
+        databaseChooseViewModel.availableDatabase(databaseViewModel.viewData());
+
+    </script>
+    <script>
+        // Setup the business model with view model
+        (function initialize() {
+
+            // *******YOUR SHOULD CODING IN HERE:*******
+            function BusinessPOJO() {
+                var self = this;
+
+                self.database = databaseChooseViewModel;
+                self.sql = ko.observable();
+            }
+            var businessPOJO = new BusinessPOJO();
+            genericModalViewModel.businessPOJO(businessPOJO);
+            genericModalViewModel.businessPOJO().database.selectedDatabase.subscribe(function (newValue) {
+                getTableInDatabase();
+            });
+            genericModalViewModel.businessPOJO().database.selectedTable.subscribe(function (newValue) {
+                getColumnInTable();
+            });
+        })();
+
+        function execute() {
+            if (!genericModalViewModel.validation(businessValidation)) {
+                return;
+            } else {
+                runService();
+            }
+        }
+
+        var businessValidation = function () {
+            var errorMessages = [];
+            //validate logic...
+            ValidationPOJO.validate("SQL:", genericModalViewModel.businessPOJO().sql(), errorMessages, ['KEY_NOT_NULL']);
+
+            if (!genericModalViewModel.businessPOJO().database.selectedDatabase()) {
+                errorMessages.push('未选择数据库');
+            }
+
+            return errorMessages;
+        }
+
+        var runService = function () {
+            console.log("run service function invoked!")
+            var ConfigPOJO = {
+                "dbType": genericModalViewModel.businessPOJO().database.selectedDatabase()[9],
+                "dbDriver": genericModalViewModel.businessPOJO().database.selectedDatabase()[30],
+                "dbConName": genericModalViewModel.businessPOJO().database.selectedDatabase()[14],
+                "dbUsername": genericModalViewModel.businessPOJO().database.selectedDatabase()[32],
+                "dbPasswd": genericModalViewModel.businessPOJO().database.selectedDatabase()[33],
+                "dbUrl": genericModalViewModel.businessPOJO().database.selectedDatabase()[31]
+            }
+
+            var requestPOJO = {
+                "className": "v2.service.generic.query.entity.Genericentity",
+                "attributes": {
+                    "type": "SOURCE_SQL_CONFIGURATION",
+                    "deleted": false,
+//                "name":
+                    "stringeta": UserPOJO.user.userName,
+                    "stringalpha": $.toJSON(ConfigPOJO),
+                    "stringbeta": genericModalViewModel.businessPOJO().sql()
+                }
+            };
+            var data = {
+                'queryJson': $.toJSON(requestPOJO)
+            };
+            $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/add', data, "successAddSql",
+                    "failedAddSql", "serverAddSql");
+
+            $.subscribe("successAddSql", successAddSql);
+            $.subscribe("failedAddSql", failedAddSql);
+            $.subscribe("serverAddSql", serverAddSql);
+
+            function successAddSql() {
+                if (arguments & arguments[1]) {
+                    console.log(arguments[1]);
+                }
+            }
+            function failedAddSql() {
+                genericModalViewModel.response(false, "创建SQL", "失败", errorMessage)
+            }
+            function serverAddSql() {
+                genericModalViewModel.response(false, "创建SQL", "失败", "操作失败，请检查操作步骤或与系统管理员联系")
+            }
+
+        }
+    </script>
+    <script>
+        function getTableInDatabase() {
+            if (genericModalViewModel.businessPOJO().database.selectedDatabase() != undefined) {
+                var ConfigPOJO = {
+                    "dbType": genericModalViewModel.businessPOJO().database.selectedDatabase()[9],
+                    "dbDriver": genericModalViewModel.businessPOJO().database.selectedDatabase()[30],
+                    "dbConName": genericModalViewModel.businessPOJO().database.selectedDatabase()[14],
+                    "dbUsername": genericModalViewModel.businessPOJO().database.selectedDatabase()[32],
+                    "dbPasswd": genericModalViewModel.businessPOJO().database.selectedDatabase()[33],
+                    "dbUrl": genericModalViewModel.businessPOJO().database.selectedDatabase()[31]
+                }
+                $.ajax({
+                    dataType: "text",
+                    type: "POST",
+                    contentType: "application/x-www-form-urlencoded",
+                    async: false,
+                    url: $.getServerRoot() + "/generic_charting_client/api/connection/public/tables",
+                    data: {
+                        'DBConfig': $.toJSON(ConfigPOJO)
+                    }
+                }).done(function (data) {
+                    var data = JSON.parse(data);
+                    var table = data.data.split("\n")
+                    table.shift();
+                    table.pop();
+                    genericModalViewModel.businessPOJO().database.availableTable(table);
+                }).fail(function () {}).always(function () {})
+            }
+        }
+        
+        function getColumnInTable(){
+            if (genericModalViewModel.businessPOJO().database.selectedTable() != undefined) {
+                var ConfigPOJO = {
+                    "dbType": genericModalViewModel.businessPOJO().database.selectedDatabase()[9],
+                    "dbDriver": genericModalViewModel.businessPOJO().database.selectedDatabase()[30],
+                    "dbConName": genericModalViewModel.businessPOJO().database.selectedDatabase()[14],
+                    "dbUsername": genericModalViewModel.businessPOJO().database.selectedDatabase()[32],
+                    "dbPasswd": genericModalViewModel.businessPOJO().database.selectedDatabase()[33],
+                    "dbUrl": genericModalViewModel.businessPOJO().database.selectedDatabase()[31]
+                }
+                $.ajax({
+                    dataType: "text",
+                    type: "POST",
+                    contentType: "application/x-www-form-urlencoded",
+                    async: false,
+                    url: $.getServerRoot() + "/generic_charting_client/api/connection/public/" + genericModalViewModel.businessPOJO().database.selectedTable() + "/columns",
+                    data: {
+                        'DBConfig': $.toJSON(ConfigPOJO)
+                    }
+                }).done(function (data) {
+                    var data = JSON.parse(data);
+                    var table = data.data.split("\n")
+                    table.shift();
+                    table.pop();
+                    genericModalViewModel.businessPOJO().database.column(table);
+                }).fail(function () {}).always(function () {})
+            }
+        }
+
+        
+    </script>
+

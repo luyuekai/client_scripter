@@ -32,6 +32,7 @@ public class ApplicationConfig extends Application {
         resources.add(kg.auth.rest.AccountResource.class);
         resources.add(kg.auth.rest.MockResource.class);
         resources.add(kg.auth.rest.TestResource.class);
+        resources.add(scripter.datasourse.rest.ConnectionResource.class);
     }
     
 }

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Matrix</title>
+        <link rel="shortcut icon" href="assets/self-owned/ico/favicon.ico">
+
+        <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/vendor.css">
+        <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/flat-admin.css">
+        <!-- Theme -->
+        <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/blue-sky.css">
+        <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/blue.css">
+        <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/red.css">
+        <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/yellow.css">
+
+        <link rel="stylesheet" href="assets/reference/codemirror/codemirror.css">
+
+        <link rel="stylesheet" href="assets/reference/github-markdown-css/github-markdown.css">
+
+        <link rel="stylesheet" type="text/css" href="assets/self-owned/css/matrix_v3.css">
+
+        <link rel="stylesheet" type="text/css" href="assets/reference/bootstrap-fileinput/css/fileinput_ly.css" media="all">
+
+    </head>
+
+    <body>
+        <div class="app app-blue-sky" id="contentDIV">
+
+            <aside class="app-sidebar" id="sidebar" style="position:fixed;top:0px;"></aside>
+            <div class="app-container" id="main_content_div">
+
+                <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="margin-left: 180px;"></nav>
+
+                <div id="hidden_div" class="row" style="position:fixed;top:88px;left: 180px;right: 0px;z-index:100006;background-color: #E7EDEE;height:30px">
+                    <div class="col-xs-12">
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class="col-md-8" id="table_content_div" style="margin-top:30px">
+                        <div class="card card-mini">
+                            <div class="card-body" id="chart_content_body_div" style="min-height:360px">
+                                <div id="main_chart" style="width: 100%;height:100%;min-height:800px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="database_configuration_div" class="col-xs-12" style="margin-top:118px;padding-left: 0px;padding-right: 0px">
+                            <div class="card card-mini">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <i class="fa fa-diamond">&nbsp;Database Source&nbsp;&nbsp;&nbsp;</i>
+                                        <span class="pull-right" style="margin-right:0px">
+                                            <button id="new_database_button" onclick="ModalUtil.popup_modal('New Database Connection', '/assets/self-owned/html/datasource/create_database_connection.html')" title="New Database Connection" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-database"></i></button>
+                                            <!--                                        <button id="undispaly_config_button" onclick="hide_div('config_content_div');show_div('dispaly_config_button');hide_div('undispaly_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
+                                                                                    <button id="dispaly_config_button" onclick="show_div('config_content_div');hide_div('dispaly_config_button');show_div('undispaly_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>-->
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="padding:0px">
+                                    <div class="panel-body">
+                                        <table class="table-hover" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th style="padding-left: 15px">URL</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-bind="foreach: viewData">
+                                                <tr>
+                                                    <td data-bind="text:$data[14]"></td>
+                                                    <td data-bind="text:$data[31].length>45 ? $data[31].substring(0,45)+'...': $data[31], attr: {title:$data[31]}" style="padding-left: 15px"></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-xs btn-default" title="编辑" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
+                                                            <i class="fa fa-edit fa-1x"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-xs btn-default" title=" 切换状态" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
+                                                            <i class="fa fa-plug fa-1x"></i>
+                                                        </button>                                                   
+                                                        <button type="button" class="btn btn-xs btn-default" title="删除" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
+                                                            <i class="fa fa-trash fa-1x"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>                                
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="sql_configuration_div" class="col-xs-12" style="margin-top:20px;padding-left: 0px;padding-right: 0px">
+                            <div class="card card-mini">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <i class="fa fa-diamond">&nbsp;Data Source&nbsp;&nbsp;&nbsp;</i>
+                                        <span class="pull-right" style="margin-right:0px">
+                                            <button id="new_data_button" onclick="ModalUtil.popup_modal('New Data Source', '/assets/self-owned/html/datasource/create_data_source.html')" title="New Data Source" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-plus"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="padding:0px">
+                                    <div class="panel-body">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade modal-success" id="popupModalPro" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-close"></i>
+                        </button>
+                        <i class="fa fa-send-o"></i> &nbsp; <span class="modal-title" id="popupModalLabelPro"></span>
+                    </div>
+                    <div class="modal-body">
+                        <div id="modalContentDIVPro"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="assets/reference/flat-admin/assets/js/vendor_min.js"></script>
+        <script type="text/javascript" src="assets/reference/flat-admin/assets/js/app.js"></script>
+
+        <script src="assets/reference/codemirror/codemirror.js"></script>
+        <script src="assets/reference/codemirror/mode/javascript/javascript.js"></script>
+        <script src="assets/reference/codemirror/mode/markdown/markdown.js"></script>
+
+        <script src="assets/reference/jquery/jquery.json.js"></script>
+        <script src="assets/reference/jquery/jquery.blockUI.js"></script>
+        <script src="assets/reference/knockout.js/knockout-3.3.0.js"></script>
+        <script src="assets/reference/jquery-tiny-pubsub/tiny-pubsub.js"></script>
+        <script src="assets/reference/markdown/showdown.js"></script>
+        <script src="assets/reference/echarts/echarts-min.js"></script>
+        <script src="assets/reference/echarts/dataTools.js"></script>
+        <script src="assets/reference/echarts/geo/world.js"></script>
+
+        <script src="assets/reference/bootstrap-fileinput/js/fileinput_ly.js"></script>
+        <script src="assets/reference/bootstrap-fileinput/js/locales/zh.js"></script>
+
+        <!-- Javascript for Matrix Self Owned -->
+        <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
+        <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
+        <script src="assets/self-owned/js/generic/generic_cache.js"></script>
+        <script src="assets/self-owned/js/generic/generic_charting_v4.js"></script>
+        <script src="assets/self-owned/js/generic/generic_csv.js"></script>
+        <script src="assets/self-owned/js/generic/generic_cud.js"></script>
+        <script src="assets/self-owned/js/generic/generic_modal.js"></script>
+        <script src="assets/self-owned/js/generic/generic_query.js"></script>
+        <script src="assets/self-owned/js/generic/generic_table.js"></script>
+        <script src="assets/self-owned/js/generic/generic_util.js"></script>
+        <script src="assets/self-owned/js/generic/generic_validation.js"></script>
+        <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
+        <script src="assets/self-owned/js/generic/generic_upload.js"></script>
+
+        <script>
+                                                $(document).ready(function () {
+                                                    $('#sidebar').load($.getRootPath() + '/components/left_side.html');
+                                                    $('#navbar').load($.getRootPath() + '/components/header.html');
+                                                    setTimeout(function () {
+                                                        $('#navbar_title_li').html('Data Source Editor');
+                                                        $('#navbar_search_li').css('display', 'none');
+                                                    }, 200);
+                                                });
+        </script>
+        <script>
+            function retrieveDatabase() {
+                var requestPOJO = {
+                    "className": "v2.service.generic.query.entity.Genericentity",
+                    "aliasMap": {},
+                    "orderMap": {"id": false},
+                    "pageMaxSize": databaseViewModel.pageMaxSize(),
+                    "currentPageNumber": databaseViewModel.currentPageNumber(),
+                    "likeORMap": {
+                    },
+                    "eqMap": {
+                        "deleted": false,
+                        "type": "SOURCE_DATABASE_CONFIGURATION"
+                    },
+                    "inMap": {},
+                };
+                var data = {
+                    'queryJson': $.toJSON(requestPOJO)
+                };
+                $.serverRequest($.getServerRoot() + "/service_generic_query/api/query", data, "successGetDatabase",
+                        "failedGetDatabase", "serverGetDatabase");
+            }
+
+            $.subscribe("successGetDatabase", successGetDatabase);
+            $.subscribe("failedGetDatabase", failedGetDatabase);
+            $.subscribe("serverGetDatabase", serverGetDatabase);
+
+            function successGetDatabase() {
+                if (arguments && arguments[1]) {
+                    databaseViewModel.buildSearchData(arguments[1]);
+                }
+            }
+            function failedGetDatabase() {
+
+            }
+            function serverGetDatabase() {
+
+            }
+        </script>
+        <script>
+            function retrieveDataSource(){
+                var requestPOJO = {
+                    "className": "v2.service.generic.query.entity.Genericentity",
+                    "aliasMap": {},
+                    "orderMap": {"id": false},
+                    "pageMaxSize": dataSourceViewModel.pageMaxSize(),
+                    "currentPageNumber": dataSourceViewModel.currentPageNumber(),
+                    "likeORMap": {
+                    },
+                    "eqMap": {
+                        "deleted": false,
+                        "type": "SOURCE_SQL_CONFIGURATION"
+                    },
+                    "inMap": {},
+                };
+                var data = {
+                    'queryJson': $.toJSON(requestPOJO)
+                };
+            }
+        </script>
+        <script>
+            var databaseViewModel = new ServerPagingViewModel();
+            databaseViewModel.retrieveData = retrieveDatabase;
+
+            var dataViewModel = new ServerPagingViewModel();
+            dataViewModel.retrieveData = retrieveDataSource;
+            
+            var dataSourceViewModal = {
+                databases: databaseViewModel,
+                sqlsources: dataViewModel
+            }
+            retrieveDatabase()
+        </script>
+    </body>
+</html>
