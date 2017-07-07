@@ -72,18 +72,21 @@
     <script src="assets/self-owned/js/module/dashboard/vm.js"></script>
     <script>
       $(document).ready(function() {
+          
         init();
         
       });
 
 
       function init(){
+         
         // render dom elements
         $('#sidebar').load($.getRootPath() + '/components/left_side.html');
         $('#navbar').load($.getRootPath() + '/components/header.html');
         $('#footer_parent_div').load($.getRootPath() + '/components/footer.html');
         $('#contentDIV').load($.getRootPath() + '/assets/self-owned/html/dashboard/dashboard_content.html');
         setTimeout(function() {
+           
           $('#navbar_title_li').html('Matrix Chart Dashboard');
           add_shortcut_key_listener();
         }, 200);
