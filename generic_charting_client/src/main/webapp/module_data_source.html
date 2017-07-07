@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div id="database_configuration_div" class="col-xs-12" style="margin-top:118px;padding-left: 0px;padding-right: 0px">
+                        <div id="database_configuration_div" class="col-xs-12" style="margin-top:118px;padding-left: 0px;padding-right: 0px" data-bind="with:databases">
                             <div class="card card-mini">
                                 <div class="card-header">
                                     <div class="card-title">
@@ -91,7 +91,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="sql_configuration_div" class="col-xs-12" style="margin-top:20px;padding-left: 0px;padding-right: 0px">
+                        <div id="sql_configuration_div" class="col-xs-12" style="margin-top:20px;padding-left: 0px;padding-right: 0px" data-bind="with:sqlsources">
                             <div class="card card-mini">
                                 <div class="card-header">
                                     <div class="card-title">
@@ -103,7 +103,34 @@
                                 </div>
                                 <div class="card-body" style="padding:0px">
                                     <div class="panel-body">
-                                        
+                                        <table class="table-hover" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th style="padding-left: 15px" >SQL</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-bind="foreach: viewData">
+                                                <tr>
+                                                    <td data-bind="text:$data[0],click:function($data){
+                                                        runServiceSQL($data);
+                                                    }"></td>
+                                                    <td data-bind="text:$data[31].length>45 ? $data[31].substring(0,45)+'...': $data[31], attr: {title:$data[31]}" style="padding-left: 15px"></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-xs btn-default" title="编辑" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
+                                                            <i class="fa fa-edit fa-1x"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-xs btn-default" title=" 切换状态" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
+                                                            <i class="fa fa-plug fa-1x"></i>
+                                                        </button>                                                   
+                                                        <button type="button" class="btn btn-xs btn-default" title="删除" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
+                                                            <i class="fa fa-trash fa-1x"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -180,8 +207,8 @@
                     "className": "v2.service.generic.query.entity.Genericentity",
                     "aliasMap": {},
                     "orderMap": {"id": false},
-                    "pageMaxSize": databaseViewModel.pageMaxSize(),
-                    "currentPageNumber": databaseViewModel.currentPageNumber(),
+                    "pageMaxSize": SourceViewModel.databases.pageMaxSize(),
+                    "currentPageNumber": SourceViewModel.databases.currentPageNumber(),
                     "likeORMap": {
                     },
                     "eqMap": {
@@ -203,7 +230,7 @@
 
             function successGetDatabase() {
                 if (arguments && arguments[1]) {
-                    databaseViewModel.buildSearchData(arguments[1]);
+                    SourceViewModel.databases.buildSearchData(arguments[1]);
                 }
             }
             function failedGetDatabase() {
@@ -214,13 +241,13 @@
             }
         </script>
         <script>
-            function retrieveDataSource(){
+            function retrieveDataSource() {
                 var requestPOJO = {
                     "className": "v2.service.generic.query.entity.Genericentity",
                     "aliasMap": {},
                     "orderMap": {"id": false},
-                    "pageMaxSize": dataSourceViewModel.pageMaxSize(),
-                    "currentPageNumber": dataSourceViewModel.currentPageNumber(),
+                    "pageMaxSize": SourceViewModel.sqlsources.pageMaxSize(),
+                    "currentPageNumber": SourceViewModel.sqlsources.currentPageNumber(),
                     "likeORMap": {
                     },
                     "eqMap": {
@@ -232,6 +259,32 @@
                 var data = {
                     'queryJson': $.toJSON(requestPOJO)
                 };
+                $.serverRequest($.getServerRoot() + "/service_generic_query/api/query", data, "successGetSQLData",
+                        "failedGetSQLData", "serverGetSQLData");
+            }
+
+            $.subscribe("successGetSQLData", successGetSQLData);
+            $.subscribe("failedGetSQLData", failedGetSQLData);
+            $.subscribe("serverGetSQLData", serverGetSQLData);
+
+            function successGetSQLData() {
+                if (arguments && arguments[1]) {
+                    SourceViewModel.sqlsources.buildSearchData(arguments[1]);
+                }
+            }
+            function failedGetSQLData() {
+
+            }
+            function serverGetSQLData() {
+
+            }
+        </script>
+        <script>
+            function runServiceSQL(data){
+                console.log(data);
+                var data = {
+                    
+                }
             }
         </script>
         <script>
@@ -240,12 +293,15 @@
 
             var dataViewModel = new ServerPagingViewModel();
             dataViewModel.retrieveData = retrieveDataSource;
-            
-            var dataSourceViewModal = {
+
+            var SourceViewModel = {
                 databases: databaseViewModel,
                 sqlsources: dataViewModel
             }
-            retrieveDatabase()
+            ko.cleanNode($('#contentDIV'));
+            ko.applyBindings(SourceViewModel, document.getElementById('contentDIV'));
+            retrieveDatabase();
+            retrieveDataSource();
         </script>
     </body>
 </html>
