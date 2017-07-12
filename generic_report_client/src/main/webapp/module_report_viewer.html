@@ -180,7 +180,11 @@
     <script src="assets/self-owned/js/module/kits/logic.js"></script>
 
 
-
+    <script>
+        var reportViewModel = new ReportViewModel();
+//        reportViewModel.addCell();
+        ko.applyBindings(reportViewModel, document.getElementById('main_content_div'));
+    </script>
 
 
     <script>

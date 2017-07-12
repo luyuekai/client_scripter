@@ -99,7 +99,7 @@
                 <button title="Export PDF" type="button" data-bind="click:function(){reportViewModel.download('PDF')}" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-file-pdf-o"></i></button>
                 <button title="Export HTML" type="button" data-bind="click:function(){reportViewModel.download('HTML')}" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-html5"></i></button>
                 <button title="Export Markdown" type="button" data-bind="click:function(){reportViewModel.download('MD')}" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-file-code-o"></i></button>
-
+                <button title="Up to ODA " type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Up to ODA', '/assets/self-owned/html/report/modal_to_oda.html',$data);})" class="btn btn-default "  style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-caret-square-o-up "></i>&nbsp;</button>
 
                 <span class="pull-right" style="margin-right:18px">
                 <button type="button" class="btn btn-warning" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:hasNewContent">Modified</button>
@@ -206,6 +206,9 @@
     <script src="assets/reference/bootstrap-fileinput/js/locales/zh.js"></script>
 
     <!-- Javascript for Matrix Self Owned -->
+    <script src="assets/self-owned/js/module/gallery/codeoda.js"></script>
+    <script src="assets/reference/codemirror/mode/sql/sql.js"></script>
+    
     <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
     <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
     <script src="assets/self-owned/js/generic/generic_cache.js"></script>
@@ -243,7 +246,7 @@
         }, 200);
         window.addEventListener("beforeunload", function (e) {
                 if(reportViewModel.hasNewContent()){
-                    console.log('ssss'+reportViewModel.hasNewContent());
+//                    console.log('ssss'+reportViewModel.hasNewContent());
                     var confirmationMessage = 'if you see this, you are definitely the chosen one';
                     (e || window.event).returnValue = confirmationMessage;     // Gecko and Trident
                         return confirmationMessage;  // Gecko and WebKit

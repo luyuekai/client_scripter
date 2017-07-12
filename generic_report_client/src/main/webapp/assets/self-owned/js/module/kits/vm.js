@@ -311,6 +311,12 @@ function ReportViewModel() {
     var report = {
       cells: []
     };
+    //保存前自动compile所有的cell。
+    $.each(self.cells(),function(inx,cell){
+        if(!cell.isViewMode()){
+            cell.compile();
+        }
+    });
     $.each(self.cells(), function(idx, cell) {
       var cellShareModel = cell.buildShareModel();
       report.cells.push(cellShareModel);
@@ -477,6 +483,10 @@ function CellViewModel(parent) {
   }, self);
 
   self.listener_focus_in = function() {
+      if(!self.isViewMode()){ //editmodel
+          command_to_edit(); // 进入编辑模式。快捷键不再生效
+      }
+      
     parent.inactive_cells();
     parent.active_cell = self;
     self.isActive(true);
@@ -546,7 +556,12 @@ function CellViewModel(parent) {
       theme: "default",
       lineWrapping:true, // 不滚动
       extraKeys: {
-        "Enter": "newlineAndIndentContinueMarkdownList"
+        "Enter": "newlineAndIndentContinueMarkdownList",  
+        "Esc":function(){
+            //退出编辑模式，进入命令模式
+            editor.getInputField().blur();
+            edit_to_command();
+        }
       }
     });
     editor.on('focus', function() {

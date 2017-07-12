@@ -69,6 +69,7 @@
                     <!-- /ko -->
                   </span>
                   <span data-bind="text:(function(){return new Date(parseInt(createtime)).toLocaleString()})()" style="margin-right: 8px;"></span>
+                  <!--<button type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Up to ODA', '/assets/self-owned/html/report/modal_to_oda.html',$data);})" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-caret-square-o-up "></i>&nbsp;</button>-->
                   <button type="button" data-bind="event:{click:function(){redirect2editor($data)}}" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-pencil "></i>&nbsp;</button>
                   <button type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Remove report draft', '/assets/self-owned/html/report/modal_content_remove_draft.html',$data);})" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-trash "></i>&nbsp;</button>
                 </div>
@@ -125,6 +126,9 @@
     <script src="assets/reference/markdown/markdown.min.js"></script>
 
     <!-- Javascript for Matrix Self Owned -->
+    <script src="assets/self-owned/js/module/gallery/codeoda.js"></script>
+    <script src="assets/reference/codemirror/mode/sql/sql.js"></script>
+    
     <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
     <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
     <script src="assets/self-owned/js/generic/generic_cache.js"></script>
