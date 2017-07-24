@@ -1,4 +1,4 @@
-ar labelStyle = {
+var labelStyle = {
   //color: 'white',
   fontWeight: 'bold',
   fontSize: '12'
