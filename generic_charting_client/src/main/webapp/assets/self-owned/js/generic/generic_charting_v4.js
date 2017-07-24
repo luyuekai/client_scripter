@@ -443,31 +443,6 @@ ChartPOJO = {
     serialize_chart_option: function (option) {
         return $.toJSON(option);
     },
-    dataSourceRenderChart: function (chart_type, origin_data, headerViewModel) {
-        switch (chart_type) {
-            case 'bar':
-                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
-                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'bar');
-                break;
-            case 'line':
-                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
-                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'line');
-                break;
-            case 'scatter':
-                break;
-            case 'area':
-                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
-                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'area');
-                break;
-            case 'pie':
-                break;
-            default:
-                break;
-        }
-    }
 }
 
 
