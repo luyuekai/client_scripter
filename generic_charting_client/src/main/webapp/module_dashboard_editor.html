@@ -25,7 +25,6 @@
     <aside class="app-sidebar" id="sidebar" style="position:fixed;top:0px;"></aside>
     <div class="app-container" id="main_content_div">
       <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="margin-left: 180px;"></nav>
-
       <div id="hidden_div" class="row" style="position:fixed;top:88px;left: 180px;right: 0px;z-index:100006;background-color: #E7EDEE;height:30px">
         <div class="col-xs-12">
         </div>
@@ -73,21 +72,21 @@
     <script src="assets/self-owned/js/module/dashboard/vm.js"></script>
     <script>
       $(document).ready(function() {
-
+          
         init();
-
+        
       });
 
 
       function init(){
-
+         
         // render dom elements
         $('#sidebar').load($.getRootPath() + '/components/left_side.html');
         $('#navbar').load($.getRootPath() + '/components/header.html');
         $('#footer_parent_div').load($.getRootPath() + '/components/footer.html');
         $('#contentDIV').load($.getRootPath() + '/assets/self-owned/html/dashboard/dashboard_content.html');
         setTimeout(function() {
-
+           
           $('#navbar_title_li').html('Matrix Chart Dashboard');
           add_shortcut_key_listener();
         }, 200);

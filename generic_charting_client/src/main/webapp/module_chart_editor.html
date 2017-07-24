@@ -32,8 +32,7 @@
             <aside class="app-sidebar" id="sidebar" style="position:fixed;top:0px;"></aside>
             <div class="app-container" id="main_content_div">
 
-              <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="margin-left: 180px;"></nav>
-
+                <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="margin-left: 180px;"></nav>
 
                 <div id="hidden_div" class="row" style="position:fixed;top:88px;left: 180px;right: 0px;z-index:100006;background-color: #E7EDEE;height:30px">
                     <div class="col-xs-12">
@@ -147,7 +146,7 @@
                                                     <button onclick="use_data()" title="view data" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-check"></i></button>
                                                 </div>
                                             </div>
-
+                                            
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">DataSource</label>
                                                 <div class="col-sm-10">
@@ -374,7 +373,7 @@
                                                         c.push({'name': item.shift(), 'data': item})
                                                     });
                                                     chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, c, 'bar');
-
+                                                    
 //                                                    b = a[0];
 //                                                    chartViewModel.chart = ChartPOJO.generate_default_chart('main_chart');
 //                                                    chartViewModel.chart = Parallel_ChartPOJO.initialize_chart(chartViewModel.chart, b);

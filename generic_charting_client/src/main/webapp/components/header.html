@@ -88,40 +88,10 @@
   var SearchPOJO = {
     listener: null,
     keywords: null,
-    build_requestPOJO_prototype:null,
-    // requestPOJO_prototype:null,
-    likeOrMap:[],
-    sortKey:[],
     search: function() {
       if (SearchPOJO.listener) {
         SearchPOJO.keywords = $('#search_input').val();
         SearchPOJO.listener();
-      }
-    },
-    sort:function(a, b){
-      if(SearchPOJO.sortKey.length>0){
-        var sort_key = SearchPOJO.sortKey[0];
-        return b[sort_key] - a[sort_key];
-      }else{
-        return 0;
-      }
-    },
-    build_requestPOJO:function(){
-      if(SearchPOJO.build_requestPOJO_prototype){
-        var requestPOJO = SearchPOJO.build_requestPOJO_prototype();
-        var keyword = SearchPOJO.keywords;
-        var likeOrMap = {};
-        if(SearchPOJO.likeOrMap.length>0){
-          if (keyword) {
-            $.each(SearchPOJO.likeOrMap,function(i,v){
-              likeOrMap[v] = keyword;
-            });
-          }
-        }
-        requestPOJO.likeORMap = likeOrMap;
-        return requestPOJO;
-      }else{
-        return null;
       }
     }
   }
