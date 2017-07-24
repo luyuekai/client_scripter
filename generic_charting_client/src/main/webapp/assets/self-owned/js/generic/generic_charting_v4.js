@@ -456,6 +456,9 @@ ChartPOJO = {
                 chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'line');
                 break;
             case 'scatter':
+                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
+                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
+                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'scatter');
                 break;
             case 'area':
                 var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
@@ -463,6 +466,8 @@ ChartPOJO = {
                 chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'area');
                 break;
             case 'pie':
+                var chartData = DataTransferPOJO.extractDataByHeaderPie(origin_data, headerViewModel);
+                chartViewModel.chart = Pie_ChartPOJO.initialize_chart(chartViewModel.chart,chartData.result)
                 break;
             default:
                 break;

@@ -531,6 +531,50 @@ DataTransferPOJO={
       resultJsonObject["result"] = resultArray;
       return resultJsonObject;
     },
+    extractDataByHeaderPie: function(originalData, headerViewModel) {
+      var header = [];
+      var headerIndex = [];
+      var resultArray = [];
+      var resultJsonObject = {};
+      $.each(headerViewModel, function(index, headerItem) {
+        if(headerItem.isChecked()) {
+          header.push(headerItem.data());
+          headerIndex.push(index);
+        }
+      });
+      $.each(originalData, function(i, rowData) {
+        var rowResult = [];
+        $.each(headerIndex, function(i, index){
+          rowResult.push(rowData[index]);
+        })
+        resultArray.push({'name': rowResult[0], 'value': rowResult[1]});
+      })
+      resultJsonObject["header"] = header;
+      resultJsonObject["result"] = resultArray;
+      return resultJsonObject;
+    },
+    extractDataByHeaderRadar: function(originalData, headerViewModel) {
+      var header = [];
+      var headerIndex = [];
+      var resultArray = [];
+      var resultJsonObject = {};
+      $.each(headerViewModel, function(index, headerItem) {
+        if(headerItem.isChecked()) {
+          header.push(headerItem.data());
+          headerIndex.push(index);
+        }
+      });
+      $.each(originalData, function(i, rowData) {
+        var rowResult = [];
+        $.each(headerIndex, function(i, index){
+          rowResult.push(rowData[index]);
+        })
+        resultArray.push({'name': rowResult[0], 'value': rowResult[1]});
+      })
+      resultJsonObject["header"] = header;
+      resultJsonObject["result"] = resultArray;
+      return resultJsonObject;
+    },
     transferT: function(data) {
       var dataT = [];
       for(var i=0;i<data[0].length;i++){
