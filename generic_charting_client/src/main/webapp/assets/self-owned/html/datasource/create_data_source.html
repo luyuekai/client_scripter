@@ -277,7 +277,7 @@
                     "deleted": false,
 //                "name":
                     "stringeta": UserPOJO.user.userName,
-                    "stringalpha": $.toJSON(ConfigPOJO),
+                    "stringalpha": genericModalViewModel.businessPOJO().database.selectedDatabase()[31],
                     "stringbeta": genericModalViewModel.businessPOJO().sql()
                 }
             };
@@ -308,14 +308,14 @@
     <script>
         function getTableInDatabase() {
             if (genericModalViewModel.businessPOJO().database.selectedDatabase() != undefined) {
-                var ConfigPOJO = {
-                    "dbType": genericModalViewModel.businessPOJO().database.selectedDatabase()[9],
-                    "dbDriver": genericModalViewModel.businessPOJO().database.selectedDatabase()[30],
-                    "dbConName": genericModalViewModel.businessPOJO().database.selectedDatabase()[14],
-                    "dbUsername": genericModalViewModel.businessPOJO().database.selectedDatabase()[32],
-                    "dbPasswd": genericModalViewModel.businessPOJO().database.selectedDatabase()[33],
-                    "dbUrl": genericModalViewModel.businessPOJO().database.selectedDatabase()[31]
-                }
+//                var ConfigPOJO = {
+//                    "dbType": genericModalViewModel.businessPOJO().database.selectedDatabase()[9],
+//                    "dbDriver": genericModalViewModel.businessPOJO().database.selectedDatabase()[30],
+//                    "dbConName": genericModalViewModel.businessPOJO().database.selectedDatabase()[14],
+//                    "dbUsername": genericModalViewModel.businessPOJO().database.selectedDatabase()[32],
+//                    "dbPasswd": genericModalViewModel.businessPOJO().database.selectedDatabase()[33],
+//                    "dbUrl": genericModalViewModel.businessPOJO().database.selectedDatabase()[31]
+//                }
                 $.ajax({
                     dataType: "text",
                     type: "POST",
@@ -323,11 +323,12 @@
                     async: false,
                     url: $.getServerRoot() + "/generic_charting_client/api/connection/public/tables",
                     data: {
-                        'DBConfig': $.toJSON(ConfigPOJO)
+                        'DBName': genericModalViewModel.businessPOJO().database.selectedDatabase()[31]
                     }
                 }).done(function (data) {
                     var data = JSON.parse(data);
-                    var table = data.data.split("\n")
+                    console.log(data)
+                    var table = data.result[0].split("\n")
                     table.shift();
                     table.pop();
                     genericModalViewModel.businessPOJO().database.availableTable(table);
@@ -352,11 +353,11 @@
                     async: false,
                     url: $.getServerRoot() + "/generic_charting_client/api/connection/public/" + genericModalViewModel.businessPOJO().database.selectedTable() + "/columns",
                     data: {
-                        'DBConfig': $.toJSON(ConfigPOJO)
+                        'DBName': genericModalViewModel.businessPOJO().database.selectedDatabase()[31]
                     }
                 }).done(function (data) {
                     var data = JSON.parse(data);
-                    var table = data.data.split("\n")
+                    var table = data.result[0].split("\n")
                     table.shift();
                     table.pop();
                     genericModalViewModel.businessPOJO().database.column(table);

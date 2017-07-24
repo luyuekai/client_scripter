@@ -497,6 +497,52 @@ DataTransferPOJO={
 
       return resultJsonObject;
     },
+    transferHiveDataRaw: function(inputData) {
+      var resultJsonObject = {};
+      var resultArray = [];
+      var rowArray = inputData.split("\n");
+      rowArray.pop();
+      $.each(rowArray, function(i, rowData) {
+        var cellArray = rowData.split(",");
+        resultArray.push(cellArray);
+      });
+      resultJsonObject["result"] = resultArray;
+      return resultJsonObject;
+    },
+    extractDataByHeader: function(originalData, headerViewModel) {
+      var header = [];
+      var headerIndex = [];
+      var resultArray = [];
+      var resultJsonObject = {};
+      $.each(headerViewModel, function(index, headerItem) {
+        if(headerItem.isChecked()) {
+          header.push(headerItem.data());
+          headerIndex.push(index);
+        }
+      });
+      $.each(originalData, function(i, rowData) {
+        var rowResult = [];
+        $.each(headerIndex, function(i, index){
+          rowResult.push(rowData[index]);
+        })
+        resultArray.push({'name': rowResult[0], 'data': rowResult});
+      })
+      resultJsonObject["header"] = header;
+      resultJsonObject["result"] = resultArray;
+      return resultJsonObject;
+    },
+    transferT: function(data) {
+      var dataT = [];
+      for(var i=0;i<data[0].length;i++){
+        dataT[i] = [];
+      }
+      for(var i=0;i<data.length;i++){
+        for(var j=0;j<data[i].length;j++){
+          dataT[j][i] = data[i][j];
+        }
+      }
+      return dataT;
+    },
 
     transferArray2JsonObject:function(headerArray, dataArray){
       var json = {};

@@ -5,6 +5,7 @@
  */
 package scripter.datasourse.rest;
 
+import com.alibaba.fastjson.JSON;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -91,11 +92,12 @@ public class ConnectionResource {
     @POST
     @Path("query")
     @Produces({"application/json"})
-    public String executeQuery(@FormParam("DBName") String DBName, @FormParam("queryInfo") String queryInfo) throws IOException {   //每次都要传DBconfig,因为每次选择源的时候数据库可能会变
+    public String executeQuery(@FormParam("queryInfo") String queryInfo) throws IOException {   //每次都要传DBconfig,因为每次选择源的时候数据库可能会变
+        QueryInfo sqlInfo = JsonUtil.toPojo(queryInfo, QueryInfo.class);
+        String DBName = sqlInfo.getdbName();
+        String sql = sqlInfo.getSql();
         ConnectionManager connectionManager = ConnectionManager.getInstance();
         Connection con = connectionManager.getConnection(DBName);
-        QueryInfo sqlInfo = JsonUtil.toPojo(queryInfo, QueryInfo.class);
-        String sql = sqlInfo.getSql();
         SqlService sqlService = new SqlService(con);
         return sqlService.executeQuery(sql);
     }
