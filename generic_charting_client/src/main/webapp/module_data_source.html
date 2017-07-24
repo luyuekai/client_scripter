@@ -31,7 +31,8 @@
             <aside class="app-sidebar" id="sidebar" style="position:fixed;top:0px;"></aside>
             <div class="app-container" id="main_content_div">
 
-                <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="margin-left: 180px;"></nav>
+              <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="margin-left: 180px;"></nav>
+
 
                 <div id="hidden_div" class="row" style="position:fixed;top:88px;left: 180px;right: 0px;z-index:100006;background-color: #E7EDEE;height:30px">
                     <div class="col-xs-12">
@@ -128,14 +129,14 @@
                                                         </button>
                                                         <button type="button" class="btn btn-xs btn-default" title=" 切换状态" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
                                                             <i class="fa fa-plug fa-1x"></i>
-                                                        </button>                                                   
+                                                        </button>
                                                         <button type="button" class="btn btn-xs btn-default" title="删除" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
                                                             <i class="fa fa-trash fa-1x"></i>
                                                         </button>
                                                     </td>
                                                 </tr>
                                             </tbody>
-                                        </table>                                
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -174,7 +175,7 @@
                                                         </button>
                                                         <button type="button" class="btn btn-xs btn-default" title=" 切换状态" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
                                                             <i class="fa fa-plug fa-1x"></i>
-                                                        </button>                                                   
+                                                        </button>
                                                         <button type="button" class="btn btn-xs btn-default" title="删除" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
                                                             <i class="fa fa-trash fa-1x"></i>
                                                         </button>
@@ -362,7 +363,7 @@
 
             var dataViewModel = new ServerPagingViewModel();
             dataViewModel.retrieveData = retrieveDataSource;
-            
+
             var tableModel = new ThinListViewModel();
 
             var SourceViewModel = {
