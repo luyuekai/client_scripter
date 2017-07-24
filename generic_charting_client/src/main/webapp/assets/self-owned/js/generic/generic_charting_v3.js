@@ -1740,7 +1740,7 @@ ChartPOJO = {
     }
   },
 
-  remove_treemap_child: function(treemap_array, child_id) {
+  remove_treemap_child(treemap_array, child_id) {
     $.each(treemap_array, function(index, value) {
       ChartPOJO.remove_child_iterator(value, child_id);
     })

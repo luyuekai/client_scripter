@@ -186,7 +186,7 @@ var addWidget_chart = function(option,x,y,x_width,y_height) {
   y = y || 0;
   x_width = x_width || 6;
   y_height = y_height || 6;
-debugger
+
   var grid = $('.grid-stack').data('gridstack');
 
   //step 2: clone draggableTemplate, and remove attribute of id
