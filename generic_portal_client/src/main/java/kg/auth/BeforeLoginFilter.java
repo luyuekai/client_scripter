@@ -27,6 +27,7 @@ public class BeforeLoginFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+//        Logger.getLogger(BeforeLoginFilter.class.getName()).log(Level.INFO,"******BeforeLoginFilter do filter function invoked!******");
         if(doSSOFlag){
             doSSOChain(request);
         }
