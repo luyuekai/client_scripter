@@ -1,11 +1,15 @@
 package kg.auth;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
 import kg.auth.model.PagingPOJO;
+import kg.auth.model.aaa.AuthPOJO;
 import kg.auth.model.aaa.UserPOJO;
 import kg.auth.model.http.HttpRequestPOJO;
 import kg.auth.model.http.HttpResponsePOJO;
@@ -17,7 +21,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
+import v2.service.generic.library.model.QueryResultPOJO;
 
 public class AuthManager {
 
@@ -86,22 +92,40 @@ public class AuthManager {
         if (StringUtil.isNullOrEmpty(principle) || StringUtil.isNullOrEmpty(credential)) {
             flag = false;
         }
-        
-        if("matrix".equalsIgnoreCase(principle)&&"matrix".equalsIgnoreCase(credential)){
+
+        if ("matrix".equalsIgnoreCase(principle) && "matrix".equalsIgnoreCase(credential)) {
             flag = true;
         }
-        
-        if(flag){
+
+        if (flag) {
             List<GrantedAuthority> AUTHORITIES = new ArrayList<GrantedAuthority>();
             AUTHORITIES.add(new SimpleGrantedAuthority("ROLE_MATRIX_USER"));
             Logger.getLogger(AuthManager.class.getName()).log(Level.INFO, "Into mock auth");
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken("matrix", "matrix", AUTHORITIES);
             return authToken;
-        }else{
+        } else {
             throw new BadCredentialsException("Bad Credentials");
         }
-        
+
     }
+
+    public String getSSOToken(HttpServletRequest request) throws IOException {
+        String rawCookie = (request).getHeader("Cookie");
+        if (rawCookie != null) {
+            String[] rawCookieParams = rawCookie.split(";");
+            for (String rawCookieNameAndValue : rawCookieParams) {
+                String[] rawCookieNameAndValuePair = rawCookieNameAndValue.split("=");
+                if (rawCookieNameAndValuePair[0].trim().equalsIgnoreCase("iPlanetDirectoryPro")) {
+                    System.out.println("*****token found****");
+                    String token = rawCookieNameAndValuePair[1];
+                    return token;
+                }
+            }
+        }
+
+        return null;
+    }
+
 
     public Authentication tryToAuth(String token, String principle, String credential) throws Exception {
 
@@ -135,5 +159,22 @@ public class AuthManager {
             Logger.getLogger(AuthManager.class.getName()).log(Level.INFO, "User [" + principle + "] has not pass the authorization phase from the AUTH system! The detail message are:" + pagingPOJO.getErrorMessage());
             throw new BadCredentialsException("Bad Credentials");
         }
+    }
+
+    public void extraLogic(HttpServletRequest request) {
+        Collection<? extends GrantedAuthority> groups = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        List list;
+        if (groups instanceof List) {
+            list = (List) groups;
+        } else {
+            list = new ArrayList(groups);
+        }
+        List<String> g = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            GrantedAuthority au = (GrantedAuthority) list.get(i);
+            g.add(au.getAuthority());
+        }
+
+        UserContext.setCurrentUser(request, SecurityContextHolder.getContext().getAuthentication().getName(), g);
     }
 }
