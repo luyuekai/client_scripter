@@ -11,13 +11,13 @@ import kg.auth.model.aaa.AuthPOJO;
 import kg.auth.model.http.HttpResponsePOJO;
 import kg.auth.utils.HttpClientUtil;
 import kg.auth.utils.JsonUtil;
+import kg.auth.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import v2.service.generic.library.utils.StringUtil;
 
 public class AuthProvider implements AuthenticationProvider {
     
@@ -47,12 +47,6 @@ public class AuthProvider implements AuthenticationProvider {
             String token = null;
 
             if (StringUtil.isNullOrEmpty(principle) || StringUtil.isNullOrEmpty(credential)) {
-                throw new BadCredentialsException("Bad Credentials");
-            }
-            if (StringUtil.hasFullWidthCharacters(principle) || StringUtil.hasFullWidthCharacters(credential)) {
-                throw new BadCredentialsException("Bad Credentials");
-            }
-            if (StringUtil.isConSpeCharacters(principle) || StringUtil.isConSpeCharacters(credential)) {
                 throw new BadCredentialsException("Bad Credentials");
             }
             Logger.getLogger(AuthProvider.class.getName()).log(Level.INFO, "User ["+principle+"] is attemp to access the AUTH system with login operation!");
