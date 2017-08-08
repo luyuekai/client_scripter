@@ -9,7 +9,27 @@ ko.applyBindings(vm, document.getElementById('template-matrix-main-div'));
 current_vm = vm;
 
 function env_setup() {
+  cookie_env_setup();
   vm_env_setup();
+  dynamic_table_env_setup();
+}
+
+function cookie_env_setup(){
+  var status_lag = $.hasUrlParam('status');
+  var type_flag = $.hasUrlParam('type');
+  if (status_lag && type_flag) {
+    var status = $.urlParamValue('status');
+    var type = $.urlParamValue('type');
+    if(status && type){
+      var cookie_value = UtilPOJO.getCookie(type);
+      console.log(cookie_value);
+      if(cookie_value){
+        CachePOJO.businessPOJO = JSON.parse(cookie_value);
+        //clear cookie
+        UtilPOJO.clearCookie(type);
+      }
+    }
+  }
 }
 
 
@@ -47,14 +67,27 @@ function vm_env_setup() {
       self.lastupdatetime(pojo.numberbeta);
       self.stringzeta(pojo.stringzeta);
       var ds = JSON.parse(pojo.stringzeta);
-      self.stringzeta_ds(ds.ds);
-      self.stringzeta_header_json(ds.header_json);
-      self.stringzeta_refresh_interval(ds.refresh_interval);
-      self.stringzeta_json_rule(ds.json_rule);
-      self.stringzeta_rest_mode(ds.rest_mode);
-      self.stringzeta_request_params(ds.request_params);
-      self.stringzeta_pageMaxSize(ds.pageMaxSize);
-      self.stringzeta_mock(ds.mock);
+      if(ds){
+        self.stringzeta_ds(ds.ds);
+        self.stringzeta_header_json(ds.header_json);
+        self.stringzeta_refresh_interval(ds.refresh_interval);
+        self.stringzeta_json_rule(ds.json_rule);
+        self.stringzeta_rest_mode(ds.rest_mode);
+        self.stringzeta_request_params(ds.request_params);
+        self.stringzeta_pageMaxSize(ds.pageMaxSize);
+        self.stringzeta_mock(ds.mock);
+
+        check_data_source();
+
+        reload_dynamic_table(ds);
+      }
+    }
+
+    self.reload_table = function(){
+      gen_table();
+      var header_model_list = self.tableModel().json2header(self.stringzeta_header_json());
+      console.log(header_model_list);
+      self.tableModel().headerViewData(header_model_list);
     }
 
     self.clear = function(){
@@ -84,9 +117,34 @@ function vm_env_setup() {
     self.stringzeta_ds = ko.observable();
     self.stringzeta_header_json = ko.observable();
     self.stringzeta_refresh_interval = ko.observable('30');
+    self.stringzeta_refresh_interval_tooltip = ko.computed(function() {
+      var val = self.stringzeta_refresh_interval();
+      if('10'==val){return '10 Seconds'}
+      else if('30'==val){return '30 Seconds'}
+      else if('60'==val){return '1 Minutes'}
+      else if('300'==val){return '5 Minutes'}
+      else if('3000000'==val){return 'Never'}
+      else{return 'Unknow'}
+    });
+
     self.stringzeta_json_rule = ko.observable();
     self.stringzeta_rest_mode = ko.observable('POST');
     self.stringzeta_request_params = ko.observable();
+    self.stringzeta_request_params_max_size = ko.computed(function() {
+      var val = self.stringzeta_request_params();
+      var result = 'No limit';
+      if(val){
+        val = JSON.parse(val);
+        if(val.queryJson){
+          var json = JSON.parse(val.queryJson);
+          if(json && json.pageMaxSize){
+            result = json.pageMaxSize;
+          }
+        }
+      }
+      return result;
+    });
+
     self.stringzeta_pageMaxSize = ko.observable();
     self.stringzeta_mock = ko.observable(false);
 
@@ -116,6 +174,10 @@ function vm_env_setup() {
               "deleted": false,
           }
       };
+
+      if(self.id()){
+        requestPOJO.attributes.id=self.id();
+      }
       return requestPOJO;
     }
 
@@ -134,11 +196,15 @@ function vm_env_setup() {
     });
 
 
+    self.data_source_table_display = ko.observable(false);
   }
 
   var businessPOJO = new BusinessPOJO();
   businessPOJO.creator(UserPOJO.user.userName);
   vm.businessPOJO(businessPOJO);
+  if(CachePOJO.businessPOJO){
+    vm.businessPOJO().reload(CachePOJO.businessPOJO);
+  }
 };
 
 // *******YOUR SHOULD CODING IN HERE:*******
@@ -163,9 +229,12 @@ var businessValidation = function() {
 
 // *******YOUR SHOULD CODING IN HERE:*******
 var runService = function() {
-  default_add_logic();
-  // var pojo = vm.businessPOJO().build_requestPOJO();
-  // console.log(pojo)
+  // default_add_logic();
+  if(vm.businessPOJO().id()){
+    default_update_logic();
+  }else{
+    default_add_logic();
+  }
 }
 
 
@@ -173,26 +242,40 @@ $.subscribe("MATRIX_API_SUCCESS_EVENT", MATRIX_API_SUCCESS_EVENT_HANDLER);
 
 function MATRIX_API_SUCCESS_EVENT_HANDLER() {
   if (arguments && arguments[1]) {
-    if(arguments[1].addtion && arguments[1].addtion['TAG']=='MATRIX_DATA_SOURCE_TESTING'){
+    if(arguments[1].addtion && (arguments[1].addtion['TAG']=='MATRIX_DATA_SOURCE_TESTING' || arguments[1].addtion['TAG']=='MATRIX_DATA_SOURCE_RETRIEVE')){
       console.log(arguments[1]);
       console.log("Retrieve Data Source Successed!")
       var server_data = arguments[1].response;
       var res = JSON.stringify(arguments[1].response);
       vm.businessPOJO().stringzeta_ds_response(res);
       vm.businessPOJO().stringzeta_ds_response_data = server_data;
+      if(arguments[1].addtion['TAG']=='MATRIX_DATA_SOURCE_RETRIEVE'){
+        //continue to reload table
+        vm.businessPOJO().reload_table();
+      }
     }
-    if(arguments[1].addtion && arguments[1].addtion['TAG']=='MATRIX_ADD'){
+
+    if(arguments[1].addtion && (arguments[1].addtion['TAG']=='MATRIX_ADD' || arguments[1].addtion['TAG']=='MATRIX_UPDATE')){
       console.log(arguments[1]);
       console.log("Retrieve Data Source Successed!")
       var server_data = arguments[1].response.result[0];
       vm.businessPOJO().reload(server_data);
 
+
+
+
+      // var ds = JSON.parse(server_data.stringzeta);
+      // reload_dynamic_table(ds);
     }
   }
 }
 
 
-var check_data_source = function() {
+var check_data_source = function(type) {
+  var type_test = 'MATRIX_DATA_SOURCE_TESTING';
+  var type_retrieve = 'MATRIX_DATA_SOURCE_RETRIEVE';
+  var type_current =  type?type_test:type_retrieve;
+
   if (!vm.validation(function(){
     var errorMessages = [];
     //validate
@@ -209,7 +292,7 @@ var check_data_source = function() {
     if(data){
       data = JSON.parse(data);
     }
-    $.serverRequest(vm.businessPOJO().stringzeta_ds(), data, "DEFAULT_RETRIEVE_API_SUCCESS_LISTENER", "DEFAULT_RETRIEVE_API_FAILED_LISTENER", "DEFAULT_RETRIEVE_API_EXCEPTION_LISTENER", mode, true, {'TAG':'MATRIX_DATA_SOURCE_TESTING'});
+    $.serverRequest(vm.businessPOJO().stringzeta_ds(), data, "DEFAULT_RETRIEVE_API_SUCCESS_LISTENER", "DEFAULT_RETRIEVE_API_FAILED_LISTENER", "DEFAULT_RETRIEVE_API_EXCEPTION_LISTENER", mode, true, {'TAG':type_current});
   }
 
 }
@@ -238,4 +321,20 @@ var gen_table = function() {
   tableModel.pageMaxSize(vm.businessPOJO().tableModel().pageMaxSize());
   vm.businessPOJO().tableModel(tableModel);
   vm.businessPOJO().showTable(true);
+}
+
+
+
+
+function dynamic_table_env_setup(){
+  MATRIX_DYNAMIC_TABLE_ENV_SETUP();
+}
+
+function reload_dynamic_table(ds){
+  if(ds){
+    setTimeout(function(){
+      create_dynamic_table(ds, 'copy_table_parent_div', 'copied_table_div');
+      vm.businessPOJO().data_source_table_display(true);
+    },600)
+  }
 }

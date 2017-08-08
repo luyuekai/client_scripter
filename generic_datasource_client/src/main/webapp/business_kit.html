@@ -91,6 +91,140 @@
       <!--VALIDATION DIV FINISHED-->
 
       <!--BUSINESS DIV BEGIN-->
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card card-mini">
+            <div class="card-header">
+              <i class="fa fa-diamond">&nbsp;Data Source Detail &nbsp;&nbsp;&nbsp;</i>
+            </div>
+            <div class="card-body" style="padding: 20px 30px 20px 30px;">
+              <div data-bind="with:businessPOJO">
+                <div class="row">
+                  <div class="col-xs-2 text-right">
+                    <label style="margin-top:8px;">Creator:
+                    </label>
+                  </div>
+                  <div class="col-xs-4" style="margin-top: 2px;">
+                    <p class="form-control-static" data-bind="text:creator"></p>
+                  </div>
+                  <div class="col-xs-2 text-right">
+                    <label style="margin-top:8px;">Date:
+                    </label>
+                  </div>
+                  <div class="col-xs-4" style="margin-top: 2px;">
+                    <p class="form-control-static" data-bind="text:formatTime"></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-2 text-right">
+                    <label style="margin-top:8px;">Data Source Name:
+                    </label>
+                  </div>
+                  <div class="col-xs-10" style="margin-top: 2px;">
+                    <p class="form-control-static" data-bind="text:name()?name():''"></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-2 text-right">
+                    <label style="margin-top:8px;">Data Source Description:
+                    </label>
+                  </div>
+                  <div class="col-xs-10" style="margin-top: 2px;">
+                    <p class="form-control-static" data-bind="text:description()?description():''"></p>
+                  </div>
+                </div>
+                <hr style="border-top: 2px solid #39c3da;"><span class="label label-info">Data Source Setting</span>
+                <div class="row">
+                  <div class="col-xs-2 text-right">
+                    <label style="margin-top:8px;">Data Source URL:
+                    </label>
+                  </div>
+                  <div class="col-xs-10" style="margin-top: 2px;">
+                    <p class="form-control-static" data-bind="text:stringzeta_ds"></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-2 text-right">
+                    <label style="margin-top:8px;">Request Params:
+                    </label>
+                  </div>
+                  <div class="col-xs-10" style="margin-top: 2px;">
+                    <p class="form-control-static" data-bind="text:stringzeta_request_params"></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-2 text-right">
+                    <label style="margin-top:8px;">JSON Rules:
+                    </label>
+                  </div>
+                  <div class="col-xs-10" style="margin-top: 2px;">
+                    <p class="form-control-static" data-bind="text:stringzeta_json_rule"></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-2 text-right">
+                    <label style="margin-top:8px;">Data Source Header:
+                    </label>
+                  </div>
+                  <div class="col-xs-10" style="margin-top: 2px;">
+                    <!-- ko foreach: tableModel().headerViewData -->
+                    <span data-bind="visible:$data.isChecked,text:$data.data"></span>
+                    <!-- /ko -->
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-2 text-right">
+                    <label style="margin-top:8px;">REST Mode:
+                    </label>
+                  </div>
+                  <div class="col-xs-4" style="margin-top: 2px;">
+                    <p class="form-control-static" data-bind="text:stringzeta_rest_mode"></p>
+                  </div>
+                  <div class="col-xs-2 text-right">
+                    <label style="margin-top:8px;">Refresh Interval:
+                    </label>
+                  </div>
+                  <div class="col-xs-4" style="margin-top: 2px;">
+                    <p class="form-control-static" data-bind="text:stringzeta_refresh_interval_tooltip"></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-2 text-right">
+                    <label style="margin-top:8px;">Retrive Data Max Size:
+                    </label>
+                  </div>
+                  <div class="col-xs-4" style="margin-top: 2px;">
+                    <p class="form-control-static" data-bind="text:stringzeta_request_params_max_size"></p>
+                  </div>
+                  <div class="col-xs-2 text-right">
+                    <label style="margin-top:8px;">Table Pager Size:
+                    </label>
+                  </div>
+                  <div class="col-xs-4" style="margin-top: 2px;">
+                    <p class="form-control-static" data-bind="text:stringzeta_pageMaxSize"></p>
+                  </div>
+                </div>
+                <hr style="border-top: 2px solid #39c3da;"><span class="label label-info">Data Source Table</span>
+                <div data-bind="visible:!(data_source_table_display())">
+                  <div class="flat-matrix">
+                    <div class="alert alert-info alert-dismissible fresh-color" role="alert" style="margin-top: 16px;">
+                      <strong><i class="fa fa-warning"></i>&nbsp;Tips:</strong> &nbsp;Table Not Initialized.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div id="copy_table_parent_div"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
       <div class="row" data-bind="with:businessPOJO">
         <div class="col-md-12">
           <div class="card">
@@ -194,7 +328,7 @@
                         <textarea data-bind="value: stringzeta_request_params" rows="3" class="form-control"></textarea>
                       </div>
                       <div class="col-xs-2">
-                        <button onclick="check_data_source()" type="button" class="btn btn-info">Check</button>
+                        <button onclick="check_data_source('MATRIX_DATA_SOURCE_TESTING')" type="button" class="btn btn-info">Check</button>
                       </div>
                     </div>
                     <div class="row">
@@ -520,7 +654,7 @@
         $('#template-matrix-footer-div').load($.getRootPath() + '/components/footer.html');
 
         setTimeout(function() {
-          resetCssClass('li_kits', 'active');
+          // resetCssClass('li_kits', 'active');
           $('#navbar_title_li').text('Matrix Data Source Kit');
           // $('#navbar_search_li').css('display', '');
 
@@ -530,7 +664,7 @@
     </script>
 
     <script>
-    $.subscribe("get_user_detail_chain_finished", env_setup);
+      $.subscribe("get_user_detail_chain_finished", env_setup);
     </script>
 
 </body>
