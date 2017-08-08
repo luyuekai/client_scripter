@@ -59,8 +59,10 @@
   function add_series_data() {
     var data_name = $('#add_name_input').val();
     var data_value = $('#add_value_input').val().split(',');
+    debugger;
     console.log(data_value)
     if (data_name && data_value && chartViewModel && chartViewModel.chart) {
+
       chartViewModel.chart = ChartPOJO.addSeries(chartViewModel.chart, data_name, 'area', data_value);
     }
   }

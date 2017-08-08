@@ -129,8 +129,12 @@
                                 <strong><i class="fa fa-spinner"></i>&nbsp;Dynamic Table Setting:</strong>
                                 <button type="button" data-bind="click:$data.table().uncheck_all()" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px;"><i class="fa fa-square-o"> &nbsp;Uncheck ALL</i></button>
                                 <button type="button" data-bind="click:$data.table().check_all()" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px;"><i class="fa fa-check-square-o"> &nbsp;Check ALL</i></button>
+                                <button type="button" data-bind="click:function(){transferTData()}" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px">
+                                    <i class="fa fa-check-square-o"> &nbsp;Transfer Table</i>
+                                </button>
                             </div>
                         </div>
+
                         <div class="col-xs-12">
                             <div class="compile_mode_focus_in" tabindex="100">
                                 <div class="row" data-bind="with:table">
@@ -156,53 +160,79 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <div class="matrix-pager-v3" data-bind="visible:isDisplayPager">
-                                            <div class="form-inline">
-                                                <nav>
-                                                    <form>
-                                                        <span class="pull-left">
-                                                            <label class="control-label" style="margin-bottom: 12px;">Total Counts:<span data-bind="text:totalCounts()?totalCounts():0"></span></label>
-                                                        </span>
-                                                    </form>
-                                                    <span class="pull-right">
-                                                        <button data-bind="click:function(){toPage(1);}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-double-left"></i> &nbsp;First</button>
-                                                        <button data-bind="click:function(){toPage(currentPageNumber()-1);}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-left"></i> &nbsp;Previous</button>
-                                                        <input data-bind="value:currentPageNumber" type="text" class="form-control" placeholder="Page" style="width:60px;margin-bottom:5px;padding:10px;text-align: center;">
-                                                        <button data-bind="visible:false,click:function(){}" type="submit" class="btn"><span class="fui-search"></span></button>
-                                                        <button data-bind="click:function(){toPage(currentPageNumber()+1);}" type="button" class="btn btn-default " style="padding: 10px 12px;">Next &nbsp;<i class="fa fa-angle-right"></i></button>
-                                                        <button data-bind="click:function(){toPage(totalPage());}" type="button" class="btn btn-default " style="padding: 10px 12px;">Last &nbsp;<i class="fa fa-angle-double-right"></i></button>
-                                                        <div class="btn-group">
-                                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span data-bind="text:pageMaxSize()"></span> <span class="caret"></span></button>
-                                                            <ul class="dropdown-menu" role="menu" data-bind="foreach: pagingSizeArray">
-                                                                <li><a data-bind="click:function(){$parent.pageMaxSize($data)}" href="#"><span data-bind="text:$data"></span></a></li>
-                                                            </ul>
-                                                        </div>
+                                    </div>
+                                    <div class="matrix-pager-v3" data-bind="visible:isDisplayPager">
+                                        <div class="form-inline">
+                                            <nav>
+                                                <form>
+                                                    <span class="pull-left">
+                                                        <label class="control-label" style="margin-bottom: 12px;">Total Counts:<span data-bind="text:totalCounts()?totalCounts():0"></span></label>
                                                     </span>
-                                                </nav>
-                                            </div>
+                                                </form>
+                                                <span class="pull-right">
+                                                    <button data-bind="click:function(){toPage(1);}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-double-left"></i> &nbsp;First</button>
+                                                    <button data-bind="click:function(){toPage(currentPageNumber()-1);}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-left"></i> &nbsp;Previous</button>
+                                                    <input data-bind="value:currentPageNumber" type="text" class="form-control" placeholder="Page" style="width:60px;margin-bottom:5px;padding:10px;text-align: center;">
+                                                    <button data-bind="visible:false,click:function(){}" type="submit" class="btn"><span class="fui-search"></span></button>
+                                                    <button data-bind="click:function(){toPage(currentPageNumber()+1);}" type="button" class="btn btn-default " style="padding: 10px 12px;">Next &nbsp;<i class="fa fa-angle-right"></i></button>
+                                                    <button data-bind="click:function(){toPage(totalPage());}" type="button" class="btn btn-default " style="padding: 10px 12px;">Last &nbsp;<i class="fa fa-angle-double-right"></i></button>
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span data-bind="text:pageMaxSize()"></span> <span class="caret"></span></button>
+                                                        <ul class="dropdown-menu" role="menu" data-bind="foreach: pagingSizeArray">
+                                                            <li><a data-bind="click:function(){$parent.pageMaxSize($data)}" href="#"><span data-bind="text:$data"></span></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </span>
+                                            </nav>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class='col-xs-12'>
+                            <label class="col-sm-3 col-xs-offset-1 control-label">
+                                <span style="font-weight: bold;font-size: 1.1em;">Legend</span>
+                            </label>
+                            <div class="col-sm-7">
+                                <select data-bind="options: table_header ,optionsText: function(item) {console.log(item);return item.name() },value: selectedLegend,optionsCaption: '选择...'," class="form-control" style="width:400px"></select>
+                            </div>
+                        </div>
                     </div>
+
+
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="step3-v3-horizantal">
-                    <div class="card card-success">
-                        <div class="card-header" style="height:50px">
-                            <div class="card-title" style="padding: 8px 20px;">
-                                <div class="title"><i class="fa fa-cogs"></i> 确认信息并执行
+                        <div class="card-header flat-matrix" style="height:50px">
+                            <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
+                                <div class="title"><i class="fa fa-cogs"></i> 确认信息并执行</div>
+                            </div>
+                            <div class="clear-both"></div>
+                        </div>
+                        <div class="card-body no-padding flat-matrix">
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <label class="col-xs-2 col-xs-offset-1 control-label">Refresh Interval</label>
+                                    <div class="col-sm-8">
+                                        <select id="chart_refresh_interval" class="select2" data-bind="value:refreshInterval" style="z-index:100016;">
+                                            <option value=10>10s</option>
+                                            <option value=20>20s</option>
+                                            <option value=30>30s</option>
+                                            <option value=60>1min</option>
+                                            <option value=120>2min</option>
+                                            <option value=180>3min</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <br>
-                        <div class="pull-right">
-                            <button id="excuteNew" class="btn btn-primary btn-wide" onclick="execute()">执行</button>
-                            <button class="btn btn-inverse btn-wide" onclick="ModalUtil.modal_close('popupModalPro')">关闭</button>
-                        </div>
+                    <br>
+                    <div class="pull-right">
+                        <button id="excuteNew" class="btn btn-primary btn-wide" onclick="execute()">执行</button>
+                        <button class="btn btn-inverse btn-wide" onclick="ModalUtil.modal_close('popupModalPro')">关闭</button>
                     </div>
-                </div>
+            </div>
             </div>
         </div>
         <!-- *******YOUR SHOULD CODING IN HERE:[END]*******-->
@@ -234,8 +264,12 @@
                 self.dataSource = dataSourceChooseViewModel;
                 self.table = ko.observable(new ThinListViewModel());
                 self.table_header = ko.observableArray();
+                self.selectedLegend = ko.observable();
                 self.sql = ko.observable();
                 self.isTransferT = ko.observable(false);
+                self.selectedLegendIndex = ko.observable();
+                self.rawDataForTransferT = [];
+                self.refreshInterval = ko.observable();
             }
             var businessPOJO = new BusinessPOJO();
             genericModalViewModel.businessPOJO(businessPOJO);
@@ -270,21 +304,26 @@
 
         var runService = function() {
             console.log("run service function invoked!");
+            clearInterval(interval);
+            var chartType = $('#chart_type_select').val();
+            if(genericModalViewModel.businessPOJO().selectedLegend()){
+                genericModalViewModel.businessPOJO().table().headerViewData()[genericModalViewModel.businessPOJO().selectedLegend().index()].isLegend(true);
+            }
             var ds_setting = {
-                'sql': genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringbeta,
+                'sql': genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringbeta.trim(),
                 'dbName': genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringalpha,
                 'header': genericModalViewModel.businessPOJO().table().headerViewData(),
-                'isTransferT': genericModalViewModel.businessPOJO().isTransferT()
+                'isTransferT': genericModalViewModel.businessPOJO().isTransferT(),
+                'chartType': chartType,
+                'refreshInterval':genericModalViewModel.businessPOJO().refreshInterval()
             }
 
-            chartViewModel.chart.setOption({'ds_setting': ds_setting, 'isFromDs': true});
-
+            chartViewModel.chart.setOption({'ds_setting': ds_setting});
+            console.log(genericModalViewModel.businessPOJO().table().originalData())
             //extract data by choosen header
-           ChartPOJO.dataSourceRenderChart($('#chart_type_select').val(), genericModalViewModel.businessPOJO().table().originalData(), genericModalViewModel.businessPOJO().table().headerViewData());
-             // var chartData = DataTransferPOJO.extractDataByHeader(genericModalViewModel.businessPOJO().table().originalData(), genericModalViewModel.businessPOJO().table().headerViewData());
-             // chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
-             // chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'bar');
-
+           // ChartPOJO.dataSourceRenderChart(chartType, genericModalViewModel.businessPOJO().table().originalData(), genericModalViewModel.businessPOJO().table().headerViewData());
+            LoaderUtil.add_v3('chart_content_body_div');
+            renderDynamicChart(ds_setting, chartViewModel.chart);
             ModalUtil.modal_close('popupModalPro');
         }
     </script>
@@ -335,12 +374,13 @@
         $.subscribe("successGetSqlResult", serverGetSqlResult);
         function successGetSqlResult() {
             if(arguments && arguments[1]) {
-                console.log(arguments[1]);
                 genericModalViewModel.businessPOJO().dataSource.sqlResult(arguments[1].result[0])
                 // var data = DataTransferPOJO.transferHiveDataRaw(arguments[1].result[0]);
                 // console.log(data);
                 // console.log(DataTransferPOJO.transferT(data.result))
-                var tableData = DataTransferPOJO.serverData2TableData(arguments[1].result[0]);
+                var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].result[0]);
+                genericModalViewModel.businessPOJO().rawDataForTransferT = ClonePOJO.deepCloneTwoDimentionArray(rawData.result);
+                var tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
                 var tableModel = new ThinListViewModel();
                 tableModel.buildData(tableData.result);
                 tableModel.columnNames(tableData.header);
@@ -348,7 +388,7 @@
                 tableModel.buildView();
                 tableModel.pageMaxSize(5);
                 genericModalViewModel.businessPOJO().table(tableModel);
-
+                genericModalViewModel.businessPOJO().table_header(tableModel.headerViewData());
             }
         };
         function failedGetSqlResult() {};
@@ -356,7 +396,18 @@
     </script>
     <script>
     function transferTData() {
-        genericModalViewModel.businessPOJO().dataSource.sqlResult(DataTransferPOJO.transferT(genericModalViewModel.businessPOJO().dataSource.sqlResult()));
+        var rawData = DataTransferPOJO.transferT(genericModalViewModel.businessPOJO().rawDataForTransferT);
+        genericModalViewModel.businessPOJO().rawDataForTransferT = ClonePOJO.deepCloneTwoDimentionArray(rawData);
+        var tableData = DataTransferPOJO.divideHeaderFromData(rawData);
+        var tableModel = new ThinListViewModel();
+        tableModel.buildData(tableData.result);
+        tableModel.columnNames(tableData.header);
+        tableModel.isDisplayPager(true);
+        tableModel.buildView();
+        tableModel.pageMaxSize(5);
+        genericModalViewModel.businessPOJO().table(tableModel);
+        genericModalViewModel.businessPOJO().table_header(tableModel.headerViewData());
+        genericModalViewModel.businessPOJO().isTransferT(!genericModalViewModel.businessPOJO().isTransferT())
     }
     </script>
     <script>

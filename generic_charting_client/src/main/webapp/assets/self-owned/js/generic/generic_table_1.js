@@ -31,8 +31,8 @@ function HeaderItemModel(data,index,isChecked,isDisplay,parent){
   },this);
   self.isChecked = ko.observable(isChecked);
   self.isDisplay = ko.observable(isDisplay);
+  self.isLegend = ko.observable(false);
 }
-
 
 
 function ThinListViewModel() {
