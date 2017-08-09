@@ -156,14 +156,13 @@ public class ConnectionManager {
         List list = new ArrayList();
         try {
             Class.forName("org.postgresql.Driver");
-
+            DatabaseConnection databaseConnection = new DatabaseConnection();
             con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/scripter", "postgres", "123456");
             if (con != null) {
                 Statement st = con.createStatement();
                 String sql = "select stringalpha, stringbeta, stringdelta, stringepsilon from genericentity where deleted= false and type= 'SOURCE_DATABASE_CONFIGURATION' and enabled= true";     //stringalpha=DBdriver,stringbeta=DBurl,stringdelta=dbuser,stringepsilon=pwd
                 ResultSet rs = st.executeQuery(sql);
                 while (rs.next()) {
-                    DatabaseConnection databaseConnection = new DatabaseConnection();
                     System.out.println(rs.getString(1));
                     System.out.println(rs.getString(2));
                     System.out.println(rs.getString(3));

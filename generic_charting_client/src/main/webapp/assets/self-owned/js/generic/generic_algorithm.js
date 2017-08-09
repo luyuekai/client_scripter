@@ -67,6 +67,7 @@ AlgorithmPOJO = {
 
 
 
+
   /**
    * 将数据（一般是数组数据）按照属性提取出标准的key属性列表
    * 举例：
@@ -140,7 +141,7 @@ AlgorithmPOJO = {
       'keySumArray': []
     };
     var columnArray = [];
-    if (key_y_axis != null) {
+    if(key_y_axis!=null){
       rowArray = AlgorithmPOJO.aggregateDataByKey(inputDataArray, key_y_axis, false);
     }
     columnArray = AlgorithmPOJO.aggregateDataByKey(inputDataArray, key_x_axis, true);
@@ -199,6 +200,7 @@ AlgorithmPOJO = {
 
 
 
+
     $.each(columnArray.keyValueArray, function(index, data) {
 
       var columnName = data;
@@ -223,6 +225,7 @@ AlgorithmPOJO = {
     // console.log(rowTableArray);
     return rowTableArray;
   },
+
 
 
 
@@ -446,459 +449,210 @@ function TableCell() {
 
 var DataTransferPOJO = DataTransferPOJO || {};
 
-DataTransferPOJO = {
+DataTransferPOJO={
 
-  seperateByComma: function(input) {
-    var arr = input.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-    /* will match:
+    seperateByComma:function(input){
+      var arr = input.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+      /* will match:
 
-        (
-            ".*?"       double quotes + anything but double quotes + double quotes
-            |           OR
-            [^",\s]+    1 or more characters excl. double quotes, comma or spaces of any kind
-        )
-        (?=             FOLLOWED BY
-            \s*,        0 or more empty spaces and a comma
-            |           OR
-            \s*$        0 or more empty spaces and nothing else (end of string)
-        )
+          (
+              ".*?"       double quotes + anything but double quotes + double quotes
+              |           OR
+              [^",\s]+    1 or more characters excl. double quotes, comma or spaces of any kind
+          )
+          (?=             FOLLOWED BY
+              \s*,        0 or more empty spaces and a comma
+              |           OR
+              \s*$        0 or more empty spaces and nothing else (end of string)
+          )
 
-    */
-    arr = arr || [];
-    return arr;
-  },
-  transferHiveData: function(inputData, needJson) {
-    var resultJsonObject = {};
-    var resultArray = [];
-    var header = [];
-    var rowArray = inputData.split("\n");
-    $.each(rowArray, function(index, rowData) {
-      if (rowData != "") {
-        var cellArray = DataTransferPOJO.seperateByComma(rowData);
-        //retrieve header array
-        if (index == 0) {
-          header = cellArray;
+      */
+      arr = arr || [];
+      return arr;
+    },
+    transferHiveData:function(inputData,needJson){
+      var resultJsonObject = {};
+      var resultArray = [];
+      var header = [];
+      var rowArray = inputData.split("\n");
+      $.each(rowArray, function(index, rowData) {
+        if (rowData != "") {
+          var cellArray = DataTransferPOJO.seperateByComma(rowData);
+          //retrieve header array
+          if (index == 0) {
+            header = cellArray;
 
-        } else {
-          if (needJson) {
-            var json = DataTransferPOJO.transferArray2JsonObject(header, cellArray);
-            resultArray.push(json);
           } else {
-            resultArray.push(cellArray);
+            if (needJson) {
+              var json = DataTransferPOJO.transferArray2JsonObject(header, cellArray);
+              resultArray.push(json);
+            } else {
+              resultArray.push(cellArray);
+            }
           }
         }
-      }
-    });
-    resultJsonObject["header"] = header;
-    resultJsonObject["result"] = resultArray;
+      });
+      resultJsonObject["header"] = header;
+      resultJsonObject["result"] = resultArray;
 
-    return resultJsonObject;
-  },
-  transferHiveDataRaw: function(inputData) {
-    var resultJsonObject = {};
-    var resultArray = [];
-    var rowArray = inputData.split("\n");
-    rowArray.pop();
-    $.each(rowArray, function(i, rowData) {
-      var cellArray = rowData.split(",");
-      resultArray.push(cellArray);
-    });
-    resultJsonObject["result"] = resultArray;
-    return resultJsonObject;
-  },
-  divideHeaderFromData: function(inputData){
-    if(inputData.result){
-      inputData = inputData.result;
-    }
-    var headerArray = inputData.shift();
-    return {
-      'header': headerArray,
-      'result': inputData
-    }
-  },
-  extractDataByHeader: function(originalData, headerViewModel) {
-    var header = [];
-    var headerIndex = [];
-    var resultArray = [];
-    var resultJsonObject = {};
-    var legendIndex;
-    $.each(headerViewModel, function(index, headerItem) {
-      if (headerItem.isChecked()) {
-        header.push(headerItem.data());
-        headerIndex.push(index);
-      }
-      if (headerItem.isLegend()) {
-        legendIndex = index;
-      }
-    });
-    $.each(originalData, function(i, rowData) {
-      var rowResult = [];
-      $.each(headerIndex, function(i, index) {
-        rowResult.push(rowData[index]);
-      })
-      if (legendIndex || legendIndex == 0) {
-        resultArray.push({
-          'name': rowData[legendIndex],
-          'data': rowResult
-        });
-      } else {
-        resultArray.push({
-          'name': 'row' + i,
-          'data': rowResult
-        });
-      }
-    })
-    resultJsonObject["header"] = header;
-    resultJsonObject["result"] = resultArray;
-    return resultJsonObject;
-  },
-  extractDataByHeaderPie: function(originalData, headerViewModel) {
-    var legend = [];
-    var headerIndex = [];
-    var resultArray = [];
-    var resultJsonObject = {};
-    var legendItem;
-    $.each(headerViewModel, function(index, headerItem) {
-      if (headerItem.isChecked()) {
-        headerIndex.push(index);
-      }
-      if (headerItem.isLegend()) {
-        legendIndex = index;
-      }
-    });
-    $.each(originalData, function(i, rowData) {
-      var rowResult = [];
-      $.each(headerIndex, function(i, index) {
-        rowResult.push(rowData[index]);
-      })
-      if (legendIndex || legendIndex == 0) {
-        legend.push(rowData[legendIndex]);
-        resultArray.push({
-          'name': rowData[legendIndex],
-          'value': rowResult[0]
-        });
-      } else {
-        legend.push('row' + i);
-        resultArray.push({
-          'name': 'row' + i,
-          'value': rowResult[0]
-        });
-      }
-    })
-    resultJsonObject["legend"] = legend;
-    resultJsonObject["result"] = resultArray;
-    return resultJsonObject;
-  },
-  extractDataByHeaderRadar: function(originalData, headerViewModel) {
-    var header = [];
-    var headerIndex = [];
-    var headerArray = [];
-    var resultArray = [];
-    var resultJsonObject = {};
-    var legend = [];
-    var legendIndex;
-    $.each(headerViewModel, function(index, headerItem) {
-      if (headerItem.isChecked()) {
-        header.push(headerItem.data());
-        headerIndex.push(index);
-      }
-      if (headerItem.isLegend()) {
-        legendIndex = index;
-      }
-    });
-    $.each(originalData, function(i, rowData) {
-      var rowResult = [];
-      $.each(headerIndex, function(i, index) {
-        rowResult.push(rowData[index]);
-      })
-      if (legendIndex || legendIndex == 0) {
-        legend.push(rowData[legendIndex]);
-        resultArray.push({
-          'name': rowData[legendIndex],
-          'value': rowResult
-        });
-      }else{
-        legend.push('row' + i);
-        resultArray.push({
-          'name': 'row' + i,
-          'value': rowResult
-        });
-      }
-    });
-    $.each(header, function(i, headerItem) {
-      headerArray.push({
-        'name': headerItem
-      })
-    });
-    resultJsonObject["legend"] = legend;
-    resultJsonObject["header"] = headerArray;
-    resultJsonObject["result"] = resultArray;
-    return resultJsonObject;
-  },
-  extractDataByHeaderParallel: function(originalData, headerViewModel) {
-    var header = [];
-    var headerIndex = [];
-    var resultArray = [];
-    var resultJsonObject = {};
-    var legendIndex;
-    $.each(headerViewModel, function(index, headerItem) {
-      if (headerItem.isChecked()) {
-        header.push(headerItem.data());
-        headerIndex.push(index);
-      }
-      if(headerItem.isLegend()){
-        legendIndex = index;
-      }
-    });
-    $.each(originalData, function(i, rowData) {
-      var rowResult = [];
-      $.each(headerIndex, function(i, index) {
-        rowResult.push(rowData[index]);
-      })
-      // if(legendIndex){
-      //   rowResult.push(rowData[legendIndex]);
-      //   resultArray.push(rowResult);
-      // }else{
-        resultArray.push(rowResult);
-      // }
-    });
-    resultJsonObject["header"] = header;
-    resultJsonObject["result"] = resultArray;
-    // console.log(resultJsonObject);
-    return resultJsonObject;
-  },
-  extractDataByHeaderRiver: function(originalData, headerViewModel) {
-    var header = [];
-    var headerIndex = [];
-    var resultArray = [];
-    var resultJsonObject = {};
-    var legendIndex;
-    $.each(headerViewModel, function(index, headerItem) {
-      if (headerItem.isChecked()) {
-        header.push(headerItem.data());
-        headerIndex.push(index);
-      }
-      if(headerItem.isLegend()){
-        legendIndex = index;
-      }
-    });
-    $.each(originalData, function(i, rowData) {
-      var rowResult = [];
-      $.each(headerIndex, function(i, index) {
-        rowResult.push(rowData[index]);
-      })
-      // if(legendIndex){
-      //   rowResult.push(rowData[legendIndex]);
-      //   resultArray.push(rowResult);
-      // }else{
-        resultArray.push(rowResult);
-      // }
-    });
-    resultJsonObject["header"] = header;
-    resultJsonObject["result"] = resultArray;
-    // console.log(resultJsonObject);
-    return resultJsonObject;
-  },
-  extractDataByHeaderBoxplot: function(originalData, headerViewModel) {
-    var header = [];
-    var headerIndex = [];
-    var resultArray = [];
-    var resultJsonObject = {};
-    $.each(headerViewModel, function(index, headerItem) {
-      if (headerItem.isChecked()) {
-        header.push(headerItem.data());
-        headerIndex.push(index);
-        resultArray.push([]);
-      }
-    });
-    $.each(originalData, function(i, rowData) {
-      $.each(headerIndex, function(j, index) {
-        resultArray[j].push(rowData[index]);
-      })
-    });
-    resultJsonObject["header"] = header;
-    resultJsonObject["result"] = resultArray;
-    return resultJsonObject;
-  },
-  uniqueArray: function(arr){
-  var res = [];
-  var json = {};
-  for(var i = 0; i < arr.length; i++){
-    if(!json[arr[i]]){
-      res.push(arr[i]);
-      json[arr[i]] = 1;
-    }
-  }
-  return res;
-},
-  transferT: function(data) {
-    var dataT = [];
-    for (var i = 0; i < data[0].length; i++) {
-      dataT[i] = [];
-    }
-    for (var i = 0; i < data.length; i++) {
-      for (var j = 0; j < data[i].length; j++) {
-        dataT[j][i] = data[i][j];
-      }
-    }
-    return {'result':dataT};
-  },
+      return resultJsonObject;
+    },
 
-  transferArray2JsonObject: function(headerArray, dataArray) {
-    var json = {};
-    $.each(headerArray, function(index, data) {
-      json[data] = dataArray[index];
-    });
-    console.log(json);
-    return json;
-  },
+    transferArray2JsonObject:function(headerArray, dataArray){
+      var json = {};
+      $.each(headerArray, function(index, data) {
+        json[data] = dataArray[index];
+      });
+      console.log(json);
+      return json;
+    },
 
-  //return : {header:[],result:[[],[],[]]}
-  serverData2TableData: function(inputData) {
-    return DataTransferPOJO.transferHiveData(inputData);
-  },
+    //return : {header:[],result:[[],[],[]]}
+    serverData2TableData:function(inputData){
+      return DataTransferPOJO.transferHiveData(inputData);
+    },
 
-  //original: [{},{},{}]
-  //return : {header:[],result:[[],[],[]]}
-  serverJsonData2TableData: function(inputData) {
-    var resultJsonObject = {};
-    var headers = AlgorithmPOJO.buildKeys(inputData);
+    //original: [{},{},{}]
+    //return : {header:[],result:[[],[],[]]}
+    serverJsonData2TableData: function(inputData) {
+      var resultJsonObject = {};
+      var headers = AlgorithmPOJO.buildKeys(inputData);
 
-    var dataArray = [];
-    $.each(inputData, function(index, value) {
-      var singleRowData = [];
-      $.each(headers, function(i, v) {
-        if (value[v] !== null) {
-          singleRowData.push(value[v]);
-        } else {
-          singleRowData.push("");
+      var dataArray = [];
+      $.each(inputData, function(index, value) {
+        var singleRowData = [];
+        $.each(headers, function(i, v) {
+          if (value[v] !== null) {
+            singleRowData.push(value[v]);
+          } else {
+            singleRowData.push("");
+          }
+        });
+        dataArray.push(singleRowData);
+      });
+      resultJsonObject["header"] = headers;
+      resultJsonObject["result"] = dataArray;
+
+      return resultJsonObject;
+    },
+
+    tableData2AnalyzeData:function(tableHeaderArray,tableDataArray){
+      var rowTableArray = [];
+      $.each(tableDataArray,function(index,eachRowData){
+        var tableRowElement = new TableRow();
+        var rowName = eachRowData[0];
+        tableRowElement.rowName = rowName;
+        $.each(eachRowData,function(cellIndex,eachCellData){
+          var tableCellElement = new TableCell();
+          tableCellElement.rowName = rowName;
+          tableCellElement.columnName = tableHeaderArray[cellIndex];
+          tableCellElement.displayValue = eachCellData;
+          tableRowElement.cells.push(tableCellElement);
+        });
+        rowTableArray.push(tableRowElement);
+      });
+
+      return rowTableArray;
+    },
+    analyzeData2TableData:function(inputData,analyzeType){
+      var resultJsonObject = {};
+      var resultArray = [];
+      var header = [];
+      if(analyzeType =='baseOnColumn'){
+        //aggregate json type
+        //  var resultArray = {
+        //    'key': key,
+        //    'value': [],
+        //    'keyValueArray': [],
+        //    'keySumArray': []
+        //  };
+        header = inputData.keyValueArray;
+        resultArray.push(inputData.keySumArray);
+
+      }else if(analyzeType =='baseOnMultiColumn' || analyzeType =='baseOnExtendColumn'){
+        // data should be rowTableArray like
+        var rowTableArray = inputData;
+
+        header = AlgorithmPOJO.getTableHeader(rowTableArray);
+        //empty the first header
+        if(analyzeType =='baseOnMultiColumn'){
+          header[0]="";
         }
-      });
-      dataArray.push(singleRowData);
-    });
-    resultJsonObject["header"] = headers;
-    resultJsonObject["result"] = dataArray;
-
-    return resultJsonObject;
-  },
-
-  tableData2AnalyzeData: function(tableHeaderArray, tableDataArray) {
-    var rowTableArray = [];
-    $.each(tableDataArray, function(index, eachRowData) {
-      var tableRowElement = new TableRow();
-      var rowName = eachRowData[0];
-      tableRowElement.rowName = rowName;
-      $.each(eachRowData, function(cellIndex, eachCellData) {
-        var tableCellElement = new TableCell();
-        tableCellElement.rowName = rowName;
-        tableCellElement.columnName = tableHeaderArray[cellIndex];
-        tableCellElement.displayValue = eachCellData;
-        tableRowElement.cells.push(tableCellElement);
-      });
-      rowTableArray.push(tableRowElement);
-    });
-
-    return rowTableArray;
-  },
-  analyzeData2TableData: function(inputData, analyzeType) {
-    var resultJsonObject = {};
-    var resultArray = [];
-    var header = [];
-    if (analyzeType == 'baseOnColumn') {
-      //aggregate json type
-      //  var resultArray = {
-      //    'key': key,
-      //    'value': [],
-      //    'keyValueArray': [],
-      //    'keySumArray': []
-      //  };
-      header = inputData.keyValueArray;
-      resultArray.push(inputData.keySumArray);
-
-    } else if (analyzeType == 'baseOnMultiColumn' || analyzeType == 'baseOnExtendColumn') {
-      // data should be rowTableArray like
-      var rowTableArray = inputData;
-
-      header = AlgorithmPOJO.getTableHeader(rowTableArray);
-      //empty the first header
-      if (analyzeType == 'baseOnMultiColumn') {
-        header[0] = "";
-      }
-      $.each(rowTableArray, function(index, rowData) {
-        var rowArray = [];
-        $.each(rowData.cells, function(index, data) {
-          rowArray.push(data.displayValue);
-        });
-        resultArray.push(rowArray);
-      });
-
-    } else {
-      return;
-    }
-    resultJsonObject["header"] = header;
-    resultJsonObject["result"] = resultArray;
-    return resultJsonObject;
-  },
-
-  //[{key1:value1,key2:value2},{}]
-  tableData2JsonDataArray: function(header, rowArray) {
-    var resultArray = [];
-    $.each(rowArray, function(index, rowData) {
-      if (rowData != "") {
-        var json = DataTransferPOJO.transferArray2JsonObject(header, rowData);
-        resultArray.push(json);
-      }
-    });
-    return resultArray;
-  },
-  tableData2SigleColumnData: function(tableHeaderArray, tableDataArray, wantedColumnHeader) {
-    var resultArray = [];
-    var index = tableHeaderArray.indexOf(wantedColumnHeader);
-    if (index > -1) {
-      $.each(tableDataArray, function(ind, eachRowData) {
-        if (eachRowData[index]) { // remove empty || null || undefined data
-          resultArray.push(eachRowData[index]);
-        }
-      })
-    }
-    return resultArray;
-  },
-  tableData2PieChartData: function(tableHeaderArray, tableDataArray, wantedColumnHeader) {
-
-    var resultArray = [];
-    var index = tableHeaderArray.indexOf(wantedColumnHeader);
-    if (index > -1) {
-      $.each(tableDataArray, function(ind, eachRowData) {
-        if (eachRowData[index]) { // remove empty || null || undefined data
-          resultArray.push({
-            value: eachRowData[index],
-            name: eachRowData[0]
+        $.each(rowTableArray, function(index, rowData) {
+          var rowArray = [];
+          $.each(rowData.cells, function(index, data) {
+            rowArray.push(data.displayValue);
           });
-        }
-        //remove the total sum (last row)
-        resultArray.pop();
-      })
-    }
-    return resultArray;
-  },
+          resultArray.push(rowArray);
+        });
 
-  tableData2ChartData: function(tableHeaderArray, tableDataArray, wantedColumnHeaders) {
-    var resultArray = [];
-    var headerIndexArray = [];
-    $.each(wantedColumnHeaders, function(index, columnHeader) {
-      var index = tableHeaderArray.indexOf(columnHeader);
-      if (index > -1) {
-        headerIndexArray.push(index);
+      }else{
+        return;
       }
-    })
+      resultJsonObject["header"] = header;
+      resultJsonObject["result"] = resultArray;
+      return resultJsonObject;
+    },
 
-    $.each(tableDataArray, function(ind, eachRowData) {
-      var chartData = [];
-      $.each(headerIndexArray, function(i, headerIndex) {
-        chartData.push(eachRowData[headerIndex]);
+    //[{key1:value1,key2:value2},{}]
+    tableData2JsonDataArray:function(header,rowArray){
+      var resultArray = [];
+      $.each(rowArray, function(index, rowData) {
+        if (rowData != "") {
+          var json = DataTransferPOJO.transferArray2JsonObject(header, rowData);
+          resultArray.push(json);
+        }
+      });
+      return resultArray;
+    },
+    tableData2SigleColumnData:function(tableHeaderArray,tableDataArray,wantedColumnHeader){
+      var resultArray = [];
+      var index = tableHeaderArray.indexOf(wantedColumnHeader);
+      if(index>-1){
+        $.each(tableDataArray,function(ind,eachRowData){
+          if(eachRowData[index]){ // remove empty || null || undefined data
+            resultArray.push(eachRowData[index]);
+          }
+        })
+      }
+      return resultArray;
+    },
+    tableData2PieChartData:function(tableHeaderArray,tableDataArray,wantedColumnHeader){
+      
+      var resultArray = [];
+      var index = tableHeaderArray.indexOf(wantedColumnHeader);
+      if(index>-1){
+        $.each(tableDataArray,function(ind,eachRowData){
+          if(eachRowData[index]){ // remove empty || null || undefined data
+            resultArray.push({
+              value:eachRowData[index],
+              name:eachRowData[0]
+            });
+          }
+          //remove the total sum (last row)
+          resultArray.pop();
+        })
+      }
+      return resultArray;
+    },
+
+    tableData2ChartData:function(tableHeaderArray,tableDataArray,wantedColumnHeaders){
+      var resultArray = [];
+      var headerIndexArray = [];
+      $.each(wantedColumnHeaders,function(index,columnHeader){
+        var index = tableHeaderArray.indexOf(columnHeader);
+        if(index>-1){
+          headerIndexArray.push(index);
+        }
       })
-      resultArray.push(chartData);
-    })
-    return resultArray;
-  },
+
+      $.each(tableDataArray,function(ind,eachRowData){
+        var chartData = [];
+        $.each(headerIndexArray,function(i,headerIndex){
+          chartData.push(eachRowData[headerIndex]);
+        })
+        resultArray.push(chartData);
+      })
+      return resultArray;
+    },
 }

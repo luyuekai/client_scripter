@@ -387,22 +387,25 @@
     function successAddListener_database() {
         if (arguments && arguments[1]) {
             genericModalViewModel.response(true, "添加数据库", "[成功]", "添加操作成功，请关闭此模态框.");
-            
-            var requestPOJO = {
-            "dbType": genericModalViewModel.businessPOJO().databaseType().trim(),
-            "dbDriver": genericModalViewModel.businessPOJO().databaseDriver().trim(),
-            "dbConName": genericModalViewModel.businessPOJO().connectionName().trim(),
-            "dbUsername": genericModalViewModel.businessPOJO().username().trim(),
-            "dbPasswd": genericModalViewModel.businessPOJO().passwd().trim(),
-            "dbUrl": genericModalViewModel.businessPOJO().databaseUrl().trim()
-        };
-
-        var data = {
-            "DBConfig": $.toJSON(requestPOJO)
-        };
-
-        $.serverRequest($.getServerRoot() + "/generic_charting_client/api/connection/addconnection", data, "successADDConnection", "failedADDConnection",
-                "failedServerADDConnection");
+//            var databasePOJO = {
+//                "dbType": genericModalViewModel.businessPOJO().databaseType().trim(),
+//                "dbDriver": genericModalViewModel.businessPOJO().databaseDriver().trim(),
+//                "dbConName": genericModalViewModel.businessPOJO().connectionName().trim(),
+//                "dbUsername": genericModalViewModel.businessPOJO().username().trim(),
+//                "dbPasswd": genericModalViewModel.businessPOJO().passwd().trim(),
+//                "dbUrl": genericModalViewModel.businessPOJO().databaseUrl().trim(),
+//                "attributes": {
+//                    "dbName": "",
+//                    "tableName": ""
+//                }
+//            };
+//
+//            var data = {
+//                "DBConfig": $.toJSON(databasePOJO)
+//            };
+//
+//            $.serverRequest($.getServerRoot() + "/service_scripter_database/api/connection/databases", data, "successSwitchConnection",
+//                    "failedSwitchConnection", "serverSwitchConnection");
 
         }
     }
@@ -418,6 +421,44 @@
         genericModalViewModel.response(false, "添加数据库", "[失败]", "系统服务错误，请联系管理人员...");
 
     }
+
+    $.subscribe("successSwitchConnection", successSwitchConnection);
+    $.subscribe("failedSwitchConnection", failedSwitchConnection);
+    $.subscribe("serverSwitchConnection", serverSwitchConnection);
+
+    function successSwitchConnection() {
+        var databasePOJO = {
+            "dbType": genericModalViewModel.businessPOJO().databaseType().trim(),
+            "dbDriver": genericModalViewModel.businessPOJO().databaseDriver().trim(),
+            "dbConName": genericModalViewModel.businessPOJO().connectionName().trim(),
+            "dbUsername": genericModalViewModel.businessPOJO().username().trim(),
+            "dbPasswd": genericModalViewModel.businessPOJO().passwd().trim(),
+            "dbUrl": genericModalViewModel.businessPOJO().databaseUrl().trim(),
+            "attributes": {
+                "dbName": "",
+                "tableName": ""
+            }
+        };
+        genericModalViewModel.response(true, "切换数据库", "[成功]", "添加操作成功，请关闭此模态框.");
+        docCookies.setItem("dbData", $.toJSON(databasePOJO), Infinity, "/");
+        dbReloadTree = databasePOJO;
+        nameFlag = genericModalViewModel.businessPOJO().databaseType().trim() + "   (" + genericModalViewModel.businessPOJO().connectionName().trim() + ")";
+        docCookies.setItem("nameFlag", nameFlag, Infinity, "/");
+        rdmsBrowserViewModel.databaseName(nameFlag.split("(")[1].split(")")[0]);
+        $("#databaseDIV").load($.getRootPath() + "/assets/self-owned/html/database_admin/rdms_tree_reload.html");
+        $('#rdmsFolderDIV').load($.getRootPath() + '/assets/self-owned/html/database_admin/database_browser_tree.html');
+
+    }
+    function failedSwitchConnection() {
+        genericModalViewModel.response(false, "切换数据库连接", "[失败]", " 切换数据库连接失败,请查看信息是否正确");
+
+    }
+    function serverSwitchConnection() {
+        genericModalViewModel.response(false, "切换数据库连接", "[失败]", " 切换数据库连接失败,服务器错误");
+
+    }
+
+
 
     var testConnection = function () {
 
