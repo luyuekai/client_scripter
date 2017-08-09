@@ -256,6 +256,15 @@ ClonePOJO = {
         }else{
           return jQuery.extend(true, {}, oldObject);
         }
+    },
+    deepCloneTwoDimentionArray: function(oldArray){
+        var result = [];
+        $.each(oldArray, function (index, value) {
+            if (value) {
+                result.push(jQuery.extend(true, [], value));
+            }
+        });
+        return result;
     }
 };
 

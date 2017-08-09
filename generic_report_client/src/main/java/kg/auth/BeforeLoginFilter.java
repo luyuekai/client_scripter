@@ -7,6 +7,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,17 +20,17 @@ import org.springframework.web.filter.GenericFilterBean;
  */
 public class BeforeLoginFilter extends GenericFilterBean {
 
-    private boolean doSSOFlag = true;
+    private boolean doSSOFlag = false;
 
     @Autowired
     AuthManager authManager;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (doSSOFlag) {
+        if(doSSOFlag){
             doSSOChain(request);
         }
-//        scripterExtraLogic(request);
+        scripterExtraLogic(request);
         chain.doFilter(request, response);
     }
 
@@ -41,48 +42,33 @@ public class BeforeLoginFilter extends GenericFilterBean {
         }
     }
 
-    private void doSSOChain(ServletRequest request) throws IOException {
+    private void doSSOChain(ServletRequest request) {
         if (!hasAuth()) {
 //          Logger.getLogger(BeforeLoginFilter.class.getName()).log(Level.INFO, "A anouymous user request for accessing the resource...System try to find whether it can be auto login for token...");
-
-            String token = authManager.getSSOToken((HttpServletRequest) request);
-            if (token != null) {
-                Logger.getLogger(BeforeLoginFilter.class.getName()).log(Level.INFO, "Find the SSO token[" + token + "], will use this token to authenticate.");
-                if (authManager.envCheck() && authManager.remoteServerCheck()) {
-                    tryToAuth(token, request);
+            HttpServletRequest req = (HttpServletRequest) request;
+            Cookie[] cookies = req.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("iPlanetDirectoryPro".equalsIgnoreCase(cookie.getName())) {
+                        String token = cookie.getValue();
+                        Logger.getLogger(BeforeLoginFilter.class.getName()).log(Level.INFO, "Find the SSO token[" + token + "], will use this token to authenticate.");
+                        if (authManager.envCheck() && authManager.remoteServerCheck()) {
+                            tryToAuth(token);
+                        }
+                    } else {
+//                        Logger.getLogger(BeforeLoginFilter.class.getName()).log(Level.INFO, "Didn't find the token exist, will processing with the login request...");
+                    }
                 }
-            } else {
-//                HttpServletRequest req = (HttpServletRequest) request;
-//                UserContext.removeCurrentUser(req);
             }
-//            HttpServletRequest req = (HttpServletRequest) request;
-//            Cookie[] cookies = req.getCookies();
-//            if (cookies != null) {
-//                for (Cookie cookie : cookies) {
-//                    if ("iPlanetDirectoryPro".equalsIgnoreCase(cookie.getName())) {
-//                        String token = cookie.getValue();
-//                        Logger.getLogger(BeforeLoginFilter.class.getName()).log(Level.INFO, "Find the SSO token[" + token + "], will use this token to authenticate.");
-//                        if (authManager.envCheck() && authManager.remoteServerCheck()) {
-//                            tryToAuth(token);
-//                        }
-//                    } else {
-////                        Logger.getLogger(BeforeLoginFilter.class.getName()).log(Level.INFO, "Didn't find the token exist, will processing with the login request...");
-//                    }
-//                }
-//            }
         } else {
 //             Logger.getLogger(BeforeLoginFilter.class.getName()).log(Level.INFO, "User has been granted, don't need authenticate anymore...");           
         }
     }
 
-    private void tryToAuth(String token, ServletRequest request) {
+    private void tryToAuth(String token) {
         try {
-
             UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) authManager.tryToAuth(token, null, null);
             SecurityContextHolder.getContext().setAuthentication(authToken);
-            if (authManager != null) {
-                authManager.extraLogic((HttpServletRequest) request);
-            }
         } catch (Exception ex) {
             Logger.getLogger(BeforeLoginFilter.class.getName()).log(Level.SEVERE, ex.getMessage());
         }

@@ -5,6 +5,11 @@
  */
 package scripter.datasourse.sourceclass;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import kg.auth.utils.JsonUtil;
+
 /**
  *
  * @author gloomy
@@ -12,6 +17,7 @@ package scripter.datasourse.sourceclass;
 public class QueryInfo {
 
     private String sql;
+    private String dbName;
 
     public String getSql() {
         return sql;
@@ -21,9 +27,18 @@ public class QueryInfo {
         this.sql = sql;
     }
 
+    public String getdbName() {
+        return dbName;
+    }
+
+    public void setdbName(String dbName) {
+        this.dbName = dbName;
+    }
+
     @Override
     public String toString() {
         return "QueryInfo{" + "sql=" + sql + '}';
     }
+
 
 }

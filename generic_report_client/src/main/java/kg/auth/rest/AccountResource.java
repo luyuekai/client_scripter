@@ -41,20 +41,7 @@ public class AccountResource {
     @PermitAll
     @Produces({"application/json"})
     public Response getCurrentUserInfo(@Context HttpServletRequest request) {
-        String token = null;
-        String rawCookie = (request).getHeader("Cookie");
-        if (rawCookie != null) {
-            String[] rawCookieParams = rawCookie.split(";");
-            for (String rawCookieNameAndValue : rawCookieParams) {
-                String[] rawCookieNameAndValuePair = rawCookieNameAndValue.split("=");
-                if (rawCookieNameAndValuePair[0].trim().equalsIgnoreCase("iPlanetDirectoryPro")) {
-                    token = rawCookieNameAndValuePair[1];
-                }
-            }
-        }
-        if (token == null) {
-           UserContext.removeCurrentUser(request); 
-        }
+
         UserInfo userinfo = UserContext.getCurrentUser(request);
         if (userinfo == null) {
             return Response.status(Response.Status.UNAUTHORIZED).build();

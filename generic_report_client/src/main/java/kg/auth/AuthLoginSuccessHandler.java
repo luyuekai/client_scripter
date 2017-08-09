@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,12 +21,8 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 //import scripter.rest.ScripterRestContext;
 //import scripter.rest.config.HdfsUserConfig;
 //import scripter.rest.hdfs.client.WebHdfsClient;
-
 public class AuthLoginSuccessHandler extends
         SavedRequestAwareAuthenticationSuccessHandler {
-
-    @Autowired
-    AuthManager authManager;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -48,10 +43,8 @@ public class AuthLoginSuccessHandler extends
                 httpServletResponse.addCookie(iplanetDirectoryProCookie);
                 Logger.getLogger(AuthLoginSuccessHandler.class.getName()).log(Level.INFO, "Add sso domain cookie success!The token info is:" + token);
             }
-            if (authManager != null) {
-                authManager.extraLogic(request);
-            }
-//            scripterExtraLogic(request);
+
+            scripterExtraLogic(request);
         }
         if (httpServletResponse != null) {
             response = httpServletResponse;
@@ -69,17 +62,18 @@ public class AuthLoginSuccessHandler extends
             list = new ArrayList(groups);
         }
         List<String> g = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
+        for(int i =0 ;i<list.size();i++){
             GrantedAuthority au = (GrantedAuthority) list.get(i);
             g.add(au.getAuthority());
         }
-
-        UserContext.setCurrentUser(request, SecurityContextHolder.getContext().getAuthentication().getName(), g);
-
+        
+        UserContext.setCurrentUser(request, SecurityContextHolder.getContext().getAuthentication().getName(),g);
+        
         scripterUserHDFSCheck();
     }
-
-    private void scripterUserHDFSCheck() {
+    
+    
+    private void scripterUserHDFSCheck(){
 //        WebHdfsClient hdfs_client = ScripterRestContext.get_hsdf_client();
 //        HdfsUserConfig userConfig = new HdfsUserConfig();
 //        userConfig.config(SecurityContextHolder.getContext().getAuthentication().getName(), SecurityContextHolder.getContext().getAuthentication().getName(), hdfs_client);

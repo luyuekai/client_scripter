@@ -28,7 +28,7 @@ UserPOJO = {
             },
             error: function (xhr, status) {
                 console.log('Sorry, there was a problem on page check status!');
-                location.href = $.getRootPath() + "/login.html?logout";
+                location.href = $.getRootPath() + "/login.html";
             },
             complete: function (xhr, status) {
             }

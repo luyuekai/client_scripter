@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .exceptionHandling().accessDeniedPage("/403.html")
             .and()
-                .addFilterBefore(beforeLoginFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(beforeLoginFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
                     .loginPage("/login.html")
                     .successHandler(authLoginSuccessHandler)

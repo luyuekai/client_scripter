@@ -36,6 +36,7 @@ function ChartViewModel(parent) {
   // }
 
   self.switch_chart_type_listener = function(){
+    clearInterval(interval);
     self.reset_chart_type();
     // self.render_tutorial();
   }
