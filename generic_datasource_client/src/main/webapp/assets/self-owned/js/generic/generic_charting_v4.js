@@ -119,7 +119,7 @@ ChartPOJO = {
 
 
 
-  generate_default_chart: function(chart_div_id) {
+  generate_default_chart: function(chart_div_id,style,series) {
     $('#' + chart_div_id).empty();
     var option_chart = {};
     // option_chart.color = ClonePOJO.deepClone(default_color);
@@ -129,6 +129,8 @@ ChartPOJO = {
     option_chart.legend = ClonePOJO.deepClone(default_legend);
     // option_chart.legend.data.push([]);
     option_chart.series = [];
+    option_chart.style = style;
+    option_chart.series_name = series;
     var chart = echarts.init(document.getElementById(chart_div_id));
 
     chart.parent_div_id = chart_div_id;

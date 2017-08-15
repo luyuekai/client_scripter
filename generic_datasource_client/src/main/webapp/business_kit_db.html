@@ -255,7 +255,7 @@
                                     <i class="fa fa-diamond">&nbsp;Data Source Configuration&nbsp;&nbsp;&nbsp;</i>
                                 </div>
                             </div>
-                            <div class="card-body flat-matrix" >
+                            <div class="card-body flat-matrix" data-bind="visible: apiVisible">
                                 <div class="step-v2-success">
                                     <ul class="nav nav-tabs nav-justified" role="tablist">
                                         <li role="step" class="active">
@@ -616,6 +616,227 @@
                                                 <div class="pull-right">
                                                     <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
                                                     <button id='execute-button' type="button" class="btn btn-sm btn-success" onclick="default_execute()">Execute</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body flat-matrix" data-bind="visible: databaseVisible">
+                                <div class="step-v2-success">
+                                    <ul class="nav nav-tabs nav-justified" role="tablist">
+                                        <li role="step" class="active">
+                                            <a href="#step1-v3-horizantal-db" id="step1-tab-v3-horizantal-db" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                                                <div class="icon fa fa-key"></div>
+                                                <div class="heading">
+                                                    <div class="title">Data Source Setting From DataBase</div>
+                                                    <div class="description">Choose Database Style</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li role="step" class="">
+                                            <a href="#step2-v3-horizantal-db" role="tab" id="step2-tab-v3-horizantal-db" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                                <div class="icon fa fa-filter"></div>
+                                                <div class="heading">
+                                                    <div class="title">Detail Setting</div>
+                                                    <div class="description">Name and Password configuration</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li role="step" class="">
+                                            <a href="#step3-v3-horizantal-db" role="tab" id="step3-tab-v3-horizantal-db" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                                <div class="icon fa fa-flag-checkered "></div>
+                                                <div class="heading">
+                                                    <div class="title">Information Summary</div>
+                                                    <div class="description">Connect database</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane active" id="step1-v3-horizantal-db">
+                                            <div class="row">
+                                                <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
+                                                    <div class="title"><i class="fa fa-cogs"></i> 选择外接数据库类型及驱动名称 :</div>
+                                                </div>
+                                                <div class="clear-both"></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-10 col-xs-offset-1">
+                                                    <label class="col-sm-2 control-label">
+                                                        <span style="font-weight: bold;font-size: 1.1em;">DbType</span>
+                                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                    </label>
+
+                                                    <div class="col-sm-8">
+                                                        <select  data-bind="options:dataBases,optionsText:'dbType',value:selectedDb" class="select2">
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-10 col-xs-offset-1">
+                                                    <label class="col-sm-2 control-label">
+                                                        <span style="font-weight: bold;">DbDriver</span>
+                                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                    </label>
+
+                                                    <div class="col-sm-8">
+                                                        <input data-bind="value:databaseDriver" readonly="true" type="text" class="form-control" placeholder="">
+                                                    </div>  
+                                                </div>                                              
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-10 col-xs-offset-1">
+                                                    <label class="col-sm-2 control-label">
+                                                        <span style="font-weight: bold;font-size: 1.1em;">DbURL</span>
+                                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                    </label>
+
+                                                    <div class="col-sm-8">
+                                                        <input data-bind="value:databaseUrl" type="text" class="form-control" placeholder="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="step2-v3-horizantal-db">
+                                            <div class="row">
+                                                <div class="alert alert-info alert-dismissible fresh-color" style="margin-top: 16px;">
+                                                    <div class="title"><i class="fa fa-cogs"></i> 数据库的用户名及密码 :
+                                                    </div>
+                                                </div>
+                                                <div class="clear-both"></div>
+                                            </div>
+                                            <div class="card-body no-padding">
+                                                <br>
+                                                <form class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">
+                                                            <span style="font-weight: bold;font-size: 1.1em;">自定义名称</span>
+                                                            <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <input data-bind="value:connectionName" type="text" class="form-control" placeholder="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">
+                                                            <span style="font-weight: bold;font-size: 1.1em;">用户名</span>
+                                                            <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <input data-bind="value:username" type="text" class="form-control" placeholder="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">
+                                                            <span style="font-weight: bold;font-size: 1.1em;">密码</span>
+                                                            <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <input id="DBpassword" data-bind="value:passwd" type="password" class="form-control" placeholder="">
+                                                        </div>
+                                                        <div class="col-sm-0">
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="test()"> 
+                                                                <span class="fa fa-eye" aria-hidden="true" title="chart">&nbsp;查看</span>
+                                                                <iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="step3-v3-horizantal-db">
+                                            <div class="row">
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:8px;">Data Source:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-10" style="margin-top: 2px;">
+                                                    <p class="form-control-static" data-bind="text:stringzeta_ds"></p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:8px;">Data Header:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-10" style="margin-top: 8px;">
+                                                    <!-- ko foreach: tableModel().headerViewData -->
+                                                    <span data-bind="visible:$data.isChecked,text:$data.data"></span>
+                                                    <!-- /ko -->
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:10px;">Refresh Interval:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-10" style="margin-top: 0px;">
+                                                    <div class="radio radio-inline">
+                                                        <input type="radio" data-bind="checked:stringzeta_refresh_interval" name="radio_stringzeta_refresh_interval" id="radio1" value="10" checked>
+                                                        <label for="radio1">
+                                                            10 Seconds
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio radio-inline">
+                                                        <input type="radio" data-bind="checked:stringzeta_refresh_interval" name="radio_stringzeta_refresh_interval" id="radio2" value="30">
+                                                        <label for="radio2">
+                                                            30 Seconds
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio radio-inline">
+                                                        <input type="radio" data-bind="checked:stringzeta_refresh_interval" name="radio_stringzeta_refresh_interval" id="radio3" value="60">
+                                                        <label for="radio3">
+                                                            1 Minutes
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio radio-inline">
+                                                        <input type="radio" data-bind="checked:stringzeta_refresh_interval" name="radio_stringzeta_refresh_interval" id="radio4" value="300">
+                                                        <label for="radio4">
+                                                            5 Minutes
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio radio-inline">
+                                                        <input type="radio" data-bind="checked:stringzeta_refresh_interval" name="radio_stringzeta_refresh_interval" id="radio5" value="3000000">
+                                                        <label for="radio5">
+                                                            Never
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:0px;">Data Source JSON:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-10" style="margin-top: 0px;">
+                                                    <div class="compile_mode_focus_in" tabindex="100">
+                                                        <span class="cell_div_view markdown-body" data-bind="html:ds"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="flat-matrix">
+                                                        <div class="alert alert-info fresh-color">
+                                                            <strong>
+                                                                <span>请注意:</span>
+                                                            </strong>
+                                                            <br>
+                                                            <span> 1, 请设置好数据源并检查是否返回正确的数据结果集</span>
+                                                            <br>
+                                                            <span> 2, 选择数据结果集中想要显示的具体列，<code><strong>这些列名</strong></code>将会显示到新建的Data Source组件中</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

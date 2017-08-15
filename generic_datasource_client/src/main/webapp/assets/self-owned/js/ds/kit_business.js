@@ -7,6 +7,11 @@ ko.cleanNode($('#template-matrix-main-div')[0]);
 ko.applyBindings(vm, document.getElementById('template-matrix-main-div'));
 // Refrence the entire page view model to current view model as cache
 current_vm = vm;
+var databaseCf = function (dbType, dbDriver) {
+    this.dbType = dbType;
+    this.dbDriver = dbDriver;
+//        this.dbUrl = dbUrl;
+}
 
 
 function env_setup() {
@@ -58,6 +63,8 @@ function vm_env_setup() {
         self.detailVisible = ko.observable(false);
         self.setVisible = ko.observable(false);
 
+
+     
         self.reload = function (pojo) {
             self.clear();
             self.server_data = pojo;
@@ -216,16 +223,16 @@ function vm_env_setup() {
     businessPOJO.creator(UserPOJO.user.userName);
     vm.businessPOJO(businessPOJO);
     var status = $.urlParamValue('status');
-   
+    var style = $.urlParamValue('style');
     if (status == null || status == 'update') {
         vm.businessPOJO().setVisible(true);
     } else if (status == 'check') {
         vm.businessPOJO().detailVisible(true);
     } else if (status == 'update') {
-         console.log(status);
         vm.businessPOJO().setVisible(true);
-        console.log(vm.businessPOJO().setVisible()+" " + vm.businessPOJO().detailVisible());
     }
+//    vm.businessPOJO().setVisible(true);
+//    vm.businessPOJO().detailVisible(true);
     if (CachePOJO.businessPOJO) {
         vm.businessPOJO().reload(CachePOJO.businessPOJO);
     }

@@ -16,7 +16,7 @@ var ds = {
     "refresh_interval": "60",
     "json_rule": "result",
     "rest_mode": "POST",
-    "request_params": "{\"queryJson\":\"{\\\"className\\\":\\\"Genericentity\\\", \\\"groupMap\\\":{\\\"stringalpha\\\":\\\"stringalpha\\\"},\\\"orderMap\\\":{\\\"stringalpha\\\":false},\\\"pageMaxSize\\\":100000,\\\"currentPageNumber\\\":1,\\\"eqMap\\\":{\\\"type\\\":\\\"GENERIC_MATRIX_DATA_SOURCE\\\",\\\"deleted\\\":false}}\"}",
+    "request_params": "{\"queryJson\":\"{\\\"className\\\":\\\"Genericentity\\\", \\\"groupMap\\\":{\\\"stringalpha\\\":\\\"stringalpha\\\"},\\\"orderMap\\\":{\\\"stringalpha\\\":true},\\\"pageMaxSize\\\":100000,\\\"currentPageNumber\\\":1,\\\"eqMap\\\":{\\\"type\\\":\\\"GENERIC_MATRIX_DATA_SOURCE\\\",\\\"deleted\\\":false}}\"}",
     "pageMaxSize": 10,
     "mock": true
 };
