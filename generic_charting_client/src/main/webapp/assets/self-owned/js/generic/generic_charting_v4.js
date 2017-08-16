@@ -1348,9 +1348,38 @@ function successGetChartData() {
         var tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
         ChartPOJO.reset_chart_type(arguments[1].addtion.chart, arguments[1].addtion.ds.chartType);
         ChartPOJO.removeAllSeries(arguments[1].addtion.chart);
-        ChartPOJO.dataSourceRenderChart(arguments[1].addtion.ds.chartType, tableData.result, arguments[1].addtion.ds.header)
+        ChartPOJO.dataSourceRenderChart(arguments[1].addtion.ds.chartType, tableData.result, JSON.parse(arguments[1].addtion.ds.header))
         LoaderUtil.remove_v3('chart_content_body_div')
     }
 }
+
+function header2json(header){
+//      var header = self.headerViewData();
+      var res = [];
+      $.each(header, function (idx, val) {
+        // var self = this;
+        // self.parent = parent;
+        // self.data = ko.observable(data);
+        //
+        // self.data_id = ko.computed(function() {
+        //       return 'id_'+this.data()+ (new Date()).getTime()
+        //   }, this);
+        // self.index = ko.observable(index);
+        // self.name = ko.computed(function(){
+        //   return self.index()+"_"+self.data();
+        // },this);
+        // self.isChecked = ko.observable(isChecked);
+        // self.isDisplay = ko.observable(isDisplay);
+        var h = {
+          data:val.data(),
+          index:idx,
+          isChecked: val.isChecked(),
+          isDisplay: val.isDisplay(),
+          isLegend: val.isLegend()
+        }
+        res.push(h);
+      });
+      return JSON.stringify(res);
+    };
 
 /////////////////////////////////////

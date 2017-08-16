@@ -312,7 +312,7 @@
             var ds_setting = {
                 'sql': genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringbeta.trim(),
                 'dbName': genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringalpha,
-                'header': genericModalViewModel.businessPOJO().table().headerViewData(),
+                'header': header2json(genericModalViewModel.businessPOJO().table().headerViewData()),
                 'isTransferT': genericModalViewModel.businessPOJO().isTransferT(),
                 'chartType': chartType,
                 'refreshInterval':genericModalViewModel.businessPOJO().refreshInterval()

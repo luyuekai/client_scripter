@@ -202,6 +202,7 @@
 
         <!--CONTENT DIV END-->
     </div>
+
     <script>
         // Initialize the View Model
         // Clean the paging binding nodes
@@ -234,6 +235,12 @@
                 self.sql = ko.observable();
             }
             var businessPOJO = new BusinessPOJO();
+            if (ModalUtil.businessPOJO) {
+                businessPOJO.id = ModalUtil.businessPOJO[0];
+
+                businessPOJO.name(ModalUtil.businessPOJO[14]);
+                businessPOJO.sql(ModalUtil.businessPOJO[31]);
+            }
             genericModalViewModel.businessPOJO(businessPOJO);
             genericModalViewModel.businessPOJO().database.selectedDatabase.subscribe(function (newValue) {
                 getTableInDatabase();
@@ -257,54 +264,58 @@
             ValidationPOJO.validate("Name:", genericModalViewModel.businessPOJO().name(), errorMessages, ['KEY_NOT_NULL']);
             ValidationPOJO.validate("SQL:", genericModalViewModel.businessPOJO().sql(), errorMessages, ['KEY_NOT_NULL']);
 
-            if (!genericModalViewModel.businessPOJO().database.selectedDatabase()) {
-                errorMessages.push('未选择数据库');
-            }
-
             return errorMessages;
         }
 
         var runService = function () {
             console.log("run service function invoked!")
-
+            var selectedDatabase;
+            if(genericModalViewModel.businessPOJO().database.selectedDatabase()){
+                selectedDatabase = genericModalViewModel.businessPOJO().database.selectedDatabase()[31];
+            }else{
+                selectedDatabase = ModalUtil.businessPOJO[30];
+            }
             var requestPOJO = {
                 "className": "v2.service.generic.query.entity.Genericentity",
                 "attributes": {
+                    "id": genericModalViewModel.businessPOJO().id,
                     "type": "SOURCE_SQL_CONFIGURATION",
                     "deleted": false,
                     "name": genericModalViewModel.businessPOJO().name(),
                     "stringeta": UserPOJO.user.userName,
-                    "stringalpha": genericModalViewModel.businessPOJO().database.selectedDatabase()[31],
+                    "stringalpha": selectedDatabase,
                     "stringbeta": genericModalViewModel.businessPOJO().sql()
                 }
             };
             var data = {
                 'queryJson': $.toJSON(requestPOJO)
             };
-            $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/add', data, "successAddSql",
-                    "failedAddSql", "serverAddSql");
+            $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/update', data, "successUpdateSql",
+                    "failedUpdateSql", "serverUpdateSql");
 
-            $.subscribe("successAddSql", successAddSql);
-            $.subscribe("failedAddSql", failedAddSql);
-            $.subscribe("serverAddSql", serverAddSql);
+            $.subscribe("successUpdateSql", successUpdateSql);
+            $.subscribe("failedUpdateSql", failedUpdateSql);
+            $.subscribe("serverUpdateSql", serverUpdateSql);
 
-            function successAddSql() {
+            function successUpdateSql() {
                 if (arguments & arguments[1]) {
                     console.log(arguments[1]);
-                    genericModalViewModelrecall.response(true, "创建SQL", "成功", "");
+                    genericModalViewModelrecall.response(true, "修改SQL", "成功", "");
                 }
             }
-            function failedAddSql() {
-                genericModalViewModel.response(false, "创建SQL", "失败", errorMessage)
+            function failedUpdateSql() {
+                genericModalViewModel.response(false, "修改SQL", "失败", errorMessage)
             }
-            function serverAddSql() {
-                genericModalViewModel.response(false, "创建SQL", "失败", "操作失败，请检查操作步骤或与系统管理员联系")
+            function serverUpdateSql() {
+                genericModalViewModel.response(false, "修改SQL", "失败", "操作失败，请检查操作步骤或与系统管理员联系")
             }
 
         }
+        
+        
     </script>
     <script>
-        function getTableInDatabase() {
+         function getTableInDatabase() {
             if (genericModalViewModel.businessPOJO().database.selectedDatabase() != undefined) {
                 $.ajax({
                     dataType: "text",
@@ -328,14 +339,6 @@
         
         function getColumnInTable(){
             if (genericModalViewModel.businessPOJO().database.selectedTable() != undefined) {
-                var ConfigPOJO = {
-                    "dbType": genericModalViewModel.businessPOJO().database.selectedDatabase()[9],
-                    "dbDriver": genericModalViewModel.businessPOJO().database.selectedDatabase()[30],
-                    "dbConName": genericModalViewModel.businessPOJO().database.selectedDatabase()[14],
-                    "dbUsername": genericModalViewModel.businessPOJO().database.selectedDatabase()[32],
-                    "dbPasswd": genericModalViewModel.businessPOJO().database.selectedDatabase()[33],
-                    "dbUrl": genericModalViewModel.businessPOJO().database.selectedDatabase()[31]
-                }
                 $.ajax({
                     dataType: "text",
                     type: "POST",
@@ -354,7 +357,4 @@
                 }).fail(function () {}).always(function () {})
             }
         }
-
-        
     </script>
-

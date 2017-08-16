@@ -523,11 +523,11 @@ DataTransferPOJO = {
     var resultJsonObject = {};
     var legendIndex;
     $.each(headerViewModel, function(index, headerItem) {
-      if (headerItem.isChecked()) {
-        header.push(headerItem.data());
+      if (headerItem.isChecked) {
+        header.push(headerItem.data);
         headerIndex.push(index);
       }
-      if (headerItem.isLegend()) {
+      if (headerItem.isLegend) {
         legendIndex = index;
       }
     });
@@ -559,10 +559,10 @@ DataTransferPOJO = {
     var resultJsonObject = {};
     var legendItem;
     $.each(headerViewModel, function(index, headerItem) {
-      if (headerItem.isChecked()) {
+      if (headerItem.isChecked) {
         headerIndex.push(index);
       }
-      if (headerItem.isLegend()) {
+      if (headerItem.isLegend) {
         legendIndex = index;
       }
     });
@@ -598,11 +598,11 @@ DataTransferPOJO = {
     var legend = [];
     var legendIndex;
     $.each(headerViewModel, function(index, headerItem) {
-      if (headerItem.isChecked()) {
-        header.push(headerItem.data());
+      if (headerItem.isChecked) {
+        header.push(headerItem.data);
         headerIndex.push(index);
       }
-      if (headerItem.isLegend()) {
+      if (headerItem.isLegend) {
         legendIndex = index;
       }
     });
@@ -642,11 +642,11 @@ DataTransferPOJO = {
     var resultJsonObject = {};
     var legendIndex;
     $.each(headerViewModel, function(index, headerItem) {
-      if (headerItem.isChecked()) {
-        header.push(headerItem.data());
+      if (headerItem.isChecked) {
+        header.push(headerItem.data);
         headerIndex.push(index);
       }
-      if(headerItem.isLegend()){
+      if(headerItem.isLegend){
         legendIndex = index;
       }
     });
@@ -674,11 +674,11 @@ DataTransferPOJO = {
     var resultJsonObject = {};
     var legendIndex;
     $.each(headerViewModel, function(index, headerItem) {
-      if (headerItem.isChecked()) {
-        header.push(headerItem.data());
+      if (headerItem.isChecked) {
+        header.push(headerItem.data);
         headerIndex.push(index);
       }
-      if(headerItem.isLegend()){
+      if(headerItem.isLegend){
         legendIndex = index;
       }
     });
@@ -705,8 +705,8 @@ DataTransferPOJO = {
     var resultArray = [];
     var resultJsonObject = {};
     $.each(headerViewModel, function(index, headerItem) {
-      if (headerItem.isChecked()) {
-        header.push(headerItem.data());
+      if (headerItem.isChecked) {
+        header.push(headerItem.data);
         headerIndex.push(index);
         resultArray.push([]);
       }
