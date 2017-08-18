@@ -87,7 +87,8 @@ public class ConnectionResource {
     public String getColumnsInTable(@FormParam("DBName") String DBName, @PathParam("schema") String schema, @PathParam("table") String table) throws IOException {
         ConnectionManager connectionManager = ConnectionManager.getInstance();
         Connection con = connectionManager.getConnection(DBName);
-        String sql = "SELECT * FROM "+schema+"."+table;
+        String sql = "SELECT column_name FROM information_schema.columns  WHERE  table_schema = '" + schema
+                + "'AND table_name = '" + table + "'";
         SqlService sqlService = new SqlService(con);
         return sqlService.executeQuery(sql);
     }
@@ -111,10 +112,10 @@ public class ConnectionResource {
     public Response addConnection(@FormParam("DBConfig") String DBConfig) throws IOException {
         DatabaseConnection dbConnection = (DatabaseConnection) JsonUtil.toPojo(DBConfig, DatabaseConnection.class);
         ConnectionManager connectionManager = ConnectionManager.getInstance();
-         connectionManager.addConnection(dbConnection);
-         ResponsePOJO response = new ResponsePOJO();
-         response.setHasError(Boolean.FALSE);
-         String outjson = JSON.toJSONString(response);
+        connectionManager.addConnection(dbConnection);
+        ResponsePOJO response = new ResponsePOJO();
+        response.setHasError(Boolean.FALSE);
+        String outjson = JSON.toJSONString(response);
         return Response.status(200).entity(outjson).build();
     }
 

@@ -61,6 +61,7 @@ function MATRIX_DYNAMIC_TABLE_ENV_SETUP() {
             });
             self.header = null;
             self.json_rule = null;
+            self.source_data = null;
             self.tableModel = ko.observable(new ThinListViewModel());
 
             self.update_table = function () {
@@ -71,13 +72,13 @@ function MATRIX_DYNAMIC_TABLE_ENV_SETUP() {
                     var pageMaxSize = self.ds().pageMaxSize || 10;
                     self.tableModel().pageMaxSize(pageMaxSize);
                     self.header = self.tableModel().json2header(self.ds().header_json);
-
+                    self.source_data = self.ds().source_data;
                     var rest_mode = self.ds().rest_mode;
                     var request_params = self.ds().request_params || null;
                     if (request_params) {
                         request_params = JSON.parse(request_params);
                     }
-                    console.log("request_params "+self.ds().request_params+" "+self.ds().pageMaxSize+" " +self.ds().rest_mode +" ds "+ url);
+                    console.log("request_params " + self.header + " ds " + url);
                     $.serverRequest(url, request_params, "SUCCESS_LISTENER_DYNAMIC_TABLE", "FAILED_LISTENER_DYNAMIC_TABLE", "SERVER_FAILED_LISTENER_DYNAMIC_TABLE", rest_mode, true, self);
                 }
             }
@@ -103,29 +104,48 @@ function MATRIX_DYNAMIC_TABLE_ENV_SETUP() {
 
 function successListener_dynamic_table() {
     if (arguments && arguments[1]) {
+        console.log("success " + $.toJSON(arguments[1]))
         var server_data = arguments[1].response;
         var matrix_dynamic_table = arguments[1].addtion;
-        if (matrix_dynamic_table.json_rule) {
+        if (matrix_dynamic_table.source_data == 'database') {
             var tmp = 'server_data.' + matrix_dynamic_table.json_rule;
             server_data = eval(tmp);
+            var tableData = DataTransferPOJO.transferHiveData(server_data[0]);
+            var tableModel = new ThinListViewModel();
+            tableModel.buildData(tableData.result);
+            tableModel.columnNames(tableData.header);
+            tableModel.isDisplayPager(true);
+            tableModel.buildView();
+            tableModel.pageMaxSize(matrix_dynamic_table.tableModel().pageMaxSize());
+            if (matrix_dynamic_table.header) {
+                tableModel.headerViewData(matrix_dynamic_table.header);
+            }
+            matrix_dynamic_table.tableModel(tableModel);
+
+        } else {
+            if (matrix_dynamic_table.json_rule) {
+                var tmp = 'server_data.' + matrix_dynamic_table.json_rule;
+                server_data = eval(tmp);
+            }
+
+            var tableData = DataTransferPOJO.serverJsonData2TableData(server_data);
+            var tableModel = new ThinListViewModel();
+            var data = tableData.result;
+            if (matrix_dynamic_table && matrix_dynamic_table.ds() && matrix_dynamic_table.ds().mock) {
+                data = UtilPOJO.shuffleArray(data);
+            }
+
+            tableModel.buildData(data);
+            tableModel.columnNames(tableData.header);
+            tableModel.isDisplayPager(true);
+            tableModel.buildView();
+            tableModel.pageMaxSize(matrix_dynamic_table.tableModel().pageMaxSize());
+            if (matrix_dynamic_table.header) {
+                tableModel.headerViewData(matrix_dynamic_table.header);
+            }
+            matrix_dynamic_table.tableModel(tableModel);
         }
 
-        var tableData = DataTransferPOJO.serverJsonData2TableData(server_data);
-        var tableModel = new ThinListViewModel();
-        var data = tableData.result;
-        if (matrix_dynamic_table && matrix_dynamic_table.ds() && matrix_dynamic_table.ds().mock) {
-            data = UtilPOJO.shuffleArray(data);
-        }
-
-        tableModel.buildData(data);
-        tableModel.columnNames(tableData.header);
-        tableModel.isDisplayPager(true);
-        tableModel.buildView();
-        tableModel.pageMaxSize(matrix_dynamic_table.tableModel().pageMaxSize());
-        if (matrix_dynamic_table.header) {
-            tableModel.headerViewData(matrix_dynamic_table.header);
-        }
-        matrix_dynamic_table.tableModel(tableModel);
     }
 }
 function failedListener_dynamic_table() {
@@ -172,8 +192,8 @@ function create_dynamic_table(ds, destination_div_id, new_div_id) {
 
     Matrix_Dynamic_Table_Cache.push(cache);
 }
-function create_dynamic_chart_line(ds, destination_div_id,series) {
-    var chart = ChartPOJO.generate_default_chart(destination_div_id, 'line',series);
+function create_dynamic_chart_line(ds, destination_div_id, series) {
+    var chart = ChartPOJO.generate_default_chart(destination_div_id, 'line', series);
     initialize_chart_environment(chart, ds);
 
     var interval = ds.refresh_interval || 10;
@@ -223,7 +243,7 @@ function successListener_dynamic_chart() {
     console.log(1)
     if (arguments && arguments[1]) {
         var server_data = arguments[1].response;
-     
+
         var ds = arguments[1].addtion.ds;
         var chart = arguments[1].addtion.chart;
         if (ds.json_rule) {
@@ -238,13 +258,13 @@ function successListener_dynamic_chart() {
         } else if (style == "line") {
             var series_name = chart.getOption().series_name;
             var x = [];
-            var y = [];   
+            var y = [];
             var result = arguments[1].response.result;
             for (var i = 0; i < result.length; i++) {
                 x[i] = result[i][1];
                 y[i] = result[i][0];
             }
-            var test = [1,1,1,1]
+            var test = [1, 1, 1, 1]
             chart = Descartes_ChartPOJO.initialize_chart(chart, style, false, x, series_name, y);
         }
     }

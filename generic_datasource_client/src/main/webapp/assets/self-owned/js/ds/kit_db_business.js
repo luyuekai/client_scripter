@@ -102,7 +102,7 @@ function vm_env_setup() {
 
         self.databaseSelected = databaseChooseViewModel;
         self.databaseSelectedName = ko.observable();
-        self.sql = ko.observable('select id,stringalpha from genericentity;');
+        self.sql = ko.observable('select id,stringalpha from genericentity limit 10;');
 
         self.showTable = ko.observable(false);
         self.tableModel = ko.observable(new ThinListViewModel());
@@ -139,6 +139,7 @@ function vm_env_setup() {
 
         self.reload = function (pojo) {
             self.clear();
+            console.log("reload " + pojo.id);
             self.server_data = pojo;
             self.id(pojo.id);
             self.name(pojo.name);
@@ -147,27 +148,34 @@ function vm_env_setup() {
             self.createtime(pojo.numberalpha);
             self.lastupdatetime(pojo.numberbeta);
             self.stringzeta(pojo.stringzeta);
+            console.log("ds reload " + pojo.stringzeta);
+            console.log("ds reload " + JSON.parse(pojo.stringzeta));
+            console.log("ds reload " + $.toJSON(JSON.parse(pojo.stringzeta)));
             var ds = JSON.parse(pojo.stringzeta);
+
             if (ds) {
+
+                console.log("ds reload " + $.toJSON(ds));
                 self.stringzeta_ds(ds.ds);
-                self.databaseUrl(ds.dbName);
-                self.stringzeta_header_json(ds.header_json);
                 self.stringzeta_refresh_interval(ds.refresh_interval);
-                self.sql(ds.sql);
                 self.stringzeta_rest_mode(ds.rest_mode);
-
+                self.stringzeta_header_json(ds.header_json);
+                self.stringzeta_request_params(ds.request_params);
                 check_data_source();
-
-                reload_dynamic_table(ds);
             }
         }
 
         self.reload_table = function () {
             self.detailVisible(true);
             gen_table();
-//            var header_model_list = self.tableModel().json2header(self.stringzeta_header_json());
-//            console.log("header = " + header_model_list);
-//            self.tableModel().headerViewData(header_model_list);
+            console.log("header = " + self.stringzeta_header_json());
+            console.log("header = " + self.tableModel().header2json());
+            var header_model_list = self.tableModel().json2header(self.stringzeta_header_json());
+
+            self.tableModel().headerViewData(header_model_list);
+            console.log("header = " + $.toJSON(self.ds()));
+            var ds = JSON.parse(self.ds());
+            reload_dynamic_table(ds);
         }
 
         self.clear = function () {
@@ -180,9 +188,9 @@ function vm_env_setup() {
             self.lastupdatetime((new Date()).getTime());
             self.stringzeta(null);
             self.databaseUrl(null);
-            self.stringzeta_header_json(null);
             self.stringzeta_refresh_interval('30');
             self.stringzeta_ds(null);
+            self.stringzeta_header_json(null);
 //            self.stringzeta_pageMaxSize(null);
 //            self.stringzeta_mock(false);
             self.stringzeta_ds_response(null);
@@ -216,21 +224,22 @@ function vm_env_setup() {
             }
             return requestPOJO;
         }
-        
+
         self.stringzeta_request_params = ko.observable();
         self.ds = ko.computed(function () {
-            console.log("stringzeta_request_params"+self.stringzeta_request_params())
+            console.log("ds.stringzeta_request_params " + self.stringzeta_request_params())
             var json = {
                 'request_params': self.stringzeta_request_params(),
                 'ds': self.stringzeta_ds(),
                 'header_json': self.tableModel().header2json(),
                 'refresh_interval': self.stringzeta_refresh_interval(),
                 'rest_mode': self.stringzeta_rest_mode(),
-                
                 'pageMaxSize': self.tableModel().pageMaxSize(),
-                'json_rule': 'result'
+                'json_rule': 'result',
+                'source_data':'database'
 //                'mock': self.stringzeta_mock()
             }
+            console.log("ds.json " + $.toJSON(json))
             return JSON.stringify(json);
         });
     }
@@ -497,7 +506,7 @@ function getTableInDatabase() {
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
             async: false,
-            url: $.getServerRoot() + "/generic_charting_client/api/connection/public/tables",
+            url: $.getServerRoot() + "/generic_datasource_client/api/connection/public/tables",
             data: {
                 'DBName': vm.businessPOJO().databaseSelected.selectedDatabase()[2]
             }
@@ -520,7 +529,7 @@ function getColumnInTable() {
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
             async: false,
-            url: $.getServerRoot() + "/generic_charting_client/api/connection/public/" + vm.businessPOJO().databaseSelected.selectedTable() + "/columns",
+            url: $.getServerRoot() + "/generic_datasource_client/api/connection/public/" + vm.businessPOJO().databaseSelected.selectedTable() + "/columns",
             data: {
                 'DBName': vm.businessPOJO().databaseSelected.selectedDatabase()[2]
             }
@@ -576,6 +585,16 @@ var tableset_runService = function () {
 //        console.log("table data " + table_data)
 //        vm.businessPOJO().stringzeta_ds_response_data = table_data;
 //    }
+    var params = {
+        "dbName": vm.businessPOJO().databaseSelected.selectedDatabase()[2],
+        "sql": vm.businessPOJO().sql()
+    }
+
+    var requestData = {
+        "queryInfo": $.toJSON(params)
+    }
+    var request = JSON.stringify(requestData);
+    vm.businessPOJO().stringzeta_request_params(request);
 
     if (vm.businessPOJO().id()) {
         default_update_logic();
@@ -590,10 +609,10 @@ function successAddSql() {
     console.log("TAG " + arguments[1].addtion['TAG'])
     if (arguments && arguments[1]) {
         if (arguments[1].addtion && (arguments[1].addtion['TAG'] == 'MATRIX_DATA_SOURCE_TESTING' || arguments[1].addtion['TAG'] == 'MATRIX_DATA_SOURCE_RETRIEVE')) {
-            console.log("arguments = " + arguments[1]);
-            console.log("Retrieve Data Source Successed!")
+            console.log("Retrieve Data Source Successed!" + $.toJSON(arguments[1].response))
             var server_data = arguments[1].response;
             var res = JSON.stringify(arguments[1].response);
+            console.log("response " + res)
             vm.businessPOJO().stringzeta_ds_response(res);
             vm.businessPOJO().stringzeta_ds_response_data = server_data;
             if (arguments[1].addtion['TAG'] == 'MATRIX_DATA_SOURCE_RETRIEVE') {
@@ -603,22 +622,13 @@ function successAddSql() {
         }
 
         if (arguments[1].addtion && (arguments[1].addtion['TAG'] == 'MATRIX_ADD' || arguments[1].addtion['TAG'] == 'MATRIX_UPDATE')) {
-            console.log("addSqlSuccess " + arguments[1].response.result[0]);
-            console.log("Retrieve Data Source Successed!")
             var server_data = arguments[1].response.result[0];
-            var params = {
-                "dbName": vm.businessPOJO().databaseSelected.selectedDatabase()[2],
-                "sql": vm.businessPOJO().sql()
-            }
-           
-            var requestData = {
-                "queryInfo": $.toJSON(params)
-            }
-            var request =  JSON.stringify(requestData);
-            vm.businessPOJO().stringzeta_request_params(request);
+            console.log("serverdata " + server_data.stringzeta)
             vm.businessPOJO().reload(server_data);
         }
     }
+
+
 //        vm.businessPOJO().reload_table();
 }
 
@@ -655,7 +665,6 @@ function dynamic_table_env_setup() {
 function reload_dynamic_table(ds) {
     if (ds) {
         setTimeout(function () {
-            console.log("dynamic")
             create_dynamic_table(ds, 'copy_table_parent_div', 'copied_table_div');
             vm.businessPOJO().data_source_table_display(true);
         }, 600)
@@ -663,6 +672,7 @@ function reload_dynamic_table(ds) {
 }
 
 var check_data_source = function (type) {
+    console.log("check data")
     var type_test = 'MATRIX_DATA_SOURCE_TESTING';
     var type_retrieve = 'MATRIX_DATA_SOURCE_RETRIEVE';
     var type_current = type ? type_test : type_retrieve;
@@ -680,24 +690,21 @@ var check_data_source = function (type) {
         // do your business...
         var data = vm.businessPOJO().stringzeta_request_params() || null;
         var mode = vm.businessPOJO().stringzeta_rest_mode();
-        console.log("data "+data)
+        console.log("data " + $.toJSON(data))
         $.serverRequest(vm.businessPOJO().stringzeta_ds(), JSON.parse(data), "DEFAULT_RETRIEVE_API_SUCCESS_LISTENER", "DEFAULT_RETRIEVE_API_FAILED_LISTENER", "DEFAULT_RETRIEVE_API_EXCEPTION_LISTENER", mode, true, {'TAG': type_current});
     }
 
 }
 var gen_table = function () {
     var server_data = vm.businessPOJO().stringzeta_ds_response_data;
-    console.log("data " + server_data)
-    var result = server_data.result[0].split("\n");
-
     if (!server_data) {
         return;
     }
-    if (!jQuery.isArray(result)) {
-        vm.response_vm().warningResponse("The JSON fragment must be array type.", "[Generate Table]", "***Violate Validation Rules***");
-        return;
-    }
-    var tableData = DataTransferPOJO.transferHiveData(server_data.result[0]);
+
+    var tmp = 'server_data.result';
+    server_data = eval(tmp);
+
+    var tableData = DataTransferPOJO.transferHiveData(server_data[0]);
     var tableModel = new ThinListViewModel();
     tableModel.buildData(tableData.result);
     tableModel.columnNames(tableData.header);
@@ -705,5 +712,6 @@ var gen_table = function () {
     tableModel.buildView();
     tableModel.pageMaxSize(vm.businessPOJO().tableModel().pageMaxSize());
     vm.businessPOJO().tableModel(tableModel);
+    vm.businessPOJO().stringzeta_header_json(vm.businessPOJO().tableModel().header2json());
     vm.businessPOJO().showTable(true);
 }
