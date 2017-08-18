@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Matrix Template</title>
+        <title>Matrix</title>
         <link rel="shortcut icon" href="assets/self-owned/ico/favicon.ico">
         <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/vendor.css">
         <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/flat-admin.css">
@@ -19,9 +19,8 @@
         <link rel="stylesheet" type="text/css" href="assets/reference/fuelux/fuelux.min.css">
         <link rel="stylesheet" type="text/css" href="assets/reference/gridstack/gridstack.css" />
         <link rel="stylesheet" type="text/css" href="assets/reference/gridstack/gridstack-extra.css" />
-        
-        
-        
+
+
         <style>
             .compile_mode_focus_in {
                 padding: 8px 20px;
@@ -31,10 +30,44 @@
                 border-radius: 3px;
                 border-left-color: #39c3da;
             }
+            .CodeMirror {
+                border: 1px solid #eee;
+                height: auto;
+            }
+
+            .compile_mode_focus_in {
+                padding: 8px 20px;
+                margin: 6px 0;
+                border: 1px solid #eee;
+                border-left-width: 5px;
+                border-radius: 3px;
+                border-left-color: #39c3da;
+            }
+
+            .compile_mode_focus_out {
+                padding: 8px 20px 8px 25px;
+                margin: 6px 0;
+            }
+
+            .edit_mode_focus_in {
+                padding: 5px 20px;
+                margin: 6px 0;
+                border: 1px solid #eee;
+                border-left-width: 5px;
+                border-radius: 3px;
+                border-left-color: #1abc9c;
+            }
+
+            .edit_mode_focus_out {
+                padding: 8px 20px 8px 25px;
+                margin: 6px 0;
+            }
         </style>
+
     </head>
 
     <body>
+
         <div class="app app-blue-sky" id="template-matrix-main-div">
             <aside class="app-sidebar" id="sidebar"></aside>
             <div class="app-container" id="main_content_div">
@@ -93,7 +126,83 @@
                 </div>
                 <!--VALIDATION DIV FINISHED-->
 
-                <!--BUSINESS DIV BEGIN-->
+                <!--Business Begin-->
+                <div class="row" id="database-connection" data-bind="with:businessPOJO">
+                    <div class="col-sm-12">
+                        <div class="card card-mini" >
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <i class="fa fa-diamond">&nbsp;Database Connection  &nbsp;&nbsp;&nbsp;</i>                    
+                                </div>
+                            </div>
+                            <div class="card-body" >
+                                <div id="connection_div" style="width: 100%;height:100%;">
+                                    <div class="table_div_class">
+                                        <div class="row" data-bind="with:databaseConnections">
+                                            <div class="col-xs-12" style="overflow: auto">
+                                                <table class="table table-striped table-hover" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <!-- ko foreach: columnNames -->
+                                                            <th>
+                                                                <span data-bind="text: $data"></span>
+                                                            </th>
+                                                            <!-- /ko -->
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody data-bind="foreach:thinViewData">
+                                                        <tr data-bind="visible:isDisplay">
+                                                            <td data-bind="text: data[0]"></td> 
+                                                            <td data-bind="text: data[1]"></td> 
+                                                            <td data-bind="text: data[2]"></td> 
+                                                            <td>
+                                                                <button type="button" class="btn btn-xs btn-default" title="编辑" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
+                                                                    <i class="fa fa-edit fa-1x"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-xs btn-default" title=" 选择"  data-bind="click:(function(){chooseDataBase($data.data);})">
+                                                                    <i class="fa fa-plug fa-1x"></i>
+                                                                </button>                                                   
+                                                                <button type="button" class="btn btn-xs btn-default" title="删除" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
+                                                                    <i class="fa fa-trash fa-1x"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="matrix-pager-v3" data-bind="visible:isDisplayPager">
+                                                <div class="form-inline">
+                                                    <nav>
+                                                        <form>
+                                                            <span class="pull-left">
+                                                                <label class="control-label" style="margin-bottom: 12px;">Total Counts:<span data-bind="text:totalCounts()?totalCounts():0"></span></label>
+                                                            </span>
+                                                        </form>
+                                                        <span class="pull-right">
+                                                            <button data-bind="click:function(){toPage(1);}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-double-left"></i> &nbsp;First</button>
+                                                            <button data-bind="click:function(){toPage(currentPageNumber()-1);}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-left"></i> &nbsp;Previous</button>
+                                                            <input data-bind="value:currentPageNumber" type="text" class="form-control" placeholder="Page" style="width:60px;margin-bottom:5px;padding:10px;text-align: center;">
+                                                            <button data-bind="visible:false,click:function(){}" type="submit" class="btn"><span class="fui-search"></span></button>
+                                                            <button data-bind="click:function(){toPage(currentPageNumber()+1);}" type="button" class="btn btn-default " style="padding: 10px 12px;">Next &nbsp;<i class="fa fa-angle-right"></i></button>
+                                                            <button data-bind="click:function(){toPage(totalPage());}" type="button" class="btn btn-default " style="padding: 10px 12px;">Last &nbsp;<i class="fa fa-angle-double-right"></i></button>
+                                                            <div class="btn-group">
+                                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span data-bind="text:pageMaxSize()"></span> <span class="caret"></span></button>
+                                                                <ul class="dropdown-menu" role="menu" data-bind="foreach: pagingSizeArray">
+                                                                    <li><a data-bind="click:function(){$parent.pageMaxSize($data)}" href="#"><span data-bind="text:$data"></span></a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </span>
+                                                    </nav>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="row" id="datasource-detail" data-bind="with:businessPOJO">
                     <div class="col-sm-12" data-bind="visible:detailVisible">
@@ -158,77 +267,6 @@
                                             <p class="form-control-static" data-bind="text:description()?description():''"></p>
                                         </div>
                                     </div>
-                                    <hr style="border-top: 2px solid #39c3da;"><span class="label label-info">Data Source Setting</span>
-                                    <div class="row">
-                                        <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">Data Source URL:
-                                            </label>
-                                        </div>
-                                        <div class="col-xs-10" style="margin-top: 2px;">
-                                            <p class="form-control-static" data-bind="text:stringzeta_ds"></p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">Request Params:
-                                            </label>
-                                        </div>
-                                        <div class="col-xs-10" style="margin-top: 2px;">
-                                            <p class="form-control-static" data-bind="text:stringzeta_request_params"></p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">JSON Rules:
-                                            </label>
-                                        </div>
-                                        <div class="col-xs-10" style="margin-top: 2px;">
-                                            <p class="form-control-static" data-bind="text:stringzeta_json_rule"></p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">Data Source Header:
-                                            </label>
-                                        </div>
-                                        <div class="col-xs-10" style="margin-top: 2px;">
-                                            <!-- ko foreach: tableModel().headerViewData -->
-                                            <span data-bind="visible:$data.isChecked,text:$data.data"></span>
-                                            <!-- /ko -->
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">REST Mode:
-                                            </label>
-                                        </div>
-                                        <div class="col-xs-4" style="margin-top: 2px;">
-                                            <p class="form-control-static" data-bind="text:stringzeta_rest_mode"></p>
-                                        </div>
-                                        <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">Refresh Interval:
-                                            </label>
-                                        </div>
-                                        <div class="col-xs-4" style="margin-top: 2px;">
-                                            <p class="form-control-static" data-bind="text:stringzeta_refresh_interval_tooltip"></p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">Retrive Data Max Size:
-                                            </label>
-                                        </div>
-                                        <div class="col-xs-4" style="margin-top: 2px;">
-                                            <p class="form-control-static" data-bind="text:stringzeta_request_params_max_size"></p>
-                                        </div>
-                                        <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">Table Pager Size:
-                                            </label>
-                                        </div>
-                                        <div class="col-xs-4" style="margin-top: 2px;">
-                                            <p class="form-control-static" data-bind="text:stringzeta_pageMaxSize"></p>
-                                        </div>
-                                    </div>
                                     <hr style="border-top: 2px solid #39c3da;"><span class="label label-info">Data Source Table</span>
                                     <div data-bind="visible:!(data_source_table_display())">
                                         <div class="flat-matrix">
@@ -247,23 +285,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" id="datasource-setting" data-bind="with:businessPOJO">
-                    <div class="col-md-12" data-bind="visible: setVisible">
+
+                <div class="row" id="database-setting" data-bind="with:businessPOJO">
+                    <div class="col-md-12" data-bind="visible: databasesetVisible">
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-title">
                                     <i class="fa fa-diamond">&nbsp;Data Source Configuration&nbsp;&nbsp;&nbsp;</i>
                                 </div>
                             </div>
-                            <div class="card-body flat-matrix" data-bind="visible: apiVisible">
+                            <div class="card-body flat-matrix" >
                                 <div class="step-v2-success">
                                     <ul class="nav nav-tabs nav-justified" role="tablist">
                                         <li role="step" class="active">
                                             <a href="#step1-v3-horizantal" id="step1-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
                                                 <div class="icon fa fa-key"></div>
                                                 <div class="heading">
-                                                    <div class="title">Data Source Setting From API</div>
-                                                    <div class="description">Information Validation</div>
+                                                    <div class="title">Data Source Setting From Database</div>
+                                                    <div class="description">Choose database type</div>
                                                 </div>
                                             </a>
                                         </li>
@@ -272,21 +311,12 @@
                                                 <div class="icon fa fa-filter"></div>
                                                 <div class="heading">
                                                     <div class="title">Detail Setting</div>
-                                                    <div class="description">Table or Chart attributes configuration</div>
+                                                    <div class="description">Name and password configuration</div>
                                                 </div>
                                             </a>
-                                        </li>
+                                        </li>                        
                                         <li role="step" class="">
                                             <a href="#step3-v3-horizantal" role="tab" id="step3-tab-v3-horizantal" data-toggle="tab" aria-controls="profile" aria-expanded="false">
-                                                <div class="icon fa fa-check"></div>
-                                                <div class="heading">
-                                                    <div class="title">Information Summary</div>
-                                                    <div class="description">Confirmation data source setting</div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li role="step" class="">
-                                            <a href="#step4-v3-horizantal" role="tab" id="step4-tab-v3-horizantal" data-toggle="tab" aria-controls="profile" aria-expanded="false">
                                                 <div class="icon fa fa-flag-checkered "></div>
                                                 <div class="heading">
                                                     <div class="title">Persist</div>
@@ -299,478 +329,377 @@
                                     <div class="tab-content">
                                         <div role="tabpanel" class="tab-pane active" id="step1-v3-horizantal">
                                             <div class="row">
-                                                <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:10px;">Data Source:
-                                                    </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
-                                                </div>
-                                                <div class="col-xs-10" style="padding-left: 0px;padding-right: 0px;">
-                                                    <input type="text" data-bind="value: stringzeta_ds" class="form-control" placeholder="Data Source Rest API URL">
-                                                </div>
-                                            </div>
-                                            <div class="row">
                                                 <div class="col-xs-12">
                                                     <div class="flat-matrix">
                                                         <div class="alert alert-info fresh-color">
-                                                            <span> [Mock Data API:] http://localhost:8080/matrix_components_v3/assets/self-owned/data/server_mock_data.json</span>
-                                                            <br>
-                                                            <span> [Generic Query API:] http://localhost:8080/service_generic_query/api/query</span>
-                                                            <br>
+                                                            <div class="title"><i class="fa fa-cogs"></i> 选择外接数据库类型及驱动名称 :</div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:10px;">REST Mode:
+                                                    <label style="margin-top:10px;">Database Type:
                                                     </label>
                                                     <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
-                                                <div class="col-xs-10" style="padding-left: 0px;padding-right: 0px;">
-                                                    <div class="radio radio-inline">
-                                                        <input type="radio" data-bind="checked:stringzeta_rest_mode" name="radio_rest_mode" id="radio1_rest_mode" value="GET" checked>
-                                                        <label for="radio1_rest_mode">
-                                                            GET
-                                                        </label>
-                                                    </div>
-                                                    <div class="radio radio-inline">
-                                                        <input type="radio" data-bind="checked:stringzeta_rest_mode" name="radio_rest_mode" id="radio2_rest_mode" value="POST">
-                                                        <label for="radio2_rest_mode">
-                                                            POST
-                                                        </label>
+                                                <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
+                                                    <div>
+                                                        <div class="radio radio-inline" >
+                                                            <input type="radio" name="dirverchoose" data-bind="checked:databaseType" id="Postgresql" value="Postgresql" checked>
+                                                            <label for="Postgresql">
+                                                                Postgresql
+                                                            </label>
+                                                        </div>
+                                                        <div class="radio radio-inline">
+                                                            <input type="radio" data-bind="checked:databaseType" name="dirverchoose" id="MySql" value="MySql" >
+                                                            <label for="MySql">
+                                                                MySql
+                                                            </label>
+                                                        </div>
+                                                        <div class="radio radio-inline">
+                                                            <input type="radio" data-bind="checked:databaseType" name="dirverchoose" id="Oracle" value="Oracle">
+                                                            <label for="Oracle">
+                                                                Oracle
+                                                            </label>
+                                                        </div>
+                                                        <div class="radio radio-inline">
+                                                            <input type="radio" data-bind="checked:databaseType" name="dirverchoose" id="GreenPlum" value="GreenPlum">
+                                                            <label for="GreenPlum">
+                                                                GreenPlum
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:0px;">Request Params:
+                                                    <label style="margin-top:10px;">Database Driver:
                                                     </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
                                                 <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
-                                                    <textarea data-bind="value: stringzeta_request_params" rows="3" class="form-control"></textarea>
-                                                </div>
-                                                <div class="col-xs-2">
-                                                    <button onclick="check_data_source('MATRIX_DATA_SOURCE_TESTING')" type="button" class="btn btn-info">Check</button>
+                                                    <input data-bind="value:databaseDriver" readonly="true" type="text" class="form-control" placeholder="">
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="flat-matrix">
-                                                        <div class="alert alert-success fresh-color">
-                                                            <strong>
-                                                                <span>Query Parameter Example:</span>
-                                                            </strong>
-                                                            <br>
-                                                            <span>
-                                                                {
-                                                                "queryJson": "{\"className\":\"Genericentity\",\"orderMap\":{\"id\":false},\"pageMaxSize\":10,\"currentPageNumber\":1,\"likeORMap\":{},\"eqMap\":{\"type\":\"MATRIX_TEMPLATE_ADD\",\"deleted\":false},\"inMap\":{}}"
-                                                                }
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:10px;">Database URL:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
+                                                    <input data-bind="value:databaseUrl" type="text" class="form-control" placeholder="">
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="flat-matrix">
-                                                        <div class="alert alert-warning fresh-color">
-                                                            <strong>
-                                                                <span>Statistic Parameter Example:</span>
-                                                            </strong>
-                                                            <br>
-                                                            <span> {"queryJson":"{\"className\":\"Genericentity\",\"groupMap\":{\"type\":\"type\"},\"pageMaxSize\":100,\"currentPageNumber\":1,\"eqMap\":{\"deleted\":false}}"}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row flat-matrix" data-bind="visible:stringzeta_ds_response">
-                                                <div class="col-xs-12">
-                                                    <div class="alert alert-info alert-dismissible fresh-color" role="alert" style="margin-top: 8px;">
-                                                        <strong><i class="fa fa-spinner"></i>&nbsp;Data Response:</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12">
-                                                    <div class="compile_mode_focus_in" tabindex="100">
-                                                        <span class="cell_div_view markdown-body" data-bind="html:stringzeta_ds_response"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
                                         </div>
                                         <div role="tabpanel" class="tab-pane" id="step2-v3-horizantal">
                                             <div class="row">
                                                 <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:10px;">JSON Rules:
+                                                    <label style="margin-top:10px;">Database Name:
                                                     </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
                                                 <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
-                                                    <input type="text" data-bind="value: stringzeta_json_rule" class="form-control" placeholder="JSON parse rules: response.result">
-                                                </div>
-                                                <div class="col-xs-2">
-                                                    <button onclick="gen_table()" type="button" class="btn btn-info">Check</button>
+                                                    <input data-bind="value:connectionName" type="text" class="form-control" placeholder="">
                                                 </div>
                                             </div>
-
-                                            <div class="row flat-matrix" data-bind="visible:showTable">
-                                                <div class="col-xs-12">
-                                                    <div class="alert alert-info alert-dismissible fresh-color" role="alert" style="margin-top: 8px;">
-                                                        <strong><i class="fa fa-spinner"></i>&nbsp;Dynamic Table Setting:</strong>
-                                                        <button type="button" data-bind="click:$data.tableModel().uncheck_all()" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px;"><i class="fa fa-square-o"> &nbsp;Uncheck ALL</i></button> &nbsp;
-                                                        <button type="button" data-bind="click:$data.tableModel().check_all()" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px;"><i class="fa fa-check-square-o"> &nbsp;Check ALL</i></button>
-                                                    </div>
+                                            <div class="row">
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:10px;">Database User Name:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
-                                                <div class="col-xs-12" data-bind="visible:stringzeta_ds_response">
-                                                    <div class="compile_mode_focus_in" tabindex="100">
-
-                                                        <div>
-                                                            <div class="row" data-bind="with:tableModel">
-                                                                <div class="col-xs-12">
-                                                                    <div style="overflow: auto">
-                                                                        <table class="table table-striped table-hover" cellspacing="0">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <!-- ko foreach: headerViewData -->
-                                                                                    <th>
-                                                                                        <div class="checkbox">
-                                                                                            <input type="checkbox" data-bind="checked: $data.isChecked,attr:{'id':$data.data_id}">
-                                                                                            <label data-bind="text: $data.data,attr:{'for':$data.data_id}">
-                                                                                            </label>
-                                                                                        </div>
-                                                                                    </th>
-                                                                                    <!-- /ko -->
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody data-bind="foreach:thinViewData">
-                                                                                <tr data-bind="visible:isDisplay,foreach: data">
-                                                                                    <td>
-                                                                                        <span data-bind="visible:$parent.isDisplay_cell($index()),text: $data"></span>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                    <div class="matrix-pager-v3" data-bind="visible:isDisplayPager">
-                                                                        <div class="form-inline">
-                                                                            <nav>
-                                                                                <form>
-                                                                                    <span class="pull-left">
-                                                                                        <label class="control-label" style="margin-bottom: 12px;">Total Counts:<span data-bind="text:totalCounts()?totalCounts():0"></span></label>
-                                                                                    </span>
-                                                                                </form>
-                                                                                <span class="pull-right">
-                                                                                    <button data-bind="click:function(){toPage(1);}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-double-left"></i> &nbsp;First</button>
-                                                                                    <button data-bind="click:function(){toPage(currentPageNumber()-1);}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-left"></i> &nbsp;Previous</button>
-                                                                                    <input data-bind="value:currentPageNumber" type="text" class="form-control" placeholder="Page" style="width:60px;margin-bottom:5px;padding:10px;text-align: center;">
-                                                                                    <button data-bind="visible:false,click:function(){}" type="submit" class="btn"><span class="fui-search"></span></button>
-                                                                                    <button data-bind="click:function(){toPage(currentPageNumber()+1);}" type="button" class="btn btn-default " style="padding: 10px 12px;">Next &nbsp;<i class="fa fa-angle-right"></i></button>
-                                                                                    <button data-bind="click:function(){toPage(totalPage());}" type="button" class="btn btn-default " style="padding: 10px 12px;">Last &nbsp;<i class="fa fa-angle-double-right"></i></button>
-                                                                                    <div class="btn-group">
-                                                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span data-bind="text:pageMaxSize()"></span> <span class="caret"></span></button>
-                                                                                        <ul class="dropdown-menu" role="menu" data-bind="foreach: pagingSizeArray">
-                                                                                            <li><a data-bind="click:function(){$parent.pageMaxSize($data)}" href="#"><span data-bind="text:$data"></span></a></li>
-                                                                                        </ul>
-                                                                                    </div>
-                                                                                </span>
-                                                                            </nav>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
+                                                    <input data-bind="value:username" type="text" class="form-control" placeholder="">
                                                 </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:10px;">Database Password:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
+                                                    <input id="DBpassword" data-bind="value:passwd" type="password" class="form-control" placeholder="">
+                                                </div>
+                                                <div class="col-xs-2">
+                                                    <button class="btn btn-primary btn-sm" type="button" onclick="showPasswd()"> 
+                                                        <span class="fa fa-eye" aria-hidden="true" title="chart">&nbsp;查看</span>
+                                                        <iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe>
+                                                    </button>
+                                                </div>  
                                             </div>
                                         </div>
                                         <div role="tabpanel" class="tab-pane" id="step3-v3-horizantal">
                                             <div class="row">
-                                                <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:8px;">Data Source:
-                                                    </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
-                                                </div>
-                                                <div class="col-xs-10" style="margin-top: 2px;">
-                                                    <p class="form-control-static" data-bind="text:stringzeta_ds"></p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:8px;">Data Header:
-                                                    </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
-                                                </div>
-                                                <div class="col-xs-10" style="margin-top: 8px;">
-                                                    <!-- ko foreach: tableModel().headerViewData -->
-                                                    <span data-bind="visible:$data.isChecked,text:$data.data"></span>
-                                                    <!-- /ko -->
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:10px;">Refresh Interval:
-                                                    </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
-                                                </div>
-                                                <div class="col-xs-10" style="margin-top: 0px;">
-                                                    <div class="radio radio-inline">
-                                                        <input type="radio" data-bind="checked:stringzeta_refresh_interval" name="radio_stringzeta_refresh_interval" id="radio1" value="10" checked>
-                                                        <label for="radio1">
-                                                            10 Seconds
-                                                        </label>
-                                                    </div>
-                                                    <div class="radio radio-inline">
-                                                        <input type="radio" data-bind="checked:stringzeta_refresh_interval" name="radio_stringzeta_refresh_interval" id="radio2" value="30">
-                                                        <label for="radio2">
-                                                            30 Seconds
-                                                        </label>
-                                                    </div>
-                                                    <div class="radio radio-inline">
-                                                        <input type="radio" data-bind="checked:stringzeta_refresh_interval" name="radio_stringzeta_refresh_interval" id="radio3" value="60">
-                                                        <label for="radio3">
-                                                            1 Minutes
-                                                        </label>
-                                                    </div>
-                                                    <div class="radio radio-inline">
-                                                        <input type="radio" data-bind="checked:stringzeta_refresh_interval" name="radio_stringzeta_refresh_interval" id="radio4" value="300">
-                                                        <label for="radio4">
-                                                            5 Minutes
-                                                        </label>
-                                                    </div>
-                                                    <div class="radio radio-inline">
-                                                        <input type="radio" data-bind="checked:stringzeta_refresh_interval" name="radio_stringzeta_refresh_interval" id="radio5" value="3000000">
-                                                        <label for="radio5">
-                                                            Never
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:0px;">Data Source JSON:
-                                                    </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
-                                                </div>
-                                                <div class="col-xs-10" style="margin-top: 0px;">
-                                                    <div class="compile_mode_focus_in" tabindex="100">
-                                                        <span class="cell_div_view markdown-body" data-bind="html:ds"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row">
                                                 <div class="col-xs-12">
                                                     <div class="flat-matrix">
                                                         <div class="alert alert-info fresh-color">
-                                                            <strong>
-                                                                <span>请注意:</span>
-                                                            </strong>
-                                                            <br>
-                                                            <span> 1, 请设置好数据源并检查是否返回正确的数据结果集</span>
-                                                            <br>
-                                                            <span> 2, 选择数据结果集中想要显示的具体列，<code><strong>这些列名</strong></code>将会显示到新建的Data Source组件中</span>
+                                                            <div class="title"><i class="fa fa-cogs"></i> 验证信息 :</div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div role="tabpanel" class="tab-pane" id="step4-v3-horizantal">
                                             <div class="row">
                                                 <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:8px;">Creator:
+                                                    <label style="margin-top:8px;">Database Type:
                                                     </label>
                                                     <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
-                                                <div class="col-xs-4" style="margin-top: 2px;">
-                                                    <p class="form-control-static" data-bind="text:creator"></p>
+                                                <div class="col-xs-4" style="margin-top: 8px;">
+                                                    <span data-bind="text:databaseType"></span>
                                                 </div>
                                                 <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:8px;">Date:
+                                                    <label style="margin-top:8px;">Database Driver:
                                                     </label>
                                                     <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
-                                                <div class="col-xs-4" style="margin-top: 2px;">
-                                                    <p class="form-control-static" data-bind="text:formatTime"></p>
+                                                <div class="col-xs-4" style="margin-top: 8px;">
+                                                    <span data-bind="text:databaseDriver"></span>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:8px;">Name:
+                                                    <label style="margin-top:8px;">Database User:
                                                     </label>
                                                     <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
-                                                <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
-                                                    <input type="text" data-bind="value: name" class="form-control" placeholder="">
+                                                <div class="col-xs-4" style="margin-top: 8px;">
+                                                    <span data-bind="text:username"></span>
+                                                </div>
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:8px;">Database Name:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-4" style="margin-top: 8px;">
+                                                    <span data-bind="text:connectionName"></span>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:8px;">Description:
+                                                    <label style="margin-top:8px;">Database URL:
                                                     </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
-                                                <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
-                                                    <textarea name="name" rows="3" class="form-control" data-bind="value:description"></textarea>
-                                                </div>
+                                                <div class="col-xs-10" style="margin-top: 8px;">
+                                                    <span data-bind="text:databaseUrl"></span>
+                                                </div>                                                 
                                             </div>
+
                                             <hr>
                                             <div class="row">
                                                 <div class="pull-right">
-                                                    <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
-                                                    <button id='execute-button' type="button" class="btn btn-sm btn-success" onclick="default_execute()">Execute</button>
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="testConnection()">Check</button>
+                                                    <button id="excuteNew" type="button" class="btn btn-sm btn-success" onclick="default_execute()">Execute</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body flat-matrix" data-bind="visible: databaseVisible">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="datasource-setting" data-bind="with:businessPOJO">
+                    <div class="col-md-12" data-bind="visible: datasourcesetVisible">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <i class="fa fa-diamond">&nbsp;Data Source Configuration&nbsp;&nbsp;&nbsp;</i>
+                                </div>
+                            </div>
+                            <div class="card-body flat-matrix" >
                                 <div class="step-v2-success">
                                     <ul class="nav nav-tabs nav-justified" role="tablist">
                                         <li role="step" class="active">
-                                            <a href="#step1-v3-horizantal-db" id="step1-tab-v3-horizantal-db" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                                            <a href="#step1-v3-horizantal-table" id="step1-data-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
                                                 <div class="icon fa fa-key"></div>
                                                 <div class="heading">
-                                                    <div class="title">Data Source Setting From DataBase</div>
-                                                    <div class="description">Choose Database Style</div>
+                                                    <div class="title">Table Choice</div>
+                                                    <div class="description">Choose table</div>
                                                 </div>
                                             </a>
                                         </li>
                                         <li role="step" class="">
-                                            <a href="#step2-v3-horizantal-db" role="tab" id="step2-tab-v3-horizantal-db" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                            <a href="#step2-v3-horizantal-table" role="tab" id="step2-data-v3-horizantal" data-toggle="tab" aria-controls="profile" aria-expanded="false">
                                                 <div class="icon fa fa-filter"></div>
                                                 <div class="heading">
-                                                    <div class="title">Detail Setting</div>
-                                                    <div class="description">Name and Password configuration</div>
+                                                    <div class="title">Write SQL</div>
+                                                    <div class="description">Write sql</div>
                                                 </div>
                                             </a>
-                                        </li>
+                                        </li>    
                                         <li role="step" class="">
-                                            <a href="#step3-v3-horizantal-db" role="tab" id="step3-tab-v3-horizantal-db" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                            <a href="#step3-v3-horizantal-table" role="tab" id="step4-data-v3-horizantal" data-toggle="tab" aria-controls="profile" aria-expanded="false">
                                                 <div class="icon fa fa-flag-checkered "></div>
                                                 <div class="heading">
-                                                    <div class="title">Information Summary</div>
-                                                    <div class="description">Connect database</div>
+                                                    <div class="title">Persist</div>
+                                                    <div class="description">Persist this for re-use purpose</div>
                                                 </div>
                                             </a>
                                         </li>
                                     </ul>
                                     <!-- Tab panes -->
                                     <div class="tab-content">
-                                        <div role="tabpanel" class="tab-pane active" id="step1-v3-horizantal-db">
+                                        <div role="tabpanel" class="tab-pane active" id="step1-v3-horizantal-table">
                                             <div class="row">
-                                                <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
-                                                    <div class="title"><i class="fa fa-cogs"></i> 选择外接数据库类型及驱动名称 :</div>
-                                                </div>
-                                                <div class="clear-both"></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-10 col-xs-offset-1">
-                                                    <label class="col-sm-2 control-label">
-                                                        <span style="font-weight: bold;font-size: 1.1em;">DbType</span>
-                                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
-                                                    </label>
-
-                                                    <div class="col-sm-8">
-                                                        <select  data-bind="options:dataBases,optionsText:'dbType',value:selectedDb" class="select2">
-                                                        </select>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-xs-10 col-xs-offset-1">
-                                                    <label class="col-sm-2 control-label">
-                                                        <span style="font-weight: bold;">DbDriver</span>
-                                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
-                                                    </label>
-
-                                                    <div class="col-sm-8">
-                                                        <input data-bind="value:databaseDriver" readonly="true" type="text" class="form-control" placeholder="">
-                                                    </div>  
-                                                </div>                                              
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-10 col-xs-offset-1">
-                                                    <label class="col-sm-2 control-label">
-                                                        <span style="font-weight: bold;font-size: 1.1em;">DbURL</span>
-                                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
-                                                    </label>
-
-                                                    <div class="col-sm-8">
-                                                        <input data-bind="value:databaseUrl" type="text" class="form-control" placeholder="">
+                                                <div class="col-xs-12">
+                                                    <div class="flat-matrix">
+                                                        <div class="alert alert-info fresh-color">
+                                                            <div class="title"><i class="fa fa-cogs"></i> 选择数据表 :</div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div role="tabpanel" class="tab-pane" id="step2-v3-horizantal-db">
-                                            <div class="row">
-                                                <div class="alert alert-info alert-dismissible fresh-color" style="margin-top: 16px;">
-                                                    <div class="title"><i class="fa fa-cogs"></i> 数据库的用户名及密码 :
-                                                    </div>
-                                                </div>
-                                                <div class="clear-both"></div>
-                                            </div>
-                                            <div class="card-body no-padding">
-                                                <br>
-                                                <form class="form-horizontal">
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">
-                                                            <span style="font-weight: bold;font-size: 1.1em;">自定义名称</span>
-                                                            <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
-                                                        </label>
-                                                        <div class="col-sm-8">
-                                                            <input data-bind="value:connectionName" type="text" class="form-control" placeholder="">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">
-                                                            <span style="font-weight: bold;font-size: 1.1em;">用户名</span>
-                                                            <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
-                                                        </label>
-                                                        <div class="col-sm-8">
-                                                            <input data-bind="value:username" type="text" class="form-control" placeholder="">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">
-                                                            <span style="font-weight: bold;font-size: 1.1em;">密码</span>
-                                                            <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
-                                                        </label>
-                                                        <div class="col-sm-8">
-                                                            <input id="DBpassword" data-bind="value:passwd" type="password" class="form-control" placeholder="">
-                                                        </div>
-                                                        <div class="col-sm-0">
-                                                            <button class="btn btn-primary btn-sm" type="button" onclick="test()"> 
-                                                                <span class="fa fa-eye" aria-hidden="true" title="chart">&nbsp;查看</span>
-                                                                <iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div role="tabpanel" class="tab-pane" id="step3-v3-horizantal-db">
                                             <div class="row">
                                                 <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:8px;">Data Source:
+                                                    <label style="margin-top:8px;">Data Source Name:
                                                     </label>
                                                     <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
-                                                <div class="col-xs-10" style="margin-top: 2px;">
-                                                    <p class="form-control-static" data-bind="text:stringzeta_ds"></p>
+                                                <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
+                                                    <input type="text" data-bind="value: name" class="form-control" placeholder="JSON parse rules: response.result">
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:8px;">Data Header:
+                                                    <label style="margin-top:10px;">Database Name:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-8" style="margin-top: 8px;">
+                                                    <span data-bind="text:databaseSelected.selectedDatabase()[0]"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:8px;">Database URL:
                                                     </label>
                                                     <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
                                                 <div class="col-xs-10" style="margin-top: 8px;">
-                                                    <!-- ko foreach: tableModel().headerViewData -->
-                                                    <span data-bind="visible:$data.isChecked,text:$data.data"></span>
-                                                    <!-- /ko -->
+                                                    <span data-bind="text:databaseSelected.selectedDatabase()[2]"></span>
                                                 </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:10px;">Table:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-10" style="margin-top: 8px;">
+                                                    <div data-bind=" with:databaseSelected">
+                                                        <div data-bind="foreach:availableTable">
+                                                            <div class="radio radio-inline">
+                                                                <input type="radio" name="tablechoose" id="" data-bind="value:$data,attr:{id:$data},checked:selected($data)">
+                                                                <label  for="data" data-bind="text:$data,attr:{for:$data}">
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div data-bind="visible:databaseSelected.columnVisible">
+                                                    <div class="col-xs-2 text-right">
+                                                        <label style="margin-top:10px;">Column:
+                                                        </label>
+                                                        <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                    </div>
+                                                    <div class="col-xs-10" data-bind="foreach:databaseSelected.column">
+                                                        <button type="button" class="btn btn-default" style="width:120px"data-bind="text:$data.length>7 ? $data.substring(0,10)+'...': $data,attr: {title:$data}"></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="step2-v3-horizantal-table">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="flat-matrix">
+                                                        <div class="alert alert-info fresh-color">
+                                                            <div class="title"><i class="fa fa-cogs"></i> SQL语句 :</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+                                                    <div data-bind="visible:databaseSelected.columnVisible">
+                                                        <div class="col-xs-1 text-right">
+                                                            <label style="margin-top:10px;">Column:
+                                                            </label>
+                                                            <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                        </div>
+                                                        <div class="col-xs-11" data-bind="foreach:databaseSelected.column">
+                                                            <button type="button" class="btn btn-default" style="width:120px"data-bind="text:$data.length>7 ? $data.substring(0,10)+'...': $data,attr: {title:$data}"></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-1 text-right">
+                                                    <label style="margin-top:10px;">SQL:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-11 ">
+                                                    <textarea class="form-control" data-bind="value:sql"  rows="10" placeholder="请在这里键入sql"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="step3-v3-horizantal-table">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="flat-matrix">
+                                                        <div class="alert alert-info fresh-color">
+                                                            <div class="title"><i class="fa fa-cogs"></i> 验证信息 :</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:8px;">Database Name:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-1" style="margin-top: 8px;">
+                                                    <span data-bind="text:databaseSelected.selectedDatabase()[0]"></span>
+                                                </div>
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:8px;">Database URL:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-2" style="margin-top: 8px;">
+                                                    <span data-bind="text:databaseSelected.selectedDatabase()[2],attr: {title:databaseSelected.selectedDatabase()[2]}"></span>
+                                                </div>
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:8px;">Selected Table:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-2" style="margin-top: 8px;">
+                                                    <span data-bind="text:databaseSelected.selectedTable"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-2 text-right">
+                                                    <label style="margin-top:8px;">SQL:
+                                                    </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                                                </div>
+                                                <div class="col-xs-10" style="margin-top: 8px;">
+                                                    <span data-bind="text:sql"></span>
+                                                </div>                                                 
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-2 text-right">
@@ -811,32 +740,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:0px;">Data Source JSON:
-                                                    </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
-                                                </div>
-                                                <div class="col-xs-10" style="margin-top: 0px;">
-                                                    <div class="compile_mode_focus_in" tabindex="100">
-                                                        <span class="cell_div_view markdown-body" data-bind="html:ds"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <hr>
                                             <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="flat-matrix">
-                                                        <div class="alert alert-info fresh-color">
-                                                            <strong>
-                                                                <span>请注意:</span>
-                                                            </strong>
-                                                            <br>
-                                                            <span> 1, 请设置好数据源并检查是否返回正确的数据结果集</span>
-                                                            <br>
-                                                            <span> 2, 选择数据结果集中想要显示的具体列，<code><strong>这些列名</strong></code>将会显示到新建的Data Source组件中</span>
-                                                        </div>
-                                                    </div>
+                                                <div class="pull-right">
+                                                    <button id="excuteNew" type="button" class="btn btn-sm btn-success" onclick="tableset_execute()">Execute</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -856,6 +763,12 @@
                 <!--TEMPLATE DIV BEGIN-->
             </div>
 
+
+
+
+
+
+
             <!-- Javascript for Matrix Referenced -->
             <script src="assets/reference/flat-admin/assets/js/vendor_min.js"></script>
             <script src="assets/reference/flat-admin/assets/js/app.js"></script>
@@ -872,6 +785,7 @@
             <script src="assets/reference/gridstack/gridstack.all.js"></script>
             <script src="assets/reference/echarts/echarts-min.js"></script>
             <script src="assets/reference/echarts/dataTools.js"></script>
+
             <!-- Javascript for Matrix Self Owned -->
             <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
             <script src="assets/self-owned/js/generic/generic_cache.js"></script>
@@ -886,29 +800,35 @@
             <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
             <script src="assets/self-owned/js/generic/generic_dynamic.js"></script>
             <script src="assets/self-owned/js/generic/generic_vm.js"></script>
-            <script src="assets/self-owned/js/ds/kit_business.js"></script>
+            <script src="assets/self-owned/js/ds/kit_db_business.js"></script>
+
+
+
 
             <script>
-                                            $(document).ready(function () {
-                                                $('#sidebar').load($.getRootPath() + '/components/left_side.html');
-                                                $('#navbar').load($.getRootPath() + '/components/header.html');
-                                                $('#template-matrix-dynamic-table-div').load($.getRootPath() + '/components/template-matrix-dynamic-table.html');
-                                                $('#template-matrix-modal-div').load($.getRootPath() + '/components/template-matrix-modal.html');
-                                                $('#template-matrix-footer-div').load($.getRootPath() + '/components/footer.html');
+                                                        $(document).ready(function () {
+                                                            $('#sidebar').load($.getRootPath() + '/components/left_side.html');
+                                                            $('#navbar').load($.getRootPath() + '/components/header.html');
+                                                            $('#template-matrix-dynamic-table-div').load($.getRootPath() + '/components/template-matrix-dynamic-table.html');
+                                                            $('#template-matrix-modal-div').load($.getRootPath() + '/components/template-matrix-modal.html');
+                                                            $('#template-matrix-footer-div').load($.getRootPath() + '/components/footer.html');
 
-                                                setTimeout(function () {
-                                                    // resetCssClass('li_kits', 'active');
-                                                    $('#navbar_title_li').text('Matrix Data Source Kit');
-                                                    // $('#navbar_search_li').css('display', '');
+                                                            setTimeout(function () {
+                                                                // resetCssClass('li_kits', 'active');
+                                                                $('#navbar_title_li').text('Matrix Data Source Kit');
+                                                                // $('#navbar_search_li').css('display', '');
 
-                                                    // env_setup();
-                                                }, 200)
-                                            });
+                                                                // env_setup();
+                                                            }, 200)
+                                                        });
             </script>
 
             <script>
+
                 $.subscribe("get_user_detail_chain_finished", env_setup);
             </script>
+
+
 
     </body>
 

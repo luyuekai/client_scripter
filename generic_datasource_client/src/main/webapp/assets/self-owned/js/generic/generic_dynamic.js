@@ -77,6 +77,7 @@ function MATRIX_DYNAMIC_TABLE_ENV_SETUP() {
                     if (request_params) {
                         request_params = JSON.parse(request_params);
                     }
+                    console.log("request_params "+self.ds().request_params+" "+self.ds().pageMaxSize+" " +self.ds().rest_mode +" ds "+ url);
                     $.serverRequest(url, request_params, "SUCCESS_LISTENER_DYNAMIC_TABLE", "FAILED_LISTENER_DYNAMIC_TABLE", "SERVER_FAILED_LISTENER_DYNAMIC_TABLE", rest_mode, true, self);
                 }
             }

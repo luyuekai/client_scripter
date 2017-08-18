@@ -7,11 +7,6 @@ ko.cleanNode($('#template-matrix-main-div')[0]);
 ko.applyBindings(vm, document.getElementById('template-matrix-main-div'));
 // Refrence the entire page view model to current view model as cache
 current_vm = vm;
-var databaseCf = function (dbType, dbDriver) {
-    this.dbType = dbType;
-    this.dbDriver = dbDriver;
-//        this.dbUrl = dbUrl;
-}
 
 
 function env_setup() {
@@ -64,7 +59,7 @@ function vm_env_setup() {
         self.setVisible = ko.observable(false);
 
 
-     
+
         self.reload = function (pojo) {
             self.clear();
             self.server_data = pojo;
@@ -288,7 +283,7 @@ function MATRIX_API_SUCCESS_EVENT_HANDLER() {
         }
 
         if (arguments[1].addtion && (arguments[1].addtion['TAG'] == 'MATRIX_ADD' || arguments[1].addtion['TAG'] == 'MATRIX_UPDATE')) {
-            console.log(arguments[1]);
+            console.log(arguments[1].response.result[0]);
             console.log("Retrieve Data Source Successed!")
             var server_data = arguments[1].response.result[0];
             vm.businessPOJO().reload(server_data);
@@ -331,7 +326,7 @@ var check_data_source = function (type) {
 
 var gen_table = function () {
     var server_data = vm.businessPOJO().stringzeta_ds_response_data;
-
+    console.log("data "+server_data)
     var json_rule = vm.businessPOJO().stringzeta_json_rule();
     if (!server_data) {
         return;
