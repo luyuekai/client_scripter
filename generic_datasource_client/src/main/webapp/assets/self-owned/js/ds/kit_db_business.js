@@ -74,6 +74,7 @@ function vm_env_setup() {
         self.detailVisible = ko.observable(false);
         self.databasesetVisible = ko.observable(false);
         self.datasourcesetVisible = ko.observable(false);
+        self.connectionVisible = ko.observable(false);
 
         //database
         self.dataBases = ko.observableArray([
@@ -94,7 +95,7 @@ function vm_env_setup() {
             }
             return result;
         });
-        self.databaseUrl = ko.observable();
+        self.databaseUrl = ko.observable('jdbc:postgresql://localhost:5432/scripter');
         self.connectionName = ko.observable('');
         self.username = ko.observable('postgres');
         self.passwd = ko.observable('');
@@ -109,7 +110,7 @@ function vm_env_setup() {
 
         self.server_data = null;
         self.deleted = ko.observable(false);
-        self.data_source_table_display = ko.observable(true);
+        self.data_source_table_display = ko.observable(false);
 
         self.stringzeta_ds_response = ko.observable();
         self.stringzeta_ds_response_data = null;
@@ -139,7 +140,6 @@ function vm_env_setup() {
 
         self.reload = function (pojo) {
             self.clear();
-            console.log("reload " + pojo.id);
             self.server_data = pojo;
             self.id(pojo.id);
             self.name(pojo.name);
@@ -148,14 +148,10 @@ function vm_env_setup() {
             self.createtime(pojo.numberalpha);
             self.lastupdatetime(pojo.numberbeta);
             self.stringzeta(pojo.stringzeta);
-            console.log("ds reload " + pojo.stringzeta);
-            console.log("ds reload " + JSON.parse(pojo.stringzeta));
-            console.log("ds reload " + $.toJSON(JSON.parse(pojo.stringzeta)));
             var ds = JSON.parse(pojo.stringzeta);
 
             if (ds) {
 
-                console.log("ds reload " + $.toJSON(ds));
                 self.stringzeta_ds(ds.ds);
                 self.stringzeta_refresh_interval(ds.refresh_interval);
                 self.stringzeta_rest_mode(ds.rest_mode);
@@ -168,12 +164,9 @@ function vm_env_setup() {
         self.reload_table = function () {
             self.detailVisible(true);
             gen_table();
-            console.log("header = " + self.stringzeta_header_json());
-            console.log("header = " + self.tableModel().header2json());
             var header_model_list = self.tableModel().json2header(self.stringzeta_header_json());
 
             self.tableModel().headerViewData(header_model_list);
-            console.log("header = " + $.toJSON(self.ds()));
             var ds = JSON.parse(self.ds());
             reload_dynamic_table(ds);
         }
@@ -227,7 +220,6 @@ function vm_env_setup() {
 
         self.stringzeta_request_params = ko.observable();
         self.ds = ko.computed(function () {
-            console.log("ds.stringzeta_request_params " + self.stringzeta_request_params())
             var json = {
                 'request_params': self.stringzeta_request_params(),
                 'ds': self.stringzeta_ds(),
@@ -236,10 +228,9 @@ function vm_env_setup() {
                 'rest_mode': self.stringzeta_rest_mode(),
                 'pageMaxSize': self.tableModel().pageMaxSize(),
                 'json_rule': 'result',
-                'source_data':'database'
+                'source_data': 'database'
 //                'mock': self.stringzeta_mock()
             }
-            console.log("ds.json " + $.toJSON(json))
             return JSON.stringify(json);
         });
     }
@@ -259,11 +250,9 @@ function vm_env_setup() {
 //    } else if (status == 'update') {
 //        vm.businessPOJO().databasesetVisible(true);
 //    }
-//    vm.businessPOJO().databasesetVisible(true);
-    vm.businessPOJO().datasourcesetVisible(true);
-    vm.businessPOJO().detailVisible(true);
+    vm.businessPOJO().databasesetVisible(true);
+    vm.businessPOJO().connectionVisible(true);
     vm.businessPOJO().databaseSelected.selectedDatabase.subscribe(function (newValue) {
-        console.log("database")
         getTableInDatabase();
     });
     vm.businessPOJO().databaseSelected.selectedTable.subscribe(function (newValue) {
@@ -361,7 +350,7 @@ function successAddListener_database() {
             "DBConfig": $.toJSON(requestPOJO)
         };
         retrieveDatabase();
-        $.serverRequest($.getServerRoot() + "/generic_charting_client/api/connection/addconnection", data, "successADDConnection", "failedADDConnection",
+        $.serverRequest($.getServerRoot() + "/generic_datasource_client/api/connection/addconnection", data, "successADDConnection", "failedADDConnection",
                 "failedServerADDConnection");
 
     }
@@ -419,7 +408,6 @@ function successGetDatabase() {
             table_data[i] = [name, username, url, id];
         }
         var header = ["Name", "User Name", "URL", ""];
-        console.log("table data " + table_data);
         vm.businessPOJO().databaseConnections().buildData(table_data);
         vm.businessPOJO().databaseConnections().columnNames(header);
         vm.businessPOJO().databaseConnections().isDisplayPager(true);
@@ -450,9 +438,47 @@ var testConnection = function () {
     if (!vm.validation(businessValidation)) {
         return;
     } else {
-        runTest();
+        runTestPre();
     }
 };
+var runTestPre = function () {
+    var requestPOJO = {
+        "className": "v2.service.generic.query.entity.Genericentity",
+        "aliasMap": {},
+        "orderMap": {"id": false},
+        "pageMaxSize": 1000000,
+        "currentPageNumber": 1,
+        "eqMap": {
+            "stringbeta": vm.businessPOJO().databaseUrl().trim(),
+            "deleted": false,
+            "type": "SOURCE_DATABASE_CONFIGURATION"
+        },
+        "inMap": {},
+    };
+    var data = {
+        'queryJson': $.toJSON(requestPOJO)
+    };
+    $.serverRequest($.getServerRoot() + "/service_generic_query/api/query", data, "successURL",
+            "failURL", "serverURL");
+}
+$.subscribe("successURL", exsistUrl);
+$.subscribe("failURL", runTest);
+$.subscribe("serverURL", serverFailURL);
+
+function exsistUrl() {
+
+    var result = arguments[1].result
+    if (result.length > 0) {
+        vm.response_vm().errorResponse(" 测试数据库连接已经存在", "测试数据库连接", "[失败]");
+    } else {
+        runTest();
+    }
+
+}
+function serverFailURL() {
+    vm.response_vm().errorResponse(" 测试数据库连接失败,服务器错误", "测试数据库连接", "[失败]");
+}
+
 var runTest = function () {
     var requestPOJO = {
         "dbType": vm.businessPOJO().databaseType().trim(),
@@ -494,7 +520,8 @@ function failedServerConnection() {
 // 数据库按钮函数
 function chooseDataBase(data) {
     vm.businessPOJO().databaseSelected.selectedDatabase(data);
-    console.log("vm ==" + vm.businessPOJO().databaseSelected.selectedDatabase());
+    vm.businessPOJO().databasesetVisible(false);
+    vm.businessPOJO().datasourcesetVisible(true);
 }
 
 //数据表选择函数
@@ -548,11 +575,62 @@ function getColumnInTable() {
 function selected(data) {
     vm.businessPOJO().databaseSelected.selectedTable(data);
 }
+function removeConnection(data) {
+    var requestPOJO = {
+        "className": "v2.service.generic.query.entity.Genericentity",
+        "attributes": {
+            "id": data[3],
+            "deleted": true
+        }
+    };
+    var request = {
+        'queryJson': $.toJSON(requestPOJO)
+    };
+    $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/update', request, "CONNECTION_REMOVE_SUCCESS", "CONNECTION_REMOVE_FAIL", "CONNECTION_REMOVE_EXCEPTION", "POST", true, {'TAG': 'CONNECTION_UPDATE'});
+}
+$.subscribe("CONNECTION_REMOVE_SUCCESS", successRemoveConnection);
+$.subscribe("CONNECTION_REMOVE_FAIL", failedRemoveConnection);
+$.subscribe("CONNECTION_REMOVE_EXCEPTION", failedServerRemoveConnection);
+
+function successRemoveConnection() {
+
+    var requestPOJO = {
+        "dbUrl": vm.businessPOJO().databaseUrl().trim()
+    };
+
+    var data = {
+        "DBConfig": $.toJSON(requestPOJO)
+    };
+    $.serverRequest($.getServerRoot() + "/generic_datasource_client/api/connection/deleteconnection", data, "successRemoveConnection", "failedRemoveConnection",
+            "failedServerRemoveConnection");
+}
+
+$.subscribe("successRemoveConnection", retrieveDatabase);
+
+
+
+function failedRemoveConnection() {
+    if (arguments && arguments[1]) {
+        var errorMessage = arguments[1].data;
+        vm.response_vm().errorResponse("请检查信息是否有误", "数据库连接删除", "[失败]");
+    }
+}
+
+function failedServerRemoveConnection() {
+    vm.response_vm().errorResponse(" 数据库连接删除失败,服务器错误", "数据库连接删除", "[失败]");
+}
+
+
+
+
 
 function tableset_execute() {
     if (!vm.validation(businessValidation_table)) {
         return;
     } else {
+        vm.businessPOJO().detailVisible(true);
+        vm.businessPOJO().datasourcesetVisible(false);
+        vm.businessPOJO().connectionVisible(false);
         runServiceSQL();
     }
 }
@@ -572,11 +650,9 @@ function runServiceSQL() {
 }
 function failServiceSql() {
     vm.response_vm().errorResponse("请检查SQL语句是否正确", "创建SQL", "[失败]");
-    console.log("sqlFail " + arguments[1]);
 }
 function serverServiceSql() {
     vm.response_vm().errorResponse("操作失败，请检查操作步骤或与系统管理员联系", "创建SQL", "[失败]");
-    console.log("serverSql " + arguments[1]);
 }
 
 var tableset_runService = function () {
@@ -606,13 +682,10 @@ var tableset_runService = function () {
 $.subscribe("MATRIX_API_SUCCESS_EVENT", successAddSql);
 
 function successAddSql() {
-    console.log("TAG " + arguments[1].addtion['TAG'])
     if (arguments && arguments[1]) {
         if (arguments[1].addtion && (arguments[1].addtion['TAG'] == 'MATRIX_DATA_SOURCE_TESTING' || arguments[1].addtion['TAG'] == 'MATRIX_DATA_SOURCE_RETRIEVE')) {
-            console.log("Retrieve Data Source Successed!" + $.toJSON(arguments[1].response))
             var server_data = arguments[1].response;
             var res = JSON.stringify(arguments[1].response);
-            console.log("response " + res)
             vm.businessPOJO().stringzeta_ds_response(res);
             vm.businessPOJO().stringzeta_ds_response_data = server_data;
             if (arguments[1].addtion['TAG'] == 'MATRIX_DATA_SOURCE_RETRIEVE') {
@@ -623,7 +696,6 @@ function successAddSql() {
 
         if (arguments[1].addtion && (arguments[1].addtion['TAG'] == 'MATRIX_ADD' || arguments[1].addtion['TAG'] == 'MATRIX_UPDATE')) {
             var server_data = arguments[1].response.result[0];
-            console.log("serverdata " + server_data.stringzeta)
             vm.businessPOJO().reload(server_data);
         }
     }
@@ -631,27 +703,6 @@ function successAddSql() {
 
 //        vm.businessPOJO().reload_table();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -672,7 +723,6 @@ function reload_dynamic_table(ds) {
 }
 
 var check_data_source = function (type) {
-    console.log("check data")
     var type_test = 'MATRIX_DATA_SOURCE_TESTING';
     var type_retrieve = 'MATRIX_DATA_SOURCE_RETRIEVE';
     var type_current = type ? type_test : type_retrieve;
@@ -690,7 +740,6 @@ var check_data_source = function (type) {
         // do your business...
         var data = vm.businessPOJO().stringzeta_request_params() || null;
         var mode = vm.businessPOJO().stringzeta_rest_mode();
-        console.log("data " + $.toJSON(data))
         $.serverRequest(vm.businessPOJO().stringzeta_ds(), JSON.parse(data), "DEFAULT_RETRIEVE_API_SUCCESS_LISTENER", "DEFAULT_RETRIEVE_API_FAILED_LISTENER", "DEFAULT_RETRIEVE_API_EXCEPTION_LISTENER", mode, true, {'TAG': type_current});
     }
 

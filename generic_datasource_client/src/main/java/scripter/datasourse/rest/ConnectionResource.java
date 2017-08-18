@@ -9,8 +9,6 @@ import com.alibaba.fastjson.JSON;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -109,14 +107,14 @@ public class ConnectionResource {
     @POST
     @Path("addconnection")
     @Produces({"application/json"})
-    public Response addConnection(@FormParam("DBConfig") String DBConfig) throws IOException {
+    public String addConnection(@FormParam("DBConfig") String DBConfig) throws IOException {
         DatabaseConnection dbConnection = (DatabaseConnection) JsonUtil.toPojo(DBConfig, DatabaseConnection.class);
         ConnectionManager connectionManager = ConnectionManager.getInstance();
         connectionManager.addConnection(dbConnection);
         ResponsePOJO response = new ResponsePOJO();
         response.setHasError(Boolean.FALSE);
-        String outjson = JSON.toJSONString(response);
-        return Response.status(200).entity(outjson).build();
+        response.setStatusCode(GenericStatus.Service_Successed);
+        return JsonUtil.toJson(response);
     }
 
     @POST
@@ -129,8 +127,14 @@ public class ConnectionResource {
     @POST
     @Path("deleteconnection")
     @Produces({"application/json"})
-    public String deleteConnection(@FormParam("DBName") String DBName) {
-        return null;
+    public String deleteConnection(@FormParam("DBConfig") String DBConfig) throws IOException {
+         DatabaseConnection dbConnection = (DatabaseConnection) JsonUtil.toPojo(DBConfig, DatabaseConnection.class);
+        ConnectionManager connectionManager = ConnectionManager.getInstance();
+        connectionManager.deleteConnection(dbConnection.getDbUrl());
+        ResponsePOJO response = new ResponsePOJO();
+        response.setHasError(Boolean.FALSE);
+        response.setStatusCode(GenericStatus.Service_Successed);
+        return JsonUtil.toJson(response);
     }
 
 }

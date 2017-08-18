@@ -17,6 +17,7 @@ public class DatabaseConnection {
     private String dbUsername;
     private String dbPasswd;
     private String dbUrl;
+    private int dbID;
 
     public String getDbUrl() {
         return dbUrl;
@@ -66,6 +67,11 @@ public class DatabaseConnection {
         this.dbPasswd = dbPasswd;
     }
     
-    
+    public int getdbID(){
+        return dbID;
+    }
+    public void setdbID(int i){
+        this.dbID = i;
+    }
 
 }

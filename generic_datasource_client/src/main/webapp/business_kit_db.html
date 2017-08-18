@@ -128,7 +128,7 @@
 
                 <!--Business Begin-->
                 <div class="row" id="database-connection" data-bind="with:businessPOJO">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12" data-bind="visible:connectionVisible">
                         <div class="card card-mini" >
                             <div class="card-header">
                                 <div class="card-title">
@@ -157,13 +157,10 @@
                                                             <td data-bind="text: data[1]"></td> 
                                                             <td data-bind="text: data[2]"></td> 
                                                             <td>
-                                                                <button type="button" class="btn btn-xs btn-default" title="编辑" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
-                                                                    <i class="fa fa-edit fa-1x"></i>
-                                                                </button>
                                                                 <button type="button" class="btn btn-xs btn-default" title=" 选择"  data-bind="click:(function(){chooseDataBase($data.data);})">
                                                                     <i class="fa fa-plug fa-1x"></i>
                                                                 </button>                                                   
-                                                                <button type="button" class="btn btn-xs btn-default" title="删除" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
+                                                                <button type="button" class="btn btn-xs btn-default" title="删除" data-bind="click:(function(){removeConnection($data.data);})">
                                                                     <i class="fa fa-trash fa-1x"></i>
                                                                 </button>
                                                             </td>
@@ -491,7 +488,7 @@
                                             <hr>
                                             <div class="row">
                                                 <div class="pull-right">
-                                                    <button type="button" class="btn btn-sm btn-info" onclick="testConnection()">Check</button>
+                                                        <button type="button" class="btn btn-sm btn-info" onclick="testConnection()">Check</button>
                                                     <button id="excuteNew" type="button" class="btn btn-sm btn-success" onclick="default_execute()">Execute</button>
                                                 </div>
                                             </div>

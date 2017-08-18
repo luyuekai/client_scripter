@@ -94,7 +94,7 @@ public class ConnectionManager {
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        System.out.println(conns);
     }
 
     /**

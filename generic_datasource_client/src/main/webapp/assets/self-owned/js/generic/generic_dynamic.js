@@ -78,7 +78,6 @@ function MATRIX_DYNAMIC_TABLE_ENV_SETUP() {
                     if (request_params) {
                         request_params = JSON.parse(request_params);
                     }
-                    console.log("request_params " + self.header + " ds " + url);
                     $.serverRequest(url, request_params, "SUCCESS_LISTENER_DYNAMIC_TABLE", "FAILED_LISTENER_DYNAMIC_TABLE", "SERVER_FAILED_LISTENER_DYNAMIC_TABLE", rest_mode, true, self);
                 }
             }
@@ -104,7 +103,6 @@ function MATRIX_DYNAMIC_TABLE_ENV_SETUP() {
 
 function successListener_dynamic_table() {
     if (arguments && arguments[1]) {
-        console.log("success " + $.toJSON(arguments[1]))
         var server_data = arguments[1].response;
         var matrix_dynamic_table = arguments[1].addtion;
         if (matrix_dynamic_table.source_data == 'database') {
