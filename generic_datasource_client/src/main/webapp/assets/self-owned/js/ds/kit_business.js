@@ -181,7 +181,7 @@ function vm_env_setup() {
                     "numberalpha": self.createtime(),
                     "numberbeta": self.lastupdatetime(),
                     // "lastupdatetime": self.lastupdatetime(),
-                    "stringalpha": self.formatTime(),
+                    "stringeta": self.formatTime(),
                     "stringzeta": self.ds(),
                     "type": self.type(),
                     "enabled": true,

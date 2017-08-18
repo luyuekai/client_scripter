@@ -16,7 +16,7 @@ var ds = {
     "refresh_interval": "60",
     "json_rule": "result",
     "rest_mode": "POST",
-    "request_params": "{\"queryJson\":\"{\\\"className\\\":\\\"Genericentity\\\", \\\"groupMap\\\":{\\\"stringalpha\\\":\\\"stringalpha\\\"},\\\"orderMap\\\":{\\\"stringalpha\\\":true},\\\"pageMaxSize\\\":100000,\\\"currentPageNumber\\\":1,\\\"eqMap\\\":{\\\"type\\\":\\\"GENERIC_MATRIX_DATA_SOURCE\\\",\\\"deleted\\\":false}}\"}",
+    "request_params": "{\"queryJson\":\"{\\\"className\\\":\\\"Genericentity\\\", \\\"groupMap\\\":{\\\"stringeta\\\":\\\"stringeta\\\"},\\\"orderMap\\\":{\\\"stringeta\\\":true},\\\"pageMaxSize\\\":100000,\\\"currentPageNumber\\\":1,\\\"eqMap\\\":{\\\"deleted\\\":false},\\\"inMap\\\":{\\\"type\\\":[\\\"GENERIC_MATRIX_DATA_SOURCE\\\",\\\"SOURCE_SQL_CONFIGURATION\\\"]}}\"}",
     "pageMaxSize": 10,
     "mock": true
 };
@@ -94,10 +94,12 @@ function search_env_setup() {
             "pageMaxSize": ScrollPOJO.pageMaxSize,
             "currentPageNumber": ScrollPOJO.page || 1,
             "eqMap": {
-                "type": "GENERIC_MATRIX_DATA_SOURCE",
+
                 "deleted": false
             },
-            "inMap": {},
+            "inMap": {
+                "type": ["SOURCE_SQL_CONFIGURATION", "GENERIC_MATRIX_DATA_SOURCE"]
+            }
         };
         return result;
     }
@@ -117,12 +119,13 @@ function query_chain_env_setup() {
             "pageMaxSize": 10,
             "currentPageNumber": 1,
             "eqMap": {
-                "stringalpha": date,
+                "stringeta": date,
                 "creator": UserPOJO.user.userName,
-                "type": "GENERIC_MATRIX_DATA_SOURCE",
-                 "deleted": false
+                "deleted": false
             },
-            "inMap": {},
+            "inMap": {
+                "type": ["SOURCE_SQL_CONFIGURATION", "GENERIC_MATRIX_DATA_SOURCE"]
+            },
             "orderMap": {
                 "id": false
             }
@@ -135,10 +138,11 @@ function query_chain_env_setup() {
             "currentPageNumber": 1,
             "eqMap": {
                 "creator": UserPOJO.user.userName,
-                "type": "GENERIC_MATRIX_DATA_SOURCE",
-                 "deleted": false
+                "deleted": false
             },
-            "inMap": {},
+            "inMap": {
+                "type": ["SOURCE_SQL_CONFIGURATION", "GENERIC_MATRIX_DATA_SOURCE"]
+            },
             "orderMap": {
                 "id": false
             }
@@ -152,9 +156,9 @@ function query_chain_env_setup() {
             "eqMap": {
                 "type": "GENERIC_MATRIX_DATA_SOURCE",
             },
-           "groupMap":{
-               "creator": "creator",
-           },
+            "groupMap": {
+                "creator": "creator",
+            },
             "inMap": {},
             "orderMap": {
                 "id": false
@@ -190,7 +194,7 @@ function dynamic_table_env_setup() {
     setTimeout(function () {
         create_dynamic_table(ds, 'copy_table_parent_div', 'copied_table_div');
         create_dynamic_chart_pie(ds, 'actionnum');
-        create_dynamic_chart_line(ds, 'linenum','number');
+        create_dynamic_chart_line(ds, 'linenum', 'number');
     }, 100)
 }
 

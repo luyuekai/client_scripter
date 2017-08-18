@@ -35,10 +35,12 @@ function search_env_setup(){
       "pageMaxSize": ScrollPOJO.pageMaxSize,
       "currentPageNumber": ScrollPOJO.page || 1,
       "eqMap": {
-        "type": "GENERIC_MATRIX_DATA_SOURCE",
         "deleted": false
       },
-      "inMap": {},
+      
+      "inMap": {
+          "type":["SOURCE_SQL_CONFIGURATION","GENERIC_MATRIX_DATA_SOURCE"]
+      }
     };
     return result;
   }

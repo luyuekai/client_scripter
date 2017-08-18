@@ -208,7 +208,8 @@ function vm_env_setup() {
                     "deleted": false,
                     "stringalpha": self.databaseSelected.selectedDatabase()[2],
                     "stringbeta": self.sql(),
-                    "stringzeta": self.ds()
+                    "stringzeta": self.ds(),
+                    "stringeta": self.formatTime(),
                 }
             };
 //            console.log("deleted = " + requestPOJO.attributes.deleted)
@@ -316,6 +317,7 @@ var runService = function () {
             "stringbeta": vm.businessPOJO().databaseUrl().trim(),
             "stringdelta": vm.businessPOJO().username().trim(),
             "stringepsilon": vm.businessPOJO().passwd().trim(),
+            "stringeta": vm.businessPOJO().formatTime(),
             "deleted": false,
             "type": "SOURCE_DATABASE_CONFIGURATION"
         }
