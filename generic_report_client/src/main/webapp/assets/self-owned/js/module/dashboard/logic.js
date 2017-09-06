@@ -119,12 +119,12 @@ var statistic_result_listener = function() {
 
 function redirect2editor(currentData) {
   if (currentData && currentData[6]) {
-    window.open($.getRootPath() + '/module_report_editor.html?token=' + currentData[6]);
+    window.open($.getRootPath() + '/module_report_editor.html?token=' + currentData[8]);
   }
 }
 
 function redirect2viewer(currentData) {
   if (currentData && currentData[6]) {
-    window.open($.getRootPath() + '/module_report_viewer.html?token=' + currentData[6]);
+    window.open($.getRootPath() + '/module_report_viewer.html?token=' + currentData[8]);
   }
 }
