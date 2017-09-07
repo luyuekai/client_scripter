@@ -1,0 +1,152 @@
+<div>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">X Axis</label>
+      <div class="col-sm-8">
+        <div class="input-group" title="From Source">
+          <span class="input-group-addon" id="basic-addon2">
+            <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+          <input id="x_axis_value_input" type="text" class="form-control" placeholder="X Axis" aria-describedby="basic-addon2">
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <button onclick="reset_grid_heatmap_x()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Y Axis</label>
+      <div class="col-sm-8">
+        <div class="input-group" title="From Source">
+          <span class="input-group-addon" id="basic-addon2">
+            <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+          <input id="y_axis_value_input" type="text" class="form-control" placeholder="Y Axis" aria-describedby="basic-addon2">
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <button onclick="reset_grid_heatmap_y()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Scale</label>
+      <div class="col-sm-3">
+        <input id="min_value_input" type="text" class="form-control" placeholder="min" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-3">
+        <input id="max_value_input" type="text" class="form-control" placeholder="max" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-1 col-sm-offset-2">
+        <button onclick="reset_grid_heatmap_min_max()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Series</label>
+      <div class="col-sm-8">
+        <textarea id="series_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+      </div>
+
+      <div class="col-sm-1">
+        <button onclick="reset_grid_heatmap_series()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Add</label>
+      <div class="col-sm-3">
+        <input id="add_x_value_input" type="text" class="form-control" placeholder="X" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-3">
+        <input id="add_y_value_input" type="text" class="form-control" placeholder="Y" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-2">
+        <input id="add_value_value_input" type="text" class="form-control" placeholder="Value" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-1">
+        <button onclick="add_grid_heatmap_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Remove</label>
+      <div class="col-sm-3">
+        <input id="remove_x_value_input" type="text" class="form-control" placeholder="X" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-3">
+        <input id="remove_y_value_input" type="text" class="form-control" placeholder="Y" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-1 col-sm-offset-2">
+        <button onclick="remove_grid_heatmap_data()" title="Manual add series" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  function reset_grid_heatmap_x() {
+    var data_prototype = ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.data_prototype);
+    data_prototype.x_data = $('#x_axis_value_input').val().split(',');
+    reset_grid_heatmap(data_prototype);
+  }
+
+  function reset_grid_heatmap_y() {
+    var data_prototype = ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.data_prototype);
+    data_prototype.y_data = $('#y_axis_value_input').val().split(',');
+    reset_grid_heatmap(data_prototype);
+  }
+
+  function reset_grid_heatmap_min_max() {
+    var data_prototype = ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.data_prototype);
+    data_prototype.min_scale = Number($('#min_value_input').val());
+    data_prototype.max_scale = Number($('#max_value_input').val());
+    reset_grid_heatmap(data_prototype);
+  }
+
+  function reset_grid_heatmap_series(){
+    var data_prototype = ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.data_prototype);
+    var tmp = $('#series_value_input').val();
+    tmp = $.parseJSON(tmp);
+    data_prototype.series_data = tmp || [];
+    reset_grid_heatmap(data_prototype);
+  }
+
+  function reset_grid_heatmap(data_prototype) {
+    if (chartViewModel && chartViewModel.chart) {
+      chartViewModel.chart = HeatMap_Grid_ChartPOJO.initialize_chart(chartViewModel.chart, data_prototype);
+    }
+  }
+
+  function add_grid_heatmap_data() {
+    var x = $('#add_x_value_input').val();
+    var y = $('#add_y_value_input').val();
+    var num = Number($('#add_value_value_input').val())
+    if (chartViewModel && chartViewModel.chart) {
+      var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+      var search_index = -1;
+      $.each(option.series[0].data, function(index, value) {
+        if (value[0] == x && value[1] == y) {
+          search_index = index;
+          value[2] = num;
+        }
+      });
+      if (search_index == -1) {
+        var tmp = [x, y, num];
+        chartViewModel.chart = ChartPOJO.add_series_data_item(chartViewModel.chart,tmp);
+      }
+    }
+  }
+  function remove_grid_heatmap_data() {
+    var x = $('#remove_x_value_input').val();
+    var y = $('#remove_y_value_input').val();
+    if (chartViewModel && chartViewModel.chart) {
+      var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+      var search_index = -1;
+      $.each(option.series[0].data, function(index, value) {
+        if (value[0] == x && value[1] == y) {
+          search_index = index;
+        }
+      });
+      if (search_index != -1) {
+        chartViewModel.chart = ChartPOJO.remove_series_data_item(chartViewModel.chart, search_index);
+      }
+    }
+  }
+</script>

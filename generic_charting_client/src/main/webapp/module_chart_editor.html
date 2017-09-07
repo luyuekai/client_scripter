@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Matrix</title>
+  <link rel="shortcut icon" href="assets/self-owned/ico/favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/vendor.css">
+  <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/flat-admin.css">
+  <!-- Theme -->
+  <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/blue-sky.css">
+  <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/blue.css">
+  <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/red.css">
+  <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/theme/yellow.css">
+
+  <link rel="stylesheet" href="assets/reference/codemirror/codemirror.css">
+
+  <link rel="stylesheet" href="assets/reference/github-markdown-css/github-markdown.css">
+
+  <link rel="stylesheet" type="text/css" href="assets/self-owned/css/matrix_v3.css">
+
+  <link rel="stylesheet" type="text/css" href="assets/reference/bootstrap-fileinput/css/fileinput_ly.css" media="all">
+
+</head>
+
+<body>
+
+  <div class="app app-blue-sky" id="contentDIV">
+
+    <aside class="app-sidebar" id="sidebar" style="position:fixed;top:0px;"></aside>
+    <div class="app-container" id="main_content_div">
+
+      <nav class="navbar navbar-default navbar-fixed-top" id="navbar" style="margin-left: 180px;"></nav>
+
+      <div id="hidden_div" class="row" style="position:fixed;top:88px;left: 180px;right: 0px;z-index:100006;background-color: #E7EDEE;height:30px">
+        <div class="col-xs-12">
+        </div>
+      </div>
+
+      <div class="row" id="menubar_div" style="position:fixed;top:118px;left: 180px;right: 0px;z-index:100006">
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0px;">
+          <div class="card card-mini">
+            <div class="card-header">
+              <div class="card-title">
+
+                <span class="pull-right" style="margin-right:0px">
+                  <button id="dispaly_config_button" onclick="show_configuration_panel();" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-wrench"></i></button>
+                  <button id="undispaly_config_button" onclick="hide_configuration_panel();" title="Hide" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-eye-slash"></i></button>
+                </span>
+              </div>
+            </div>
+            <div class="card-body no-padding table-responsive">
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="chart_content_seperate_div" class="seperate_div_class" style="margin-top:188px"></div>
+
+      <div class="row" onresize="alert('You have changed the size of the window')">
+        <div class="col-md-8" id="chart_content_div" style="margin-top:30px" onresize="console.log(1)">
+          <div class="card card-mini">
+            <div class="card-body" id="chart_content_body_div" style="min-height:360px">
+              <div id="main_chart" style="width: 100%;height:100%;min-height:660px"></div>
+            </div>
+          </div>
+          <br>
+          <div class="card card-mini">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa fa-diamond">&nbsp;Chart Tutorials&nbsp;&nbsp;&nbsp;</i>
+                <span class="pull-right" style="margin-right:0px">
+                  <button id="undispaly_chart_tutorials_button" onclick="hide_div('chart_tutorials_content_div');show_div('dispaly_chart_tutorials_button');hide_div('undispaly_chart_tutorials_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
+                  <button id="dispaly_chart_tutorials_button" onclick="show_div('chart_tutorials_content_div');hide_div('dispaly_chart_tutorials_button');show_div('undispaly_chart_tutorials_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
+                </span>
+              </div>
+            </div>
+            <div class="card-body" id="chart_tutorials_content_div">
+
+
+            </div>
+          </div>
+        </div>
+
+        <div id="configuration_div" class="col-md-4" style="margin-top:30px">
+          <div class="card card-mini">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa fa-diamond">&nbsp;Basic Configuration&nbsp;&nbsp;&nbsp;</i>
+                <span class="pull-right" style="margin-right:0px">
+                  <button id="undispaly_basic_config_button" onclick="hide_div('basic_config_content_div');show_div('dispaly_basic_config_button');hide_div('undispaly_basic_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
+                  <button id="dispaly_basic_config_button" onclick="show_div('basic_config_content_div');hide_div('dispaly_basic_config_button');show_div('undispaly_basic_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
+                </span>
+              </div>
+            </div>
+            <div class="card-body" id="basic_config_content_div">
+              <div>
+                <form class="form-horizontal">
+                  <!-- <div class="form-group">
+                    <label class="col-sm-3 control-label">Initialize Chart</label>
+                    <div class="col-sm-2 col-sm-offset-7">
+                      <button data-bind="click:initialize_chart" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+                    </div>
+                  </div> -->
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Type</label>
+                    <div class="col-sm-8">
+                      <select id="chart_type_select" class="select2" onchange="rerender_children_dom(this.options[this.options.selectedIndex].value)" style="z-index:100016;">
+                      <!-- <select id="chart_type_select" class="select2" style="z-index:100016;"> -->
+                        <option value="bar">Chart-Descartes Bar</option>
+                        <option value="line">Chart-Descartes Line</option>
+                        <option value="area">Chart-Descartes Area</option>
+                        <option value="scatter">Chart-Descartes Scatter</option>
+                        <option value="parallel">Chart-Parallel </option>
+                        <option value="force">Chart-Force </option>
+                        <option value="graph">Chart-Graph </option>
+                        <option value="circular">Chart-Circular </option>
+                        <option value="pie">Chart-Pie </option>
+                        <option value="radar">Chart-Radar</option>
+                        <option value="river">Chart-River</option>
+                        <option value="treemap">Chart-TreeMap</option>
+                        <option value="boxplot">Chart-BoxPlot</option>
+                        <option value="sankey">Chart-Sankey</option>
+                        <option value="grid_heatmap">Chart-Descartes-Heatmap</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-2">
+                      <button data-bind="click:switch_chart_type_listener" title="Manual minus stacks" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+                    </div>
+                  </div>
+                  <!-- <div class="form-group">
+                    <label class="col-sm-3 control-label">Series Setting</label>
+                    <div class="col-sm-2 col-sm-offset-7">
+                      <button data-bind="click:initialize_chart" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+                    </div>
+                  </div> -->
+                </form>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="card card-mini">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa fa-diamond">&nbsp;Data Source&nbsp;&nbsp;&nbsp;</i>
+                <span class="pull-right" style="margin-right:0px">
+                  <button id="undispaly_data_config_button" onclick="hide_div('data_config_content_div');show_div('dispaly_data_config_button');hide_div('undispaly_data_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
+                  <button id="dispaly_data_config_button" onclick="show_div('data_config_content_div');hide_div('dispaly_data_config_button');show_div('undispaly_data_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
+                </span>
+              </div>
+            </div>
+            <div class="card-body" id="data_config_content_div">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+            </div>
+          </div>
+          <br>
+          <div class="card card-mini">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa fa-diamond">&nbsp;Detail Configuration&nbsp;&nbsp;&nbsp;</i>
+                <span class="pull-right" style="margin-right:0px">
+                  <button id="undispaly_detail_config_button" onclick="hide_div('detail_config_content_div');show_div('dispaly_detail_config_button');hide_div('undispaly_detail_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
+                  <button id="dispaly_detail_config_button" onclick="show_div('detail_config_content_div');hide_div('dispaly_detail_config_button');show_div('undispaly_detail_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
+                </span>
+              </div>
+            </div>
+            <div class="card-body" id="detail_config_content_div">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="seperate_div_class" style="margin-top:58px"></div>
+
+      <footer id="footer_div" class="app-footer" style="position:absolute;bottom:0;margin:0 auto;">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="footer-copyright">
+              Copyright © 2016 MATRIX Company Co,Ltd.
+            </div>
+          </div>
+        </div>
+      </footer>
+
+
+      <div class="modal fade" id="popupModalPro" tabindex="-1" role="dialog" aria-labelledby="matrixModalLabel">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <i class="fa fa-power-off"></i> &nbsp; <span class="modal-title" id="popupModalLabelPro"></span>
+            </div>
+            <div class="modal-body">
+              <div id="modalContentDIVPro"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script type="text/javascript" src="assets/reference/flat-admin/assets/js/vendor_min.js"></script>
+    <script type="text/javascript" src="assets/reference/flat-admin/assets/js/app.js"></script>
+
+    <script src="assets/reference/codemirror/codemirror.js"></script>
+    <script src="assets/reference/codemirror/mode/javascript/javascript.js"></script>
+    <script src="assets/reference/codemirror/mode/markdown/markdown.js"></script>
+
+    <script src="assets/reference/jquery/jquery.json.js"></script>
+    <script src="assets/reference/jquery/jquery.blockUI.js"></script>
+    <script src="assets/reference/knockout.js/knockout-3.3.0.js"></script>
+    <script src="assets/reference/jquery-tiny-pubsub/tiny-pubsub.js"></script>
+    <script src="assets/reference/markdown/showdown.js"></script>
+    <script src="assets/reference/echarts/echarts-min.js"></script>
+    <script src="assets/reference/echarts/dataTools.js"></script>
+    <script src="assets/reference/echarts/geo/world.js"></script>
+
+    <script src="assets/reference/bootstrap-fileinput/js/fileinput_ly.js"></script>
+    <script src="assets/reference/bootstrap-fileinput/js/locales/zh.js"></script>
+
+    <!-- Javascript for Matrix Self Owned -->
+    <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
+    <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
+    <script src="assets/self-owned/js/generic/generic_cache.js"></script>
+    <script src="assets/self-owned/js/generic/generic_charting_v4.js"></script>
+    <script src="assets/self-owned/js/generic/generic_csv.js"></script>
+    <script src="assets/self-owned/js/generic/generic_cud.js"></script>
+    <script src="assets/self-owned/js/generic/generic_modal.js"></script>
+    <script src="assets/self-owned/js/generic/generic_query.js"></script>
+    <script src="assets/self-owned/js/generic/generic_table.js"></script>
+    <script src="assets/self-owned/js/generic/generic_util.js"></script>
+    <script src="assets/self-owned/js/generic/generic_validation.js"></script>
+    <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
+    <script src="assets/self-owned/js/generic/generic_upload.js"></script>
+    <!-- Javascript for Matrix chart Editor Self Owned -->
+    <script src="assets/self-owned/js/module/kits/vm.js"></script>
+    <script src="assets/self-owned/js/module/kits/logic.js"></script>
+
+
+
+
+
+    <script>
+      $(document).ready(function() {
+        $('#sidebar').load($.getRootPath() + '/components/left_side.html');
+        $('#navbar').load($.getRootPath() + '/components/header.html');
+        setTimeout(function() {
+          $('#navbar_title_li').html('Matrix Chart Editor');
+          $('#navbar_search_li').css('display', 'none');
+        }, 200);
+        setTimeout(function() {
+          rerender_children_dom('bar')
+        }, 800);
+      });
+    </script>
+
+</body>
+
+</html>
