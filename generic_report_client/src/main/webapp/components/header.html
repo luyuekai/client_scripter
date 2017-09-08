@@ -70,8 +70,8 @@
     },
     reloadData: function() {
       userNameModel.userName(UserPOJO.user.userName);
-    },
-  }
+    }
+  };
 
   ko.applyBindings(userNameModel, document.getElementById('user_info_div'));
 
@@ -81,7 +81,7 @@
 
 <script>
   $('#search_input').on('keypress', function(event) {
-    if (event.keyCode == 13){
+    if (event.keyCode === 13){
       SearchPOJO.search();
     }
   });
@@ -94,5 +94,5 @@
         SearchPOJO.listener();
       }
     }
-  }
+  };
 </script>
