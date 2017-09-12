@@ -191,6 +191,14 @@ function successListener() {
                     sankeyViewModel.nodes(JSON.stringify(option.series[0].data));
                     sankeyViewModel.links(JSON.stringify(option.series[0].links));
                     break;
+                case 'wordCloud':
+                    var a = option.series;
+                    a[0].textStyle.normal.color = function () {
+                        var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+                        return colors[parseInt(Math.random() * 10)];
+                    };
+                    option.series = a;
+                    break;
                 case 'graph':
                     var layout = option.series[0].layout;
                     if (layout == 'none') {

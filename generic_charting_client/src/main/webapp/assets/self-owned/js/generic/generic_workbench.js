@@ -186,7 +186,6 @@ var addWidget_chart = function(option,x,y,x_width,y_height) {
   y = y || 0;
   x_width = x_width || 6;
   y_height = y_height || 6;
-debugger
   var grid = $('.grid-stack').data('gridstack');
 
   //step 2: clone draggableTemplate, and remove attribute of id
@@ -206,7 +205,12 @@ debugger
 
   var chart = echarts.init(document.getElementById($draggableTemplateContext_id));
   // 使用刚指定的配置项和数据显示图表。
-  chart.setOption(option);
+  if(option.ds_setting){
+    chart = ChartPOJO.generate_default_chart($draggableTemplateContext_id);      
+    renderDynamicDash(option.ds_setting, chart);
+  }else{
+    chart.setOption(option);
+  }
 
 
 
