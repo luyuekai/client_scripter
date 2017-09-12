@@ -1,0 +1,210 @@
+<div id="genericModalDiv">
+
+    <!--LOADER DIV BEGIN-->
+    <div class="loader-container text-center">
+        <div class="icon">
+            <div class="sk-wave">
+                <div class="sk-rect sk-rect1"></div>
+                <div class="sk-rect sk-rect2"></div>
+                <div class="sk-rect sk-rect3"></div>
+                <div class="sk-rect sk-rect4"></div>
+                <div class="sk-rect sk-rect5"></div>
+            </div>
+        </div>
+        <div class="title">Loading</div>
+    </div>
+    <!--LOADER DIV BEGIN-->
+
+    <!--RESULT DISPLAY DIV BEGIN-->
+    <div class="flat-matrix">
+        <div id="resultDIV" data-bind="visible: hasResult,css: styleClass" class="alert fresh-color">
+            <button type="button" class="close" data-bind="click:function(){hasResult(!hasResult)}" aria-label="Close"><i class="fa fa-close"></i></button>
+            <strong>
+                <span data-bind="text:resultTitle"></span>
+            </strong>
+            <span data-bind="text:resultSubTitle"></span>
+            <div data-bind="text:resultContent"></div>
+        </div>
+    </div>
+    <!--RESULT DISPLAY DIV END-->
+
+    <!--Validation DIV BEGIN-->
+    <div class="flat-matrix">
+        <div data-bind="visible: hasError" class="alert alert-warning alert-dismissible fresh-color" role="alert">
+            <button type="button" data-bind="click:function(){hasError(!hasError)}" class="close" aria-label="Close">
+                <i class="fa fa-close"></i>
+            </button>
+            <strong>警告:</strong>
+            <div id="errorMessagesDIV" data-bind="foreach:errorMessage">
+                <div data-bind="text:$data"></div>
+            </div>
+        </div>
+    </div>
+    <!--Validation DIV END-->
+    <!--CONTENT DIV BEGIN-->
+    <div id="modal_content_div" class="flat-matrix">
+        <div class="panel-body" style="padding-bottom: 0px">
+            <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">                
+                <div class="title"><i class="fa fa-cogs"></i> remove this data source?</div>
+            </div>
+            <div class="card profile" style="box-shadow: none">
+                <div class="card-body" style="padding-top: 15px">
+                    <!-- *******YOUR SHOULD CODING IN HERE:[BEGIN]*******-->
+                    <div data-bind="if:businessPOJO()">
+                        <div>
+
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" style="text-align:right">
+                                        <span style="font-weight: bold;font-size: 16px;">作业名称</span>
+                                    </label>
+                                    <div class="col-sm-4">
+                                        <p class="form-control-static" data-bind="text:businessPOJO().name"></p>
+                                    </div>
+                                    <label class="col-sm-2 control-label" style="text-align:right">
+                                        <span style="font-weight: bold;font-size: 16px;">所属用户</span>
+                                    </label>
+                                    <div class="col-sm-4">
+                                        <p class="form-control-static" data-bind="text:businessPOJO().username"></p>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" style="text-align:right">
+                                        <span style="font-weight: bold;font-size: 16px;">来源数据库</span>
+                                    </label>
+                                    <div class="col-sm-4">
+                                        <p class="form-control-static" data-bind="text:businessPOJO().database"></p>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" style="text-align:right">
+                                        <span style="font-weight: bold;font-size: 16px;">sql详情</span>
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <p class="form-control-static" data-bind="text:businessPOJO().sql"></p>
+                                    </div>
+                                </div>
+                                <!--                                <div class="form-group">
+                                                                    <label class="col-sm-2 control-label" style="text-align:right">
+                                                                        <span style="font-weight: bold;font-size: 16px;">是否启用</span>
+                                                                    </label>
+                                                                    <div class="col-sm-4">
+                                                                        <p class="form-control-static" data-bind="text:businessPOJO().enabled()?'Y':'N'"></p>
+                                                                    </div>
+                                                                </div>-->
+                            </form>
+                            <div class="alert alert-warning fresh-color" style="margin-bottom: 0px">
+                                <span>警告: 确定删除该数据源吗?</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- *******YOUR SHOULD CODING IN HERE:[END]*******-->
+
+                </div>
+                <div>
+                    <form class="form-horizontal" id="formdata" role="form">
+                        <div class="pull-right">
+                            <button class="btn btn-sm btn-success" onclick="executeRemove()" style="margin-bottom: -20px">执行</button>
+                            <button class="btn btn-sm btn-default" style="margin-bottom: -20px" onclick="(function () {
+                                        ModalUtil.modal_close('popupModalPro');
+                                        location.reload();
+                                    })()">关闭</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--CONTENT DIV END-->
+</div>
+
+<script>
+    // Initialize the View Model
+    // Clean the paging binding nodes
+    // Binding the view Model
+    var genericModalViewModel = new GenericModalViewModel();
+    ko.cleanNode($('#genericModalDiv')[0]);
+    ko.applyBindings(genericModalViewModel, document.getElementById('genericModalDiv'));
+</script>
+<script>
+    (function initialize() {
+        // *******YOUR SHOULD CODING IN HERE:*******
+        function BusinessPOJO() {
+            var self = this;
+
+            self.id = null;
+            self.name = ko.observable('');
+            self.username = ko.observable('');
+            self.database = ko.observable('');
+            self.sql = ko.observable('');
+        }
+        var businessPOJO = new BusinessPOJO();
+        if (ModalUtil.businessPOJO) {
+            businessPOJO.id = ModalUtil.businessPOJO[0]; // Don't need observable bind!
+            businessPOJO.name(ModalUtil.businessPOJO[14]);
+            businessPOJO.username(ModalUtil.businessPOJO[34]);
+            businessPOJO.database(ModalUtil.businessPOJO[30]);
+            businessPOJO.sql(ModalUtil.businessPOJO[31]);
+        }
+        genericModalViewModel.businessPOJO(businessPOJO);
+    })();
+</script>
+<script>
+    function executeRemove() {
+        // validation failed
+        // show validation error message in the warning DIV...
+        if (!genericModalViewModel.validation(businessValidation)) {
+            return;
+        } else {
+            // validation correct
+            // do your business...
+            runService();
+        }
+    }
+
+    // *******YOUR SHOULD CODING IN HERE:*******
+    var businessValidation = function () {
+        var errorMessages = [];
+        //validate logic...
+
+        //validate
+        ValidationPOJO.validate("Entity ID", genericModalViewModel.businessPOJO().id, errorMessages, ['KEY_NOT_NULL']);
+        ValidationPOJO.validate("KEY", genericModalViewModel.businessPOJO().name(), errorMessages, ['KEY_NOT_NULL']);
+
+        return errorMessages;
+    }
+
+    var runService = function () {
+        var requestPOJO = {
+            "className": "v2.service.generic.query.entity.Genericentity",
+            "attributes": {
+                "id": genericModalViewModel.businessPOJO().id,
+                "deleted": true
+            }
+        }
+        var data = {
+            'queryJson': $.toJSON(requestPOJO)
+        };
+        $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/update', data, "successRemoveSql",
+                "failedRemoveSql", "serverRemoveSql");
+    }
+    $.subscribe("successRemoveSql", successRemoveSql);
+    $.subscribe("failedRemoveSql", failedRemoveSql);
+    $.subscribe("serverRemoveSql", serverRemoveSql);
+
+    function successRemoveSql() {
+        if (arguments & arguments[1]) {
+            genericModalViewModelrecall.response(true, "删除SQL", "成功", "");
+        }
+    }
+    function failedRemoveSql() {
+        genericModalViewModel.response(false, "删除SQL", "失败", errorMessage)
+    }
+    function serverRemoveSql() {
+        genericModalViewModel.response(false, "删除SQL", "失败", "操作失败，请检查操作步骤或与系统管理员联系")
+    }
+
+</script>

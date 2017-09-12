@@ -1,37 +1,46 @@
 function addCell_chart(json) {
-  if (json) {
-    var option = ChartPOJO.deserialize_chart_option(json);
-    addWidget_chart(option);
-    if(viewModel){
-      viewModel.hasNewContent(true);
+    debugger;
+    if (json) {
+        var option = ChartPOJO.deserialize_chart_option(json);
+        if (option.series[0].type == 'wordCloud') {
+            var a = option.series;
+            a[0].textStyle.normal.color = function () {
+                var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+                return colors[parseInt(Math.random() * 10)];
+            };
+            option.series = a;
+        }
+        addWidget_chart(option);
+        if (viewModel) {
+            viewModel.hasNewContent(true);
+        }
     }
-  }
-};
+}
+;
 
 
 // *******Server Side Retrieve Data JS Code*******
-var retrieveData_chart = function(page) {
-  //        LoaderUtil.add('tableDIV');
-  var requestPOJO = {
-    "className": "Share",
-    "orderMap": {
-      "id": false
-    },
-    "pageMaxSize": pageMaxSize,
-    "currentPageNumber": page || 1,
-    "likeORMap": {
-
-    },
-    "eqMap": {
-      "type": "MATRIX_CHART",
-      "deleted": false
-    },
-    "inMap": {},
-  };
-  var data = {
-    'queryJson': $.toJSON(requestPOJO)
-  };
-  $.serverRequest($.getServerRoot() + '/service_generic_query/api/query', data, "CHART_SEARCH_SUCCESS_LISTENER", "CHART_PAGING_SEARCH_FAILED", "CHART_SERVICE_GENERIC_QUERY_FAILED");
+var retrieveData_chart = function (page) {
+    //        LoaderUtil.add('tableDIV');
+    var requestPOJO = {
+        "className": "Share",
+        "orderMap": {
+            "id": false
+        },
+        "pageMaxSize": pageMaxSize,
+        "currentPageNumber": page || 1,
+        "likeORMap": {
+        },
+        "eqMap": {
+            "type": "MATRIX_CHART",
+            "deleted": false
+        },
+        "inMap": {},
+    };
+    var data = {
+        'queryJson': $.toJSON(requestPOJO)
+    };
+    $.serverRequest($.getServerRoot() + '/service_generic_query/api/query', data, "CHART_SEARCH_SUCCESS_LISTENER", "CHART_PAGING_SEARCH_FAILED", "CHART_SERVICE_GENERIC_QUERY_FAILED");
 }
 
 
@@ -42,40 +51,40 @@ $.subscribe("CHART_SERVICE_GENERIC_QUERY_FAILED", failedServiceListener_chart);
 
 
 function failedServiceListener_chart() {
-  if(!genericModalViewModel){
-    return;
-  }
-  genericModalViewModel.response(false, "SERVICE 'GENERIC QUERY", "[Failed]", "SERVICE 'GENERIC CUD' FAILED! Please contact with the system admin for more information...");
+    if (!genericModalViewModel) {
+        return;
+    }
+    genericModalViewModel.response(false, "SERVICE 'GENERIC QUERY", "[Failed]", "SERVICE 'GENERIC CUD' FAILED! Please contact with the system admin for more information...");
 }
 
 function failedListener_chart() {
-  if(!genericModalViewModel){
-    return;
-  }
-  if (arguments && arguments[1]) {
-    var errorMessage = arguments[1].errorMessage;
-    genericModalViewModel.response(false, "SERVICE 'GENERIC QUERY", "[Failed]", errorMessage);
-  }
+    if (!genericModalViewModel) {
+        return;
+    }
+    if (arguments && arguments[1]) {
+        var errorMessage = arguments[1].errorMessage;
+        genericModalViewModel.response(false, "SERVICE 'GENERIC QUERY", "[Failed]", errorMessage);
+    }
 }
 
 function successListener_chart() {
-  if(!genericModalViewModel){
-    return;
-  }
-  if (arguments && arguments[1]) {
-    var data = arguments[1].result;
-    displayResult = displayResult.concat(data);
-    if (data.length < pageMaxSize) {
-      hasNewData = false;
+    if (!genericModalViewModel) {
+        return;
     }
-    var history_scripts = displayResult.sort(sortTime);
+    if (arguments && arguments[1]) {
+        var data = arguments[1].result;
+        displayResult = displayResult.concat(data);
+        if (data.length < pageMaxSize) {
+            hasNewData = false;
+        }
+        var history_scripts = displayResult.sort(sortTime);
 
-    genericModalViewModel.businessPOJO().serverPagingViewModel.viewData(history_scripts);
-  }
+        genericModalViewModel.businessPOJO().serverPagingViewModel.viewData(history_scripts);
+    }
 }
 
 function sortTime(a, b) {
-  return b.createtime - a.createtime;
+    return b.createtime - a.createtime;
 }
 
 
@@ -83,24 +92,24 @@ function sortTime(a, b) {
 
 
 
-function update_workbench_size(){
-  var height= 0;
-  if(isView){
-    height = $(window).height()-60;
-  }else{
-    height =$(window).height()-290;
-  }
-  $('#workbench_div').css('height', height);
+function update_workbench_size() {
+    var height = 0;
+    if (isView) {
+        height = $(window).height() - 60;
+    } else {
+        height = $(window).height() - 290;
+    }
+    $('#workbench_div').css('height', height);
 }
 
 
 function initialize() {
-  $(window).resize(function() {
-    setTimeout(function() {
-      update_workbench_size();
-    }, 500)
-  });
-  update_workbench_size();
+    $(window).resize(function () {
+        setTimeout(function () {
+            update_workbench_size();
+        }, 500)
+    });
+    update_workbench_size();
 }
 
 
@@ -148,30 +157,30 @@ $.subscribe("MATRIX_SHARE_SUCCESS", successListener);
 $.subscribe("MATRIX_SHARE_FAILED", failedListener);
 $.subscribe("MATRIX_SHARE_SERVICE_FAILED", failedServiceListener);
 $.subscribe("WORKBENCH_EVENT_CHANGE", WORKBENCH_EVENT_CHANGE_LISTENER);
-function WORKBENCH_EVENT_CHANGE_LISTENER(){
-  if(viewModel){
-    viewModel.hasNewContent(true);
-  }
+function WORKBENCH_EVENT_CHANGE_LISTENER() {
+    if (viewModel) {
+        viewModel.hasNewContent(true);
+    }
 }
 function successListener() {
     if (arguments && arguments[1]) {
         var json = arguments[1].result[0];
         if (viewModel) {
-          viewModel.deserialize_dashboard(json);
-          viewModel.hasNewContent(false);
-          if(current_mode == 'EDIT'){
-            userCheck();
-          }
+            viewModel.deserialize_dashboard(json);
+            viewModel.hasNewContent(false);
+            if (current_mode == 'EDIT') {
+                userCheck();
+            }
         }
     }
 }
-function userCheck(){
-  if(UserPOJO.user&& UserPOJO.user.userName && viewModel.data && viewModel.data.username){
-    if(UserPOJO.user.userName!=viewModel.data.username){
-      console.log('user vlidation finished, to forbidden page');
-      SharePOJO.redirect('INVALID');
+function userCheck() {
+    if (UserPOJO.user && UserPOJO.user.userName && viewModel.data && viewModel.data.username) {
+        if (UserPOJO.user.userName != viewModel.data.username) {
+            console.log('user vlidation finished, to forbidden page');
+            SharePOJO.redirect('INVALID');
+        }
     }
-  }
 }
 
 function failedListener() {
@@ -194,113 +203,113 @@ function failedServiceListener() {
 
 
 
-function add_shortcut_key_listener(){
-  document.onkeydown = keyDownSearch;
+function add_shortcut_key_listener() {
+    document.onkeydown = keyDownSearch;
 }
 
-function add_shortcut_key_listener_view(){
-  document.onkeydown = keyDownSearch_view;
+function add_shortcut_key_listener_view() {
+    document.onkeydown = keyDownSearch_view;
 }
 
 function keyDownSearch(e) {
-  // 兼容FF和IE和Opera
-  var theEvent = e || window.event;
-  var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
-  if (code == 119) { //F8
-    switchMode();
-    // return false;
-  }
-  if (event.keyCode == 78 && event.shiftKey && event.altKey) {
-    // alt+shift+n
-    if(viewModel){
-      ModalUtil.popup_modal('New Dashboard', '/assets/self-owned/html/dashboard/modal_content_new.html', null, null, null);
+    // 兼容FF和IE和Opera
+    var theEvent = e || window.event;
+    var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+    if (code == 119) { //F8
+        switchMode();
+        // return false;
     }
-  }
-  if (event.keyCode == 83 && event.shiftKey && event.altKey) {
-    // alt+shift+s
-    if(viewModel){
-      ModalUtil.popup_modal('Save Dashboard', '/assets/self-owned/html/dashboard/modal_content_save.html');
+    if (event.keyCode == 78 && event.shiftKey && event.altKey) {
+        // alt+shift+n
+        if (viewModel) {
+            ModalUtil.popup_modal('New Dashboard', '/assets/self-owned/html/dashboard/modal_content_new.html', null, null, null);
+        }
     }
-  }
+    if (event.keyCode == 83 && event.shiftKey && event.altKey) {
+        // alt+shift+s
+        if (viewModel) {
+            ModalUtil.popup_modal('Save Dashboard', '/assets/self-owned/html/dashboard/modal_content_save.html');
+        }
+    }
 
-  if (event.keyCode == 69 && event.shiftKey && event.altKey) {
-    // alt+shift+e
-    if(viewModel){
-      ModalUtil.popup_modal('Insert a new chart', '/assets/self-owned/html/dashboard/modal_content_insert_chart.html', null, null, null);
+    if (event.keyCode == 69 && event.shiftKey && event.altKey) {
+        // alt+shift+e
+        if (viewModel) {
+            ModalUtil.popup_modal('Insert a new chart', '/assets/self-owned/html/dashboard/modal_content_insert_chart.html', null, null, null);
+        }
     }
-  }
-  if (event.keyCode == 85 && event.shiftKey && event.altKey) {
-    // alt+shift+u
-    if(viewModel){
-      remove_css_class('dragContainer_div', 'dragContainer')
+    if (event.keyCode == 85 && event.shiftKey && event.altKey) {
+        // alt+shift+u
+        if (viewModel) {
+            remove_css_class('dragContainer_div', 'dragContainer')
+        }
     }
-  }
-  if (event.keyCode == 86 && event.shiftKey && event.altKey) {
-    // alt+shift+v
-    if(viewModel){
-      add_css_class('dragContainer_div', 'dragContainer')
+    if (event.keyCode == 86 && event.shiftKey && event.altKey) {
+        // alt+shift+v
+        if (viewModel) {
+            add_css_class('dragContainer_div', 'dragContainer')
+        }
     }
-  }
-  if (event.keyCode == 82 && event.shiftKey && event.altKey) {
-    // alt+shift+r
-    if(viewModel){
-      refresh_workbench()
+    if (event.keyCode == 82 && event.shiftKey && event.altKey) {
+        // alt+shift+r
+        if (viewModel) {
+            refresh_workbench()
+        }
     }
-  }
 }
 function keyDownSearch_view(e) {
-  // 兼容FF和IE和Opera
-  var theEvent = e || window.event;
-  var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
-  if (code == 119) { //F8
-    switchMode();
-  }
+    // 兼容FF和IE和Opera
+    var theEvent = e || window.event;
+    var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+    if (code == 119) { //F8
+        switchMode();
+    }
 }
 var isView = false;
 var current_mode = null; //EDIT && VIEW
-function switchMode(){
-  if(isView){
-    editMode();
-  }else{
-    viewMode();
-  }
-  update_workbench_size();
+function switchMode() {
+    if (isView) {
+        editMode();
+    } else {
+        viewMode();
+    }
+    update_workbench_size();
 }
 
 function viewMode() {
-  if(isView){
-    return;
-  }
-  isView = true;
-  $('#main_content_div').css('padding-left','0px');
-  $('#sidebar').css('display', 'none');
-  $('#navbar').css('display', 'none');
-  $('#hidden_div').css('display', 'none');
-  $('#menubar_div').css('display', 'none');
-  $('#report_content_seperate_div').css('display', 'none');
-  $('#footer_div').css('display', 'none');
-  $('#help-actions').css('display', 'none');
+    if (isView) {
+        return;
+    }
+    isView = true;
+    $('#main_content_div').css('padding-left', '0px');
+    $('#sidebar').css('display', 'none');
+    $('#navbar').css('display', 'none');
+    $('#hidden_div').css('display', 'none');
+    $('#menubar_div').css('display', 'none');
+    $('#report_content_seperate_div').css('display', 'none');
+    $('#footer_div').css('display', 'none');
+    $('#help-actions').css('display', 'none');
 }
 
 function editMode() {
-  if(!isView){
-    return;
-  }
-  isView = false;
-  $('#main_content_div').css('padding-left','180px');
-  $('#sidebar').css('display', '');
-  $('#navbar').css('display', '');
-  $('#hidden_div').css('display', '');
-  $('#menubar_div').css('display', '');
-  $('#report_content_seperate_div').css('display', '');
-  $('#footer_div').css('display', '');
-  $('#help-actions').css('display', '');
+    if (!isView) {
+        return;
+    }
+    isView = false;
+    $('#main_content_div').css('padding-left', '180px');
+    $('#sidebar').css('display', '');
+    $('#navbar').css('display', '');
+    $('#hidden_div').css('display', '');
+    $('#menubar_div').css('display', '');
+    $('#report_content_seperate_div').css('display', '');
+    $('#footer_div').css('display', '');
+    $('#help-actions').css('display', '');
 }
 
 
-function save_dashboard(){
-  $('#new_modal_clost_button').click();
-    setTimeout(function() {
-      $('#button_save').click();
+function save_dashboard() {
+    $('#new_modal_clost_button').click();
+    setTimeout(function () {
+        $('#button_save').click();
     }, 500);
 }

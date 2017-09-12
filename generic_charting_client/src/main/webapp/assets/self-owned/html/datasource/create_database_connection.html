@@ -351,6 +351,7 @@
                 "stringepsilon": genericModalViewModel.businessPOJO().passwd().trim(),
                 "stringeta": UserPOJO.user.userName,
                 "deleted": false,
+                "enabled": true,
                 "type": "SOURCE_DATABASE_CONFIGURATION"
             }
 
@@ -361,17 +362,6 @@
             'queryJson': $.toJSON(requestPOJO)
         };
 
-
-//        -------刷新tree-------------
-        console.log("run service function invoked!");
-
-
-
-        $('#assistDIV').load($.getRootPath() + '/assets/self-owned/html/database_admin/assist_DBconnection_mgmt.html');
-//        ---------刷新tree--------------
-
-
-// ------------写入genericentity表中----------------
 
         $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/add', database_data, "ADD_SUCCESS_LISTENER_DATABASE",
                 "ADD_FAILED_LISTENER_DATABASE", "ADD_SERVER_FAILED_LISTENER_DATABASE");
@@ -387,25 +377,24 @@
     function successAddListener_database() {
         if (arguments && arguments[1]) {
             genericModalViewModel.response(true, "添加数据库", "[成功]", "添加操作成功，请关闭此模态框.");
-//            var databasePOJO = {
-//                "dbType": genericModalViewModel.businessPOJO().databaseType().trim(),
-//                "dbDriver": genericModalViewModel.businessPOJO().databaseDriver().trim(),
-//                "dbConName": genericModalViewModel.businessPOJO().connectionName().trim(),
-//                "dbUsername": genericModalViewModel.businessPOJO().username().trim(),
-//                "dbPasswd": genericModalViewModel.businessPOJO().passwd().trim(),
-//                "dbUrl": genericModalViewModel.businessPOJO().databaseUrl().trim(),
-//                "attributes": {
-//                    "dbName": "",
-//                    "tableName": ""
-//                }
-//            };
-//
-//            var data = {
-//                "DBConfig": $.toJSON(databasePOJO)
-//            };
-//
-//            $.serverRequest($.getServerRoot() + "/service_scripter_database/api/connection/databases", data, "successSwitchConnection",
-//                    "failedSwitchConnection", "serverSwitchConnection");
+            
+            var requestPOJO = {
+            "dbType": genericModalViewModel.businessPOJO().databaseType().trim(),
+            "dbDriver": genericModalViewModel.businessPOJO().databaseDriver().trim(),
+            "dbConName": genericModalViewModel.businessPOJO().connectionName().trim(),
+            "dbUsername": genericModalViewModel.businessPOJO().username().trim(),
+            "dbPasswd": genericModalViewModel.businessPOJO().passwd().trim(),
+            "dbUrl": genericModalViewModel.businessPOJO().databaseUrl().trim()
+        };
+
+        var data = {
+            "DBConfig": $.toJSON(requestPOJO)
+        };
+
+        $.serverRequest($.getServerRoot() + "/generic_charting_client/api/connection/addconnection", data, "successADDConnection", "failedADDConnection",
+                "failedServerADDConnection");
+                
+        retrieveDatabase();
 
         }
     }
