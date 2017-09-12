@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -67,11 +68,13 @@ public class ConnectionResource {
 
     }
 
+
     @POST
     @Path("{schema}/tables")
     @Produces({"application/json"})
     public String getTablesInSchema(@FormParam("DBName") String DBName, @PathParam("schema") String schema) throws IOException {
         ConnectionManager connectionManager = ConnectionManager.getInstance();
+        System.out.print(DBName);
         Connection con = connectionManager.getConnection(DBName);
         String sql = "SELECT tablename FROM pg_tables  WHERE  schemaname = '" + schema
                 + "'AND tablename NOT LIKE 'pg%' AND tablename NOT LIKE 'sql_%' ORDER BY tablename;";
@@ -85,7 +88,7 @@ public class ConnectionResource {
     public String getColumnsInTable(@FormParam("DBName") String DBName, @PathParam("schema") String schema, @PathParam("table") String table) throws IOException {
         ConnectionManager connectionManager = ConnectionManager.getInstance();
         Connection con = connectionManager.getConnection(DBName);
-        String sql = "SELECT column_name FROM information_schema.columns  WHERE  table_schema = '" + schema
+        String sql = "SELECT column_name, data_type FROM information_schema.columns  WHERE  table_schema = '" + schema
                 + "'AND table_name = '" + table + "'";
         SqlService sqlService = new SqlService(con);
         return sqlService.executeQuery(sql);
@@ -128,7 +131,7 @@ public class ConnectionResource {
     @Path("deleteconnection")
     @Produces({"application/json"})
     public String deleteConnection(@FormParam("DBConfig") String DBConfig) throws IOException {
-         DatabaseConnection dbConnection = (DatabaseConnection) JsonUtil.toPojo(DBConfig, DatabaseConnection.class);
+        DatabaseConnection dbConnection = (DatabaseConnection) JsonUtil.toPojo(DBConfig, DatabaseConnection.class);
         ConnectionManager connectionManager = ConnectionManager.getInstance();
         connectionManager.deleteConnection(dbConnection.getDbUrl());
         ResponsePOJO response = new ResponsePOJO();

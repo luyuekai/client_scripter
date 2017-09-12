@@ -42,6 +42,7 @@ public class ConnectionManager {
                 if(con != null){
                     conns.put(databaseConnection.getDbUrl(), con);
                 }
+                
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
@@ -66,6 +67,7 @@ public class ConnectionManager {
      */
     public Connection getConnection(String name) {
         Connection con = null;
+        System.out.println(conns);
         con = (Connection) conns.get(name);
 
         return con;
@@ -94,7 +96,7 @@ public class ConnectionManager {
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(conns);
+
     }
 
     /**

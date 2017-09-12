@@ -81,20 +81,41 @@
                 <!--VALIDATION DIV FINISHED-->
 
                 <!--BUSINESS DIV BEGIN-->
-                <div class="row">
+
+                <div class="row" >
+                    <div class="col-sm-12" data-bind="with:businessPOJO()">
+                        <div class="card card-mini">
+                            <div class="card-body flat-matrix " style="padding-top: 0px;padding-bottom: 0px ">
+                                <span >Filter by&nbsp;:&nbsp;</span>
+                                <div class="btn-group">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span data-bind="text:dataSourceType()"></span> <span class="caret"></span></button>
+                                        <ul class="dropdown-menu" role="menu" data-bind="foreach: type()">
+                                            <li><a data-bind="click:function(){$parent.dataSourceType($data)}" href="#"><span data-bind="text:$data"></span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div data-bind="if:businessPOJO()">
                         <div data-bind="with:businessPOJO().elements">
                             <!--ko foreach: viewData-->
                             <div class="col-xs-12" style="margin-bottom:18px;">
-                                <a class="card card-banner card-blue-light" data-bind="event:{dblclick:function(){default_switch2detail_page($data,'/business_kit.html','check','MATRIX_DATA_SOURCE_CURRENT')}}">
+                                <a class="card card-banner card-blue-light" data-bind="event:{dblclick:function(){show_data($data)}}">
                                     <div class="card-body">
-                                        <i class="icon fa fa-edit fa-4x"></i>
+                                        <i class="icon fa fa-bars fa-4x"></i>
                                         <div class="content">
                                             <div class="title">
+                                                <span class="label label-info" id="APIData" data-bind="visible:isApi(type)">&nbsp;&nbsp;API&nbsp;&nbsp;</span>
+                                                <span class="label label-warning" id="DatabaseData"data-bind="visible:!isApi(type)">Database</span>
                                                 <span  data-bind="text:creator" style="margin-right: 8px;"></span>
                                                 <span  data-bind="text:(function(){return new Date(parseInt(numberalpha)).toLocaleString()})()" style="margin-right: 8px;"></span>
                                                 <button title="Remove" data-toggle="modal" data-target="#myModal" type="button" class="btn btn-default pull-right" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-trash-o"></i></button>
-                                                <button title="Update" onclick = "function(){default_switch2detail_page($data,'/business_kit.html','update','MATRIX_DATA_SOURCE_CURRENT')}" type="button" class="btn btn-default pull-right" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-cogs"></i></button>
+                                                <button title="Update" onclick = "function () {
+                                                            default_switch2detail_page($data, '/business_kit.html', 'update', 'MATRIX_DATA_SOURCE_CURRENT')
+                                                        }" type="button" class="btn btn-default pull-right" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-cogs"></i></button>
                                             </div>                                           
                                             <div class="value">
                                                 <span class="sign" data-bind="text:description"></span>
