@@ -205,7 +205,12 @@ var addWidget_chart = function(option,x,y,x_width,y_height) {
 
   var chart = echarts.init(document.getElementById($draggableTemplateContext_id));
   // 使用刚指定的配置项和数据显示图表。
-  chart.setOption(option);
+  if(option.ds_setting){
+    chart = ChartPOJO.generate_default_chart($draggableTemplateContext_id);      
+    renderDynamicDash(option.ds_setting, chart);
+  }else{
+    chart.setOption(option);
+  }
 
 
 

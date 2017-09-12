@@ -495,6 +495,257 @@ DataTransferPOJO={
       resultJsonObject["header"] = header;
       resultJsonObject["result"] = resultArray;
 
+    return resultJsonObject;
+  },
+  transferHiveDataRaw: function(inputData) {
+    var resultJsonObject = {};
+    var resultArray = [];
+    var rowArray = inputData.split("\n");
+    rowArray.pop();
+    $.each(rowArray, function(i, rowData) {
+      var cellArray = rowData.split(",");
+      resultArray.push(cellArray);
+    });
+    resultJsonObject["result"] = resultArray;
+    return resultJsonObject;
+  },
+  divideHeaderFromData: function(inputData){
+    if(inputData.result){
+      inputData = inputData.result;
+    }
+    var headerArray = inputData.shift();
+    return {
+      'header': headerArray,
+      'result': inputData
+    }
+  },
+  extractDataByHeader: function(originalData, headerViewModel) {
+    var header = [];
+    var headerIndex = [];
+    var resultArray = [];
+    var resultJsonObject = {};
+    var legendIndex;
+    $.each(headerViewModel, function(index, headerItem) {
+      if (headerItem.isChecked) {
+        header.push(headerItem.data);
+        headerIndex.push(index);
+      }
+      if (headerItem.isLegend) {
+        legendIndex = index;
+      }
+    });
+    $.each(originalData, function(i, rowData) {
+      var rowResult = [];
+      $.each(headerIndex, function(i, index) {
+        rowResult.push(rowData[index]);
+      })
+      if (legendIndex || legendIndex == 0) {
+        resultArray.push({
+          'name': rowData[legendIndex],
+          'data': rowResult
+        });
+      } else {
+        resultArray.push({
+          'name': 'row' + i,
+          'data': rowResult
+        });
+      }
+    })
+    resultJsonObject["header"] = header;
+    resultJsonObject["result"] = resultArray;
+    return resultJsonObject;
+  },
+  extractDataByHeaderPie: function(originalData, headerViewModel) {
+    var legend = [];
+    var headerIndex = [];
+    var resultArray = [];
+    var resultJsonObject = {};
+    var legendItem;
+    $.each(headerViewModel, function(index, headerItem) {
+      if (headerItem.isChecked) {
+        headerIndex.push(index);
+      }
+      if (headerItem.isLegend) {
+        legendIndex = index;
+      }
+    });
+    $.each(originalData, function(i, rowData) {
+      var rowResult = [];
+      $.each(headerIndex, function(i, index) {
+        rowResult.push(rowData[index]);
+      })
+      if (legendIndex || legendIndex == 0) {
+        legend.push(rowData[legendIndex]);
+        resultArray.push({
+          'name': rowData[legendIndex],
+          'value': rowResult[0]
+        });
+      } else {
+        legend.push('row' + i);
+        resultArray.push({
+          'name': 'row' + i,
+          'value': rowResult[0]
+        });
+      }
+    })
+    resultJsonObject["legend"] = legend;
+    resultJsonObject["result"] = resultArray;
+    return resultJsonObject;
+  },
+  extractDataByHeaderRadar: function(originalData, headerViewModel) {
+    var header = [];
+    var headerIndex = [];
+    var headerArray = [];
+    var resultArray = [];
+    var resultJsonObject = {};
+    var legend = [];
+    var legendIndex;
+    $.each(headerViewModel, function(index, headerItem) {
+      if (headerItem.isChecked) {
+        header.push(headerItem.data);
+        headerIndex.push(index);
+      }
+      if (headerItem.isLegend) {
+        legendIndex = index;
+      }
+    });
+    $.each(originalData, function(i, rowData) {
+      var rowResult = [];
+      $.each(headerIndex, function(i, index) {
+        rowResult.push(rowData[index]);
+      })
+      if (legendIndex || legendIndex == 0) {
+        legend.push(rowData[legendIndex]);
+        resultArray.push({
+          'name': rowData[legendIndex],
+          'value': rowResult
+        });
+      }else{
+        legend.push('row' + i);
+        resultArray.push({
+          'name': 'row' + i,
+          'value': rowResult
+        });
+      }
+    });
+    $.each(header, function(i, headerItem) {
+      headerArray.push({
+        'name': headerItem
+      })
+    });
+    resultJsonObject["legend"] = legend;
+    resultJsonObject["header"] = headerArray;
+    resultJsonObject["result"] = resultArray;
+    return resultJsonObject;
+  },
+  extractDataByHeaderParallel: function(originalData, headerViewModel) {
+    var header = [];
+    var headerIndex = [];
+    var resultArray = [];
+    var resultJsonObject = {};
+    var legendIndex;
+    $.each(headerViewModel, function(index, headerItem) {
+      if (headerItem.isChecked) {
+        header.push(headerItem.data);
+        headerIndex.push(index);
+      }
+      if(headerItem.isLegend){
+        legendIndex = index;
+      }
+    });
+    $.each(originalData, function(i, rowData) {
+      var rowResult = [];
+      $.each(headerIndex, function(i, index) {
+        rowResult.push(rowData[index]);
+      })
+      // if(legendIndex){
+      //   rowResult.push(rowData[legendIndex]);
+      //   resultArray.push(rowResult);
+      // }else{
+        resultArray.push(rowResult);
+      // }
+    });
+    resultJsonObject["header"] = header;
+    resultJsonObject["result"] = resultArray;
+    // console.log(resultJsonObject);
+    return resultJsonObject;
+  },
+  extractDataByHeaderRiver: function(originalData, headerViewModel) {
+    var header = [];
+    var headerIndex = [];
+    var resultArray = [];
+    var resultJsonObject = {};
+    var legendIndex;
+    $.each(headerViewModel, function(index, headerItem) {
+      if (headerItem.isChecked) {
+        header.push(headerItem.data);
+        headerIndex.push(index);
+      }
+      if(headerItem.isLegend){
+        legendIndex = index;
+      }
+    });
+    $.each(originalData, function(i, rowData) {
+      var rowResult = [];
+      $.each(headerIndex, function(i, index) {
+        rowResult.push(rowData[index]);
+      })
+      // if(legendIndex){
+      //   rowResult.push(rowData[legendIndex]);
+      //   resultArray.push(rowResult);
+      // }else{
+        resultArray.push(rowResult);
+      // }
+    });
+    resultJsonObject["header"] = header;
+    resultJsonObject["result"] = resultArray;
+    // console.log(resultJsonObject);
+    return resultJsonObject;
+  },
+  extractDataByHeaderBoxplot: function(originalData, headerViewModel) {
+    var header = [];
+    var headerIndex = [];
+    var resultArray = [];
+    var resultJsonObject = {};
+    $.each(headerViewModel, function(index, headerItem) {
+      if (headerItem.isChecked) {
+        header.push(headerItem.data);
+        headerIndex.push(index);
+        resultArray.push([]);
+      }
+    });
+    $.each(originalData, function(i, rowData) {
+      $.each(headerIndex, function(j, index) {
+        resultArray[j].push(rowData[index]);
+      })
+    });
+    resultJsonObject["header"] = header;
+    resultJsonObject["result"] = resultArray;
+    return resultJsonObject;
+  },
+  uniqueArray: function(arr){
+  var res = [];
+  var json = {};
+  for(var i = 0; i < arr.length; i++){
+    if(!json[arr[i]]){
+      res.push(arr[i]);
+      json[arr[i]] = 1;
+    }
+  }
+  return res;
+},
+  transferT: function(data) {
+    var dataT = [];
+    for (var i = 0; i < data[0].length; i++) {
+      dataT[i] = [];
+    }
+    for (var i = 0; i < data.length; i++) {
+      for (var j = 0; j < data[i].length; j++) {
+        dataT[j][i] = data[i][j];
+      }
+    }
+    return {'result':dataT};
+  },
       return resultJsonObject;
     },
 

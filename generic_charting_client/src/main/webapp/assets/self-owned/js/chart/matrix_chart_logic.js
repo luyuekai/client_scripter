@@ -144,7 +144,7 @@ function successListener() {
 //                    $('#sub_content_div').load($.getRootPath() + '/assets/self-owned/html/chart/content_boxplot.html');
                     break;
                 case 'pie':
-                    pieViewModel.series(JSON.stringify(option.series[1].data));
+//                    pieViewModel.series(JSON.stringify(option.series[1].data));
                     break;
                 case 'radar':
                     var a = [];
@@ -191,39 +191,55 @@ function successListener() {
                     sankeyViewModel.nodes(JSON.stringify(option.series[0].data));
                     sankeyViewModel.links(JSON.stringify(option.series[0].links));
                     break;
+                case 'wordCloud':
+                    var a = option.series;
+                    a[0].textStyle.normal.color = function () {
+                        var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+                        return colors[parseInt(Math.random() * 10)];
+                    };
+                    option.series = a;
+                    break;
                 case 'graph':
                     var layout = option.series[0].layout;
-                        if (layout == 'none') {
-                            rerender_children_dom('graph');
-                            setTimeout(function () {
-                                graphViewModel.categories(JSON.stringify(option.series[0].categories));
-                                graphViewModel.nodes(JSON.stringify(option.series[0].data));
-                                graphViewModel.links(JSON.stringify(option.series[0].links));
-                            }, 200);
-                        } else if (layout == 'circular') {
-                            rerender_children_dom('circular');
-                            setTimeout(function () {
-                                circularViewModel.categories(JSON.stringify(option.series[0].categories));
-                                circularViewModel.nodes(JSON.stringify(option.series[0].data));
-                                circularViewModel.links(JSON.stringify(option.series[0].links));
-                            }, 200);
-                        } else if (layout == 'force') {
-                            rerender_children_dom('force');
-                            setTimeout(function () {
-                                forceViewModel.categories(JSON.stringify(option.series[0].categories));
-                                forceViewModel.nodes(JSON.stringify(option.series[0].data));
-                                forceViewModel.links(JSON.stringify(option.series[0].links));
-                            }, 200);
-                        }
+                    if (layout == 'none') {
+                        rerender_children_dom('graph');
+                        setTimeout(function () {
+                            graphViewModel.categories(JSON.stringify(option.series[0].categories));
+                            graphViewModel.nodes(JSON.stringify(option.series[0].data));
+                            graphViewModel.links(JSON.stringify(option.series[0].links));
+                        }, 200);
+                    } else if (layout == 'circular') {
+                        rerender_children_dom('circular');
+                        setTimeout(function () {
+                            circularViewModel.categories(JSON.stringify(option.series[0].categories));
+                            circularViewModel.nodes(JSON.stringify(option.series[0].data));
+                            circularViewModel.links(JSON.stringify(option.series[0].links));
+                        }, 200);
+                    } else if (layout == 'force') {
+                        rerender_children_dom('force');
+                        setTimeout(function () {
+                            forceViewModel.categories(JSON.stringify(option.series[0].categories));
+                            forceViewModel.nodes(JSON.stringify(option.series[0].data));
+                            forceViewModel.links(JSON.stringify(option.series[0].links));
+                        }, 200);
+                    }
                     break;
                 default:
             }
         }, 200);
         setTimeout(function () {
-            chart = ChartPOJO.renderChart('main_chart', option);
-            if (chartViewModel) {
-                chartViewModel.chart = chart;
-                chartViewModel.data = json;
+            if (!option.ds_setting) {
+                chart = ChartPOJO.renderChart('main_chart', option);
+                if (chartViewModel) {
+                    chartViewModel.chart = chart;
+                    chartViewModel.data = json;
+                }
+            } else {
+                chart = ChartPOJO.generate_default_chart('main_chart');
+                if (chartViewModel) {
+                    chartViewModel.chart = chart;
+                }
+                renderDynamicChart(option.ds_setting, chart);
             }
         }, 500);
 

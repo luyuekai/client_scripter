@@ -1,0 +1,415 @@
+
+<div id="genericModalDiv">
+
+    <!--LOADER DIV BEGIN-->
+    <div class="loader-container text-center">
+        <div class="icon">
+            <div class="sk-wave">
+                <div class="sk-rect sk-rect1"></div>
+                <div class="sk-rect sk-rect2"></div>
+                <div class="sk-rect sk-rect3"></div>
+                <div class="sk-rect sk-rect4"></div>
+                <div class="sk-rect sk-rect5"></div>
+            </div>
+        </div>
+        <div class="title">Loading</div>
+    </div>
+    <!--LOADER DIV BEGIN-->
+
+    <!--RESULT DISPLAY DIV BEGIN-->
+    <div class="flat-matrix">
+        <div id="resultDIV" data-bind="visible: hasResult,css: styleClass" class="alert fresh-color">
+            <button type="button" class="close" data-bind="click:function(){hasResult(!hasResult)}" aria-label="Close"><i class="fa fa-close"></i></button>
+            <strong>
+                <span data-bind="text:resultTitle"></span>
+            </strong>
+            <span data-bind="text:resultSubTitle"></span>
+            <div data-bind="text:resultContent"></div>
+        </div>
+    </div>
+    <!--RESULT DISPLAY DIV END-->
+
+    <!--Validation DIV BEGIN-->
+    <div class="flat-matrix">
+        <div data-bind="visible: hasError" class="alert alert-warning alert-dismissible fresh-color" role="alert">
+            <button type="button" data-bind="click:function(){hasError(!hasError)}" class="close" aria-label="Close">
+                <i class="fa fa-close"></i>
+            </button>
+            <strong>警告:</strong>
+            <div id="errorMessagesDIV" data-bind="foreach:errorMessage">
+                <div data-bind="text:$data"></div>
+            </div>
+        </div>
+    </div>
+    <!--Validation DIV END-->
+
+    <!--CONTENT DIV BEGIN-->
+
+    <!-- *******YOUR SHOULD CODING IN HERE:[BEGIN]*******-->
+    <div class="business_div_class" data-bind="if:businessPOJO()">
+        <div class="step-v2-success" data-bind="with:businessPOJO">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li role="step" class="active">
+                    <a href="#step1-v3-horizantal" id="step1-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                        <div class="icon fa fa-database"></div>
+                        <div class="heading">
+                            <div class="title">Step 1</div>
+                            <div class="description"><strong>选择数据源</strong></div>
+                        </div>
+                    </a>
+                </li>
+                <li role="step">
+                    <a href="#step2-v3-horizantal" id="step2-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                        <div class="icon fa fa-filter"></div>
+                        <div class="heading">
+                            <div class="title">Step 2</div>
+                            <div class="description"><strong>选择属性列 </strong></div>
+                        </div>
+                    </a>
+                </li>
+
+                <li role="step">
+                    <a href="#step3-v3-horizantal" id="step3-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                        <div class="icon fa fa-flag-checkered"></div>
+                        <div class="heading">
+                            <div class="title">Step 3</div>
+                            <div class="description"><strong>确认信息并提交 </strong></div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="step1-v3-horizantal">
+                    <div class="card-header flat-matrix" style="height:50px">
+                        <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
+                            <div class="title"><i class="fa fa-cogs"></i> 选择数据源</div>
+                        </div>
+                        <div class="clear-both"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-10 col-xs-offset-1" style="padding-bottom: 15px">
+                            <label class="col-sm-3 control-label">
+                                <span style="font-weight: bold;font-size: 1.1em;">DataSource</span>
+                                <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
+                            </label>
+                            <div class="col-sm-7">
+                                <select data-bind="options: dataSource.availableDataSource,optionsText: function(item) {
+             return item.id + ' (' +item.name + ')'
+         },value: dataSource.selectedDataSource,
+             optionsCaption: '选择...',
+                                        " class="form-control" style="width:400px"></select>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-12 flat-matrix">
+                            <div class="alert alert-info alert-dismissible fresh-color" role="alert" style="margin-top: 8px;">
+                                <strong><i class="fa fa-spinner"></i>&nbsp;Data Response:</strong>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 flat-matrix">
+                            <div class="compile_mode_focus_in" tabindex="100">
+                                <span class="cell_div_view markdown-body" data-bind="html:dataSource.sqlResult"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div role="tabpanel" class="tab-pane" id="step2-v3-horizantal">
+                    <div class="card-header flat-matrix" style="height:50px">
+                        <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
+                            <div class="title"><i class="fa fa-cogs"></i> 选择属性列
+                            </div>
+                        </div>
+                        <div class="clear-both"></div>
+                    </div>
+                    <div class="row flat-matrix">
+                        <div class="col-xs-12">
+                            <div class="alert alert-info alert-dismissible fresh-color" role="alert" style="margin-top: 8px;">
+                                <strong><i class="fa fa-spinner"></i>&nbsp;Dynamic Table Setting:</strong>
+                                <button type="button" data-bind="click:$data.table().uncheck_all()" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px;"><i class="fa fa-square-o"> &nbsp;Uncheck ALL</i></button>
+                                <button type="button" data-bind="click:$data.table().check_all()" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px;"><i class="fa fa-check-square-o"> &nbsp;Check ALL</i></button>
+                                <button type="button" data-bind="click:function(){transferTData()}" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px">
+                                    <i class="fa fa-check-square-o"> &nbsp;Transfer Table</i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12">
+                            <div class="compile_mode_focus_in" tabindex="100">
+                                <div class="row" data-bind="with:table">
+                                    <div class="col-xs-12" style="overflow: auto;">
+                                        <table class="table table-striped table-hover" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <!-- ko foreach: headerViewData -->
+                                                    <th>
+                                                        <div class="checkbox">
+                                                            <input type="checkbox" data-bind="checked: $data.isChecked,attr:{'id': $data.data_id}">
+                                                            <label data-bind="text: $data.data,attr:{'for':$data.data_id}"></label>
+                                                        </div>
+                                                    </th>
+                                                    <!-- /ko -->
+                                                </tr>
+                                            </thead>
+                                            <tbody data-bind="foreach: thinViewData">
+                                                <tr data-bind="visible: isDisplay, foreach: data">
+                                                    <td>
+                                                        <span data-bind="visible: $parent.isDisplay_cell($index()),text: $data"></span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="matrix-pager-v3" data-bind="visible:isDisplayPager">
+                                        <div class="form-inline">
+                                            <nav>
+                                                <form>
+                                                    <span class="pull-left">
+                                                        <label class="control-label" style="margin-bottom: 12px;">Total Counts:<span data-bind="text:totalCounts()?totalCounts():0"></span></label>
+                                                    </span>
+                                                </form>
+                                                <span class="pull-right">
+                                                    <button data-bind="click:function(){toPage(1);}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-double-left"></i> &nbsp;First</button>
+                                                    <button data-bind="click:function(){toPage(currentPageNumber()-1);}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-left"></i> &nbsp;Previous</button>
+                                                    <input data-bind="value:currentPageNumber" type="text" class="form-control" placeholder="Page" style="width:60px;margin-bottom:5px;padding:10px;text-align: center;">
+                                                    <button data-bind="visible:false,click:function(){}" type="submit" class="btn"><span class="fui-search"></span></button>
+                                                    <button data-bind="click:function(){toPage(currentPageNumber()+1);}" type="button" class="btn btn-default " style="padding: 10px 12px;">Next &nbsp;<i class="fa fa-angle-right"></i></button>
+                                                    <button data-bind="click:function(){toPage(totalPage());}" type="button" class="btn btn-default " style="padding: 10px 12px;">Last &nbsp;<i class="fa fa-angle-double-right"></i></button>
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span data-bind="text:pageMaxSize()"></span> <span class="caret"></span></button>
+                                                        <ul class="dropdown-menu" role="menu" data-bind="foreach: pagingSizeArray">
+                                                            <li><a data-bind="click:function(){$parent.pageMaxSize($data)}" href="#"><span data-bind="text:$data"></span></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </span>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-xs-12'>
+                            <label class="col-sm-3 col-xs-offset-1 control-label">
+                                <span style="font-weight: bold;font-size: 1.1em;">Legend</span>
+                            </label>
+                            <div class="col-sm-7">
+                                <select data-bind="options: table_header ,optionsText: function(item) {console.log(item);return item.name() },value: selectedLegend,optionsCaption: '选择...'," class="form-control" style="width:400px"></select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="step3-v3-horizantal">
+                        <div class="card-header flat-matrix" style="height:50px">
+                            <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
+                                <div class="title"><i class="fa fa-cogs"></i> 确认信息并执行</div>
+                            </div>
+                            <div class="clear-both"></div>
+                        </div>
+                        <div class="card-body no-padding flat-matrix">
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <label class="col-xs-2 col-xs-offset-1 control-label">Refresh Interval</label>
+                                    <div class="col-sm-8">
+                                        <select id="chart_refresh_interval" class="select2" data-bind="value:refreshInterval" style="z-index:100016;">
+                                            <option value=10>10s</option>
+                                            <option value=20>20s</option>
+                                            <option value=30>30s</option>
+                                            <option value=60>1min</option>
+                                            <option value=120>2min</option>
+                                            <option value=180>3min</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <br>
+                    <div class="pull-right">
+                        <button id="excuteNew" class="btn btn-primary btn-wide" onclick="execute()">执行</button>
+                        <button class="btn btn-inverse btn-wide" onclick="ModalUtil.modal_close('popupModalPro')">关闭</button>
+                    </div>
+            </div>
+            </div>
+        </div>
+        <!-- *******YOUR SHOULD CODING IN HERE:[END]*******-->
+
+        <!--CONTENT DIV END-->
+    </div>
+    <script>
+        // Initialize the View Model
+        // Clean the paging binding nodes
+        // Binding the view Model
+        var genericModalViewModel = new GenericModalViewModel();
+        ko.cleanNode($('#genericModalDiv')[0]);
+        ko.applyBindings(genericModalViewModel, document.getElementById('genericModalDiv'));
+
+        var dataSourceChooseViewModel = {
+            availableDataSource: ko.observableArray([]),
+            selectedDataSource: ko.observable(),
+            sqlResult: ko.observable()
+        }
+    </script>
+    <script>
+        // Setup the business model with view model
+        (function initialize() {
+
+            // *******YOUR SHOULD CODING IN HERE:*******
+            function BusinessPOJO() {
+                var self = this;
+
+                self.dataSource = dataSourceChooseViewModel;
+                self.table = ko.observable(new ThinListViewModel());
+                self.table_header = ko.observableArray();
+                self.selectedLegend = ko.observable();
+                self.sql = ko.observable();
+                self.isTransferT = ko.observable(false);
+                self.selectedLegendIndex = ko.observable();
+                self.rawDataForTransferT = [];
+                self.refreshInterval = ko.observable();
+            }
+            var businessPOJO = new BusinessPOJO();
+            genericModalViewModel.businessPOJO(businessPOJO);
+            genericModalViewModel.businessPOJO().dataSource.selectedDataSource.subscribe(function (newValue) {
+                getSqlResult();
+                genericModalViewModel.businessPOJO().isTransferT(false);
+            });
+        })();
+
+        function execute() {
+            console.log('execute incoked')
+            // validation failed
+            // show validation error message in the warning DIV...
+            if (!genericModalViewModel.validation(businessValidation)) {
+                return;
+            } else {
+                // validation correct
+                // do your business...
+                runService();
+            }
+        }
+
+          // *******YOUR SHOULD CODING IN HERE:*******
+        var businessValidation = function() {
+            var errorMessages = [];
+            //validate logic...
+
+            //validate
+
+            return errorMessages;
+        }
+
+        var runService = function() {
+            console.log("run service function invoked!");
+            clearInterval(interval);
+            var chartType = $('#chart_type_select').val();
+            if(genericModalViewModel.businessPOJO().selectedLegend()){
+                genericModalViewModel.businessPOJO().table().headerViewData()[genericModalViewModel.businessPOJO().selectedLegend().index()].isLegend(true);
+            }
+            var ds_setting = {
+                'sql': genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringbeta.trim(),
+                'dbName': genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringalpha,
+                'header': header2json(genericModalViewModel.businessPOJO().table().headerViewData()),
+                'isTransferT': genericModalViewModel.businessPOJO().isTransferT(),
+                'chartType': chartType,
+                'refreshInterval':genericModalViewModel.businessPOJO().refreshInterval()
+            }
+
+            chartViewModel.chart.setOption({'ds_setting': ds_setting});
+            console.log(genericModalViewModel.businessPOJO().table().originalData())
+            //extract data by choosen header
+           // ChartPOJO.dataSourceRenderChart(chartType, genericModalViewModel.businessPOJO().table().originalData(), genericModalViewModel.businessPOJO().table().headerViewData());
+            LoaderUtil.add_v3('chart_content_body_div');
+            renderDynamicChart(ds_setting, chartViewModel.chart);
+            ModalUtil.modal_close('popupModalPro');
+        }
+    </script>
+    <script>
+        function getAvailableDataSource() {
+            var requestPOJO = {
+                "className": "v2.service.generic.query.entity.Genericentity",
+                "aliasMap": {},
+                "orderMap": {"id": false},
+                "pageMaxSize": 500, // 最多支持500个
+                "currentPageNumber": 1,
+                "likeORMap": {
+                },
+                "eqMap": {
+                    "deleted": false,
+                    "type": "SOURCE_SQL_CONFIGURATION"
+                },
+                "inMap": {},
+            };
+            var data = {
+                'queryJson': $.toJSON(requestPOJO)
+            };
+            $.serverRequest($.getServerRoot() + "/service_generic_query/api/query", data, "successGetAvailableData");
+
+        }
+        $.subscribe("successGetAvailableData", successGetAvailableData);
+        function successGetAvailableData() {
+            if (arguments && arguments[1]) {
+                console.log(arguments[1].result);
+                genericModalViewModel.businessPOJO().dataSource.availableDataSource(arguments[1].result);
+            }
+        }
+    </script>
+    <script>
+        function getSqlResult() {
+            var requestPOJO = {
+                "dbName": genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringalpha,
+                "sql": genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringbeta
+            };
+            var data = {
+                'queryInfo': $.toJSON(requestPOJO)
+            };
+            $.serverRequest($.getServerRoot() + '/generic_charting_client/api/connection/query', data, "successGetSqlResult", "failedGetSqlResult", "serverGetSqlResult");
+        };
+
+        $.subscribe("successGetSqlResult", successGetSqlResult);
+        $.subscribe("failedGetSqlResult", failedGetSqlResult);
+        $.subscribe("successGetSqlResult", serverGetSqlResult);
+        function successGetSqlResult() {
+            if(arguments && arguments[1]) {
+                genericModalViewModel.businessPOJO().dataSource.sqlResult(arguments[1].result[0])
+                // var data = DataTransferPOJO.transferHiveDataRaw(arguments[1].result[0]);
+                // console.log(data);
+                // console.log(DataTransferPOJO.transferT(data.result))
+                var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].result[0]);
+                genericModalViewModel.businessPOJO().rawDataForTransferT = ClonePOJO.deepCloneTwoDimentionArray(rawData.result);
+                var tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
+                var tableModel = new ThinListViewModel();
+                tableModel.buildData(tableData.result);
+                tableModel.columnNames(tableData.header);
+                tableModel.isDisplayPager(true);
+                tableModel.buildView();
+                tableModel.pageMaxSize(5);
+                genericModalViewModel.businessPOJO().table(tableModel);
+                genericModalViewModel.businessPOJO().table_header(tableModel.headerViewData());
+            }
+        };
+        function failedGetSqlResult() {};
+        function serverGetSqlResult() {};
+    </script>
+    <script>
+    function transferTData() {
+        var rawData = DataTransferPOJO.transferT(genericModalViewModel.businessPOJO().rawDataForTransferT);
+        genericModalViewModel.businessPOJO().rawDataForTransferT = ClonePOJO.deepCloneTwoDimentionArray(rawData);
+        var tableData = DataTransferPOJO.divideHeaderFromData(rawData);
+        var tableModel = new ThinListViewModel();
+        tableModel.buildData(tableData.result);
+        tableModel.columnNames(tableData.header);
+        tableModel.isDisplayPager(true);
+        tableModel.buildView();
+        tableModel.pageMaxSize(5);
+        genericModalViewModel.businessPOJO().table(tableModel);
+        genericModalViewModel.businessPOJO().table_header(tableModel.headerViewData());
+        genericModalViewModel.businessPOJO().isTransferT(!genericModalViewModel.businessPOJO().isTransferT())
+    }
+    </script>
+    <script>
+        getAvailableDataSource();
+    </script>

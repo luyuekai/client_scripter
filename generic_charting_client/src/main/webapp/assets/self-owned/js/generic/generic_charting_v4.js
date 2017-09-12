@@ -5,7 +5,6 @@ var default_color = ['#1ABC9C', '#5DADE2', '#FFC153', '#EC7063', '#CC99CC', '#66
 var default_tooltip = {
     position: 'top',
     trigger: 'item',
-    formatter: "{a} <br/>{b} : {c}"
 };
 var default_labelStyle = {
     //color: 'white',
@@ -189,6 +188,9 @@ ChartPOJO = {
         }
         if (chart_type == 'bar') {
             return Descartes_ChartPOJO.initialize_chart(chart, 'bar');
+        }
+        if (chart_type == 'wordCloud') {
+            return Cloud_ChartPOJO.initialize_chart(chart);
         }
     },
     has_series_data_item: function (chart, data_item_name) {
@@ -443,6 +445,132 @@ ChartPOJO = {
     serialize_chart_option: function (option) {
         return $.toJSON(option);
     },
+    dataSourceRenderDash: function (chart_type, origin_data, headerViewModel, chart) {
+        switch (chart_type) {
+            case 'bar':
+                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
+                chart = ChartPOJO.reset_Axis(chart, 'x', chartData.header);
+                chart = Descartes_ChartPOJO.reset_series_data(chart, chartData.result, 'bar');
+                break;
+            case 'line':
+                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
+                chart = ChartPOJO.reset_Axis(chart, 'x', chartData.header);
+                chart = Descartes_ChartPOJO.reset_series_data(chart, chartData.result, 'line');
+                break;
+            case 'scatter':
+                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
+                chart = ChartPOJO.reset_Axis(chart, 'x', chartData.header);
+                chart = Descartes_ChartPOJO.reset_series_data(chart, chartData.result, 'scatter');
+                break;
+            case 'area':
+                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
+                chart = ChartPOJO.reset_Axis(chart, 'x', chartData.header);
+                chart = Descartes_ChartPOJO.reset_series_data(chart, chartData.result, 'area');
+                break;
+            case 'pie':
+                var chartData = DataTransferPOJO.extractDataByHeaderPie(origin_data, headerViewModel);
+                chart = Pie_ChartPOJO.initialize_chart(chart, chartData.result);
+                chart.setOption({
+                    legend: {
+                        orient: 'vertical',
+                        x: 'right',
+                        data: chartData.legend
+                    }
+                })
+                break;
+            case 'radar':
+                var chartData = DataTransferPOJO.extractDataByHeaderRadar(origin_data, headerViewModel);
+                chart = Radar_ChartPOJO.initialize_chart(chart, chartData.result, chartData.header);
+                chart.setOption({
+                    legend: {
+                        orient: 'vertical',
+                        x: 'right',
+                        data: chartData.legend
+                    }
+                })
+                break;
+            case 'parallel':
+                var chartData = DataTransferPOJO.extractDataByHeaderParallel(origin_data, headerViewModel);
+                chart = ChartPOJO.generate_default_chart('main_chart');
+                chart = Parallel_ChartPOJO.initialize_chart(chart, chartData.header);
+                chart = ChartPOJO.addSeries(chart, null, 'parallel', chartData.result);
+                break;
+            case 'themeRiver':
+                var chartData = DataTransferPOJO.extractDataByHeaderRiver(origin_data, headerViewModel);
+                chart = River_ChartPOJO.initialize_chart(chart, chartData.result);
+                break;
+            case 'boxplot':
+                var chartData = DataTransferPOJO.extractDataByHeaderBoxplot(origin_data, headerViewModel);
+                console.log(chartData);
+                chart = Boxplot_ChartPOJO.initialize_chart(chart, chartData.result, chartData.header);
+                break;
+            default:
+                break;
+        }
+    },
+    dataSourceRenderChart: function (chart_type, origin_data, headerViewModel) {
+        switch (chart_type) {
+            case 'bar':
+                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
+                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
+                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'bar');
+                break;
+            case 'line':
+                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
+                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
+                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'line');
+                break;
+            case 'scatter':
+                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
+                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
+                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'scatter');
+                break;
+            case 'area':
+                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
+                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
+                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'area');
+                break;
+            case 'pie':
+                var chartData = DataTransferPOJO.extractDataByHeaderPie(origin_data, headerViewModel);
+                chartViewModel.chart = Pie_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.result);
+                chartViewModel.chart.setOption({
+                    legend: {
+                        orient: 'vertical',
+                        x: 'right',
+                        data: chartData.legend
+                    }
+                })
+                break;
+            case 'radar':
+                var chartData = DataTransferPOJO.extractDataByHeaderRadar(origin_data, headerViewModel);
+                chartViewModel.chart = Radar_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.result, chartData.header);
+                chartViewModel.chart.setOption({
+                    legend: {
+                        orient: 'vertical',
+                        x: 'right',
+                        data: chartData.legend
+                    }
+                })
+                break;
+            case 'parallel':
+                var chartData = DataTransferPOJO.extractDataByHeaderParallel(origin_data, headerViewModel);
+                chartViewModel.chart = ChartPOJO.generate_default_chart('main_chart');
+                chartViewModel.chart = Parallel_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.header);
+                chartViewModel.chart = ChartPOJO.addSeries(chartViewModel.chart, null, 'parallel', chartData.result);
+                break;
+            case 'themeRiver':
+                var chartData = DataTransferPOJO.extractDataByHeaderRiver(origin_data, headerViewModel);
+                chartViewModel.chart = River_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.result);
+                break;
+            case 'boxplot':
+                var chartData = DataTransferPOJO.extractDataByHeaderBoxplot(origin_data, headerViewModel);
+                console.log(chartData);
+                chartViewModel.chart = Boxplot_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.result, chartData.header);
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 
@@ -665,7 +793,7 @@ Boxplot_ChartPOJO = {
             }
         };
     },
-    initialize_chart: function (chart, data,names) {
+    initialize_chart: function (chart, data, names) {
         if (!chart) {
             return null;
         }
@@ -747,6 +875,17 @@ River_ChartPOJO = {
         max: 'dataMax',
         min: 'dataMin',
         type: 'value'
+    },
+    default_tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'line',
+            lineStyle: {
+                color: 'rgba(0,0,0,0.2)',
+                width: 1,
+                type: 'solid'
+            }
+        }
     },
     initialize_chart: function (chart, data, river_type) {
         if (!chart) {
@@ -1057,6 +1196,42 @@ var schema = [{
         text: '等级'
     }];
 
+var Cloud_ChartPOJO = Cloud_ChartPOJO || {};
+Cloud_ChartPOJO = {
+    initialize_chart: function (chart) {
+        var option = {
+                series: [
+                    {
+                        type: 'wordCloud',
+                        shape: 'ellipse',
+                        gridSize: 8,
+                        textStyle: {
+                            normal: {
+                                fontFamily: '微软雅黑',
+                                color: function () {
+                                    var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+                                    return colors[parseInt(Math.random() * 10)];
+                                }
+                            }
+                      },
+                        /*注释一：*/
+                        // textStyle:createRandomItemStyle2(),  
+
+
+                        /*注释二：*/
+                        /*textStyle: { 
+                         normal: { 
+                         fontFamily: '微软雅黑', 
+                         color: createRandomItemStyle1() 
+                         } 
+                         },*/
+                        data: null
+                    }
+                ]
+            };
+        return ChartPOJO.reset_chart_option(chart, option);
+    }
+}
 
 var Descartes_ChartPOJO = Descartes_ChartPOJO || {};
 Descartes_ChartPOJO = {
@@ -1212,12 +1387,133 @@ function prepareDataBox(data, names, opt) {
     };
 }
 
+var interval
+
+function renderDynamicChart(ds, chart) {
+    retrieveDataSource(chart, ds);
+    interval = setInterval(function () {
+        console.log('refresh chart');
+        retrieveDataSource(chart, ds);
+    }, 1000 * ds.refreshInterval)
+
+}
+
+
+function retrieveDataSource(chart, ds) {
+    console.log("retrieveChartData");
+
+    var requestPOJO = {
+        "dbName": ds.dbName,
+        "sql": ds.sql
+    };
+    var wrapper = {
+        'chart': chart,
+        'ds': ds
+    };
+    var data = {
+        'queryInfo': $.toJSON(requestPOJO)
+    };
+    $.serverRequest($.getServerRoot() + '/generic_charting_client/api/connection/query', data, "successGetChartData", "failedGetChartData", "serverGetChartData", 'POST', true, wrapper);
 
 
 
 
 
+function successGetChartData() {
+    if (arguments && arguments[1]) {
+        console.log(arguments[1]);
+        var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].response.result[0]);
+        if (arguments[1].addtion.ds.isTransferT) {
+            rawData = DataTransferPOJO.transferT(rawData.result);
+            //做数据转置
+            // } else {
+            //     tableData = DataTransferPOJO.serverData2TableData(arguments[1].response.result[0]);
+        }
+        var tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
+        ChartPOJO.reset_chart_type(arguments[1].addtion.chart, arguments[1].addtion.ds.chartType);
+        ChartPOJO.removeAllSeries(arguments[1].addtion.chart);
+        ChartPOJO.dataSourceRenderChart(arguments[1].addtion.ds.chartType, tableData.result, JSON.parse(arguments[1].addtion.ds.header))
+        LoaderUtil.remove_v3('chart_content_body_div')
+    }
+}
+
+function renderDynamicDash(ds, chart) {
+    retrieveDataSourceDash(chart, ds);
+    interval = setInterval(function () {
+        console.log('refresh chart');
+        retrieveDataSourceDash(chart, ds);
+    }, 1000 * ds.refreshInterval)
+}
+
+function retrieveDataSourceDash(chart, ds) {
+    console.log("retrieveChartData");
+
+    var requestPOJO = {
+        "dbName": ds.dbName,
+        "sql": ds.sql
+    };
+    var wrapper = {
+        'chart': chart,
+        'ds': ds
+    };
+    var data = {
+        'queryInfo': $.toJSON(requestPOJO)
+    };
+    $.serverRequest($.getServerRoot() + '/generic_charting_client/api/connection/query', data, "successGetDashData", "failedGetDashData", "serverGetDashData", 'POST', true, wrapper);
+}
+
+$.subscribe("successGetDashData", successGetDashData);
 
 
+// $.subscribe("failedGetChartData", failedGetChartData);
+// $.subscribe("serverGetChartData", serverGetChartData);
+
+function successGetDashData() {
+    if (arguments && arguments[1]) {
+        console.log(arguments[1]);
+        var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].response.result[0]);
+        if (arguments[1].addtion.ds.isTransferT) {
+            rawData = DataTransferPOJO.transferT(rawData.result);
+            //做数据转置
+            // } else {
+            //     tableData = DataTransferPOJO.serverData2TableData(arguments[1].response.result[0]);
+        }
+        var tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
+        ChartPOJO.reset_chart_type(arguments[1].addtion.chart, arguments[1].addtion.ds.chartType);
+        ChartPOJO.removeAllSeries(arguments[1].addtion.chart);
+        ChartPOJO.dataSourceRenderDash(arguments[1].addtion.ds.chartType, tableData.result, JSON.parse(arguments[1].addtion.ds.header), arguments[1].addtion.chart);
+//        LoaderUtil.remove_v3('chart_content_body_div')
+    }
+}
+
+function header2json(header) {
+//      var header = self.headerViewData();
+    var res = [];
+    $.each(header, function (idx, val) {
+        // var self = this;
+        // self.parent = parent;
+        // self.data = ko.observable(data);
+        //
+        // self.data_id = ko.computed(function() {
+        //       return 'id_'+this.data()+ (new Date()).getTime()
+        //   }, this);
+        // self.index = ko.observable(index);
+        // self.name = ko.computed(function(){
+        //   return self.index()+"_"+self.data();
+        // },this);
+        // self.isChecked = ko.observable(isChecked);
+        // self.isDisplay = ko.observable(isDisplay);
+        var h = {
+            data: val.data(),
+            index: idx,
+            isChecked: val.isChecked(),
+            isDisplay: val.isDisplay(),
+            isLegend: val.isLegend()
+        }
+        res.push(h);
+    });
+    return JSON.stringify(res);
+}
+;
 
 /////////////////////////////////////

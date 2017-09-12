@@ -1,0 +1,106 @@
+<div id="boxplot_content">
+    <form class="form-horizontal">
+        <!--        <div class="form-group">
+                    <label class="col-sm-3 control-label">Add Data</label>
+                    <div class="col-sm-7">
+                        <div class="input-group" title="From Source">
+                            <span class="input-group-addon" id="basic-addon2">
+                                <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
+                            <input id="add_name_input" type="text" class="form-control" placeholder="Source Name" aria-describedby="basic-addon2">
+                        </div>
+                        <div class="input-group" title="From Source">
+                            <span class="input-group-addon" id="basic-addon2">
+                                <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+                            <input id="add_value_input" type="text" class="form-control" placeholder="Source Value" aria-describedby="basic-addon2">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <button onclick="add_pie_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>-->
+        <!--        <div class="form-group">
+                    <label class="col-sm-3 control-label">Remove Data</label>
+                    <div class="col-sm-7">
+                        <div class="input-group" title="From Source">
+                            <span class="input-group-addon" id="basic-addon2">
+                                <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
+                            <input id="remove_name_input" type="text" class="form-control" placeholder="Source Name" aria-describedby="basic-addon2">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <button onclick="remove_pie_data()" title="Manual minus stacks" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>-->
+        <!--        <div class="form-group">
+                    <label class="col-sm-3 control-label">Names</label>
+                    <div class="col-sm-7">
+                        <div class="input-group" title="From Source">
+                            <span class="input-group-addon" id="basic-addon2">
+                                <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
+                            <input id="name_value_input" type="text" class="form-control" placeholder="Source Name" aria-describedby="basic-addon2">
+                        </div>
+                    </div>
+                </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Series</label>
+            <div class="col-sm-7">
+                <textarea id="data_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:series"></textarea>
+            </div>
+
+            <div class="col-sm-1">
+                <button onclick="reset_series()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+var layout;
+    function reset_series() {
+        var origin_data = eval($('#data_value_input').val()) || [];
+        console.log(origin_data)
+        var fill = d3.scale.category20();
+debugger
+        layout = d3.layout.cloud(origin_data)
+                .size([1400, 800])
+                .words(origin_data)
+                .padding(5)
+                .rotate(function () {
+                    return ~~(Math.random() * 18 - 9) * 10;
+                })
+                .font("Impact")       //这里一定要指定字体，要不然会出现overlap的错误
+                .fontSize(function (d) {
+                    return d.size;
+                })
+                .on("end", draw);
+
+        layout.start();
+    }
+    function draw(words) {
+        d3.select("div#main_chart").append("svg")
+//                .attr("width", 1400)
+//                .attr("height", 800)
+                .attr("width", layout.size()[0])
+                .attr("height", layout.size()[1])
+                .append("g")
+//                .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                .attr("transform", "translate(700,400)")
+                .selectAll("text")
+                .data(words)
+                .enter().append("text")
+                .style("font-size", function (d) {
+                    return d.size + "px";
+                })
+                .style("font-family", "Impact")
+                .style("fill", function (d, i) {
+                    return fill(i);
+                })
+                .attr("text-anchor", "middle")
+                .attr("transform", function (d) {
+                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                })
+                .text(function (d) {
+                    return d.text;
+                });
+    }
+</script>

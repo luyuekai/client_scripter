@@ -54,12 +54,14 @@
                                         <i class="fa fa-diamond">&nbsp;Database Source&nbsp;&nbsp;&nbsp;</i>
                                         <span class="pull-right" style="margin-right:0px">
                                             <button id="new_database_button" onclick="ModalUtil.popup_modal('New Database Connection', '/assets/self-owned/html/datasource/create_database_connection.html')" title="New Database Connection" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-database"></i></button>
+                                            <button  class="btn btn-default btn-xs"  title="隐藏" onclick="$('#databaseShowDiv').css('display', 'none'), $('#displayDatabaseShowDIV').css('display', ''), $('#hideDatabaseShowDIV').css('display', 'none')" id="hideDatabaseShowDIV" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-sort-up" aria-hidden="true"></i></button>
+                                            <button  class="btn btn-default btn-xs" title="显示" onclick="$('#databaseShowDiv').css('display', ''), $('#hideDatabaseShowDIV').css('display', ''), $('#displayDatabaseShowDIV').css('display', 'none')" style="padding: 6px 12px;margin-bottom: 0px;display: none" id="displayDatabaseShowDIV"><i class="fa fa-sort-down" aria-hidden="true"></i></button>
                                             <!--                                        <button id="undispaly_config_button" onclick="hide_div('config_content_div');show_div('dispaly_config_button');hide_div('undispaly_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
                                                                                     <button id="dispaly_config_button" onclick="show_div('config_content_div');hide_div('dispaly_config_button');show_div('undispaly_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>-->
                                         </span>
                                     </div>
                                 </div>
-                                <div class="card-body" style="padding:0px">
+                                <div class="card-body " id="databaseShowDiv" style="padding:0px">
                                     <div class="panel-body">
                                         <table class="table-hover" width="100%" cellspacing="0">
                                             <thead>
@@ -86,7 +88,34 @@
                                                     </td>
                                                 </tr>
                                             </tbody>
-                                        </table>                                
+                                        </table>
+                                        
+                                        <div class="matrix-pager-v3">
+                                            <div class="form-inline">
+                                                <nav>
+                                                    <form>
+                                                        <span class="pull-left">
+                                                            <label class="control-label" style="margin-bottom: -12px;">结果总数:<span data-bind="text:totalCounts()?totalCounts():0"></span>条</label>
+
+                                                        </span>
+                                                    </form>
+                                                    <span class="pull-right">
+                                                        <button data-bind="click:function(){toPage(1)}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-double-left"></i> &nbsp;首页</button>
+                                                        <button data-bind="click:function(){toPage(currentPageNumber()-1)}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-left"></i> &nbsp;上页</button>
+                                                        <input data-bind="value:currentPageNumber" type="text" class="form-control" placeholder="页数" style="width:60px;margin-bottom:6px;padding:10px;text-align: center;">
+                                                        <button data-bind="visible:false,click:function(){}" type="submit" class="btn"><span class="fui-search"></span></button>
+                                                        <button data-bind="click:function(){toPage(currentPageNumber()+1)}" type="button" class="btn btn-default " style="padding: 10px 12px;">下页 &nbsp;<i class="fa fa-angle-right"></i></button>
+                                                        <button data-bind="click:function(){toPage(totalPage())}" type="button" class="btn btn-default " style="padding: 10px 12px;">末页 &nbsp;<i class="fa fa-angle-double-right"></i></button>
+                                                        <div class="btn-group dropup">
+                                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span data-bind="text:pageMaxSize()"></span> <span class="caret"></span></button>
+                                                            <ul class="dropdown-menu" role="menu" data-bind="foreach: pagingSizeArray" style="min-width: 90px">
+                                                                <li><a data-bind="click:function(){$parent.pageMaxSize($data)}" href="#"><span data-bind="text:$data"></span></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </span>
+                                                </nav>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -116,21 +145,48 @@
                                                     <td data-bind="text:$data[0],click:function($data){
                                                         runServiceSQL($data);
                                                     }"></td>
-                                                    <td data-bind="text:$data[31].length>45 ? $data[31].substring(0,45)+'...': $data[31], attr: {title:$data[31]}" style="padding-left: 15px"></td>
+                                                    <td data-bind="text:$data[31].length>30 ? $data[31].substring(0,27)+'...': $data[31], attr: {title:$data[31]}" style="padding-left: 15px"></td>
+                                                    <td data-bind="text:$data[14]" style="padding-left: 15px"></td>
                                                     <td>
-                                                        <button type="button" class="btn btn-xs btn-default" title="编辑" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
+                                                        <button type="button" class="btn btn-xs btn-default" title="编辑" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Update Data Source', '/assets/self-owned/html/datasource/update_data_source.html',$data);})">
                                                             <i class="fa fa-edit fa-1x"></i>
                                                         </button>
-                                                        <button type="button" class="btn btn-xs btn-default" title=" 切换状态" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
+                                                        <button type="button" class="btn btn-xs btn-default" title=" 切换状态" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('', '/assets/self-owned/html/datasource/enable_data_source.html',$data);})">
                                                             <i class="fa fa-plug fa-1x"></i>
                                                         </button>                                                   
-                                                        <button type="button" class="btn btn-xs btn-default" title="删除" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('更新定时作业', '/assets/self-owned/html/timejob/modal_timejob_update.html',$data);})">
+                                                        <button type="button" class="btn btn-xs btn-default" title="删除" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Remove Data Source', '/assets/self-owned/html/datasource/remove_data_source.html',$data);})">
                                                             <i class="fa fa-trash fa-1x"></i>
                                                         </button>
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
+                                                                                <div class="matrix-pager-v3">
+                                            <div class="form-inline">
+                                                <nav>
+                                                    <form>
+                                                        <span class="pull-left">
+                                                            <label class="control-label" style="margin-bottom: -12px;">结果总数:<span data-bind="text:totalCounts()?totalCounts():0"></span>条</label>
+
+                                                        </span>
+                                                    </form>
+                                                    <span class="pull-right">
+                                                        <button data-bind="click:function(){toPage(1)}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-double-left"></i> &nbsp;首页</button>
+                                                        <button data-bind="click:function(){toPage(currentPageNumber()-1)}" type="button" class="btn btn-default " style="padding: 10px 12px;"><i class="fa fa-angle-left"></i> &nbsp;上页</button>
+                                                        <input data-bind="value:currentPageNumber" type="text" class="form-control" placeholder="页数" style="width:60px;margin-bottom:6px;padding:10px;text-align: center;">
+                                                        <button data-bind="visible:false,click:function(){}" type="submit" class="btn"><span class="fui-search"></span></button>
+                                                        <button data-bind="click:function(){toPage(currentPageNumber()+1)}" type="button" class="btn btn-default " style="padding: 10px 12px;">下页 &nbsp;<i class="fa fa-angle-right"></i></button>
+                                                        <button data-bind="click:function(){toPage(totalPage())}" type="button" class="btn btn-default " style="padding: 10px 12px;">末页 &nbsp;<i class="fa fa-angle-double-right"></i></button>
+                                                        <div class="btn-group dropup">
+                                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span data-bind="text:pageMaxSize()"></span> <span class="caret"></span></button>
+                                                            <ul class="dropdown-menu" role="menu" data-bind="foreach: pagingSizeArray" style="min-width: 90px">
+                                                                <li><a data-bind="click:function(){$parent.pageMaxSize($data)}" href="#"><span data-bind="text:$data"></span></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </span>
+                                                </nav>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -207,7 +263,7 @@
                     "className": "v2.service.generic.query.entity.Genericentity",
                     "aliasMap": {},
                     "orderMap": {"id": false},
-                    "pageMaxSize": SourceViewModel.databases.pageMaxSize(),
+                    "pageMaxSize": 10,
                     "currentPageNumber": SourceViewModel.databases.currentPageNumber(),
                     "likeORMap": {
                     },
