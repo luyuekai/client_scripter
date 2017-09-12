@@ -1513,7 +1513,6 @@ function header2json(header) {
         res.push(h);
     });
     return JSON.stringify(res);
+};
 }
-;
 
-/////////////////////////////////////

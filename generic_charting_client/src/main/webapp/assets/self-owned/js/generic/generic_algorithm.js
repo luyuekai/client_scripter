@@ -746,8 +746,7 @@ DataTransferPOJO={
     }
     return {'result':dataT};
   },
-      return resultJsonObject;
-    },
+
 
     transferArray2JsonObject:function(headerArray, dataArray){
       var json = {};
