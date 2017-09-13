@@ -108,6 +108,18 @@
 
 
 <script>
+    var tag_map = {
+        TEXT: '文本',
+        IMAGE: '图像',
+        VIDEO: '视频',
+        VOICE: '语音',
+        INTERNET: '互联网',
+        ECONOMY: '经济',
+        TRANSPORTATION: '交通',
+        HEALTH: '健康',
+        REAL_ESTATE: '房地产'
+    };
+
     // Initialize the View Model
     // Clean the paging binding nodes
     // Binding the view Model
@@ -133,7 +145,7 @@
                 if (self.tag_string) {
                     var tags = self.availableTags();
                     $.each(tags, function (index, value) {
-                        if (self.tag_string.indexOf(value.value) > -1) {
+                        if (self.tag_string.indexOf(value.key) > -1) {
                             value.is_select = true;
                         }
                     });
@@ -150,7 +162,7 @@
                 var result = "";
                 $.each(tags, function (index, value) {
                     if (value.is_select) {
-                        result += value.value + ',';
+                        result += value.key + ',';
                     }
                 });
                 if (self.is_template()) {
@@ -180,7 +192,8 @@
         $.each(tags, function (index, value) {
             var obj = {
                 'checkbox_id': 'tag_checkbox_' + index,
-                'value': value,
+                'key': value,
+                'value': tag_map[value],
                 'is_select': false
             };
             businessPOJO.availableTags.push(obj);
@@ -293,6 +306,8 @@
             genericModalViewModel.response(true, "Entity Operation", "[Successed]", "Operation Successed, please close the console and reload the data.");
             LoaderUtil.remove_v3('genericModalDiv');
             $('#confirm_button').attr("disabled",true);
+            $('#add_ds_btn').attr("visible",true);
+            $('#up2oda_btn').attr("visible",true);
           }, 2000);
       }
   }

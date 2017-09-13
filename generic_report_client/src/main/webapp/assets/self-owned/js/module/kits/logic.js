@@ -1,5 +1,6 @@
 var template_tag_list = ["TEMPLATE"];
-var tag_list = ["TEXT", " NATURAL_LANGUAGE", " IMAGE", " VIDEO", " VOICE", " MACHINE_LEARNING", " INTERNET", " ECONOMY", " TRANSPORTATION", " HEALTH", " REAL_ESTATE"];
+//var tag_list = ["TEXT", " NATURAL_LANGUAGE", " IMAGE", " VIDEO", " VOICE", " MACHINE_LEARNING", " INTERNET", " ECONOMY", " TRANSPORTATION", " HEALTH", " REAL_ESTATE"];
+var tag_list = ["TEXT", "IMAGE", "VOICE", "INTERNET", "ECONOMY", "TRANSPORTATION", "HEALTH", "REAL_ESTATE"];
 var isView = false;
 var current_mode = null; //EDIT && VIEW
 function switchMode(){
