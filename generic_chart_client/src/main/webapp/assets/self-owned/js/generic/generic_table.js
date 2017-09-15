@@ -17,7 +17,6 @@ function DataModel(data, isChecked, isDisplay,parent) {
     };
 }
 
-
 function HeaderItemModel(data,index,isChecked,isDisplay,parent){
   var self = this;
   self.parent = parent;
@@ -32,10 +31,8 @@ function HeaderItemModel(data,index,isChecked,isDisplay,parent){
   },this);
   self.isChecked = ko.observable(isChecked);
   self.isDisplay = ko.observable(isDisplay);
-
-
+  self.isLegend = ko.observable(false);
 }
-
 
 
 function ThinListViewModel() {
@@ -289,6 +286,8 @@ function ThinListViewModel() {
       });
     }
 
+
+
     // 分页更新页面视图元素函数，逻辑如下：
     // data为表中所有数据，它包含的isDisplay属性控制是否在界面显示
     // 对data进行loop，将索引从first到last之间的元素设置为显示，其余设置为不显示
@@ -326,43 +325,6 @@ function ThinListViewModel() {
         self.columnNames([]);
         self.buildView();
     };
-
-    self.header2json = function(){
-      var header = self.headerViewData();
-      var res = [];
-      $.each(header, function (idx, val) {
-        // var self = this;
-        // self.parent = parent;
-        // self.data = ko.observable(data);
-        //
-        // self.data_id = ko.computed(function() {
-        //       return 'id_'+this.data()+ (new Date()).getTime()
-        //   }, this);
-        // self.index = ko.observable(index);
-        // self.name = ko.computed(function(){
-        //   return self.index()+"_"+self.data();
-        // },this);
-        // self.isChecked = ko.observable(isChecked);
-        // self.isDisplay = ko.observable(isDisplay);
-        var h = {
-          data:val.data(),
-          index:idx,
-          isChecked: val.isChecked(),
-          isDisplay: val.isDisplay()
-        }
-        res.push(h);
-      });
-      return JSON.stringify(res);
-    };
-
-    self.json2header = function(json){
-      var obj = JSON.parse(json);
-      var header = [];
-      $.each(obj,function(idx,val){
-        header.push(new HeaderItemModel(val.data,idx,val.isChecked,val.isDisplay,self));
-      });
-      return header;
-    }
 }
 
 function ListViewModel() {

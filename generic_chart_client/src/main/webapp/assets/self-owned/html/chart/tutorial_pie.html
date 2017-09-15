@@ -1,0 +1,31 @@
+<div id="tutorial_chart" style="width: 100%;height:100%;min-height:360px"></div>
+<br>
+
+<span class="cell_div_view markdown-body" ><h2 id="">饼图</h2>
+<p>饼图主要用于表现不同类目的数据在总和中的占比。每个的弧度表示数据数量的比例。</p>
+<p>Tip: 饼图更适合表现数据相对于总数的百分比等关系。如果只是表示不同类目数据间的大小，建议使用 柱状图，人们对于微小的弧度差别相比于微小的长度差别更不敏感</p>
+<h3 id="-1">数据模型样例</h3>
+<ul>
+<li>Data:
+[{"value":335,"name":"直接访问"},{"value":310,"name":"邮件营销"},{"value":234,"name":"联盟广告"},{"value":135,"name":"视频广告"},{"value":1548,"name":"搜索引擎"}]</li>
+</ul>
+</span>
+
+
+<script>
+  var data = [
+         {value:335, name:'直接访问'},
+         {value:310, name:'邮件营销'},
+         {value:234, name:'联盟广告'},
+         {value:135, name:'视频广告'},
+         {value:1548, name:'搜索引擎'}
+     ];
+
+  var pie;
+  function initialize() {
+    var c = ChartPOJO.generate_default_chart('tutorial_chart');
+    pie = c = Pie_ChartPOJO.initialize_chart(c, data);
+  }
+
+  initialize();
+</script>
