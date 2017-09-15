@@ -1,0 +1,73 @@
+<div id="boxplot_content">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Scale</label>
+            <div class="col-sm-3">
+                <input id="min_value_input" type="text" class="form-control" placeholder="min" aria-describedby="basic-addon2" data-bind="value:scale_min">
+            </div>
+            <div class="col-sm-3">
+                <input id="max_value_input" type="text" class="form-control" placeholder="max" aria-describedby="basic-addon2" data-bind="value:scale_max">
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Series</label>
+            <div class="col-sm-7">
+                <textarea id="data_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:series"></textarea>
+            </div>
+
+            <div class="col-sm-1">
+                <button onclick="reset_series()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    function reset_series() {
+        var tmp = $('#data_value_input').val();
+        var min_scale = Number($('#min_value_input').val());
+        var max_scale = Number($('#max_value_input').val());
+        tmp = $.parseJSON(tmp);
+        if (tmp && chartViewModel && chartViewModel.chart) {
+            var option = _setWordCloud(tmp);
+            chartViewModel.chart.setOption(option);
+        }
+    }
+
+    function _setWordCloud(cloudData, max, min) {
+        if(max && min) {
+            
+        }
+        var option = {
+            series: [
+                {
+                    type: 'wordCloud',
+                    shape: 'ellipse',
+                    gridSize: 8,
+                    textStyle: {
+                        normal: {
+                            fontFamily: '微软雅黑',
+                            color: function () {
+                                var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+                                return colors[parseInt(Math.random() * 10)];
+                            }
+                        }
+                    },
+                    /*注释一：*/
+                    // textStyle:createRandomItemStyle2(),  
+
+
+                    /*注释二：*/
+                    /*textStyle: { 
+                     normal: { 
+                     fontFamily: '微软雅黑', 
+                     color: createRandomItemStyle1() 
+                     } 
+                     },*/
+                    data: cloudData
+                }
+            ]
+        };
+        return option;
+    }
+</script>

@@ -1,0 +1,183 @@
+<div id="radar_content">
+  <form class="form-horizontal">
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Add Indicator</label>
+      <div class="col-sm-7">
+        <div class="input-group" title="From Source">
+          <span class="input-group-addon" id="basic-addon2">
+            <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
+          <input id="add_indicator_name_input" type="text" class="form-control" placeholder="Indicator Name" aria-describedby="basic-addon2">
+        </div>
+        <div class="input-group" title="From Source">
+          <span class="input-group-addon" id="basic-addon2">
+            <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+          <input id="add_indicator_value_input" type="text" class="form-control" placeholder="Max Value" aria-describedby="basic-addon2">
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <button onclick="add_radar_indicator()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Remove Indicator</label>
+      <div class="col-sm-7">
+        <div class="input-group" title="From Source">
+          <span class="input-group-addon" id="basic-addon2">
+            <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
+          <input id="remove_indicator_name_input" type="text" class="form-control" placeholder="Indicator Name" aria-describedby="basic-addon2">
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <button onclick="remove_radar_indicator()" title="Manual minus stacks" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Add Data</label>
+      <div class="col-sm-7">
+        <div class="input-group" title="From Source">
+          <span class="input-group-addon" id="basic-addon2">
+            <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
+          <input id="add_name_input" type="text" class="form-control" placeholder="Source Name" aria-describedby="basic-addon2">
+        </div>
+        <div class="input-group" title="From Source">
+          <span class="input-group-addon" id="basic-addon2">
+            <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+          <input id="add_value_input" type="text" class="form-control" placeholder="Source Value" aria-describedby="basic-addon2">
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <button onclick="add_radar_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Remove Data</label>
+      <div class="col-sm-7">
+        <div class="input-group" title="From Source">
+          <span class="input-group-addon" id="basic-addon2">
+            <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
+          <input id="remove_name_input" type="text" class="form-control" placeholder="Source Name" aria-describedby="basic-addon2">
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <button onclick="remove_radar_data()" title="Manual minus stacks" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Indicator</label>
+      <div class="col-sm-7">
+          <textarea id="indicator_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:indicator"></textarea>
+      </div>
+
+      <div class="col-sm-1">
+        <button onclick="reset_indicator()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Series</label>
+      <div class="col-sm-7">
+          <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value:series"></textarea>
+      </div>
+
+      <div class="col-sm-1">
+        <button onclick="reset_series()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<script>
+var radarViewModel = {
+    indicator:  ko.observable(''),
+    series: ko.observable('')
+}
+
+ko.cleanNode($('#radar_content'))
+ko.applyBindings(radarViewModel,document.getElementById('radar_content'))
+
+function add_radar_indicator() {
+  var indicator_name = $('#add_indicator_name_input').val();
+  var max_value=$('#add_indicator_value_input').val();
+  if (chartViewModel && chartViewModel.chart) {
+    var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+    var obj = {
+      'name': indicator_name,
+      'max': max_value
+    }
+    option.radar[0].indicator.push(obj);
+    chartViewModel.chart = ChartPOJO.reset_chart_option(chartViewModel.chart, option);
+  }
+}
+
+function remove_radar_indicator(){
+  var data_name=$('#remove_indicator_name_input').val();
+  if (chartViewModel && chartViewModel.chart) {
+    var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+    var data = [];
+    $.each(option.radar[0].indicator, function(index, value) {
+      if (value.name != data_name) {
+        data.push(value);
+      }
+    });
+
+    option.radar[0].indicator = data;
+    chartViewModel.chart = ChartPOJO.reset_chart_option(chartViewModel.chart, option);
+  }
+}
+
+function add_radar_data(){
+  var data_name = $('#add_name_input').val();
+  var data_value = $('#add_value_input').val().split(',');
+  if (chartViewModel && chartViewModel.chart) {
+    var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+    var obj = {
+      'name': data_name,
+      'value': data_value
+    }
+    chartViewModel.chart = ChartPOJO.add_series_data_item(chartViewModel.chart,obj);
+  }
+}
+ function remove_radar_data(){
+  var data_name = $('#remove_name_input').val();
+  if (chartViewModel && chartViewModel.chart) {
+    var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
+    var data = [];
+
+    $.each(option.series[0].data, function(index, value) {
+      if (value.name != data_name) {
+        data.push(value);
+      }
+    });
+
+    option.series[0].data = data;
+    chartViewModel.chart = ChartPOJO.reset_chart_option(chartViewModel.chart, option);
+  }
+
+};
+
+
+function reset_indicator() {
+  var tmp = $('#indicator_value_input').val();
+  tmp = $.parseJSON(tmp);
+  if (chartViewModel && chartViewModel.chart) {
+    var i = chartViewModel.chart.getOption().radar[0].indicator;
+    var d = chartViewModel.chart.getOption().series[0].data;
+    chartViewModel.chart = Radar_ChartPOJO.initialize_chart(chartViewModel.chart,d,tmp);
+  }
+}
+
+  function reset_series() {
+    var tmp = $('#nodes_value_input').val();
+    tmp = $.parseJSON(tmp);
+    if (chartViewModel && chartViewModel.chart) {
+      var i = chartViewModel.chart.getOption().radar[0].indicator;
+      var d = chartViewModel.chart.getOption().series[0].data;
+      
+      chartViewModel.chart = Radar_ChartPOJO.initialize_chart(chartViewModel.chart,tmp,i);
+    }
+  }
+
+
+
+</script>

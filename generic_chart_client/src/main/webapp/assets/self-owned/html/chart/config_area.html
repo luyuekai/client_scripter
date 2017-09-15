@@ -1,0 +1,106 @@
+<div id="area_content">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Axis Base</label>
+            <div class="col-sm-7">
+                <div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_axis" id="radio_axis_x" value="x" data-bind="checked:xOry" checked>
+                        <label for="radio_axis_x" title="left">
+                            &nbsp;X Axis
+                        </label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_axis" id="radio_axis_y" value="y" data-bind="checked:xOry">
+                        <label for="radio_axis_y" title="center">
+                            &nbsp;Y Axis
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Axis Value</label>
+            <div class="col-sm-7">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">
+                        <i class="fa fa-bars" aria-hidden="true"></i>&nbsp;</span>
+                    <input id="axis_value_input" type="text" class="form-control" placeholder="Axis value:cat,dog,bird,fish" aria-describedby="basic-addon1" data-bind="value:axis">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button onclick="reset_axis_base()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Series Data</label>
+            <div class="col-sm-7">
+                <div class="input-group" title="From Source">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
+                    <input id="add_name_input" type="text" class="form-control" placeholder="Series Name" aria-describedby="basic-addon2">
+                </div>
+                <div class="input-group" title="From Source">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+                    <input id="add_value_input" type="text" class="form-control" placeholder="Series Value" aria-describedby="basic-addon2">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button onclick="add_series_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+                <button onclick="ModalUtil.popup_modal('Manual minus series', '/assets/self-owned/html/chart/modal/modal_content_minus_series.html', null, null, null);" title="Manual remove series" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Series</label>
+            <div class="col-sm-7">
+                <textarea id="nodes_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;" data-bind="value: series"></textarea>
+            </div>
+
+            <div class="col-sm-1">
+                <button onclick="reset_series()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    var areaViewModel = {
+        xOry: ko.observable('x'),
+        axis: ko.observable(''),
+        series: ko.observable('')
+    }
+    ko.cleanNode($('#area_content'))
+    ko.applyBindings(areaViewModel, document.getElementById('area_content'))
+
+    function add_series_data() {
+        var data_name = $('#add_name_input').val();
+        var data_value = $('#add_value_input').val().split(',');
+        if (data_name && data_value && chartViewModel && chartViewModel.chart) {
+            chartViewModel.chart = ChartPOJO.addSeries(chartViewModel.chart, data_name, 'area', data_value);
+        }
+    }
+
+
+
+
+    function reset_series() {
+        var tmp = $('#nodes_value_input').val();
+        tmp = $.parseJSON(tmp);
+        if (tmp && chartViewModel && chartViewModel.chart) {
+            chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, tmp, 'area');
+        }
+    }
+
+
+    function reset_axis_base() {
+        var checked = $("[name='radio_axis']").filter(":checked");
+        var axis_base = $(checked[0]).val();
+        var axis_data = $('#axis_value_input').val().split(',');
+        // alert(axis_base)
+        if (chartViewModel && chartViewModel.chart) {
+            chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, axis_base, axis_data);
+        }
+    }
+</script>
