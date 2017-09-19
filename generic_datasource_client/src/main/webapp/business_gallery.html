@@ -45,7 +45,7 @@
 
                 <!--RESPONSE DIV BEGIN-->
                 <div class="row" data-bind="with:response_vm">
-                    <div class="col-sm-12" style="margin-bottom:12px" style="display:none" data-bind="visible: resultVisible">
+                    <div class="col-sm-12" style="margin-bottom:12px;display:none" data-bind="visible: resultVisible">
                         <div class="flat-matrix">
                             <div class="alert fresh-color " data-bind="css:styleClass,visible: resultVisible" style="display:none">
                                 <button type="button" class="close" data-bind="click:function(){resultVisible(false)}" aria-label="Close"><i class="fa fa-close"></i></button>
@@ -62,7 +62,7 @@
 
                 <!--VALIDATION DIV BEGIN-->
                 <div class="row">
-                    <div class="col-sm-12" style="margin-bottom:12px" style="display:none" data-bind="visible: hasError">
+                    <div class="col-sm-12" style="margin-bottom:12px;display:none" data-bind="visible: hasError">
                         <div id="validation_div">
                             <div class="flat-matrix">
                                 <div class="alert alert-warning alert-dismissible fresh-color" role="alert" style="display:none" data-bind="visible: hasError">
@@ -108,14 +108,12 @@
                                         <i class="icon fa fa-bars fa-4x"></i>
                                         <div class="content">
                                             <div class="title">
-                                                <span class="label label-info" id="APIData" data-bind="visible:isApi(type)">&nbsp;&nbsp;API&nbsp;&nbsp;</span>
-                                                <span class="label label-warning" id="DatabaseData"data-bind="visible:!isApi(type)">Database</span>
+                                                <span class="label label-info" id="APIData" data-bind="if:type=='GENERIC_MATRIX_DATA_SOURCE'" style="margin-right: 8px;">&nbsp;&nbsp;API&nbsp;&nbsp;</span>
+                                                <span class="label label-warning" id="DatabaseData"data-bind="if:type !='GENERIC_MATRIX_DATA_SOURCE'" style="margin-right: 8px;">Database</span>
                                                 <span  data-bind="text:creator" style="margin-right: 8px;"></span>
                                                 <span  data-bind="text:(function(){return new Date(parseInt(numberalpha)).toLocaleString()})()" style="margin-right: 8px;"></span>
-                                                <button title="Remove" data-toggle="modal" data-target="#myModal" type="button" class="btn btn-default pull-right" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-trash-o"></i></button>
-                                                <button title="Update" onclick = "function () {
-                                                            default_switch2detail_page($data, '/business_kit.html', 'update', 'MATRIX_DATA_SOURCE_CURRENT')
-                                                        }" type="button" class="btn btn-default pull-right" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-cogs"></i></button>
+                                                <button title="Remove" data-bind="event:{click:function(){Remove($data)}}" type="button" class="btn btn-default pull-right" style="padding: 6px 8px;margin-bottom: 0px;margin-right: 8px;"><i class="fa fa-trash-o"></i></button>
+                                                <button title="Update" data-bind="event:{click:function(){Update($data)}}" type="button" class="btn btn-default pull-right" style="padding: 6px 8px;margin-bottom: 0px;margin-right: 8px;"><i class="fa fa-cogs"></i></button>
                                             </div>                                           
                                             <div class="value">
                                                 <span class="sign" data-bind="text:description"></span>
@@ -124,23 +122,6 @@
                                         </div>
                                     </div>
                                 </a>
-                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h4 class="modal-title">Modal title</h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-sm btn-success" onclick="Remove()">Save changes</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                             <!-- /ko -->

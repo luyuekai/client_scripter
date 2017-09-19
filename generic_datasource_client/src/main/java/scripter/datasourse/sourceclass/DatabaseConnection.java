@@ -17,6 +17,7 @@ public class DatabaseConnection {
     private String dbUsername;
     private String dbPasswd;
     private String dbUrl;
+    private boolean enable;
     private int dbID;
 
     public String getDbUrl() {
@@ -73,5 +74,11 @@ public class DatabaseConnection {
     public void setdbID(int i){
         this.dbID = i;
     }
-
+    
+    public boolean getEnable(){
+        return enable;
+    }
+    public void setEnable(boolean e){
+        this.enable = e;
+    }
 }

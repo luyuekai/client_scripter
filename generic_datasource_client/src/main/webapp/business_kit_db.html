@@ -91,7 +91,7 @@
 
                 <!--RESPONSE DIV BEGIN-->
                 <div class="row" data-bind="with:response_vm">
-                    <div class="col-sm-12" style="margin-bottom:12px" style="display:none" data-bind="visible: resultVisible">
+                    <div class="col-sm-12" style="margin-bottom:12px;display:none" data-bind="visible: resultVisible">
                         <div class="flat-matrix">
                             <div class="alert fresh-color " data-bind="css:styleClass,visible: resultVisible" style="display:none">
                                 <button type="button" class="close" data-bind="click:function(){resultVisible(false)}" aria-label="Close"><i class="fa fa-close"></i></button>
@@ -108,7 +108,7 @@
 
                 <!--VALIDATION DIV BEGIN-->
                 <div class="row">
-                    <div class="col-sm-12" style="margin-bottom:12px" style="display:none" data-bind="visible: hasError">
+                    <div class="col-sm-12" style="margin-bottom:12px;display:none" data-bind="visible: hasError">
                         <div id="validation_div">
                             <div class="flat-matrix">
                                 <div class="alert alert-warning alert-dismissible fresh-color" role="alert" style="display:none" data-bind="visible: hasError">
@@ -213,10 +213,10 @@
                     <div class="col-sm-12" data-bind="visible:detailVisible">
                         <div class="card card-mini">
                             <div class="card-header">
-                                <div class="card-title">
+                                <div class="card-title" >
                                     <i class="fa fa-diamond">&nbsp;Data Source Detail  &nbsp;&nbsp;&nbsp;</i>                    
-                                    <button title="Remove" data-toggle="modal" data-target="#myModal" type="button" class="btn btn-default pull-right" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-trash-o"></i></button>
-                                    <button title="Update" onclick="Update()" type="button" class="btn btn-default pull-right" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-cogs"></i></button>
+                                    <button title="Remove" data-toggle="modal" data-target="#myModal" type="button" class="btn btn-default pull-right" style="padding: 6px 8px;margin-bottom: 0px;margin-right:8px;"><i class="fa fa-trash-o"></i>&nbsp;</button>&nbsp;
+                                    <button title="Update" onclick="Update()" type="button" class="btn btn-default pull-right" style="padding: 6px 8px;margin-bottom: 0px;margin-right:8px;"><i class="fa fa-cogs"></i>&nbsp;</button>
                                 </div>  
                                 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                     <div class="modal-dialog">
@@ -306,7 +306,7 @@
                                             <a href="#step1-v3-horizantal" id="step1-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
                                                 <div class="icon fa fa-key"></div>
                                                 <div class="heading">
-                                                    <div class="title">Data Source Setting From Database</div>
+                                                    <div class="title">Setting From Database</div>
                                                     <div class="description">Choose database type</div>
                                                 </div>
                                             </a>
@@ -316,7 +316,7 @@
                                                 <div class="icon fa fa-filter"></div>
                                                 <div class="heading">
                                                     <div class="title">Detail Setting</div>
-                                                    <div class="description">Name and password configuration</div>
+                                                    <div class="description">Configuration</div>
                                                 </div>
                                             </a>
                                         </li>                        
@@ -383,17 +383,17 @@
                                                     </label>
                                                     <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
-                                                <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
-                                                    <input data-bind="value:databaseDriver" readonly="true" type="text" class="form-control" placeholder="">
+                                                <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;margin-top: 8px;">
+                                                    <span data-bind="text:databaseDriver" ></span>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-2 text-right">
-                                                    <label style="margin-top:10px;">Database URL:
+                                                    <label style="margin-top:15px;">Database URL:
                                                     </label>
                                                     <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
-                                                <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
+                                                <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;margin-top: 8px;">
                                                     <input data-bind="value:databaseUrl" type="text" class="form-control" placeholder="">
                                                 </div>
                                             </div>
@@ -896,12 +896,12 @@
                 <!--TEMPLATE DIV BEGIN-->
                 <div id="template-matrix-dynamic-table-div"></div>
                 <div id="template-matrix-modal-div"></div>
-                <div id="template-matrix-footer-div"></div>
                 <!--TEMPLATE DIV BEGIN-->
+                <div id="template-matrix-footer-div"></div>
             </div>
+        </div>
 
-
-
+              
 
 
 

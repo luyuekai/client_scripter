@@ -63,7 +63,6 @@ function scroll_env_setup() {
 }
 
 function show_data(data) {
-    console.log("data " + $.toJSON(data));
     if (data.type == 'SOURCE_SQL_CONFIGURATION') {
         default_switch2detail_page(data, '/business_kit_db.html', 'check', 'MATRIX_DATA_SOURCE_CURRENT');
     } else {
@@ -139,4 +138,34 @@ function filterData(type) {
         }
         SearchPOJO.listener();
     }
+}
+
+function Update(data) {
+    if (data.type == 'SOURCE_SQL_CONFIGURATION') {
+        default_switch2detail_page(data, '/business_kit_db.html', 'update', 'MATRIX_DATA_SOURCE_CURRENT');
+    } else {
+        default_switch2detail_page(data, '/business_kit.html', 'update', 'MATRIX_DATA_SOURCE_CURRENT');
+    }
+}
+function Remove(data) {
+    var id = data.id;
+    console.log(data);
+    var requestPOJO = {
+        "className": "v2.service.generic.query.entity.Genericentity",
+        "attributes": {
+            "id":id,
+            "deleted": true
+        }
+    };
+     var res = {
+      'queryJson': $.toJSON(requestPOJO)
+    };
+    $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/update', res, "galleryRemoveSuccess", "galleryRemoveFail", "galleryRemoveWrong","POST",true,{'TAG':'MATRIX_UPDATE'});
+   
+}
+$.subscribe("galleryRemoveSuccess",successRemove);
+
+function successRemove(){
+    console.log($.toJSON(arguments[1]))
+    filterData(vm.businessPOJO().dataSourceType());
 }

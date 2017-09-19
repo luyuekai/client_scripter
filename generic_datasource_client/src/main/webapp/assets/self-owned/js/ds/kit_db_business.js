@@ -29,7 +29,7 @@ var databaseChooseViewModel = {
     tableHasResult: ko.observable(false),
     columnHasResult: ko.observable(false),
 }
-
+//20170914
 
 
 function env_setup() {
@@ -158,9 +158,9 @@ function vm_env_setup() {
             var ds = JSON.parse(pojo.stringzeta);
             if (ds) {
                 var url = pojo.stringalpha;
-                var name = pojo.decription;
-                console.log("url " + url)
+                var name = pojo.description;               
                 var database = [name, '', url, ''];
+                ds = ds.attr;
                 self.databaseSelected.selectedDatabase(database);
                 self.stringzeta_ds(ds.ds);
                 self.stringzeta_refresh_interval(ds.refresh_interval);
@@ -178,7 +178,8 @@ function vm_env_setup() {
 
             self.tableModel().headerViewData(header_model_list);
             var ds = JSON.parse(self.ds());
-            reload_dynamic_table(ds);
+            var attr = ds.attr;
+            reload_dynamic_table(attr);
         }
 
         self.clear = function () {
@@ -230,6 +231,7 @@ function vm_env_setup() {
                     "numberbeta": self.lastupdatetime(),
                     "description": self.databaseSelected.selectedDatabase()[0],
                     "deleted": self.deleted(),
+                    "enabled": true,
                     "stringalpha": self.databaseSelected.selectedDatabase()[2],
                     "stringbeta": self.sql(),
                     "stringzeta": self.ds(),
@@ -246,15 +248,18 @@ function vm_env_setup() {
         self.stringzeta_request_params = ko.observable();
         self.ds = ko.computed(function () {
             var json = {
-                'request_params': self.stringzeta_request_params(),
-                'ds': self.stringzeta_ds(),
-                'header_json': self.tableModel().header2json(),
-                'refresh_interval': self.stringzeta_refresh_interval(),
-                'rest_mode': self.stringzeta_rest_mode(),
-                'pageMaxSize': self.tableModel().pageMaxSize(),
-                'json_rule': 'result',
-                'source_data': 'database'
+                'style': 'database',
+                'attr': {
+                    'request_params': self.stringzeta_request_params(),
+                    'ds': self.stringzeta_ds(),
+                    'header_json': self.tableModel().header2json(),
+                    'refresh_interval': self.stringzeta_refresh_interval(),
+                    'rest_mode': self.stringzeta_rest_mode(),
+                    'pageMaxSize': self.tableModel().pageMaxSize(),
+                    'json_rule': 'result',
+                    'source_data': 'database'
 //                'mock': self.stringzeta_mock()
+                }
             }
             return JSON.stringify(json);
         });
@@ -289,10 +294,14 @@ function vm_env_setup() {
     var style = $.urlParamValue('style');
     if (status == 'check') {
         vm.businessPOJO().detailVisible(true);
-    } else {
+    } else if(status === 'remove') {
+        Remove();
+    }else if (status === 'update'){
+        vm.businessPOJO().detailVisible(true);
+        vm.businessPOJO().datasourcesetVisible(true);
+    }else{
         vm.businessPOJO().connectionVisible(true);
     }
-
     if (CachePOJO.businessPOJO) {
         vm.businessPOJO().reload(CachePOJO.businessPOJO);
     }
@@ -353,6 +362,7 @@ var runService = function () {
             "stringepsilon": vm.businessPOJO().passwd().trim(),
             "stringeta": vm.businessPOJO().formatTime(),
             "deleted": false,
+            "enabled": true,
             "type": "SOURCE_DATABASE_CONFIGURATION"
         }
 
@@ -576,7 +586,6 @@ function getSchemaInDatabase() {
             }
         }).done(function (data) {
             var data = JSON.parse(data);
-            console.log(data)
             if (!data.hasError) {
                 var table = data.result[0].split("\n");
                 if (table[0] && table[0] === "schema_name,schema_owner") {
@@ -619,7 +628,6 @@ function getTableInDatabase(data) {
         }
     }).done(function (data) {
         var data = JSON.parse(data);
-        console.log(data)
         if (!data.hasError) {
             vm.businessPOJO().databaseSelected.availableTable.removeAll();
             var table = data.result[0].split("\n")
@@ -639,7 +647,6 @@ function getTableInDatabase(data) {
 
 }
 function getColumnInTable(data) {
-    console.log("column" + $.toJSON(data))
 
     $.ajax({
         dataType: "text",
@@ -652,7 +659,7 @@ function getColumnInTable(data) {
         }
     }).done(function (data) {
         var data = JSON.parse(data);
-        console.log(data);
+        
         if (!data.hasError) {
             vm.businessPOJO().databaseSelected.column.removeAll();
             var table = data.result[0].split("\n")
@@ -692,23 +699,21 @@ function checkDataSourceForConnection(data) {
         'queryJson': $.toJSON(requestPOJO)
     };
     $.serverRequest($.getServerRoot() + "/service_generic_query/api/query", data, "successCheckDatabase",
-            "failedCheckDatabase", "serverCheckDatabase","POST", true, {'TAG': id});
+            "failedCheckDatabase", "serverCheckDatabase", "POST", true, {'TAG': id});
 
 }
 $.subscribe("successCheckDatabase", removeConnection);
 
 function removeConnection() {
     if (arguments && arguments[1]) {
-        console.log(arguments[1])
         if (arguments[1].response.result.length > 0) {
             var result = arguments[1].response.result[0];
             var num = result[0];
             var url = result[1];
-            if(num > 0){
-               vm.response_vm().errorResponse("有依赖于该链接的数据源", "删除数据库链接", "[失败]"); 
+            if (num > 0) {
+                vm.response_vm().errorResponse("有依赖于该链接的数据源", "删除数据库链接", "[失败]");
             }
         } else {
-             console.log(arguments[1].addtion.TAG)
             var requestPOJO = {
                 "className": "v2.service.generic.query.entity.Genericentity",
                 "attributes": {
@@ -940,6 +945,7 @@ var gen_table = function () {
 
     var tableData = DataTransferPOJO.transferHiveData(server_data[0]);
     var tableModel = new ThinListViewModel();
+    
     tableModel.buildData(tableData.result);
     tableModel.columnNames(tableData.header);
     tableModel.isDisplayPager(true);
@@ -1014,4 +1020,8 @@ function show_configuration_panel(divToSwitch, showButtonDiv, hideButtonDiv) {
     show_div(divToSwitch);
     hide_div(showButtonDiv);
     show_div(hideButtonDiv);
+}
+
+function Update() {
+    vm.businessPOJO().datasourcesetVisible(true);
 }

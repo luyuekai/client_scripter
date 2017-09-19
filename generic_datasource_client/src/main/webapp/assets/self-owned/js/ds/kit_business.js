@@ -72,6 +72,7 @@ function vm_env_setup() {
             self.stringzeta(pojo.stringzeta);
             var ds = JSON.parse(pojo.stringzeta);
             if (ds) {
+                ds = ds.attr;
                 self.stringzeta_ds(ds.ds);
                 self.stringzeta_header_json(ds.header_json);
                 self.stringzeta_refresh_interval(ds.refresh_interval);
@@ -88,11 +89,16 @@ function vm_env_setup() {
         }
 
         self.reload_table = function () {
+
             self.detailVisible(true);
-            self.setVisible(false);
+            var status = $.urlParamValue('status');
+            if (status == 'update') {
+                self.setVisible(true)
+            } else {
+                self.setVisible(false);
+            }
             gen_table();
             var header_model_list = self.tableModel().json2header(self.stringzeta_header_json());
-            console.log("header = " + header_model_list);
             self.tableModel().headerViewData(header_model_list);
         }
 
@@ -147,13 +153,22 @@ function vm_env_setup() {
             var val = self.stringzeta_request_params();
             var result = 'No limit';
             if (val) {
-                val = JSON.parse(val);
-                if (val.queryJson) {
-                    var json = JSON.parse(val.queryJson);
-                    if (json && json.pageMaxSize) {
-                        result = json.pageMaxSize;
+                try {
+                    val = JSON.parse(val);
+                    if (val.queryJson) {
+                        var json = JSON.parse(val.queryJson);
+                        if (json && json.pageMaxSize) {
+                            result = json.pageMaxSize;
+                        }
                     }
+                } catch (err) {
+                    vm.response_vm().errorResponse("JSON解析失败，请检查JSON格式", "JSON解析", "[失败]");
+                    setTimeout(function () {
+                        vm.response_vm().reset();
+                    }, 3000);
                 }
+
+
             }
             return result;
         });
@@ -189,7 +204,6 @@ function vm_env_setup() {
                     "deleted": self.deleted(),
                 }
             };
-            console.log("deleted = " + requestPOJO.attributes.deleted)
             if (self.id()) {
                 requestPOJO.attributes.id = self.id();
             }
@@ -198,14 +212,17 @@ function vm_env_setup() {
 
         self.ds = ko.computed(function () {
             var json = {
-                'ds': self.stringzeta_ds(),
-                'header_json': self.tableModel().header2json(),
-                'refresh_interval': self.stringzeta_refresh_interval(),
-                'json_rule': self.stringzeta_json_rule(),
-                'rest_mode': self.stringzeta_rest_mode(),
-                'request_params': self.stringzeta_request_params() || null,
-                'pageMaxSize': self.tableModel().pageMaxSize(),
-                'mock': self.stringzeta_mock()
+                'style': 'api',
+                'attr': {
+                    'ds': self.stringzeta_ds(),
+                    'header_json': self.tableModel().header2json(),
+                    'refresh_interval': self.stringzeta_refresh_interval(),
+                    'json_rule': self.stringzeta_json_rule(),
+                    'rest_mode': self.stringzeta_rest_mode(),
+                    'request_params': self.stringzeta_request_params() || null,
+                    'pageMaxSize': self.tableModel().pageMaxSize(),
+                    'mock': self.stringzeta_mock()
+                }
             }
             return JSON.stringify(json);
         });
@@ -219,17 +236,20 @@ function vm_env_setup() {
     vm.businessPOJO(businessPOJO);
     var status = $.urlParamValue('status');
     var style = $.urlParamValue('style');
-    if (status == null || status == 'update') {
+
+
+    if (CachePOJO.businessPOJO) {
+        vm.businessPOJO().reload(CachePOJO.businessPOJO);
+    }
+    if (status == null) {
         vm.businessPOJO().setVisible(true);
     } else if (status == 'check') {
         vm.businessPOJO().detailVisible(true);
-    } else if (status == 'update') {
-        vm.businessPOJO().setVisible(true);
     }
-//    vm.businessPOJO().setVisible(true);
-//    vm.businessPOJO().detailVisible(true);
-    if (CachePOJO.businessPOJO) {
-        vm.businessPOJO().reload(CachePOJO.businessPOJO);
+    if (status == 'update') {
+        Update();
+        vm.businessPOJO().detailVisible(false);
+        vm.businessPOJO().setVisible(true);
     }
 }
 ;
@@ -253,6 +273,10 @@ var businessValidation = function () {
 
     return errorMessages;
 }
+var settingValidation = function () {
+
+}
+
 
 // *******YOUR SHOULD CODING IN HERE:*******
 var runService = function () {
@@ -270,7 +294,7 @@ $.subscribe("MATRIX_API_SUCCESS_EVENT", MATRIX_API_SUCCESS_EVENT_HANDLER);
 function MATRIX_API_SUCCESS_EVENT_HANDLER() {
     if (arguments && arguments[1]) {
         if (arguments[1].addtion && (arguments[1].addtion['TAG'] == 'MATRIX_DATA_SOURCE_TESTING' || arguments[1].addtion['TAG'] == 'MATRIX_DATA_SOURCE_RETRIEVE')) {
-            console.log("arguments = " + arguments[1]);
+            console.log("arguments = " + $.toJSON(arguments[1]));
             console.log("Retrieve Data Source Successed!")
             var server_data = arguments[1].response;
             var res = JSON.stringify(arguments[1].response);
@@ -317,7 +341,16 @@ var check_data_source = function (type) {
         var data = vm.businessPOJO().stringzeta_request_params() || null;
         var mode = vm.businessPOJO().stringzeta_rest_mode();
         if (data) {
-            data = JSON.parse(data);
+            try {
+                data = JSON.parse(data);
+            } catch (err) {
+                vm.response_vm().errorResponse("JSON解析失败，请检查JSON格式", "JSON解析", "[失败]");
+                setTimeout(function () {
+                    vm.response_vm().reset();
+                }, 3000);
+                return
+            }
+
         }
         $.serverRequest(vm.businessPOJO().stringzeta_ds(), data, "DEFAULT_RETRIEVE_API_SUCCESS_LISTENER", "DEFAULT_RETRIEVE_API_FAILED_LISTENER", "DEFAULT_RETRIEVE_API_EXCEPTION_LISTENER", mode, true, {'TAG': type_current});
     }
@@ -326,7 +359,6 @@ var check_data_source = function (type) {
 
 var gen_table = function () {
     var server_data = vm.businessPOJO().stringzeta_ds_response_data;
-    console.log("data "+server_data)
     var json_rule = vm.businessPOJO().stringzeta_json_rule();
     if (!server_data) {
         return;
@@ -337,12 +369,20 @@ var gen_table = function () {
     }
     if (!jQuery.isArray(server_data)) {
         vm.response_vm().warningResponse("The JSON fragment must be array type.", "[Generate Table]", "***Violate Validation Rules***");
+        setTimeout(function () {
+            vm.response_vm().reset();
+        }, 3000);
         return;
     }
     var tableData = DataTransferPOJO.serverJsonData2TableData(server_data);
+    var header = tableData.header;
+    var l = header.length;
+    for (var i = 0; i < l; i++) {
+        header[i] = "col " + header[i];
+    }
     var tableModel = new ThinListViewModel();
     tableModel.buildData(tableData.result);
-    tableModel.columnNames(tableData.header);
+    tableModel.columnNames(header);
     tableModel.isDisplayPager(true);
     tableModel.buildView();
     tableModel.pageMaxSize(vm.businessPOJO().tableModel().pageMaxSize());
@@ -368,7 +408,6 @@ function reload_dynamic_table(ds) {
 
 function Update() {
     vm.businessPOJO().setVisible(true);
-    vm.businessPOJO().detailVisible(false);
 }
 
 function Remove() {

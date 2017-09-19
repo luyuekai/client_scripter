@@ -26,7 +26,6 @@ function env_setup() {
     query_chain_env_setup();
     dynamic_table_env_setup();
     search_env_setup();
-    scroll_env_setup();
 
 }
 
@@ -104,10 +103,6 @@ function search_env_setup() {
         return result;
     }
 }
-function scroll_env_setup() {
-    ScrollPOJO.listener = default_retrive_api;
-    ScrollPOJO.setup();
-}
 
 
 function query_chain_env_setup() {
@@ -167,11 +162,15 @@ function query_chain_env_setup() {
     };
 
 
-    QueryChainPOJO.queryArray = [];
-    QueryChainPOJO.queryArray.push({'id': 1, 'tag': 'today_counts', 'query': today_counts});
-    QueryChainPOJO.queryArray.push({'id': 2, 'tag': 'all_counts', 'query': all_counts});
+
+
+    setInterval(function () {
+        QueryChainPOJO.queryArray = [];
+        QueryChainPOJO.queryArray.push({'id': 1, 'tag': 'today_counts', 'query': today_counts});
+        QueryChainPOJO.queryArray.push({'id': 2, 'tag': 'all_counts', 'query': all_counts});
+        QueryChainPOJO.query();
+    }, 1000)
     $.subscribe("query_chain_finished", statistic_result_listener);
-    QueryChainPOJO.query();
 
 }
 
