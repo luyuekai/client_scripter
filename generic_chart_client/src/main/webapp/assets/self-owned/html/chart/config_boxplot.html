@@ -6,16 +6,16 @@
                 <div class="input-group" title="From Source">
                     <span class="input-group-addon" id="basic-addon2">
                         <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
-                    <input id="add_name_input" type="text" class="form-control" placeholder="Source Name" aria-describedby="basic-addon2">
+                    <input id="add_boxplot_name_input" type="text" class="form-control" placeholder="Source Name" aria-describedby="basic-addon2">
                 </div>
                 <div class="input-group" title="From Source">
                     <span class="input-group-addon" id="basic-addon2">
                         <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
-                    <input id="add_value_input" type="text" class="form-control" placeholder="Source Value" aria-describedby="basic-addon2">
+                    <input id="add_boxplot_data_input" type="text" class="form-control" placeholder="Source Value" aria-describedby="basic-addon2">
                 </div>
             </div>
             <div class="col-sm-2">
-                <button onclick="add_pie_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+                <button onclick="add_boxplot_data()" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
             </div>
         </div>
         <div class="form-group">
@@ -24,11 +24,11 @@
                 <div class="input-group" title="From Source">
                     <span class="input-group-addon" id="basic-addon2">
                         <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
-                    <input id="remove_name_input" type="text" class="form-control" placeholder="Source Name" aria-describedby="basic-addon2">
+                    <input id="remove_boxplot_name_input" type="text" class="form-control" placeholder="Source Name" aria-describedby="basic-addon2">
                 </div>
             </div>
             <div class="col-sm-2">
-                <button onclick="remove_pie_data()" title="Manual minus stacks" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
+                <button onclick="remove_boxplot_data()" title="Manual minus stacks" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
             </div>
         </div>
         <div class="form-group">
@@ -61,15 +61,47 @@
     ko.cleanNode($('#boxplot_content'))
     ko.applyBindings(boxplotViewModel, document.getElementById('boxplot_content'))
 
+    function add_boxplot_data() {
+        var name = $('#add_boxplot_name_input').val();
+        var data = eval($('#add_boxplot_data_input').val()) || [];
+        if (name && chartViewModel.chart) {
+            var origin_name = chartViewModel.chart.getOption().origin_name;
+            origin_name.push(name);
+            var origin_data = chartViewModel.chart.getOption().origin_data;
+            origin_data.push(data);
+            console.log(origin_data);
+            console.log(origin_name);
+            chartViewModel.chart = Boxplot_ChartPOJO.initialize_chart(chartViewModel.chart, origin_data, origin_name);
+        }
+    }
+
+    function remove_boxplot_data() {
+        var name = $('#remove_boxplot_name_input').val();
+        var origin_name = chartViewModel.chart.getOption().origin_name;
+        var origin_data = chartViewModel.chart.getOption().origin_data;
+        var index = -1;
+        debugger
+        origin_name.forEach(function(element,i){
+            if(element == name){
+                index = i;
+            }
+        })
+        if(index != -1){
+            origin_name.splice(index, 1);
+            origin_data.splice(index, 1);
+            chartViewModel.chart = Boxplot_ChartPOJO.initialize_chart(chartViewModel.chart, origin_data, origin_name);
+        }
+    }
+
     function reset_series() {
         var names = eval($('#name_value_input').val()) || [];
         var origin_data = eval($('#data_value_input').val()) || [];
         console.log(origin_data)
-        chartViewModel.chart = Boxplot_ChartPOJO.initialize_chart(chartViewModel.chart, origin_data,names);
+        chartViewModel.chart = Boxplot_ChartPOJO.initialize_chart(chartViewModel.chart, origin_data, names);
     }
-    
-    function reset_names(){
+
+    function reset_names() {
         var names = eval($('#name_value_input').val()) || [];
-        chartViewModel.chart.setOption({xAxis:{data:names}});
+        chartViewModel.chart.setOption({xAxis: {data: names}});
     }
 </script>

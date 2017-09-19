@@ -122,7 +122,7 @@ ChartPOJO = {
         if (cleanFlag) {
             chart.clear()
         }
-        chart.setOption(option);
+        chart.setOption(option, true);
         $(window).resize(function () {
             setTimeout(function () {
                 chart.resize();
@@ -141,7 +141,7 @@ ChartPOJO = {
             return Sankey_ChartPOJO.initialize_chart(chart);
         }
         if (chart_type == 'boxplot') {
-            return Boxplot_ChartPOJO.initialize_chart(chart);
+            return Boxplot_ChartPOJO.initialize_chart(chart,[],[]);
         }
         if (chart_type == 'treemap') {
             return Treemap_ChartPOJO.initialize_chart(chart);
@@ -841,13 +841,15 @@ Boxplot_ChartPOJO = {
         }
         var chart_parent_div_id = chart.parent_div_id;
         var option = chart.getOption();
-        option.origin_data = Boxplot_ChartPOJO.default_data;
+        option.origin_data = [];
+        option.origin_name = [];
 
         option.yAxis = Boxplot_ChartPOJO.default_yAxis;
-        option.tooltip = Boxplot_ChartPOJO.default_tooltip;
+//        option.tooltip = Boxplot_ChartPOJO.default_tooltip;
         if (data) {
             var origin_data = DataTransferPOJO.prepareDataBox(data, names);
             option.origin_data = data;
+            option.origin_name = names;
             option.series = Boxplot_ChartPOJO.get_series_option(origin_data);
             option.xAxis = Boxplot_ChartPOJO.get_xAxis_option(origin_data);
         } else {
