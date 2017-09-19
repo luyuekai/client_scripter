@@ -30,9 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/assets/**","/api/**","/components/**","/login.html","/portal.html","/401.html","/403.html","/404.html").permitAll()
-                    .antMatchers("/index**").hasAnyRole("MATRIX_USER")
-                    .anyRequest().authenticated()
+                    .antMatchers("/assets/**","/api/**","/components/**","index.html","/login.html","/portal.html","/401.html","/403.html","/404.html").permitAll()
+//                    .antMatchers("/index**").hasAnyRole("MATRIX_USER")
+//                    .anyRequest().authenticated()
             .and()
                 .exceptionHandling().accessDeniedPage("/403.html")
             .and()
