@@ -81,7 +81,70 @@
       <!--VALIDATION DIV FINISHED-->
 
       <!--BUSINESS DIV BEGIN-->
-
+      <div class="row" id="content_div">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card card-tab card-mini">
+            <div class="card-header" style="overflow-x: visible;">
+              <ul class="nav nav-tabs tab-stats">
+                <li role="tab1" class="active" style="width: 200px;">
+                  <a href="#tab1" aria-controls="tab3" role="tab" data-toggle="tab" onclick="SearchPOJO.build_requestPOJO_prototype = retrieve_self_saved;default_search_data();">Self Saved</a>
+                </li>
+                <li role="tab1" class="" style="width: 200px;">
+                  <a href="#tab1" aria-controls="tab3" role="tab" data-toggle="tab" onclick="SearchPOJO.build_requestPOJO_prototype = retrieve_self_shared;default_search_data();">Self Shared</a>
+                </li>
+                <li role="tab1" class="" style="width: 200px;">
+                  <a href="#tab1" aria-controls="tab3" role="tab" data-toggle="tab" onclick="SearchPOJO.build_requestPOJO_prototype = retrieve_all_shared;default_search_data();">Gallery Shared</a>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body tab-content">
+              <div role="tabpanel" class="tab-pane active" id="tab1" style="background-color:#E7EDEE">
+                <div class="row">
+                  <div data-bind="if:businessPOJO()">
+                    <div class="flat-matrix" data-bind="visible:businessPOJO().elements.viewData().length==0" style="display:none">
+                      <div class="alert alert-success alert-dismissible fresh-color" role="alert" style="margin-top: 16px;">
+                        <strong><i class="fa fa-warning"></i>&nbsp;Tips:</strong> &nbsp;The search result is empty!
+                      </div>
+                    </div>
+                    <div data-bind="with:businessPOJO().elements">
+                      <!--ko foreach: viewData-->
+                      <div class="col-xs-12" style="margin-bottom:18px;">
+                        <a class="card card-banner card-blue-light" data-bind="event:{dblclick:function(){default_switch2detail_page($data,'/components/component_matrix_template_update.html','update','MATRIX_TEMPLATE_ADD')}}">
+                          <div class="card-body">
+                            <i class="icon fa fa-edit fa-4x"></i>
+                            <div class="content">
+                              <div class="title">
+                                <span data-bind="if:stringbeta">
+                                <!-- ko foreach: stringbeta.split(',') -->
+                                                  <span class="label label-info" data-bind="text:$data"></span> &nbsp;
+                                <!-- /ko -->
+                                </span>
+                                <span data-bind="text:(function(){return new Date(parseInt(createtime)).toLocaleString()})()" style="margin-right: 8px;"></span>
+                                <button type="button" data-bind="event:{click:function(){redirect2editor($data)}}" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-pencil "></i>&nbsp;</button>
+                                <button type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Remove Dashboard', '/assets/self-owned/html/dashboard/modal_content_remove.html',$data);})" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-trash "></i>&nbsp;</button>
+                              </div>
+                              <div class="value">
+                                <span data-bind="text:stringalpha" style="font-size:28px"></span>
+                              </div>
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+                      <!-- /ko -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div role="tabpanel" class="tab-pane" id="tab2" style="background-color:#E7EDEE">
+                          2
+                      </div>
+                      <div role="tabpanel" class="tab-pane" id="tab3" style="background-color:#E7EDEE">
+                          3
+                      </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
       <!--BUSINESS DIV FINISHED-->
 
 
@@ -123,6 +186,8 @@
   <script src="assets/self-owned/js/generic/generic_dynamic.js"></script>
   <script src="assets/self-owned/js/generic/generic_vm.js"></script>
 
+  <script src="assets/self-owned/js/dashboard/vm_gallery.js"></script>
+  <script src="assets/self-owned/js/dashboard/logic_gallery.js"></script>
 
   <script>
     $(document).ready(function() {
@@ -134,11 +199,11 @@
 
       setTimeout(function() {
         $('#navbar_search_li').css('display', '');
-        $('#navbar_title_li').text('[#Your Components Title#]');
+        $('#navbar_title_li').text('Gallery');
       }, 1000)
     });
     // UNIT_TEST_SUITE();
-    // $.subscribe("get_user_detail_chain_finished", env_setup);
+    $.subscribe("get_user_detail_chain_finished", env_setup);
   </script>
 
 </body>

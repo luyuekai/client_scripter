@@ -209,10 +209,10 @@ function default_retrive_service_success_listener() {
         }
       }
     }
-    current_vm.response_vm().correctResponse("CONGRATULATIONS", "[MATRIX SERVER RESPONSE]", "***SERVICE SUCCESSED***");
-    setTimeout(function() {
-      vm.response_vm().reset();
-    }, 3000);
+    // current_vm.response_vm().correctResponse("CONGRATULATIONS", "[MATRIX SERVER RESPONSE]", "***SERVICE SUCCESSED***");
+    // setTimeout(function() {
+    //   vm.response_vm().reset();
+    // }, 3000);
     $.publish("MATRIX_API_SUCCESS_EVENT", arguments[1]);
   }
 }

@@ -123,6 +123,8 @@
   <script src="assets/self-owned/js/generic/generic_dynamic.js"></script>
   <script src="assets/self-owned/js/generic/generic_vm.js"></script>
 
+  <script src="assets/self-owned/js/dashboard/vm_kit_dashboard.js"></script>
+  <script src="assets/self-owned/js/dashboard/logic_kit_dashboard.js"></script>
 
   <script>
     $(document).ready(function() {
@@ -133,12 +135,12 @@
       $('#template-matrix-footer-div').load($.getRootPath() + '/components/footer.html');
 
       setTimeout(function() {
-        $('#navbar_search_li').css('display', '');
-        $('#navbar_title_li').text('[#Your Components Title#]');
+        // $('#navbar_search_li').css('display', '');
+        $('#navbar_title_li').text('Dashboard Kit');
       }, 1000)
     });
     // UNIT_TEST_SUITE();
-    // $.subscribe("get_user_detail_chain_finished", env_setup);
+    $.subscribe("get_user_detail_chain_finished", env_setup);
   </script>
 
 </body>
