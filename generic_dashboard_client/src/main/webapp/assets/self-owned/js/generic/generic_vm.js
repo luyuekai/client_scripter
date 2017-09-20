@@ -219,8 +219,9 @@ function default_retrive_service_success_listener() {
 
 function default_switch2detail_page($data,page_url,status,type){
   if($data && page_url && status && type){
-    UtilPOJO.setCookie(type,JSON.stringify($data),1);
-    window.open($.getRootPath() + page_url+'?status='+status+'&type='+type);
+    var key = (new Date()).getTime()+ $data.id;
+    UtilPOJO.setCookie(key,JSON.stringify($data),1);
+    window.open($.getRootPath() + page_url+'?status='+status+'&type='+type+'&key='+key);
   }
 }
 

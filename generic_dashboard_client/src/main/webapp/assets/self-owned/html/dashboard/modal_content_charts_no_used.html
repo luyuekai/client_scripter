@@ -1,0 +1,60 @@
+<div id="genericModalDiv">
+
+  <div class="business_div_class" data-bind="if:businessPOJO()">
+    <div data-bind="with:businessPOJO">
+      <p>
+        This operation will start a new dashboard editor, please confirm to continue...
+      </p>
+
+      <br>
+      <div id="business_div" class="business_div_class" style="max-height:500px;overflow:scroll;overflow-y:auto;overflow-x:hidden">
+        <div data-bind="with:elements">
+          <!--ko foreach: viewData-->
+          <div class="col-xs-12" style="margin-bottom:18px;">
+            <a class="card card-banner card-blue-light" data-bind="event:{dblclick:function(){redirect2editor($data)}}">
+              <div class="card-body" style="height: 100px;">
+                <i class="icon fa fa-area-chart fa-2x"></i>
+                <div class="content" style="padding: 1rem;">
+                  <div class="title">
+                    <span data-bind="text:(function(){return new Date(parseInt(createtime)).toLocaleString()})()" style="margin-right: 8px;"></span>
+                  </div>
+                  <div class="value" style="font-size: 2em;line-height: 0rem;">
+
+                    <span class="sign" data-bind="text:stringalpha"></span> Chart
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <!-- /ko -->
+        </div>
+      </div>
+
+      <div class="pull-right">
+        <button id="new_modal_clost_button" type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+        <button type="button" onclick="" class="btn btn-sm btn-success">Confirm</button>
+      </div>
+      <br>
+    </div>
+  </div>
+
+</div>
+
+
+
+<script>
+</script>
+<script>
+  // Initialize the View Model
+  // Clean the paging binding nodes
+  // Binding the view Model
+  var genericModalViewModel = new GenericModalViewModel();
+  ko.cleanNode($('#genericModalDiv')[0]);
+  ko.applyBindings(genericModalViewModel, document.getElementById('genericModalDiv'));
+
+
+
+  
+
+  modal_env_setup();
+</script>
