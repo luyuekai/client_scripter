@@ -112,7 +112,7 @@ function statistic_charts_env_setup() {
 var ds_statistic_by_date = {
   "ds": "http://localhost:8080/service_generic_query/api/query",
   "header_json": "[{\"data\":\"SUM_NUMBER\",\"index\":0,\"isChecked\":true,\"isDisplay\":true},{\"data\":\"CREATE_TIME\",\"index\":1,\"isChecked\":true,\"isDisplay\":true}]",
-  "refresh_interval": "10",
+  "refresh_interval": "60",
   "json_rule": "result",
   "rest_mode": "POST",
   "request_params": "{\"queryJson\":\"{\\\"className\\\":\\\"Share\\\",\\\"groupMap\\\":{\\\"stringalpha\\\":\\\"stringalpha\\\"},\\\"pageMaxSize\\\":100000,\\\"currentPageNumber\\\":1,\\\"eqMap\\\":{\\\"type\\\":\\\"MATRIX_DASHBOARD\\\",\\\"deleted\\\":false}}\"}",
@@ -123,10 +123,10 @@ var ds_statistic_by_date = {
 var ds_statistic_by_user = {
   "ds": "http://localhost:8080/service_generic_query/api/query",
   "header_json": "[{\"data\":\"SUM_NUMBER\",\"index\":0,\"isChecked\":true,\"isDisplay\":true},{\"data\":\"USER\",\"index\":1,\"isChecked\":true,\"isDisplay\":true}]",
-  "refresh_interval": "10",
+  "refresh_interval": "60",
   "json_rule": "result",
   "rest_mode": "POST",
-  "request_params": "{\"queryJson\":\"{\\\"className\\\":\\\"Share\\\",\\\"groupMap\\\":{\\\"creator\\\":\\\"creator\\\"},\\\"pageMaxSize\\\":100000,\\\"currentPageNumber\\\":1,\\\"eqMap\\\":{\\\"type\\\":\\\"MATRIX_DASHBOARD\\\",\\\"deleted\\\":false}}\"}",
+  "request_params": "{\"queryJson\":\"{\\\"className\\\":\\\"Share\\\",\\\"groupMap\\\":{\\\"username\\\":\\\"username\\\"},\\\"pageMaxSize\\\":100000,\\\"currentPageNumber\\\":1,\\\"eqMap\\\":{\\\"type\\\":\\\"MATRIX_DASHBOARD\\\",\\\"deleted\\\":false}}\"}",
   "pageMaxSize": 10,
   "mock": false
 };
@@ -134,7 +134,7 @@ var ds_statistic_by_user = {
 var ds_statistic_by_business = {
   "ds": "http://localhost:8080/service_generic_query/api/query",
   "header_json": "[{\"data\":\"SUM_NUMBER\",\"index\":0,\"isChecked\":true,\"isDisplay\":true},{\"data\":\"BUSINESS_STATUS\",\"index\":1,\"isChecked\":true,\"isDisplay\":true}]",
-  "refresh_interval": "10",
+  "refresh_interval": "60",
   "json_rule": "result",
   "rest_mode": "POST",
   "request_params": "{\"queryJson\":\"{\\\"className\\\":\\\"Share\\\",\\\"groupMap\\\":{\\\"id\\\":\\\"id\\\"},\\\"pageMaxSize\\\":100000,\\\"currentPageNumber\\\":1,\\\"eqMap\\\":{\\\"type\\\":\\\"MATRIX_DASHBOARD\\\",\\\"deleted\\\":false}}\"}",
