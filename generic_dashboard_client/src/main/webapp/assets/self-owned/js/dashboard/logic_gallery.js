@@ -21,7 +21,7 @@ function vm_env_setup() {
   // }
   var businessPOJO = new GenericBusinessPOJO();
   vm.businessPOJO(businessPOJO);
-};
+}
 
 function search_env_setup() {
   SearchPOJO.listener = default_search_data;
@@ -88,4 +88,17 @@ function retrieve_all_shared() {
 function scroll_env_setup() {
   ScrollPOJO.listener = default_retrive_api;
   ScrollPOJO.setup();
+}
+
+
+function redirect2editor(currentData) {
+  if (currentData && currentData.token) {
+    window.open($.getRootPath() + '/module_kit_dashboard.html?token=' + currentData.token);
+  }
+}
+
+function redirect2viewer(currentData) {
+  if (currentData && currentData.token) {
+    window.open($.getRootPath() + '/module_kit_dashboard.html?token=' + currentData.token);
+  }
 }
