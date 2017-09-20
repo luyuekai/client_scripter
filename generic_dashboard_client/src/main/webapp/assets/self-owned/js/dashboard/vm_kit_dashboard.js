@@ -51,34 +51,6 @@ function DashboardViewModel(parent) {
     }
   };
 
-  self.reload = function(pojo){
-    console.log(pojo);
-    // self.clear();
-    // self.server_data = pojo;
-    // self.id(pojo.id);
-    // self.name(pojo.name);
-    // self.description(pojo.description);
-    // self.creator(pojo.creator);
-    // self.createtime(pojo.numberalpha);
-    // self.lastupdatetime(pojo.numberbeta);
-    // self.stringzeta(pojo.stringzeta);
-    // var ds = JSON.parse(pojo.stringzeta);
-    // if(ds){
-    //   self.stringzeta_ds(ds.ds);
-    //   self.stringzeta_header_json(ds.header_json);
-    //   self.stringzeta_refresh_interval(ds.refresh_interval);
-    //   self.stringzeta_json_rule(ds.json_rule);
-    //   self.stringzeta_rest_mode(ds.rest_mode);
-    //   self.stringzeta_request_params(ds.request_params);
-    //   self.stringzeta_pageMaxSize(ds.pageMaxSize);
-    //   self.stringzeta_mock(ds.mock);
-    //
-    //   check_data_source();
-    //
-    //   reload_dynamic_table(ds);
-    // }
-  }
-
 
   self.persist2server = function() {
     //'type': 'MATRIX_DASHBOARD'

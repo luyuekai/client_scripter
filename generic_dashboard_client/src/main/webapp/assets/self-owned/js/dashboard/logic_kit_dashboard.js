@@ -10,6 +10,7 @@ function env_setup() {
   cookie_env_setup();
   vm_env_setup();
   setup_default_workbench();
+
 }
 function cookie_env_setup(){
   var token_lag = $.hasUrlParam('token');
@@ -28,6 +29,13 @@ function vm_env_setup() {
   if(CachePOJO.businessPOJO){
     $.serverRequest($.getServerRoot() + '/service_generic_query/api/share/fetch/' + CachePOJO.businessPOJO, null, "MATRIX_SHARE_SUCCESS","DEFAULT_RETRIEVE_API_FAILED_LISTENER", "DEFAULT_RETRIEVE_API_EXCEPTION_LISTENER");
   }
+  window.addEventListener("beforeunload", function(e) {
+    if (vm.businessPOJO().hasNewContent()) {
+      var confirmationMessage = 'if you see this, you are definitely the chosen one';
+      (e || window.event).returnValue = confirmationMessage; // Gecko and Trident
+      return confirmationMessage; // Gecko and WebKit
+    }
+  });
 }
 
 $.subscribe("MATRIX_SHARE_SUCCESS", successListener);
@@ -48,6 +56,13 @@ function successListener() {
 }
 
 
+$.subscribe("WORKBENCH_EVENT_CHANGE", WORKBENCH_EVENT_CHANGE_LISTENER);
+
+function WORKBENCH_EVENT_CHANGE_LISTENER(){
+  if (vm && vm.businessPOJO()) {
+    vm.businessPOJO().hasNewContent(true);
+  }
+}
 function addCell_chart(json) {
     if (json) {
         var option = ChartPOJO.deserialize_chart_option(json);
@@ -60,9 +75,7 @@ function addCell_chart(json) {
         //     option.series = a;
         // }
         addWidget_chart(option);
-        // if (viewModel) {
-        //     viewModel.hasNewContent(true);
-        // }
+        WORKBENCH_EVENT_CHANGE_LISTENER();
     }
 }
 
