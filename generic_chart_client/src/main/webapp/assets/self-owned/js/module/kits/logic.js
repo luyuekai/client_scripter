@@ -1,5 +1,11 @@
 var chartViewModel = new ChartViewModel();
+var chart;       //tutorial chart object
 ko.applyBindings(chartViewModel, document.getElementById('main_content_div'));
+$('input[name="radio_data_from"]').change(function () {
+    $('#data_from_manual').css('display', 'none');
+    $('#data_from_dynamic').css('display', 'none');
+    $('#data_from_' + $(this).val()).css('display', '');
+})
 
 $.subscribe("get_user_detail_chain_finished", initialize);
 
@@ -219,15 +225,17 @@ function successListener() {
         }, 200);
         setTimeout(function () {
             if (!option.ds_setting) {
-                chart = ChartPOJO.renderChart('main_chart', option);
+                var main_chart = ChartPOJO.renderChart('main_chart', option);
                 if (chartViewModel) {
-                    chartViewModel.chart = chart;
+                    chartViewModel.chart = main_chart;
+                    chartCache['main_chart'] = chartViewModel.chart;
                     chartViewModel.data = json;
                 }
             } else {
-                chart = ChartPOJO.generate_default_chart('main_chart');
+                var main_chart = ChartPOJO.generate_default_chart('main_chart');
                 if (chartViewModel) {
-                    chartViewModel.chart = chart;
+                    chartViewModel.chart = main_chart;
+                    chartCache['main_chart'] = chartViewModel.chart;
                 }
                 ChartPOJO.renderDynamicChart(option.ds_setting, chart);
             }
@@ -258,7 +266,8 @@ function hide_configuration_panel() {
     resetCssClass('chart_content_div', 'col-md-12');
     show_div('dispaly_config_button');
     hide_div('undispaly_config_button');
-    chartViewModel.resize_chart();
+//    chartViewModel.resize_chart();
+    refresh_workbench()
 }
 
 function show_configuration_panel() {
@@ -266,7 +275,8 @@ function show_configuration_panel() {
     resetCssClass('chart_content_div', 'col-md-8');
     hide_div('dispaly_config_button');
     show_div('undispaly_config_button');
-    chartViewModel.resize_chart();
+    refresh_workbench();
+
 }
 
 function rerender_children_dom(type) {

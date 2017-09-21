@@ -880,6 +880,7 @@ DataTransferPOJO = {
         var boxData = [];
         var outliers = [];
         var axisData = [];
+
         var boundIQR = opt.boundIQR;
         for (i = 0; i < data.length; i++) {
             axisData.push(names[i] + '');
@@ -887,6 +888,14 @@ DataTransferPOJO = {
             data[i].forEach(function (item) {
                 a.push(parseInt(item))
             });
+
+            if (data == []) {
+                return {
+                    boxData: boxData,
+                    outliers: outliers,
+                    axisData: axisData
+                };
+            }
             var ascList = a.sort(DataTransferPOJO.sortNumber);
 
             var Q1 = DataTransferPOJO.getQuantile(ascList, 0.25);

@@ -309,6 +309,15 @@
             if(genericModalViewModel.businessPOJO().selectedLegend()){
                 genericModalViewModel.businessPOJO().table().headerViewData()[genericModalViewModel.businessPOJO().selectedLegend().index()].isLegend(true);
             }
+            if(chartViewModel) {
+                chartViewModel.dynamic_config.data_source(genericModalViewModel.businessPOJO().dataSource.selectedDataSource().name);
+                chartViewModel.dynamic_config.trans(genericModalViewModel.businessPOJO().isTransferT());
+                chartViewModel.dynamic_config.legend(genericModalViewModel.businessPOJO().selectedLegend() ? genericModalViewModel.businessPOJO().selectedLegend().data() : '' );
+                chartViewModel.dynamic_config.refresh_inteval(genericModalViewModel.businessPOJO().refreshInterval());
+                var columns = '';
+                genericModalViewModel.businessPOJO().table().headerViewData().forEach(function(element){if(element.isChecked()){columns += element.data() + ' ' ;}})
+                chartViewModel.dynamic_config.columns(columns);     
+            }
             var ds_setting = {
                 'sql': genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringbeta.trim(),
                 'dbName': genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringalpha,

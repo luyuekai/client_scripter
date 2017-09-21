@@ -56,14 +56,6 @@
     ko.cleanNode($('#parallel_content'))
     ko.applyBindings(parallelViewModel, document.getElementById('parallel_content'))
     
-  function add_series_data() {
-    var data_name = $('#add_name_input').val();
-    var data_value = $('#add_value_input').val().split(',');
-    console.log(data_value)
-    if (data_name && data_value && chartViewModel && chartViewModel.chart) {
-      chartViewModel.chart = ChartPOJO.addSeries(chartViewModel.chart, data_name, 'area', data_value);
-    }
-  }
 
   function parallel_axis_setting() {
     if (chartViewModel && chartViewModel.chart) {

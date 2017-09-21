@@ -101,81 +101,115 @@
                             <div class="card-body" id="basic_config_content_div">
                                 <div>
                                     <form class="form-horizontal">
-                                        <!-- <div class="form-group">
-                                                                <label class="col-sm-3 control-label">Initialize Chart</label>
-                                                                <div class="col-sm-2 col-sm-offset-7">
-                                                                  <button data-bind="click:initialize_chart" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
-                                                                </div>
-                                                              </div> -->
                                         <div class="form-group">
-                                            <label class="col-sm-2 control-label">Type</label>
+                                            <label class="col-sm-2 control-label" style="padding-top: 15px;">Type</label>
                                             <div class="col-sm-8">
                                                 <select id="chart_type_select" class="select2" onchange="rerender_children_dom(this.options[this.options.selectedIndex].value)" style="z-index:100016;">
-                                                    <option value="bar">Chart-Descartes Bar</option>
-                                                    <option value="line">Chart-Descartes Line</option>
-                                                    <option value="area">Chart-Descartes Area</option>
-                                                    <option value="scatter">Chart-Descartes Scatter</option>
-                                                    <option value="parallel">Chart-Parallel </option>
-                                                    <option value="force">Chart-Force </option>
-                                                    <option value="graph">Chart-Graph </option>
-                                                    <option value="circular">Chart-Circular </option>
-                                                    <option value="pie">Chart-Pie </option>
-                                                    <option value="radar">Chart-Radar</option>
-                                                    <option value="themeRiver">Chart-River</option>
-                                                    <option value="treemap">Chart-TreeMap</option>
-                                                    <option value="boxplot">Chart-BoxPlot</option>
-                                                    <option value="sankey">Chart-Sankey</option>
-                                                    <option value="grid_heatmap">Chart-Descartes-Heatmap</option>
-                                                    <option value="wordCloud">Chart-Cloud</option>
+                                                    <option value="bar">Descartes Bar</option>
+                                                    <option value="line">Descartes Line</option>
+                                                    <option value="area">Descartes Area</option>
+                                                    <option value="scatter">Descartes Scatter</option>
+                                                    <option value="parallel">Parallel </option>
+                                                    <option value="force">Force </option>
+                                                    <option value="graph">Graph </option>
+                                                    <option value="circular">Circular </option>
+                                                    <option value="pie">Pie </option>
+                                                    <option value="radar">Radar</option>
+                                                    <option value="themeRiver">River</option>
+                                                    <option value="treemap">TreeMap</option>
+                                                    <option value="boxplot">BoxPlot</option>
+                                                    <option value="sankey">Sankey</option>
+                                                    <option value="grid_heatmap">Descartes-Heatmap</option>
+                                                    <option value="wordCloud">Cloud</option>
                                                 </select>
                                             </div>
                                             <div class="col-sm-2">
                                                 <button data-bind="click:switch_chart_type_listener" title="Manual minus stacks" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-check"></i></button>
                                             </div>
                                         </div>
-                                        <div class="panel-body">
-<!--                                            <div class="form-group">
-                                                <label class="col-sm-2 control-label">Data</label>
-                                                <div class="col-sm-8">
-                                                    <div id="dvImportSegments" class="fileupload ">
-                                                        <input type="file" name="File Upload" id="txtFileUpload" accept=".csv .tsv" />
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Data</label>
+                                            <div class="col-sm-9">
+                                                <div>
+                                                    <div class="radio radio-inline" id="choose_data_from">
+                                                        <input type="radio" name="radio_data_from" id="radio_manual_add" value="manual" checked>
+                                                        <label for="radio_manual_add" title="left">
+                                                            &nbsp;Static Manual
+                                                        </label>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <button onclick="ModalUtil.popup_modal('View', '/assets/self-owned/html/chart/modal/modal_content_view_data.html', null, null, null);" title="view data" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-eye"></i></button>
-                                                    <button onclick="use_data()" title="view data" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-check"></i></button>
-                                                </div>
-                                            </div>-->
-                                            <div class="form-group">
-                                                <label class="col-sm-2 control-label">DataSource</label>
-                                                <div class="col-sm-10">
-                                                    <button onclick="ModalUtil.popup_modal('Choose DataSource', '/assets/self-owned/html/chart/modal/modal_choose_data_source.html', null, null, null);" title="choose dataSource" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-check"></i></button>
+                                                    <div class="radio radio-inline">
+                                                        <input type="radio" name="radio_data_from" id="radio_dynamic_data" value="dynamic">
+                                                        <label for="radio_dynamic_data" title="center">
+                                                            &nbsp;Dynamic Data Source
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="form-group">
-                                          <label class="col-sm-3 control-label">Series Setting</label>
-                                          <div class="col-sm-2 col-sm-offset-7">
-                                            <button data-bind="click:initialize_chart" title="Manual add series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
-                                          </div>
-                                        </div> -->
                                     </form>
                                 </div>
                             </div>
                         </div>
                         <br>
-                        <div class="card card-mini">
+
+                        <div class="card card-mini" id="data_from_manual">
                             <div class="card-header">
                                 <div class="card-title">
-                                    <i class="fa fa-diamond">&nbsp;Data Source&nbsp;&nbsp;&nbsp;</i>
+                                    <i class="fa fa-diamond">&nbsp;Static Manual Add&nbsp;&nbsp;&nbsp;</i>
                                     <span class="pull-right" style="margin-right:0px">
-                                        <button id="undispaly_data_config_button" onclick="hide_div('data_config_content_div');show_div('dispaly_data_config_button');hide_div('undispaly_data_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
-                                        <button id="dispaly_data_config_button" onclick="show_div('data_config_content_div');hide_div('dispaly_data_config_button');show_div('undispaly_data_config_button')" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
+                                        <button id="undispaly_data_config_button" onclick="hide_div('data_config_content_div');show_div('dispaly_data_config_button');hide_div('undispaly_data_config_button')" title="Hide" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
+                                        <button id="dispaly_data_config_button" onclick="show_div('data_config_content_div');hide_div('dispaly_data_config_button');show_div('undispaly_data_config_button')" title="Show" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
                                     </span>
                                 </div>
                             </div>
-                            <div class="card-body" id="data_config_content_div">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                            <div class="card-body" id="data_config_content_div"></div>
+                        </div>
+
+                        <div class="card card-mini" id="data_from_dynamic"  style="display:none">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <i class="fa fa-diamond">&nbsp;Dynamic Data Source&nbsp;&nbsp;&nbsp;</i>
+                                    <span class="pull-right" style="margin-right:0px">
+                                        <button id="undispaly_ds_config_button" onclick="hide_div('ds_config_content_div');show_div('dispaly_ds_config_button');hide_div('undispaly_ds_config_button')" title="Hide" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
+                                        <button id="dispaly_ds_config_button" onclick="show_div('ds_config_content_div');hide_div('dispaly_ds_config_button');show_div('undispaly_ds_config_button')" title="Show" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-plus"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-body" id="ds_config_content_div">
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Config</label>
+                                        <div class="col-sm-10">
+                                            <button onclick="ModalUtil.popup_modal('Choose DataSource', '/assets/self-owned/html/chart/modal/modal_choose_data_source.html', null, null, null);" title="choose dataSource" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">DS</label>
+                                        <div class="col-sm-4">
+                                            <p data-bind="text:dynamic_config.data_source()" style="padding-top: 7px;"></p>
+                                        </div>
+                                        <label class="col-sm-2 control-label">Trans?</label>
+                                        <div class="col-sm-4">
+                                            <p data-bind="text:dynamic_config.trans()" style="padding-top: 7px;"></p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Legend</label>
+                                        <div class="col-sm-4">
+                                            <p data-bind="text:dynamic_config.legend()" style="padding-top: 7px;"></p>
+                                        </div>
+                                        <label class="col-sm-2 control-label">Inteval</label>
+                                        <div class="col-sm-4">
+                                            <p data-bind="text:dynamic_config.refresh_inteval()" style="padding-top: 7px;"></p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Column</label>
+                                        <div class="col-sm-10">
+                                            <p data-bind="text:dynamic_config.columns()" style="padding-top: 7px;"></p>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <br>
@@ -240,9 +274,9 @@
                 </div>
 
             </div>
-<!--            <div class="card-body" id="detail_config_content_div">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-            </div>-->
+            <!--            <div class="card-body" id="detail_config_content_div">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                        </div>-->
         </div>
     </div>
 
@@ -296,79 +330,81 @@
                                                         $('#navbar_title_li').html('Matrix Chart Editor');
                                                         $('#navbar_search_li').css('display', 'none');
                                                     }, 200);
-//                                                        document.getElementById('txtFileUpload').addEventListener('change', upload, false);
+
+                                                    //                                                        document.getElementById('txtFileUpload').addEventListener('change', upload, false);
                                                 });
 
 
 
-//                                                var dataViewModel = {
-//                                                    data: ko.observableArray()
-//                                                };
+
+                                                //                                                var dataViewModel = {
+                                                //                                                    data: ko.observableArray()
+                                                //                                                };
 
 
 
-//                                                // Method that checks that the browser supports the HTML5 File API
-//                                                function browserSupportFileUpload() {
-//                                                    var isCompatible = false;
-//                                                    if (window.File && window.FileReader && window.FileList && window.Blob) {
-//                                                        isCompatible = true;
-//                                                    }
-//                                                    return isCompatible;
-//                                                }
-//
-//                                                // Method that reads and processes the selected file
-//                                                function upload(evt) {
-//                                                    if (!browserSupportFileUpload()) {
-//                                                        alert('The File APIs are not fully supported in this browser!');
-//                                                    } else {
-//                                                        var data = null;
-//                                                        var file = evt.target.files[0];
-//                                                        var reader = new FileReader();
-//                                                        reader.readAsText(file);
-//                                                        reader.onload = function (event) {
-//                                                            var csvData = event.target.result;
-//
-//                                                            data = $.csv.toArrays(csvData);
-//                                                            if (data && data.length > 0) {
-//                                                                alert('Imported -' + data.length + '- rows successfully!');
-//                                                                dataViewModel.data(data)
-//                                                            } else {
-//                                                                alert('No data to import!');
-//                                                            }
-//                                                        };
-//                                                        reader.onerror = function () {
-//                                                            alert('Unable to read ' + file.fileName);
-//                                                        };
-//                                                    }
-//                                                }
-//
-//                                                function use_data() {
-//                                                    var a = [];
-//                                                    for (var i = 0; i < dataViewModel.data().length; i++) {
-//                                                        a[i] = [];
-//                                                        for (j = 0; j < dataViewModel.data()[i].length; j++) {
-//                                                            a[i][j] = dataViewModel.data()[i][j];
-//                                                        }
-//                                                    }
-//                                                    ;
-//                                                    b = a[0];
-//                                                    b.shift();
-//                                                    chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', b);
-//                                                    var c = [];
-//                                                    a.shift();
-//                                                    a.forEach(function (item) {
-//                                                        c.push({'name': item.shift(), 'data': item})
-//                                                    });
-//                                                    chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, c, 'bar');
-//
-////                                                    b = a[0];
-////                                                    chartViewModel.chart = ChartPOJO.generate_default_chart('main_chart');
-////                                                    chartViewModel.chart = Parallel_ChartPOJO.initialize_chart(chartViewModel.chart, b);
-////                                                    a.shift();
-////                                                    chartViewModel.chart = ChartPOJO.addSeries(chartViewModel.chart, 'default', 'parallel', a);
-//
+                                                //                                                // Method that checks that the browser supports the HTML5 File API
+                                                //                                                function browserSupportFileUpload() {
+                                                //                                                    var isCompatible = false;
+                                                //                                                    if (window.File && window.FileReader && window.FileList && window.Blob) {
+                                                //                                                        isCompatible = true;
+                                                //                                                    }
+                                                //                                                    return isCompatible;
+                                                //                                                }
+                                                //
+                                                //                                                // Method that reads and processes the selected file
+                                                //                                                function upload(evt) {
+                                                //                                                    if (!browserSupportFileUpload()) {
+                                                //                                                        alert('The File APIs are not fully supported in this browser!');
+                                                //                                                    } else {
+                                                //                                                        var data = null;
+                                                //                                                        var file = evt.target.files[0];
+                                                //                                                        var reader = new FileReader();
+                                                //                                                        reader.readAsText(file);
+                                                //                                                        reader.onload = function (event) {
+                                                //                                                            var csvData = event.target.result;
+                                                //
+                                                //                                                            data = $.csv.toArrays(csvData);
+                                                //                                                            if (data && data.length > 0) {
+                                                //                                                                alert('Imported -' + data.length + '- rows successfully!');
+                                                //                                                                dataViewModel.data(data)
+                                                //                                                            } else {
+                                                //                                                                alert('No data to import!');
+                                                //                                                            }
+                                                //                                                        };
+                                                //                                                        reader.onerror = function () {
+                                                //                                                            alert('Unable to read ' + file.fileName);
+                                                //                                                        };
+                                                //                                                    }
+                                                //                                                }
+                                                //
+                                                //                                                function use_data() {
+                                                //                                                    var a = [];
+                                                //                                                    for (var i = 0; i < dataViewModel.data().length; i++) {
+                                                //                                                        a[i] = [];
+                                                //                                                        for (j = 0; j < dataViewModel.data()[i].length; j++) {
+                                                //                                                            a[i][j] = dataViewModel.data()[i][j];
+                                                //                                                        }
+                                                //                                                    }
+                                                //                                                    ;
+                                                //                                                    b = a[0];
+                                                //                                                    b.shift();
+                                                //                                                    chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', b);
+                                                //                                                    var c = [];
+                                                //                                                    a.shift();
+                                                //                                                    a.forEach(function (item) {
+                                                //                                                        c.push({'name': item.shift(), 'data': item})
+                                                //                                                    });
+                                                //                                                    chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, c, 'bar');
+                                                //
+                                                ////                                                    b = a[0];
+                                                ////                                                    chartViewModel.chart = ChartPOJO.generate_default_chart('main_chart');
+                                                ////                                                    chartViewModel.chart = Parallel_ChartPOJO.initialize_chart(chartViewModel.chart, b);
+                                                ////                                                    a.shift();
+                                                ////                                                    chartViewModel.chart = ChartPOJO.addSeries(chartViewModel.chart, 'default', 'parallel', a);
+                                                //
 
-//                                                }
+                                                //                                                }
     </script>
 
 </body>

@@ -46,9 +46,9 @@
 
 
 <script>
-  var chart;
   function initialize() {
     chart = ChartPOJO.generate_default_chart('tutorial_chart');
+    chartCache['tutorial_chart'] = chart;
 
     var data = [
         [1,55,9,56,0.46,18,6],

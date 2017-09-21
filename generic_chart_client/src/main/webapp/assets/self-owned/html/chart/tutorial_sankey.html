@@ -420,7 +420,11 @@
 </ul></span>
 
 <script>
-  var links = [{
+  function initialize() {
+    chart = ChartPOJO.generate_default_chart('tutorial_chart');
+    chartCache['tutorial_chart'] = chart;
+    
+    var links = [{
     "source": "Agricultural 'waste'",
     "target": "Bio-conversion",
     "value": 124.729
@@ -791,11 +795,7 @@
   }, {
     "name": "Wind"
   }];
-
-
-  function initialize() {
-    var c = ChartPOJO.generate_default_chart('tutorial_chart');
-    c = Sankey_ChartPOJO.initialize_chart(c,nodes,links);
+    chart = Sankey_ChartPOJO.initialize_chart(chart,nodes,links);
   }
 
   initialize();

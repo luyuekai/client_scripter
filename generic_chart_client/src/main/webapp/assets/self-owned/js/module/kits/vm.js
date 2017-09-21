@@ -5,9 +5,11 @@ function ChartViewModel(parent) {
   self.data = null;
   self.chart = null;
   self.option = new ChartOptionViewModel(self);
+  self.dynamic_config = new DynamicConfigViewModel(self);
 
   self.initialize_chart = function(){
     self.chart = ChartPOJO.generate_default_chart(self.chart_parent_div_id);
+    chartCache['main_chart'] = self.chart;
   }
 
   self.chart_check = function(){
@@ -70,4 +72,14 @@ function TitleViewModel(parent) {
       ChartPOJO.resetTitle(chart,self);
     }
   }
+}
+
+function DynamicConfigViewModel(parent) {
+    var self = this;
+    self.parent = parent;
+    self.legend = ko.observable("");
+    self.data_source = ko.observable("");
+    self.trans = ko.observable(false);
+    self.columns = ko.observable("");
+    self.refresh_inteval = ko.observable("");
 }
