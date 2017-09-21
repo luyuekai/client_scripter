@@ -87,13 +87,13 @@
             <div class="card-header" style="overflow-x: visible;">
               <ul class="nav nav-tabs tab-stats">
                 <li role="tab1" class="active" style="width: 200px;">
-                  <a href="#tab1" aria-controls="tab3" role="tab" data-toggle="tab" onclick="SearchPOJO.build_requestPOJO_prototype = retrieve_self_saved;default_search_data();">Self Saved</a>
+                  <a href="#tab1" aria-controls="tab3" role="tab" data-toggle="tab" onclick="SearchPOJO.build_requestPOJO_prototype = retrieve_self_saved;default_search_data();vm.businessPOJO().isSelf(true)">Self Saved</a>
                 </li>
                 <li role="tab1" class="" style="width: 200px;">
-                  <a href="#tab1" aria-controls="tab3" role="tab" data-toggle="tab" onclick="SearchPOJO.build_requestPOJO_prototype = retrieve_self_shared;default_search_data();">Self Shared</a>
+                  <a href="#tab1" aria-controls="tab3" role="tab" data-toggle="tab" onclick="SearchPOJO.build_requestPOJO_prototype = retrieve_self_shared;default_search_data();vm.businessPOJO().isSelf(true)">Self Shared</a>
                 </li>
                 <li role="tab1" class="" style="width: 200px;">
-                  <a href="#tab1" aria-controls="tab3" role="tab" data-toggle="tab" onclick="SearchPOJO.build_requestPOJO_prototype = retrieve_all_shared;default_search_data();">Gallery Shared</a>
+                  <a href="#tab1" aria-controls="tab3" role="tab" data-toggle="tab" onclick="SearchPOJO.build_requestPOJO_prototype = retrieve_all_shared;default_search_data();vm.businessPOJO().isSelf(false)">Gallery Shared</a>
                 </li>
               </ul>
             </div>
@@ -120,10 +120,11 @@
                                 <!-- /ko -->
                                 </span>
                                 <span data-bind="text:(function(){return new Date(parseInt(createtime)).toLocaleString()})()" style="margin-right: 8px;"></span>
-                                <button type="button" data-bind="event:{click:function(){redirect2editor($data)}}" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-pencil "></i>&nbsp;</button>
-                                <button type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Remove Dashboard', '/assets/self-owned/html/dashboard/modal_content_remove.html',$data);})" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-trash "></i>&nbsp;</button>
+                                <button type="button" data-bind="visible:vm.businessPOJO().isSelf(),event:{click:function(){redirect2editor($data)}}" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-pencil "></i>&nbsp;</button>
+                                <button type="button" data-bind="visible:vm.businessPOJO().isSelf(),click:(function(){ModalUtil.popup_modal_with_businessPOJO('Remove Dashboard', '/assets/self-owned/html/dashboard/modal_content_remove.html',$data);})" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-trash "></i>&nbsp;</button>
                               </div>
                               <div class="value">
+                                <span data-bind="visible:!vm.businessPOJO().isSelf(),text:username" class="sign"></span>
                                 <span data-bind="text:stringalpha" style="font-size:28px"></span>
                               </div>
                             </div>

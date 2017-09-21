@@ -19,7 +19,7 @@ function vm_env_setup() {
   //   var self = this;
   //   self.elements = new ServerPagingViewModel();
   // }
-  var businessPOJO = new GenericBusinessPOJO();
+  var businessPOJO = new BusinessPOJO();
   vm.businessPOJO(businessPOJO);
 }
 
