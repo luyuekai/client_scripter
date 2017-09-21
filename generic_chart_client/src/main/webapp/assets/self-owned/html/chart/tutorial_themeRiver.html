@@ -12,11 +12,12 @@
 
 
 <script>
-  var data = [[0,0,"The Sea and Cake"],[1,49,"The Sea and Cake"],[2,67,"The Sea and Cake"],[3,16,"The Sea and Cake"],[4,0,"The Sea and Cake"],[5,19,"The Sea and Cake"],[6,19,"The Sea and Cake"],[7,0,"The Sea and Cake"],[8,0,"The Sea and Cake"],[9,1,"The Sea and Cake"],[10,10,"The Sea and Cake"],[11,5,"The Sea and Cake"],[12,6,"The Sea and Cake"],[13,1,"The Sea and Cake"],[14,1,"The Sea and Cake"],[15,0,"The Sea and Cake"],[16,25,"The Sea and Cake"],[17,0,"The Sea and Cake"],[18,0,"The Sea and Cake"],[19,0,"The Sea and Cake"],[0,0,"Andrew Bird"],[1,6,"Andrew Bird"],[2,3,"Andrew Bird"],[3,34,"Andrew Bird"],[4,0,"Andrew Bird"],[5,16,"Andrew Bird"],[6,1,"Andrew Bird"],[7,0,"Andrew Bird"],[8,0,"Andrew Bird"],[9,1,"Andrew Bird"],[10,6,"Andrew Bird"],[11,0,"Andrew Bird"],[12,1,"Andrew Bird"],[13,56,"Andrew Bird"],[14,0,"Andrew Bird"],[15,2,"Andrew Bird"],[16,0,"Andrew Bird"],[17,2,"Andrew Bird"],[18,0,"Andrew Bird"],[19,0,"Andrew Bird"],[0,0,"Laura Veirs"],[1,8,"Laura Veirs"],[2,13,"Laura Veirs"],[3,15,"Laura Veirs"],[4,0,"Laura Veirs"],[5,12,"Laura Veirs"],[6,23,"Laura Veirs"],[7,0,"Laura Veirs"],[8,0,"Laura Veirs"],[9,1,"Laura Veirs"],[10,0,"Laura Veirs"],[11,1,"Laura Veirs"],[12,0,"Laura Veirs"],[13,0,"Laura Veirs"],[14,6,"Laura Veirs"],[15,0,"Laura Veirs"],[16,0,"Laura Veirs"],[17,1,"Laura Veirs"],[18,0,"Laura Veirs"],[19,1,"Laura Veirs"]];
-  function initialize() {
-      debugger
-    var c = ChartPOJO.generate_default_chart('tutorial_chart');
-    c = River_ChartPOJO.initialize_chart(c,data);
+ function initialize() {
+    chart = ChartPOJO.generate_default_chart('tutorial_chart');
+    chartCache['tutorial_chart'] = chart;
+    
+    var data = [[0,0,"The Sea and Cake"],[1,49,"The Sea and Cake"],[2,67,"The Sea and Cake"],[3,16,"The Sea and Cake"],[4,0,"The Sea and Cake"],[5,19,"The Sea and Cake"],[6,19,"The Sea and Cake"],[7,0,"The Sea and Cake"],[8,0,"The Sea and Cake"],[9,1,"The Sea and Cake"],[10,10,"The Sea and Cake"],[11,5,"The Sea and Cake"],[12,6,"The Sea and Cake"],[13,1,"The Sea and Cake"],[14,1,"The Sea and Cake"],[15,0,"The Sea and Cake"],[16,25,"The Sea and Cake"],[17,0,"The Sea and Cake"],[18,0,"The Sea and Cake"],[19,0,"The Sea and Cake"],[0,0,"Andrew Bird"],[1,6,"Andrew Bird"],[2,3,"Andrew Bird"],[3,34,"Andrew Bird"],[4,0,"Andrew Bird"],[5,16,"Andrew Bird"],[6,1,"Andrew Bird"],[7,0,"Andrew Bird"],[8,0,"Andrew Bird"],[9,1,"Andrew Bird"],[10,6,"Andrew Bird"],[11,0,"Andrew Bird"],[12,1,"Andrew Bird"],[13,56,"Andrew Bird"],[14,0,"Andrew Bird"],[15,2,"Andrew Bird"],[16,0,"Andrew Bird"],[17,2,"Andrew Bird"],[18,0,"Andrew Bird"],[19,0,"Andrew Bird"],[0,0,"Laura Veirs"],[1,8,"Laura Veirs"],[2,13,"Laura Veirs"],[3,15,"Laura Veirs"],[4,0,"Laura Veirs"],[5,12,"Laura Veirs"],[6,23,"Laura Veirs"],[7,0,"Laura Veirs"],[8,0,"Laura Veirs"],[9,1,"Laura Veirs"],[10,0,"Laura Veirs"],[11,1,"Laura Veirs"],[12,0,"Laura Veirs"],[13,0,"Laura Veirs"],[14,6,"Laura Veirs"],[15,0,"Laura Veirs"],[16,0,"Laura Veirs"],[17,1,"Laura Veirs"],[18,0,"Laura Veirs"],[19,1,"Laura Veirs"]]; 
+    chart = River_ChartPOJO.initialize_chart(chart,data);
   }
 
   initialize();

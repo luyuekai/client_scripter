@@ -120,9 +120,9 @@ ChartPOJO = {
     },
     reset_chart_option: function (chart, option, cleanFlag) {
         if (cleanFlag) {
-            chart.clear()
+            chart.clear();
         }
-        chart.setOption(option, true);
+        chart.setOption(option);
         $(window).resize(function () {
             setTimeout(function () {
                 chart.resize();
@@ -141,7 +141,7 @@ ChartPOJO = {
             return Sankey_ChartPOJO.initialize_chart(chart);
         }
         if (chart_type == 'boxplot') {
-            return Boxplot_ChartPOJO.initialize_chart(chart,[],[]);
+            return Boxplot_ChartPOJO.initialize_chart(chart, [], []);
         }
         if (chart_type == 'treemap') {
             return Treemap_ChartPOJO.initialize_chart(chart);
@@ -238,6 +238,14 @@ ChartPOJO = {
         if (series_type === 'bar') {
             series_object.barGap = '10%';
         }
+        if (series_type === 'parallel') {
+            series_object.lineStyle = {
+                normal: {
+                    width: 3,
+                    opacity: 0.5
+                }
+            }
+        }
         if (series_type === 'scatter') {
 
             scale_setting = scale_setting || default_scale_setting;
@@ -320,6 +328,9 @@ ChartPOJO = {
 
         return ChartPOJO.reset_chart_option(chart, option, true);
     },
+    cleanChart: function (parent_div_id) {
+        $('#' + parent_div_id).empty();
+    },
     getScale: function (value, value_min, value_max, scale_min, scale_max) {
         if (!value || !value_min || !value_max) {
             return default_scatterScale.min_scale;
@@ -364,6 +375,10 @@ ChartPOJO = {
         if (axis_type == "y") {
             option.yAxis.data = axis_data;
             option.dataZoom = [];
+            option.xAxis = {
+                type: 'value',
+                boundaryGap: [0, 0.01]
+            }
         } else {
             option.xAxis.data = axis_data;
             option.dataZoom = [{
@@ -593,7 +608,7 @@ $.subscribe("failedGetChartData", failedGetChartData);
 $.subscribe("serverGetChartData", serverGetChartData);
 
 function serverGetChartData() {
-    
+
 }
 function failedGetChartData() {
 
@@ -855,7 +870,7 @@ Boxplot_ChartPOJO = {
         } else {
             option.xAxis = Boxplot_ChartPOJO.default_xAxis;
         }
-        return ChartPOJO.reset_chart_option(chart, option);
+        return ChartPOJO.reset_chart_option(chart, option, true);
     },
 }
 
@@ -982,6 +997,7 @@ Pie_ChartPOJO = {
         }
         var chart_parent_div_id = chart.parent_div_id;
         var option = chart.getOption();
+        option.series = [];
         option.series.push({
             name: 'Matrix Pie',
             type: 'pie',

@@ -39,6 +39,9 @@
 
 <script>
   function initialize(){
+    chart = ChartPOJO.generate_default_chart('tutorial_chart');
+    chartCache['tutorial_chart'] = chart;
+    
     var hours = ['12a', '1a', '2a', '3a', '4a', '5a', '6a',
             '7a', '8a', '9a','10a','11a',
             '12p', '1p', '2p', '3p', '4p', '5p',
@@ -50,8 +53,6 @@
     data = data.map(function (item) {
         return [item[1], item[0], item[2] || '-'];
     });
-    var c = ChartPOJO.generate_default_chart('tutorial_chart');
-    c = ChartPOJO.reset_chart_type(c,'grid_heatmap');
     var data_prototype={
       x_data:hours,
       y_data:days,
@@ -59,7 +60,9 @@
       max_scale:10,
       series_data:data
     };
-    c = HeatMap_Grid_ChartPOJO.initialize_chart(c,data_prototype);
+
+    chart = ChartPOJO.reset_chart_type(chart ,'grid_heatmap');
+    chart = HeatMap_Grid_ChartPOJO.initialize_chart(chart ,data_prototype);
   }
 
   initialize();

@@ -4386,6 +4386,7 @@ input ::-webkit-input-placeholder {
   background-color: #29c75f; }
 
 .select2-container .select2-dropdown .select2-results__option {
+    max-height: 280px;
   padding: 10px 15px; }
 
 .ui-select-container {

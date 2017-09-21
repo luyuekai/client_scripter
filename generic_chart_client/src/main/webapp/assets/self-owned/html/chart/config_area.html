@@ -20,6 +20,25 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-3 control-label">Boundary Gap</label>
+            <div class="col-sm-7">
+                <div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="boundary_config" id="boundary_false" value='false' data-bind="checked:boundary" checked>
+                        <label for="boundary_false" title="left">
+                            &nbsp;False
+                        </label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="boundary_config" id="boundary_true" value='true' data-bind="checked:boundary">
+                        <label for="boundary_true" title="center">
+                            &nbsp;True
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label">Axis Value</label>
             <div class="col-sm-7">
                 <div class="input-group">
@@ -69,7 +88,8 @@
     var areaViewModel = {
         xOry: ko.observable('x'),
         axis: ko.observable(''),
-        series: ko.observable('')
+        series: ko.observable(''),
+        boundary: ko.observable('false')
     }
     ko.cleanNode($('#area_content'))
     ko.applyBindings(areaViewModel, document.getElementById('area_content'))
@@ -98,9 +118,15 @@
         var checked = $("[name='radio_axis']").filter(":checked");
         var axis_base = $(checked[0]).val();
         var axis_data = $('#axis_value_input').val().split(',');
+        var boundary_config = $("[name='boundary_config']").filter(":checked").val() == 'true' ? true : false;
         // alert(axis_base)
         if (chartViewModel && chartViewModel.chart) {
             chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, axis_base, axis_data);
+            if (axis_base == 'x') {
+                chartViewModel.chart.setOption({xAxis:[{boundaryGap: boundary_config}]});
+            } else {
+                chartViewModel.chart.setOption({yAxis:[{boundaryGap: boundary_config}]});
+            }
         }
     }
 </script>

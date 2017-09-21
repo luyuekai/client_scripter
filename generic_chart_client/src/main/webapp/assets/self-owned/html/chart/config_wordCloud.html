@@ -1,14 +1,53 @@
 <div id="boxplot_content">
     <form class="form-horizontal">
         <div class="form-group">
-            <label class="col-sm-3 control-label">Scale</label>
-            <div class="col-sm-3">
-                <input id="min_value_input" type="text" class="form-control" placeholder="min" aria-describedby="basic-addon2" data-bind="value:scale_min">
+            <label class="col-sm-3 control-label">Cloud Shape</label>
+            <div class="col-sm-9">
+                <div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_shape_config" id="radio_axis_circle" value="circle"  checked>
+                        <label for="radio_axis_circle" title="left">
+                            &nbsp;Circle
+                        </label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_shape_config" id="radio_axis_cardioid" value="cardioid">
+                        <label for="radio_axis_cardioid" title="center">
+                            &nbsp;Cardioid
+                        </label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_shape_config" id="radio_axis_diamond" value="diamond">
+                        <label for="radio_axis_diamond" title="right">
+                            &nbsp;Diamond
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-3">
-                <input id="max_value_input" type="text" class="form-control" placeholder="max" aria-describedby="basic-addon2" data-bind="value:scale_max">
-            </div>
+            <div class="col-sm-offset-3 col-sm-9">
+                <div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_shape_config" id="radio_axis_star" value="star">
+                        <label for="radio_axis_star" title="left" style="padding-right: 10px;">
+                            &nbsp;Star
+                        </label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_shape_config" id="radio_axis_triangle" value="triangle">
+                        <label for="radio_axis_triangle" title="center" style="padding-right: 5px;">
+                            &nbsp;Triangle
+                        </label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_shape_config" id="radio_axis_pentagon" value="pentagon">
+                        <label for="radio_axis_pentagon" title="right" style="padding-left: 24px;">
+                            &nbsp; Pentagon
+                        </label>
+                    </div>                   
 
+
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">Series</label>
@@ -25,9 +64,8 @@
 <script>
     function reset_series() {
         var tmp = $('#data_value_input').val();
-        var min_scale = Number($('#min_value_input').val());
-        var max_scale = Number($('#max_value_input').val());
-        tmp = $.parseJSON(tmp);
+//        var cloud_shape = $("[name='radio_shape_config']").filter(":checked").val();
+        tmp = $.parseJSON(tmp); 
         if (tmp && chartViewModel && chartViewModel.chart) {
             var option = _setWordCloud(tmp);
             chartViewModel.chart.setOption(option);
@@ -35,14 +73,14 @@
     }
 
     function _setWordCloud(cloudData, max, min) {
-        if(max && min) {
-            
+        if (max && min) {
+
         }
         var option = {
             series: [
                 {
                     type: 'wordCloud',
-                    shape: 'ellipse',
+                    shape: $("[name='radio_shape_config']").filter(":checked").val(),
                     gridSize: 8,
                     textStyle: {
                         normal: {
@@ -53,17 +91,6 @@
                             }
                         }
                     },
-                    /*注释一：*/
-                    // textStyle:createRandomItemStyle2(),  
-
-
-                    /*注释二：*/
-                    /*textStyle: { 
-                     normal: { 
-                     fontFamily: '微软雅黑', 
-                     color: createRandomItemStyle1() 
-                     } 
-                     },*/
                     data: cloudData
                 }
             ]

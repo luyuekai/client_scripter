@@ -18,9 +18,9 @@
 
 
 <script>
-  var chart;
   function initialize() {
     chart = ChartPOJO.generate_default_chart('tutorial_chart');
+    chartCache['tutorial_chart'] = chart;
 
     var x_Axis_data = [2013, 2014, 2015, 2016, 2017];
     var series_name = 'GDP';
