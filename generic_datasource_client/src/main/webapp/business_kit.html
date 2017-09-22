@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Matrix Template</title>
+        <title>Matrix Data Source</title>
         <link rel="shortcut icon" href="assets/self-owned/ico/favicon.ico">
         <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/vendor.css">
         <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/flat-admin.css">
@@ -31,6 +31,11 @@
                 border-radius: 3px;
                 border-left-color: #39c3da;
             }
+            .col_name{
+                border:1px solid #369;background:#fff; padding-left:5px;
+                height:30px; line-height:30px; width:300px
+            } 
+
         </style>
     </head>
 
@@ -127,7 +132,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">Data Source Name:
+                                            <label style="margin-top:8px;"> Name:
                                             </label>
                                         </div>
                                         <div class="col-xs-10" style="margin-top: 2px;">
@@ -136,7 +141,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">Data Source Description:
+                                            <label style="margin-top:8px;">Description:
                                             </label>
                                         </div>
                                         <div class="col-xs-10" style="margin-top: 2px;">
@@ -146,7 +151,7 @@
                                     <hr style="border-top: 2px solid #39c3da;"><span class="label label-info">Data Source Setting</span>
                                     <div class="row">
                                         <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">Data Source URL:
+                                            <label style="margin-top:8px;">URL:
                                             </label>
                                         </div>
                                         <div class="col-xs-10" style="margin-top: 2px;">
@@ -173,10 +178,10 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">Data Source Header:
+                                            <label style="margin-top:8px;">Header:
                                             </label>
                                         </div>
-                                        <div class="col-xs-10" style="margin-top: 2px;">
+                                        <div class="col-xs-10" style="margin-top: 9px;">
                                             <!-- ko foreach: tableModel().headerViewData -->
                                             <span data-bind="visible:$data.isChecked,text:$data.data"></span>
                                             <!-- /ko -->
@@ -200,7 +205,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-2 text-right">
-                                            <label style="margin-top:8px;">Retrive Data Max Size:
+                                            <label style="margin-top:8px;">Max Size:
                                             </label>
                                         </div>
                                         <div class="col-xs-4" style="margin-top: 2px;">
@@ -265,7 +270,7 @@
                                             <a href="#step1-v3-horizantal" id="step1-tab-v3-horizantal" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
                                                 <div class="icon fa fa-key"></div>
                                                 <div class="heading">
-                                                    <div class="title">Data Source Setting From API</div>
+                                                    <div class="title">Basic Setting</div>
                                                     <div class="description">Information Validation</div>
                                                 </div>
                                             </a>
@@ -275,7 +280,7 @@
                                                 <div class="icon fa fa-filter"></div>
                                                 <div class="heading">
                                                     <div class="title">Detail Setting</div>
-                                                    <div class="description">Table or Chart attributes configuration</div>
+                                                    <div class="description">Configuration</div>
                                                 </div>
                                             </a>
                                         </li>
@@ -283,8 +288,8 @@
                                             <a href="#step3-v3-horizantal" role="tab" id="step3-tab-v3-horizantal" data-toggle="tab" aria-controls="profile" aria-expanded="false">
                                                 <div class="icon fa fa-check"></div>
                                                 <div class="heading">
-                                                    <div class="title">Information Summary</div>
-                                                    <div class="description">Confirmation data source setting</div>
+                                                    <div class="title">Summary</div>
+                                                    <div class="description">Confirmation</div>
                                                 </div>
                                             </a>
                                         </li>
@@ -293,7 +298,7 @@
                                                 <div class="icon fa fa-flag-checkered "></div>
                                                 <div class="heading">
                                                     <div class="title">Persist</div>
-                                                    <div class="description">Persist this for re-use purpose</div>
+                                                    <div class="description">Persist into Database</div>
                                                 </div>
                                             </a>
                                         </li>
@@ -406,10 +411,15 @@
                                                 <div class="col-xs-12">
                                                     <div class="alert alert-info alert-dismissible fresh-color" role="alert" style="margin-top: 8px;">
                                                         <strong><i class="fa fa-spinner"></i>&nbsp;Data Response:</strong>
+                                                        <div class="pull-right" style="margin-top: -3px;" >
+                                                            <button id="button_workbench_plus" title="" type="button" onclick="$('#response_div').css('display', ''), $('#button_workbench_minus').css('display', ''), $('#button_workbench_plus').css('display', 'none')" class="btn btn-link" style="padding: 4px 9px;margin-bottom: 0px;display: none;"><i class="fa fa-plus"></i></button>
+                                                            <button id="button_workbench_minus" title="" type="button" onclick="$('#response_div').css('display', 'none'), $('#button_workbench_minus').css('display', 'none'), $('#button_workbench_plus').css('display', '')" class="btn btn-link" style="padding: 4px 9px;margin-bottom: 0px;"><i class="fa fa-minus"></i></button>
+                                                        </div>
                                                     </div>
+
                                                 </div>
                                                 <div class="col-xs-12">
-                                                    <div class="compile_mode_focus_in" tabindex="100">
+                                                    <div id="response_div" class="compile_mode_focus_in" tabindex="100" >
                                                         <span class="cell_div_view markdown-body" data-bind="html:stringzeta_ds_response"></span>
                                                     </div>
                                                 </div>
@@ -437,8 +447,25 @@
                                                 <div class="col-xs-12">
                                                     <div class="alert alert-info alert-dismissible fresh-color" role="alert" style="margin-top: 8px;">
                                                         <strong><i class="fa fa-spinner"></i>&nbsp;Dynamic Table Setting:</strong>
-                                                        <button type="button" data-bind="click:$data.tableModel().uncheck_all()" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px;"><i class="fa fa-square-o"> &nbsp;Uncheck ALL</i></button> &nbsp;
-                                                        <button type="button" data-bind="click:$data.tableModel().check_all()" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px;"><i class="fa fa-check-square-o"> &nbsp;Check ALL</i></button>
+                                                        <button type="button" data-bind="click:$data.tableModel().uncheck_all()" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px;margin-left: 5px;"><i class="fa fa-square-o"> &nbsp;Uncheck ALL</i></button> 
+                                                        <button type="button" data-bind="click:$data.tableModel().check_all()" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px;margin-left: 5px;"><i class="fa fa-check-square-o"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Check ALL</i></button>
+                                                        <button type="button" onclick="$('#col_name_change_div').css('display', '')" class="btn btn-default pull-right" style="padding: 2px 12px;margin-bottom: 0px;"><i class="fa fa-cogs"> &nbsp;Column Name</i></button>
+                                                    </div>
+                                                </div>
+                                                <div class="row" id='col_name_change_div' style="display:none">
+                                                    <div class="col-xs-2 text-right">
+                                                        <label style="margin-top:10px;">Column Names:
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-xs-10">
+                                                        <!-- ko foreach: tableModel().headerViewData -->
+                                                        <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;"data-bind="visible:$data.isChecked">
+                                                            <input type="text" data-bind="value:$data.data" class="form-control" placeholder="JSON parse rules: response.result">
+                                                        </div>
+                                                        <!-- /ko -->
+                                                        <div class="col-xs-2">
+                                                            <button data-bind="click:function(){$.each($data, function (idx, val) {});$('#col_name_change_div').css('display', 'none')}" type="button" class="btn btn-info">Update</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12" data-bind="visible:stringzeta_ds_response">
@@ -454,7 +481,7 @@
                                                                                     <!-- ko foreach: headerViewData -->
                                                                                     <th>
                                                                                         <div class="checkbox">
-                                                                                            <input type="checkbox" data-bind="checked: $data.isChecked,attr:{'id':$data.data_id}">
+                                                                                            <input type="checkbox" data-bind="checked: $data.isChecked,attr:{'id':$data.data_id},dbclick:changeColName($data.data_id)">
                                                                                             <label data-bind="text: $data.data,attr:{'for':$data.data_id}">
                                                                                             </label>
                                                                                         </div>
@@ -508,7 +535,6 @@
                                                 <div class="col-xs-2 text-right">
                                                     <label style="margin-top:8px;">Data Source:
                                                     </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
                                                 <div class="col-xs-10" style="margin-top: 2px;">
                                                     <p class="form-control-static" data-bind="text:stringzeta_ds"></p>
@@ -518,7 +544,6 @@
                                                 <div class="col-xs-2 text-right">
                                                     <label style="margin-top:8px;">Data Header:
                                                     </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
                                                 <div class="col-xs-10" style="margin-top: 8px;">
                                                     <!-- ko foreach: tableModel().headerViewData -->
@@ -530,7 +555,6 @@
                                                 <div class="col-xs-2 text-right">
                                                     <label style="margin-top:10px;">Refresh Interval:
                                                     </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
                                                 <div class="col-xs-10" style="margin-top: 0px;">
                                                     <div class="radio radio-inline">
@@ -569,7 +593,6 @@
                                                 <div class="col-xs-2 text-right">
                                                     <label style="margin-top:0px;">Data Source JSON:
                                                     </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
                                                 <div class="col-xs-10" style="margin-top: 0px;">
                                                     <div class="compile_mode_focus_in" tabindex="100">
@@ -599,7 +622,6 @@
                                                 <div class="col-xs-2 text-right">
                                                     <label style="margin-top:8px;">Creator:
                                                     </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
                                                 <div class="col-xs-4" style="margin-top: 2px;">
                                                     <p class="form-control-static" data-bind="text:creator"></p>
@@ -607,7 +629,6 @@
                                                 <div class="col-xs-2 text-right">
                                                     <label style="margin-top:8px;">Date:
                                                     </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
                                                 <div class="col-xs-4" style="margin-top: 2px;">
                                                     <p class="form-control-static" data-bind="text:formatTime"></p>
@@ -617,7 +638,6 @@
                                                 <div class="col-xs-2 text-right">
                                                     <label style="margin-top:8px;">Name:
                                                     </label>
-                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
                                                 <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
                                                     <input type="text" data-bind="value: name" class="form-control" placeholder="">
@@ -686,8 +706,8 @@
             <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
             <script src="assets/self-owned/js/generic/generic_dynamic.js"></script>
             <script src="assets/self-owned/js/generic/generic_vm.js"></script>
+            <script src="assets/self-owned/js/ds/token.js" ></script>
             <script src="assets/self-owned/js/ds/kit_business.js"></script>
-
             <script>
                                                         $(document).ready(function () {
                                                             $('#sidebar').load($.getRootPath() + '/components/left_side.html');
@@ -698,7 +718,7 @@
 
                                                             setTimeout(function () {
                                                                 // resetCssClass('li_kits', 'active');
-                                                                $('#navbar_title_li').text('Matrix Data Source Kit');
+                                                                $('#navbar_title_li').text('Data Source Kit (API)');
                                                                 // $('#navbar_search_li').css('display', '');
 
                                                                 // env_setup();

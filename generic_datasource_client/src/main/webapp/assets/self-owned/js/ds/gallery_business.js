@@ -63,19 +63,14 @@ function scroll_env_setup() {
 }
 
 function show_data(data) {
+    var tip = data.stringtheta;
     if (data.type == 'SOURCE_SQL_CONFIGURATION') {
-        default_switch2detail_page(data, '/business_kit_db.html', 'check', 'MATRIX_DATA_SOURCE_CURRENT');
+        window.open($.getRootPath() + '/business_kit_db.html' + '?status=' + 'check' + '&token=' + tip);
     } else {
-        default_switch2detail_page(data, '/business_kit.html', 'check', 'MATRIX_DATA_SOURCE_CURRENT');
+        window.open($.getRootPath() + '/business_kit.html' + '?status=' + 'check' + '&token=' + tip);
     }
 }
-function isApi(data) {
-    if (data == 'GENERIC_MATRIX_DATA_SOURCE') {
-        return true;
-    } else {
-        return false;
-    }
-}
+
 function filterData(type) {
     if (type == 'ALL') {
         SearchPOJO.build_requestPOJO_prototype = function () {
@@ -141,31 +136,33 @@ function filterData(type) {
 }
 
 function Update(data) {
+    var tip = data.stringtheta;
     if (data.type == 'SOURCE_SQL_CONFIGURATION') {
-        default_switch2detail_page(data, '/business_kit_db.html', 'update', 'MATRIX_DATA_SOURCE_CURRENT');
+        window.open($.getRootPath() + '/business_kit_db.html' + '?status=' + 'update' + '&token=' + tip);
     } else {
-        default_switch2detail_page(data, '/business_kit.html', 'update', 'MATRIX_DATA_SOURCE_CURRENT');
+        window.open($.getRootPath() + '/business_kit.html' + '?status=' + 'update' + '&token=' + tip);
     }
 }
 function Remove(data) {
     var id = data.id;
-    console.log(data);
     var requestPOJO = {
         "className": "v2.service.generic.query.entity.Genericentity",
         "attributes": {
-            "id":id,
+            "id": id,
             "deleted": true
         }
     };
-     var res = {
-      'queryJson': $.toJSON(requestPOJO)
+    var res = {
+        'queryJson': $.toJSON(requestPOJO)
     };
-    $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/update', res, "galleryRemoveSuccess", "galleryRemoveFail", "galleryRemoveWrong","POST",true,{'TAG':'MATRIX_UPDATE'});
-   
-}
-$.subscribe("galleryRemoveSuccess",successRemove);
+    $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/update', res, "galleryRemoveSuccess", "galleryRemoveFail", "galleryRemoveWrong", "POST", true, {'TAG': 'MATRIX_UPDATE'});
 
-function successRemove(){
-    console.log($.toJSON(arguments[1]))
+}
+$.subscribe("galleryRemoveSuccess", successRemove);
+
+function successRemove() {
+    ModalUtil.modal_close('myModal')
     filterData(vm.businessPOJO().dataSourceType());
+
+
 }

@@ -10,28 +10,49 @@ current_vm = vm;
 
 
 function env_setup() {
-    cookie_env_setup();
+    data_env_setup();
     vm_env_setup();
     dynamic_table_env_setup();
 }
 
-function cookie_env_setup() {
+function data_env_setup() {
     var status_lag = $.hasUrlParam('status');
-    var type_flag = $.hasUrlParam('type');
-    if (status_lag && type_flag) {
+    var token_flag = $.hasUrlParam('token');
+    if (status_lag && token_flag) {
         var status = $.urlParamValue('status');
-        var type = $.urlParamValue('type');
-        if (status && type) {
-            var cookie_value = UtilPOJO.getCookie(type);
-            if (cookie_value) {
-                CachePOJO.businessPOJO = JSON.parse(cookie_value);
-                //clear cookie
-                UtilPOJO.clearCookie(type);
-            }
+        var token = $.urlParamValue('token');
+        if (status && token) {
+            var result = {
+                "className": "Genericentity",
+                "orderMap": {
+                    "id": false
+                },
+                "pageMaxSize": 10,
+                "currentPageNumber": 1,
+                "eqMap": {
+                    "stringtheta": token,
+                    "deleted": false
+                },
+
+                "inMap": {
+                    "type": ["SOURCE_SQL_CONFIGURATION", "GENERIC_MATRIX_DATA_SOURCE"]
+                }
+            };
+            var data = {
+                'queryJson': $.toJSON(result)
+            };
+            $.serverRequest($.getServerRoot() + '/service_generic_query/api/query', data, "GET_DATA_SUCCESS", "GET_DATA_FAIL", "GET_DATA_SERVER_FAIL");
         }
     }
 }
+$.subscribe("GET_DATA_SUCCESS", reloadData)
 
+function reloadData() {
+    if (arguments && arguments[1]) {
+        var result = arguments[1].result[0]
+        vm.businessPOJO().reload(result)
+    }
+}
 
 // Setup the business model with view model
 function vm_env_setup() {
@@ -57,6 +78,7 @@ function vm_env_setup() {
         self.type = ko.observable('GENERIC_MATRIX_DATA_SOURCE');
         self.detailVisible = ko.observable(false);
         self.setVisible = ko.observable(false);
+        self.token = hex_sha1(self.createtime + new Date().getTime());
 
 
 
@@ -126,7 +148,7 @@ function vm_env_setup() {
             self.tableModel(new ThinListViewModel());
         }
 
-        self.stringzeta_ds = ko.observable();
+        self.stringzeta_ds = ko.observable('http://localhost:8080/service_generic_query/api/query');
         self.stringzeta_header_json = ko.observable();
         self.stringzeta_refresh_interval = ko.observable('30');
         self.stringzeta_refresh_interval_tooltip = ko.computed(function () {
@@ -146,9 +168,9 @@ function vm_env_setup() {
             }
         });
 
-        self.stringzeta_json_rule = ko.observable();
+        self.stringzeta_json_rule = ko.observable('result');
         self.stringzeta_rest_mode = ko.observable('POST');
-        self.stringzeta_request_params = ko.observable();
+        self.stringzeta_request_params = ko.observable('{"queryJson":"{\\"className\\":\\"Genericentity\\",\\"groupMap\\":{\\"type\\":\\"type\\"},\\"pageMaxSize\\":100,\\"currentPageNumber\\":1,\\"eqMap\\":{\\"deleted\\":false}}"}');
         self.stringzeta_request_params_max_size = ko.computed(function () {
             var val = self.stringzeta_request_params();
             var result = 'No limit';
@@ -162,6 +184,7 @@ function vm_env_setup() {
                         }
                     }
                 } catch (err) {
+                    vm.businessPOJO().stringzeta_ds_response('');
                     vm.response_vm().errorResponse("JSON解析失败，请检查JSON格式", "JSON解析", "[失败]");
                     setTimeout(function () {
                         vm.response_vm().reset();
@@ -197,6 +220,7 @@ function vm_env_setup() {
                     "numberbeta": self.lastupdatetime(),
                     // "lastupdatetime": self.lastupdatetime(),
                     "stringeta": self.formatTime(),
+                    "stringtheta": self.token,
                     "stringzeta": self.ds(),
                     "type": self.type(),
                     "enabled": true,
@@ -212,7 +236,7 @@ function vm_env_setup() {
 
         self.ds = ko.computed(function () {
             var json = {
-                'style': 'api',
+                'mode': 'api',
                 'attr': {
                     'ds': self.stringzeta_ds(),
                     'header_json': self.tableModel().header2json(),
@@ -238,9 +262,7 @@ function vm_env_setup() {
     var style = $.urlParamValue('style');
 
 
-    if (CachePOJO.businessPOJO) {
-        vm.businessPOJO().reload(CachePOJO.businessPOJO);
-    }
+
     if (status == null) {
         vm.businessPOJO().setVisible(true);
     } else if (status == 'check') {
@@ -248,7 +270,7 @@ function vm_env_setup() {
     }
     if (status == 'update') {
         Update();
-        vm.businessPOJO().detailVisible(false);
+        vm.businessPOJO().detailVisible(true);
         vm.businessPOJO().setVisible(true);
     }
 }
@@ -294,8 +316,6 @@ $.subscribe("MATRIX_API_SUCCESS_EVENT", MATRIX_API_SUCCESS_EVENT_HANDLER);
 function MATRIX_API_SUCCESS_EVENT_HANDLER() {
     if (arguments && arguments[1]) {
         if (arguments[1].addtion && (arguments[1].addtion['TAG'] == 'MATRIX_DATA_SOURCE_TESTING' || arguments[1].addtion['TAG'] == 'MATRIX_DATA_SOURCE_RETRIEVE')) {
-            console.log("arguments = " + $.toJSON(arguments[1]));
-            console.log("Retrieve Data Source Successed!")
             var server_data = arguments[1].response;
             var res = JSON.stringify(arguments[1].response);
             vm.businessPOJO().stringzeta_ds_response(res);
@@ -307,8 +327,6 @@ function MATRIX_API_SUCCESS_EVENT_HANDLER() {
         }
 
         if (arguments[1].addtion && (arguments[1].addtion['TAG'] == 'MATRIX_ADD' || arguments[1].addtion['TAG'] == 'MATRIX_UPDATE')) {
-            console.log(arguments[1].response.result[0]);
-            console.log("Retrieve Data Source Successed!")
             var server_data = arguments[1].response.result[0];
             vm.businessPOJO().reload(server_data);
 
@@ -323,6 +341,7 @@ function MATRIX_API_SUCCESS_EVENT_HANDLER() {
 
 
 var check_data_source = function (type) {
+    vm.businessPOJO().stringzeta_ds_response('');
     var type_test = 'MATRIX_DATA_SOURCE_TESTING';
     var type_retrieve = 'MATRIX_DATA_SOURCE_RETRIEVE';
     var type_current = type ? type_test : type_retrieve;
@@ -352,7 +371,7 @@ var check_data_source = function (type) {
             }
 
         }
-        $.serverRequest(vm.businessPOJO().stringzeta_ds(), data, "DEFAULT_RETRIEVE_API_SUCCESS_LISTENER", "DEFAULT_RETRIEVE_API_FAILED_LISTENER", "DEFAULT_RETRIEVE_API_EXCEPTION_LISTENER", mode, true, {'TAG': type_current});
+        $.serverRequest(vm.businessPOJO().stringzeta_ds().trim(), data, "DEFAULT_RETRIEVE_API_SUCCESS_LISTENER", "DEFAULT_RETRIEVE_API_FAILED_LISTENER", "DEFAULT_RETRIEVE_API_EXCEPTION_LISTENER", mode, true, {'TAG': type_current});
     }
 
 }
@@ -360,6 +379,7 @@ var check_data_source = function (type) {
 var gen_table = function () {
     var server_data = vm.businessPOJO().stringzeta_ds_response_data;
     var json_rule = vm.businessPOJO().stringzeta_json_rule();
+    console.log($.toJSON(server_data))
     if (!server_data) {
         return;
     }
@@ -407,6 +427,7 @@ function reload_dynamic_table(ds) {
 }
 
 function Update() {
+    vm.businessPOJO().detailVisible(true);
     vm.businessPOJO().setVisible(true);
 }
 
@@ -414,4 +435,8 @@ function Remove() {
     vm.businessPOJO().deleted(true);
     default_update_logic();
     window.location.href = $.getRootPath() + '/business_gallery.html';
+}
+
+function changeColName(data) {
+    console.log(data);
 }

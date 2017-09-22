@@ -25,7 +25,7 @@ import scripter.datasourse.ChartServiceListener;
 public class ConnectionManager {
 
     static private ConnectionManager instance;           //唯一数据库连接管理类
-    private ConcurrentHashMap conns = new ConcurrentHashMap();       //连接放在hashmap中
+    private static ConcurrentHashMap conns = new ConcurrentHashMap();       //连接放在hashmap中
 
 //实例化管理类
     public ConnectionManager() {    //?

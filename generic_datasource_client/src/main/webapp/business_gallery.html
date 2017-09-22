@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Matrix Template</title>
+        <title>Matrix Data Source</title>
         <link rel="shortcut icon" href="assets/self-owned/ico/favicon.ico">
         <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/vendor.css">
         <link rel="stylesheet" type="text/css" href="assets/reference/flat-admin/assets/css/flat-admin.css">
@@ -112,9 +112,10 @@
                                                 <span class="label label-warning" id="DatabaseData"data-bind="if:type !='GENERIC_MATRIX_DATA_SOURCE'" style="margin-right: 8px;">Database</span>
                                                 <span  data-bind="text:creator" style="margin-right: 8px;"></span>
                                                 <span  data-bind="text:(function(){return new Date(parseInt(numberalpha)).toLocaleString()})()" style="margin-right: 8px;"></span>
-                                                <button title="Remove" data-bind="event:{click:function(){Remove($data)}}" type="button" class="btn btn-default pull-right" style="padding: 6px 8px;margin-bottom: 0px;margin-right: 8px;"><i class="fa fa-trash-o"></i></button>
+                                                <button title="Remove" data-bind="click:function(){console.log($data);ModalUtil.popup_modal_with_businessPOJO('DELETE', '/modal_content_remove.html', $data, null,null);}" type="button" class="btn btn-default pull-right" style="padding: 6px 8px;margin-bottom: 0px;margin-right: 8px;"><i class="fa fa-trash-o"></i></button>
                                                 <button title="Update" data-bind="event:{click:function(){Update($data)}}" type="button" class="btn btn-default pull-right" style="padding: 6px 8px;margin-bottom: 0px;margin-right: 8px;"><i class="fa fa-cogs"></i></button>
-                                            </div>                                           
+                                            </div>
+
                                             <div class="value">
                                                 <span class="sign" data-bind="text:description"></span>
                                                 <span data-bind="text:name"></span>
@@ -123,7 +124,23 @@
                                     </div>
                                 </a>
                             </div>
-
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" onclick="ModalUtil.modal_close('myModal');" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title">DELETE</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Delete current data source?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-sm btn-default" onclick="ModalUtil.modal_close('myModal');">Close</button>
+                                            <button type="button" class="btn btn-sm btn-success"  data-bind="event:{click:function(){Remove($data)}}">Yes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- /ko -->
                         </div>
                     </div>

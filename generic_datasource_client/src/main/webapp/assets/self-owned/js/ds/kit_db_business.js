@@ -33,29 +33,50 @@ var databaseChooseViewModel = {
 
 
 function env_setup() {
-    cookie_env_setup();
+    data_env_setup();
     vm_env_setup();
     dynamic_table_env_setup();
 }
 
-function cookie_env_setup() {
+function data_env_setup() {
     var status_lag = $.hasUrlParam('status');
-    var type_flag = $.hasUrlParam('type');
-    if (status_lag && type_flag) {
+    var token_flag = $.hasUrlParam('token');
+    if (status_lag && token_flag) {
         var status = $.urlParamValue('status');
-        var type = $.urlParamValue('type');
-        if (status && type) {
-            var cookie_value = UtilPOJO.getCookie(type);
-            if (cookie_value) {
-                CachePOJO.businessPOJO = JSON.parse(cookie_value);
-                //clear cookie
-                UtilPOJO.clearCookie(type);
-            }
+        var token = $.urlParamValue('token');
+        if (status && token) {
+            var result = {
+                "className": "Genericentity",
+                "orderMap": {
+                    "id": false
+                },
+                "pageMaxSize": 10,
+                "currentPageNumber": 1,
+                "eqMap": {
+                    "stringtheta": token,
+                    "deleted": false
+                },
+
+                "inMap": {
+                    "type": ["SOURCE_SQL_CONFIGURATION", "GENERIC_MATRIX_DATA_SOURCE"]
+                }
+            };
+            var data = {
+                'queryJson': $.toJSON(result)
+            };
+            $.serverRequest($.getServerRoot() + '/service_generic_query/api/query', data, "GET_DATA_SUCCESS", "GET_DATA_FAIL", "GET_DATA_SERVER_FAIL");
         }
     }
 }
 
+$.subscribe("GET_DATA_SUCCESS", reloadData)
 
+function reloadData() {
+    if (arguments && arguments[1]) {
+        var result = arguments[1].result[0]
+        vm.businessPOJO().reload(result)
+    }
+}
 // Setup the business model with view model
 function vm_env_setup() {
 
@@ -82,6 +103,8 @@ function vm_env_setup() {
         self.databasesetVisible = ko.observable(false);
         self.datasourcesetVisible = ko.observable(false);
         self.connectionVisible = ko.observable(false);
+        self.codeMirror = null;
+        self.token = hex_sha1(self.createtime + new Date().getTime());
 
         //database
         self.dataBases = ko.observableArray([
@@ -158,7 +181,7 @@ function vm_env_setup() {
             var ds = JSON.parse(pojo.stringzeta);
             if (ds) {
                 var url = pojo.stringalpha;
-                var name = pojo.description;               
+                var name = pojo.description;
                 var database = [name, '', url, ''];
                 ds = ds.attr;
                 self.databaseSelected.selectedDatabase(database);
@@ -233,6 +256,7 @@ function vm_env_setup() {
                     "deleted": self.deleted(),
                     "enabled": true,
                     "stringalpha": self.databaseSelected.selectedDatabase()[2],
+                    "stringtheta": self.token,
                     "stringbeta": self.sql(),
                     "stringzeta": self.ds(),
                     "stringeta": self.formatTime(),
@@ -248,7 +272,7 @@ function vm_env_setup() {
         self.stringzeta_request_params = ko.observable();
         self.ds = ko.computed(function () {
             var json = {
-                'style': 'database',
+                'mode': 'database',
                 'attr': {
                     'request_params': self.stringzeta_request_params(),
                     'ds': self.stringzeta_ds(),
@@ -294,17 +318,15 @@ function vm_env_setup() {
     var style = $.urlParamValue('style');
     if (status == 'check') {
         vm.businessPOJO().detailVisible(true);
-    } else if(status === 'remove') {
+    } else if (status === 'remove') {
         Remove();
-    }else if (status === 'update'){
+    } else if (status === 'update') {
         vm.businessPOJO().detailVisible(true);
         vm.businessPOJO().datasourcesetVisible(true);
-    }else{
+    } else {
         vm.businessPOJO().connectionVisible(true);
     }
-    if (CachePOJO.businessPOJO) {
-        vm.businessPOJO().reload(CachePOJO.businessPOJO);
-    }
+   
     retrieveDatabase();
 }
 ;
@@ -408,11 +430,17 @@ function failedAddListener_database() {
     if (arguments && arguments[1]) {
         var errorMessage = arguments[1].data;
         vm.response_vm().errorResponse("请联系管理员", "添加数据库", "[失败]");
+        setTimeout(function () {
+            vm.response_vm().reset();
+        }, 3000);
     }
 }
 
 function failedServiceListener_database() {
     vm.response_vm().errorResponse(" 测试数据库连接失败,服务器错误", "添加数据库", "[失败]");
+    setTimeout(function () {
+        vm.response_vm().reset();
+    }, 3000);
 
 }
 
@@ -452,6 +480,7 @@ function successGetDatabase() {
             var username = arguments[1].result[i].stringdelta;
             var url = arguments[1].result[i].stringbeta;
             var id = arguments[1].result[i].id;
+            var passwd = arguments[1].result
             table_data[i] = [name, username, url, id];
         }
         var header = ["Name", "User Name", "URL", ""];
@@ -552,6 +581,7 @@ function successTestConnection() {
     if (arguments && arguments[1]) {
         vm.response_vm().correctResponse(" 测试数据库连接成功,请点击执行按钮", "测试数据库连接", "[成功]");
         $("#excuteNew").prop("disabled", false);
+        $("#excuteUpdate").prop("disabled", false);
     }
 }
 function failedTestConnection() {
@@ -659,7 +689,7 @@ function getColumnInTable(data) {
         }
     }).done(function (data) {
         var data = JSON.parse(data);
-        
+
         if (!data.hasError) {
             vm.businessPOJO().databaseSelected.column.removeAll();
             var table = data.result[0].split("\n")
@@ -681,7 +711,9 @@ function getColumnInTable(data) {
 
 function checkDataSourceForConnection(data) {
     var url = data[2];
+    console.log(url)
     var id = data[3];
+    console.log('id ' + id)
     var requestPOJO = {
         "className": "v2.service.generic.query.entity.Genericentity",
         "aliasMap": {},
@@ -689,7 +721,7 @@ function checkDataSourceForConnection(data) {
         "pageMaxSize": 1000000,
         "currentPageNumber": 1,
         "eqMap": {
-            "stringalpha": url,
+            "id": id,
             "deleted": false,
             "type": "SOURCE_SQL_CONFIGURATION"
         },
@@ -699,7 +731,7 @@ function checkDataSourceForConnection(data) {
         'queryJson': $.toJSON(requestPOJO)
     };
     $.serverRequest($.getServerRoot() + "/service_generic_query/api/query", data, "successCheckDatabase",
-            "failedCheckDatabase", "serverCheckDatabase", "POST", true, {'TAG': id});
+            "failedCheckDatabase", "serverCheckDatabase", "POST", true, {'TAG': id, 'URL': url});
 
 }
 $.subscribe("successCheckDatabase", removeConnection);
@@ -714,6 +746,7 @@ function removeConnection() {
                 vm.response_vm().errorResponse("有依赖于该链接的数据源", "删除数据库链接", "[失败]");
             }
         } else {
+            var url = arguments[1].addtion.URL;
             var requestPOJO = {
                 "className": "v2.service.generic.query.entity.Genericentity",
                 "attributes": {
@@ -724,7 +757,7 @@ function removeConnection() {
             var request = {
                 'queryJson': $.toJSON(requestPOJO)
             };
-            $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/update', request, "CONNECTION_REMOVE_SUCCESS", "CONNECTION_REMOVE_FAIL", "CONNECTION_REMOVE_EXCEPTION", "POST", true, {'TAG': 'CONNECTION_UPDATE'});
+            $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/update', request, "CONNECTION_REMOVE_SUCCESS", "CONNECTION_REMOVE_FAIL", "CONNECTION_REMOVE_EXCEPTION", "POST", true, {'TAG': 'CONNECTION_UPDATE', 'URL': url});
         }
 
     }
@@ -735,9 +768,10 @@ $.subscribe("CONNECTION_REMOVE_FAIL", failedRemoveConnection);
 $.subscribe("CONNECTION_REMOVE_EXCEPTION", failedServerRemoveConnection);
 
 function successRemoveConnection() {
+    var url = arguments[1].addtion.URL;
 
     var requestPOJO = {
-        "dbUrl": vm.businessPOJO().databaseUrl().trim()
+        "dbUrl": url
     };
 
     var data = {
@@ -801,9 +835,13 @@ function successDetailConnection() {
         var update = document.getElementById("excuteUpdate");
         var check = document.getElementById("testConnection");
         var excute = document.getElementById("excuteNew");
+        var test = document.getElementById("testUpdate");
         update.style.display = "";
+        test.style.display = "";
         check.style.display = "none";
         excute.style.display = "none";
+        $("#excuteUpdate").prop("disabled", true);
+        $("#databaseUrl").prop("disabled", true)
     }
 }
 function failedDetailConnection() {
@@ -936,6 +974,7 @@ var check_data_source = function (type) {
 }
 var gen_table = function () {
     var server_data = vm.businessPOJO().stringzeta_ds_response_data;
+    console.log($.toJSON(server_data))
     if (!server_data) {
         return;
     }
@@ -945,7 +984,7 @@ var gen_table = function () {
 
     var tableData = DataTransferPOJO.transferHiveData(server_data[0]);
     var tableModel = new ThinListViewModel();
-    
+
     tableModel.buildData(tableData.result);
     tableModel.columnNames(tableData.header);
     tableModel.isDisplayPager(true);
@@ -987,6 +1026,9 @@ function successUpdateConnection() {
         vm.response_vm().correctResponse(" 更新数据库信息成功", "更新数据库连接", "[成功]");
         retrieveDatabase();
         vm.businessPOJO().databasesetVisible(false);
+        setTimeout(function () {
+            vm.response_vm().reset();
+        }, 3000);
     }
 }
 
@@ -1000,14 +1042,17 @@ function Remove() {
 function addConnection() {
     var update = document.getElementById("excuteUpdate");
     var check = document.getElementById("testConnection");
+    var test = document.getElementById("testUpdate");
     var excute = document.getElementById("excuteNew");
     update.style.display = "none";
+    test.style.display = "none";
     check.style.display = "";
     excute.style.display = "";
     vm.businessPOJO().connection_clear();
     vm.businessPOJO().databasesetVisible(true);
     vm.businessPOJO().detailVisible(false);
     vm.businessPOJO().datasourcesetVisible(false);
+    $("#databaseUrl").prop("disabled", '')
 }
 
 function hide_configuration_panel(divToSwitch, showButtonDiv, hideButtonDiv) {
@@ -1024,4 +1069,22 @@ function show_configuration_panel(divToSwitch, showButtonDiv, hideButtonDiv) {
 
 function Update() {
     vm.businessPOJO().datasourcesetVisible(true);
+}
+
+function checkConnectionBefore(data) {
+    var requestPOJO = {
+        "dbType": vm.businessPOJO().databaseType().trim(),
+        "dbDriver": vm.businessPOJO().databaseDriver().trim(),
+        "dbConName": vm.businessPOJO().connectionName().trim(),
+        "dbUsername": vm.businessPOJO().username().trim(),
+        "dbPasswd": vm.businessPOJO().passwd().trim(),
+        "dbUrl": vm.businessPOJO().databaseUrl().trim()
+    };
+
+    var data = {
+        "DBConfig": $.toJSON(requestPOJO)
+    };
+
+    $.serverRequest($.getServerRoot() + "/generic_datasource_client/api/connection/testconnection", data, "successTestConnection", "failedTestConnection",
+            "failedServerConnection");
 }
