@@ -101,15 +101,53 @@
                                     <button title="Export HTML" type="button" data-bind="click:function(){reportViewModel.download('HTML')}" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-html5"></i></button>
                                     <button title="Export Markdown" type="button" data-bind="click:function(){reportViewModel.download('MD')}" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-file-code-o"></i></button>
                                     <button id="up2oda_btn" title="Up to ODA " type="button" data-bind="visible: name(),click:(function(){ModalUtil.popup_modal_with_businessPOJO('Up to ODA', '/assets/self-owned/html/report/modal_to_oda.html',$data);})" class="btn btn-default "  style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-caret-square-o-up "></i>&nbsp;</button>
-
-                                    <span class="pull-right" style="margin-right:18px">
+                                    <span class="pull-right" style="margin-right:">
                                         <button type="button" class="btn btn-warning" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:hasNewContent">Modified</button>
                                         <button type="button" class="btn btn-danger" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:!name()">Unsaved</button>
-                                        <button type="button" class="btn btn-success" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:name()">Saved as: <span data-bind="text:name"></span></button>
+                                        <button type="button" class="btn btn-success" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:name()">Saved</button>
+                                        <!--                                        <span class="" style="margin-right:18px">
+                                            <button type="button" class="btn btn-success" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:name()">Saved as: <span data-bind="text:name"></span></button>
+                                        </span>-->
+                                        <button id="hide_report_info_btn" type="button" title="Infomation" onclick="hide_report_info_div()" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;border: 0px solid;box-shadow: none;"><i class="fa fa-angle-double-up"></i></button>
+                                        <button id="show_report_info_btn" type="button" title="Infomation" onclick="show_report_info_div()" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;border: 0px solid;box-shadow: none;display: none"><i class="fa fa-angle-double-down"></i></button>
+
+                                        <script>
+                                            function hide_report_info_div() {
+                                                hide_div('report_info_div');
+                                                show_div('show_report_info_btn');
+                                                hide_div('hide_report_info_btn');
+                                            }
+                                            function show_report_info_div() {
+                                                show_div('report_info_div');
+                                                show_div('hide_report_info_btn');
+                                                hide_div('show_report_info_btn');
+                                            }
+                                        </script>
                                     </span>
                                 </div>
                             </div>
                             <div class="card-body no-padding table-responsive">
+                            </div>
+                            <div class="card-body" id="report_info_div" style="">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row col-xs-2" style="color: #666;font-size: 14px;font-weight:500;">
+                                            <strong>Name</strong>
+                                        </div>
+                                        <div class="row col-xs-10">
+                                            <span class="label label-success" style="margin-right: 12px" data-bind="text:name"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-bind="visible: related_datasets_json" style="margin-top:10px">
+                                        <div class="row col-xs-2" style="color: #666;font-size: 14px;font-weight:500;">
+                                            <strong>Related Datasets</strong>
+                                        </div>
+                                        <div class="row col-xs-10">
+                                            <span class="" style="margin-right: 12px" data-bind="text: related_datasets_json">aaa</span>
+                                            <button id="remove_dataset_btn" type="button" title="删除数据集" onclick="removeDataset()" class="btn btn-default" style="padding: 0px 12px;margin-bottom: 0px;"><i class="fa fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -118,7 +156,7 @@
                 <div id="report_content_seperate_div" class="seperate_div_class" style="margin-top:188px"></div>
 
                 <div class="row" id="report_content_div" >
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:30px">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="">
                         <div class="card card-mini">
                             <div class="card-body" id="report_content_body_div" style="min-height:300px">
                                 <div data-bind="foreach:cells">
@@ -221,9 +259,10 @@
             <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
             <script src="assets/self-owned/js/generic/generic_vm.js"></script>
             <script src="assets/self-owned/js/generic/generic_upload.js"></script>
-            <!-- Javascript for Matrix Report Editor Self Owned -->
-            <script src="assets/self-owned/js/module/kits/vm.js"></script>
-            <script src="assets/self-owned/js/module/kits/logic.js"></script>
+            <!-- Javascript for Matrix Report Editor Self Owned(vm.js/logic.js is for general report system; vm1.js/logic.js is for kaggle system)-->
+            <!--<script src="assets/self-owned/js/module/kits/vm.js"></script>-->
+            <script src="assets/self-owned/js/module/kits/vm1.js"></script>
+            <script src="assets/self-owned/js/module/kits/logic1.js"></script>
 
             <script>
                                 var reportViewModel = new ReportViewModel();
@@ -263,6 +302,27 @@
                 //            }); 
 
 
+            </script>
+
+            <script>
+                function removeDataset() {
+                    reportViewModel.related_datasets().pop();
+                    getDatasetJson();
+                }
+
+                function getDatasetJson() {
+                    var datasetJson = {};
+                    $.each(reportViewModel.related_datasets(), function (index, value) {
+                        datasetJson["" + value.id] = value.name;
+                    });
+                    if (reportViewModel.related_datasets().length === 0) {
+                        reportViewModel.related_datasets_json(null);
+                    } else {
+                        reportViewModel.related_datasets_json($.toJSON(datasetJson));
+                    }
+                    reportViewModel.data.stringgamma = reportViewModel.related_datasets_json();
+                    reportViewModel.hasNewContent(true);
+                }
             </script>
 
     </body>

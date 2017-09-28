@@ -145,11 +145,27 @@
     function choose(data) {
         console.log('choosed dataset name,id：' + data.name + ',' + data.id);
         reportViewModel.data.stringgamma = data.name + '';
+        var dataset_item = {"id": data.id, "name": data.name};
+        if (!containsDataset(dataset_item)) {
+            reportViewModel.related_datasets().push(dataset_item);
+            console.log('pushed dataset name,id：' + data.name + ',' + data.id);
+            getDatasetJson();
+        }
         reportViewModel.hasNewContent(true);
         $.unsubscribe("DATASET_API_SUCCESS_LISTENER", dataset_service_success_listener);
         $.unsubscribe("DATASET_API_FAILED_LISTENER", dataset_service_failed_listener);
         $.unsubscribe("DATASET_API_EXCEPTION_LISTENER", dataset_server_error_listener);
         $('#popupModalPro').modal('hide');
+    }
+
+    function containsDataset(dataset_item) {
+        var flag = false;
+        $.each(reportViewModel.related_datasets(), function (index, value) {
+            if (value.id === dataset_item.id) {
+                flag = true;
+            }
+        });
+        return flag;
     }
 
 </script>
