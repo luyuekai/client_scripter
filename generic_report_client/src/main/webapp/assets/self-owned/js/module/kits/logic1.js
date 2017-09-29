@@ -105,7 +105,16 @@ function successListener() {
     var json = arguments[1].result[0];
     if (reportViewModel) {
       reportViewModel.deserialize_report(json);
-      reportViewModel.related_datasets_json(json.stringgamma);
+      
+      var datasetsStr = json.stringgamma;
+      reportViewModel.related_datasets_json(datasetsStr);
+      if(datasetsStr !== null || datasetsStr !== ""){
+          var datasetsJson = JSON.parse(datasetsStr);
+          $.each(datasetsJson, function (index, value) {
+              reportViewModel.related_datasets().push({"id": index, "name": value});
+          });
+      }
+      
       reportViewModel.hasNewContent(false);
       if(current_mode == 'EDIT'){
         userCheck();
