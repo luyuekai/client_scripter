@@ -12,6 +12,7 @@ var default_labelStyle = {
     fontSize: '12'
 };
 var default_legend = {
+    type: 'scroll',
     orient: 'vertical',
     // orient:'horizontal',
     // left: 'center',
@@ -199,6 +200,7 @@ ChartPOJO = {
     add_series_data_item: function (chart, data_item) {
         var option = ClonePOJO.deepClone(chart.getOption());
         option.series[0].data.push(data_item);
+        option.legend[0].data.push(data_item.name)
         return ChartPOJO.reset_chart_option(chart, option);
     },
     remove_series_data_item: function (chart, data_item_index) {
@@ -979,6 +981,11 @@ Radar_ChartPOJO = {
         };
         if (option.series[0]) {
             console.log(option.series.pop())
+        }
+        if (series_data) {
+            series_data.forEach(function (element) {
+                option.legend[0].data.push(element.name);
+            })
         }
         option.series.push({
             type: 'radar',

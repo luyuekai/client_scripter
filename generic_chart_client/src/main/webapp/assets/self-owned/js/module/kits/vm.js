@@ -4,6 +4,7 @@ function ChartViewModel(parent) {
   self.chart_parent_div_id = 'main_chart';
   self.data = null;
   self.chart = null;
+  self.hasNewContent = ko.observable(false);
   self.option = new ChartOptionViewModel(self);
   self.dynamic_config = new DynamicConfigViewModel(self);
 

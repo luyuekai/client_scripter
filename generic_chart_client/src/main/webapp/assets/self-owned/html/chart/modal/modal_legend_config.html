@@ -1,0 +1,83 @@
+<div id="genericModalDiv">
+      <!--Validation DIV BEGIN-->
+  <div class="flat-matrix">
+      <div class="alert alert-warning alert-dismissible fresh-color" role="alert" id="alert_div" style="display:none">
+      <button type="button" class="close" aria-label="Close">
+        <i class="fa fa-close"></i>
+      </button>
+      <strong>Warning:</strong>
+      <div id="errorMessagesDIV">
+          <p>请先选择图表类型!</p>
+      </div>
+    </div>
+  </div>
+  <!--Validation DIV END-->
+    <div class="business_div_class">
+        <div>
+<!--            <p>
+                This operation will save the chart into persist layer, please fulfill the information and confirm to continue...
+            </p>-->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="margin-bottom: 20px">
+                        <label class="col-sm-2 control-label">Orient</label>
+                        <div class="col-sm-4">
+                            <input id="title_orient_input" type="text" class="form-control"  aria-describedby="basic-addon1" placeholder="horizontal or vertical">
+                        </div>
+                        <label class="col-sm-2 control-label">ItemGap</label>
+                        <div class="col-sm-4">
+                            <input id="title_itemgap_input" type="text" class="form-control"  aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 20px">
+                        <label class="col-sm-2 control-label">Width</label>
+                        <div class="col-sm-4">
+                            <input id="title_width_input" type="text" class="form-control"  aria-describedby="basic-addon1" placeholder="#333333">
+                        </div>
+                        <label class="col-sm-2 control-label">Height</label>
+                        <div class="col-sm-4">
+                            <input id="title_height_input" type="text" class="form-control"  aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 20px">
+                        <label class="col-sm-2 control-label">Left</label>
+                        <div class="col-sm-4">
+                            <input id="title_left_input" type="text" class="form-control"  aria-describedby="basic-addon1" placeholder="left,center,right or 20 or 20%">
+                        </div>
+                        <label class="col-sm-2 control-label">Top</label>
+                        <div class="col-sm-4">
+                            <input id="title_top_input" type="text" class="form-control"  aria-describedby="basic-addon1" placeholder="top,middle,bottom or 20 or 20%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="pull-right">
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+                <button type="button" onclick="run_legend_config();" class="btn btn-sm btn-success">Confirm</button>
+            </div>
+
+            <br>
+        </div>
+    </div>
+</div>
+
+<script>
+    function run_legend_config() {
+        if (chartViewModel && chartViewModel.chart) {
+            chartViewModel.chart.setOption({
+                legend: {
+                    orient: $('#title_orient_input').val() || "vertical",
+                    itemGap: $('#title_itemgap_input').val() || 10,
+                    left:$('#title_left_input').val(),
+                    top:$('#title_top_input').val(),
+                    width:$('#title_width_input').val(),
+                    height:$('#title_height_input').val()
+                }
+            });
+            ModalUtil.modal_close('popupModalPro');
+        } else {
+            $('#alert_div').css('display','');
+        }
+    }
+</script>

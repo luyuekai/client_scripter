@@ -73,7 +73,7 @@
                         <div class="icon fa fa-flag-checkered"></div>
                         <div class="heading">
                             <div class="title">Step 3</div>
-                            <div class="description"><strong>确认信息并提交 </strong></div>
+                            <div class="description"><strong>设定刷新时间 </strong></div>
                         </div>
                     </a>
                 </li>
@@ -203,36 +203,37 @@
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="step3-v3-horizantal">
-                        <div class="card-header flat-matrix" style="height:50px">
-                            <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
-                                <div class="title"><i class="fa fa-cogs"></i> 确认信息并执行</div>
-                            </div>
-                            <div class="clear-both"></div>
+                    <div class="card-header flat-matrix" style="height:50px">
+                        <div class="alert alert-info alert-dismissible fresh-color" style="padding: 8px 20px;">
+                            <div class="title"><i class="fa fa-cogs"></i> 设定刷新时间</div>
                         </div>
-                        <div class="card-body no-padding flat-matrix">
-                            <br>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <label class="col-xs-2 col-xs-offset-1 control-label">Refresh Interval</label>
-                                    <div class="col-sm-8">
-                                        <select id="chart_refresh_interval" class="select2" data-bind="value:refreshInterval" style="z-index:100016;">
-                                            <option value=10>10s</option>
-                                            <option value=20>20s</option>
-                                            <option value=30>30s</option>
-                                            <option value=60>1min</option>
-                                            <option value=120>2min</option>
-                                            <option value=180>3min</option>
-                                        </select>
-                                    </div>
+                        <div class="clear-both"></div>
+                    </div>
+                    <div class="card-body flat-matrix" style="padding-bottom: 30px;">
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label class="col-xs-2 col-xs-offset-1 control-label">Interval</label>
+                                <div class="col-sm-8">
+                                    <select id="chart_refresh_interval" class="form-control" data-bind="value:refreshInterval" style="z-index:100016;">
+                                        <option value=10>10s</option>
+                                        <option value=20>20s</option>
+                                        <option value=30>30s</option>
+                                        <option value=60>1min</option>
+                                        <option value=120>2min</option>
+                                        <option value=180>3min</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                    <br>
-                    <div class="pull-right">
-                        <button id="excuteNew" class="btn btn-primary btn-wide" onclick="execute()">执行</button>
-                        <button class="btn btn-inverse btn-wide" onclick="ModalUtil.modal_close('popupModalPro')">关闭</button>
+                        <br>
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-sm btn-default" onclick="ModalUtil.modal_close('popupModalPro')">Close</button>
+                            <button type="button" onclick="execute()" class="btn btn-sm btn-success" id="excuteNew">Confirm</button>
+                        </div>
                     </div>
-            </div>
+
+                </div>
             </div>
         </div>
         <!-- *******YOUR SHOULD CODING IN HERE:[END]*******-->
@@ -405,7 +406,7 @@
     <script>
     function transferTData() {
         var rawData = DataTransferPOJO.transferT(genericModalViewModel.businessPOJO().rawDataForTransferT);
-        genericModalViewModel.businessPOJO().rawDataForTransferT = ClonePOJO.deepCloneTwoDimentionArray(rawData);
+        genericModalViewModel.businessPOJO().rawDataForTransferT = ClonePOJO.deepCloneTwoDimentionArray(rawData)[0];
         var tableData = DataTransferPOJO.divideHeaderFromData(rawData);
         var tableModel = new ThinListViewModel();
         tableModel.buildData(tableData.result);
