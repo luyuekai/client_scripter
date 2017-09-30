@@ -149,7 +149,7 @@ function successListener() {
                     });
                     radarViewModel.indicator(JSON.stringify(a));
                     var b = [];
-                    radarViewModel.series(JSON.stringify(option.series[2].data));
+                    radarViewModel.series(JSON.stringify(option.series[0].data));
                     break;
                 case 'treemap':
                     treemapViewModel.series(JSON.stringify(option.series[0].data));
@@ -284,7 +284,9 @@ function rerender_children_dom(type) {
     $('#data_config_content_div').load($.getRootPath() + '/assets/self-owned/html/chart/config_' + type + '.html');
 }
 
-function reset_title() {
-    var chart_title = $('#title_value_input').val();
-    chartViewModel.chart.setOption({title: {text: chart_title}})
+function run_color_config() {
+    if(chartViewModel && chartViewModel.chart && $("#title_color_input").val()) {
+        var color = $("#title_color_input").val().split(",");
+        chartViewModel.chart.setOption({color:color})
+    }
 }

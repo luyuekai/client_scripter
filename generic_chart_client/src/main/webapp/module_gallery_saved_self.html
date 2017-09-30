@@ -52,8 +52,14 @@
                         <div class="card card-tab card-mini">
                             <div class="card-header" style="overflow-x: visible;">
                                 <ul class="nav nav-tabs tab-stats">
-                                    <li role="tab4" class="active">
-                                        <a href="#tab4" aria-controls="tab3" role="tab" data-toggle="tab">Gallery</a>
+                                    <li role="tab1" class="active" style="width: 200px;">
+                                        <a href="#tab1" aria-controls="tab3" role="tab" data-toggle="tab" onclick="SearchPOJO.listener = search_saved_self;ScrollPOJO.listener = retrieveData_saved_self;SearchPOJO.listener();">Self Saved</a>
+                                    </li>
+                                    <li role="tab1" class="" style="width: 200px;">
+                                        <a href="#tab1" aria-controls="tab3" role="tab" data-toggle="tab" onclick="SearchPOJO.listener = search_shared_self;ScrollPOJO.listener = retrieveData_shared_self;SearchPOJO.listener();">Self Shared</a>
+                                    </li>
+                                    <li role="tab1" class="" style="width: 200px;">
+                                        <a href="#tab1" aria-controls="tab3" role="tab" data-toggle="tab" onclick="SearchPOJO.listener = search_shared_all;ScrollPOJO.listener = retrieveData_shared_all;SearchPOJO.listener();">Gallery Shared</a>
                                     </li>
                                 </ul>
                             </div>
@@ -63,16 +69,21 @@
                                     <div class="row">
                                         <div>
                                             <div>
+                                                <div class="flat-matrix" data-bind="visible:viewData().length==0" style="display:none">
+                                                    <div class="alert alert-success alert-dismissible fresh-color" role="alert" style="margin-top: 16px;">
+                                                        <strong><i class="fa fa-warning"></i>&nbsp;Tips:</strong> &nbsp;The search result is empty!
+                                                    </div>
+                                                </div>
                                                 <!--ko foreach: viewData-->
                                                 <div class="col-xs-12" style="margin-bottom:18px;">
-                                                    <a class="card card-banner card-green-light" data-bind="event:{dblclick:function(){redirect2editor($data)}}">
+                                                    <a class="card card-banner card-green-light" data-bind="event:{dblclick:function(){ username == UserPOJO.user.userName ? redirect2editor($data) : redirect2viewer($data)}}">
                                                         <div class="card-body">
                                                             <i class="icon fa fa-bar-chart fa-4x"></i>
                                                             <div class="content">
                                                                 <div class="title">
                                                                     <span  data-bind="text:(function(){return new Date(parseInt(createtime)).toLocaleString()})()" style="margin-right: 8px;"></span>
-                                                                    <button type="button" data-bind="event:{click:function(){redirect2editor($data)}}" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-pencil "></i>&nbsp;</button>
-                                                                    <button type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Remove Chart', '/assets/self-owned/html/chart/modal/modal_content_remove_chart.html',$data);})" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-trash "></i>&nbsp;</button>
+                                                                    <button type="button" data-bind="visible: username == UserPOJO.user.userName,event:{click:function(){redirect2editor($data)}}" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-pencil "></i>&nbsp;</button>
+                                                                    <button type="button" data-bind="visible: username == UserPOJO.user.userName,click:(function(){ModalUtil.popup_modal_with_businessPOJO('Remove Chart', '/assets/self-owned/html/chart/modal/modal_content_remove_chart.html',$data);})" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-trash "></i>&nbsp;</button>
                                                                 </div>
                                                                 <div class="value">
                                                                     <span class="sign" data-bind="text:username"></span>
@@ -151,23 +162,24 @@
 
 
         <script>
-            $(document).ready(function () {
-                $('#sidebar').load($.getRootPath() + '/components/left_side.html');
-                $('#navbar').load($.getRootPath() + '/components/header.html');
-                $('#template-matrix-modal-div').load($.getRootPath() + '/components/template-matrix-modal.html');
-                $('#template-matrix-footer-div').load($.getRootPath() + '/components/footer.html');
+                                            $(document).ready(function () {
+                                                $('#sidebar').load($.getRootPath() + '/components/left_side.html');
+                                                $('#navbar').load($.getRootPath() + '/components/header.html');
+                                                $('#template-matrix-modal-div').load($.getRootPath() + '/components/template-matrix-modal.html');
+                                                $('#template-matrix-footer-div').load($.getRootPath() + '/components/footer.html');
 
 
 
-                setTimeout(function () {
-                    $('#navbar_search_li').css('display', '');
-                    $('#navbar_title_li').html('Self Saved Gallery');
-                    SearchPOJO.listener = search_saved_self;
-                    ScrollPOJO.listener = retrieveData_saved_self;
-                    ScrollPOJO.listener();
-                }, 200);
+                                                setTimeout(function () {
+                                                    resetCssClass('li_gallery', 'active');
+                                                    $('#navbar_search_li').css('display', '');
+                                                    $('#navbar_title_li').html('Self Saved Gallery');
+                                                    SearchPOJO.listener = search_saved_self;
+                                                    ScrollPOJO.listener = retrieveData_saved_self;
+                                                    ScrollPOJO.listener();
+                                                }, 200);
 
-            });
+                                            });
         </script>
 
 

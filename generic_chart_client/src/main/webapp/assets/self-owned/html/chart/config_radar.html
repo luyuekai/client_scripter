@@ -143,13 +143,19 @@ function add_radar_data(){
   if (chartViewModel && chartViewModel.chart) {
     var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
     var data = [];
+    var legend = [];
 
     $.each(option.series[0].data, function(index, value) {
       if (value.name != data_name) {
         data.push(value);
       }
     });
-
+    $.each(option.legend[0].data, function(index, value) {
+      if (value != data_name) {
+        legend.push(value);
+      }
+    });
+    option.legend[0].data = legend;
     option.series[0].data = data;
     chartViewModel.chart = ChartPOJO.reset_chart_option(chartViewModel.chart, option);
   }
