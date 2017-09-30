@@ -5,6 +5,7 @@ ko.cleanNode($('#template-matrix-main-div')[0]);
 ko.applyBindings(vm, document.getElementById('template-matrix-main-div'));
 // Refrence the entire page view model to current view model as cache
 current_vm = vm;
+current_max_x = 0;
 
 function env_setup() {
   cookie_env_setup();
@@ -74,7 +75,21 @@ function addCell_chart(json) {
         //     };
         //     option.series = a;
         // }
-        addWidget_chart(option);
+        //
+        //update cache
+        WorkbenchCache.updateCache();
+        var max_widget_y = 0;
+        var max_widget_y_height = null;
+
+        $.each(WorkbenchCache.array_elements,function(i,v){
+          if(max_widget_y<=v.widget_element.widget_y){
+            max_widget_y = v.widget_element.widget_y;
+            max_widget_y_height = v.widget_element.widget_height;
+          }
+        });
+        max_widget_y_height = max_widget_y_height || 6;
+        max_widget_y = max_widget_y + max_widget_y_height;
+        addWidget_chart(option,0,max_widget_y);
         WORKBENCH_EVENT_CHANGE_LISTENER();
     }
 }
