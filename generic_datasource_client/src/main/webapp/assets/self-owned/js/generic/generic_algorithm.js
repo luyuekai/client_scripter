@@ -477,6 +477,7 @@ DataTransferPOJO={
       var rowArray = inputData.split("\n");
       $.each(rowArray, function(index, rowData) {
         if (rowData != "") {
+            
           var cellArray = DataTransferPOJO.seperateByComma(rowData);
           //retrieve header array
           if (index == 0) {
@@ -494,6 +495,8 @@ DataTransferPOJO={
       });
       resultJsonObject["header"] = header;
       resultJsonObject["result"] = resultArray;
+      console.log(resultArray)
+      console.log(header)
 
       return resultJsonObject;
     },
