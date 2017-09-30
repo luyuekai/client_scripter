@@ -56,7 +56,6 @@
                 <!-- <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button> -->
                 <button class="btn btn-sm btn-default" type="button" onclick="(function () {
                             ModalUtil.modal_close('popupModalPro');
-                            location.reload();
                         })()">Close</button>
                 <button id="confirm_button" type="button" onclick="execute()" class="btn btn-sm btn-success">Confirm</button>
             </div>
@@ -116,35 +115,8 @@
     LoaderUtil.add_v3('genericModalDiv');
     persist_report();
   }
-    $.subscribe("galleryRemoveSuccess", successRemove);
-  $.subscribe("FAILED_LISTENER", failedAddListener_modal);
-  $.subscribe("SERVER_FAILED_LISTENER", failedServiceListener_modal);
 
-function successRemove() {
-     filterData(vm.businessPOJO().dataSourceType());
-     setTimeout(function() {
-        LoaderUtil.remove_v3('genericModalDiv');
-         ModalUtil.modal_close('popupModalPro')
-      }, 2000);
-   
-}
-  function failedAddListener_modal() {
-    if (arguments && arguments[1]) {
-      console.log(arguments);
-      var errorMessage = arguments[1].errorMessage;
-      setTimeout(function() {
-        genericModalViewModel.response(false, "Entity Operation", "[Failed]", errorMessage);
-        LoaderUtil.remove_v3('genericModalDiv');
-      }, 2000);
-    }
-  }
-
-  function failedServiceListener_modal() {
-    setTimeout(function() {
-      genericModalViewModel.response(false, "Entity Operation", "[Failed]", "SERVICE 'GENERIC XXX' FAILED! Please contact with the system admin for more information...");
-      LoaderUtil.remove_v3('genericModalDiv');
-    }, 2000);
-  }
+ 
 </script>
 
 
@@ -157,13 +129,13 @@ function successRemove() {
     //'type': 'MATRIX_REPORT_DRAFT','MATRIX_REPORT_TEMPLATE','MATRIX_REPORT_FINISHED'
     //'tag': SAVE,SHARE
 
-var requestPOJO = {
+       var requestPOJO = {
         "className": "v2.service.generic.query.entity.Genericentity",
         "attributes": {
             "id": ModalUtil.businessPOJO.id,
             "deleted": true
-        }
-    };
+           }
+        };
     var res = {
         'queryJson': $.toJSON(requestPOJO)
     };
