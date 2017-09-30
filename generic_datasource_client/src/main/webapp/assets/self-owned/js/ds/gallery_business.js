@@ -14,11 +14,6 @@ function env_setup() {
 // Setup the business model with view model
 function vm_env_setup() {
 
-    // *******YOUR SHOULD CODING IN HERE:*******
-    // function BusinessPOJO() {
-    //   var self = this;
-    //   self.elements = new ServerPagingViewModel();
-    // }
     function BusinessPOJO() {
         var self = this;
         self.elements = new ServerPagingViewModel();
@@ -32,43 +27,6 @@ function vm_env_setup() {
         var type = vm.businessPOJO().dataSourceType();
         filterData(type);
     });
-}
-;
-function search_env_setup() {
-    SearchPOJO.listener = default_search_data;
-    SearchPOJO.likeOrMap = ["creator", "name", "description"];
-    SearchPOJO.sortKey = ['numberalpha'];
-    SearchPOJO.build_requestPOJO_prototype = function () {
-        var result = {
-            "className": "Genericentity",
-            "orderMap": {
-                "id": false
-            },
-            "pageMaxSize": ScrollPOJO.pageMaxSize,
-            "currentPageNumber": ScrollPOJO.page || 1,
-            "eqMap": {
-                "deleted": false
-            },
-
-            "inMap": {
-                "type": ["SOURCE_SQL_CONFIGURATION", "GENERIC_MATRIX_DATA_SOURCE"]
-            }
-        };
-        return result;
-    }
-}
-function scroll_env_setup() {
-    ScrollPOJO.listener = default_retrive_api;
-    ScrollPOJO.setup();
-}
-
-function show_data(data) {
-    var tip = data.stringtheta;
-    if (data.type == 'SOURCE_SQL_CONFIGURATION') {
-        window.open($.getRootPath() + '/business_kit_db.html' + '?status=' + 'check' + '&token=' + tip);
-    } else {
-        window.open($.getRootPath() + '/business_kit.html' + '?status=' + 'check' + '&token=' + tip);
-    }
 }
 
 function filterData(type) {
@@ -135,34 +93,52 @@ function filterData(type) {
     }
 }
 
-function Update(data) {
-    var tip = data.stringtheta;
-    if (data.type == 'SOURCE_SQL_CONFIGURATION') {
-        window.open($.getRootPath() + '/business_kit_db.html' + '?status=' + 'update' + '&token=' + tip);
-    } else {
-        window.open($.getRootPath() + '/business_kit.html' + '?status=' + 'update' + '&token=' + tip);
+function search_env_setup() {
+    SearchPOJO.listener = default_search_data;
+    SearchPOJO.likeOrMap = ["creator", "name", "description"];
+    SearchPOJO.sortKey = ['numberalpha'];
+    SearchPOJO.build_requestPOJO_prototype = function () {
+        var result = {
+            "className": "Genericentity",
+            "orderMap": {
+                "id": false
+            },
+            "pageMaxSize": ScrollPOJO.pageMaxSize,
+            "currentPageNumber": ScrollPOJO.page || 1,
+            "eqMap": {
+                "deleted": false
+            },
+
+            "inMap": {
+                "type": ["SOURCE_SQL_CONFIGURATION", "GENERIC_MATRIX_DATA_SOURCE"]
+            }
+        };
+        return result;
     }
 }
-function Remove(data) {
-    var id = data.id;
-    var requestPOJO = {
-        "className": "v2.service.generic.query.entity.Genericentity",
-        "attributes": {
-            "id": id,
-            "deleted": true
-        }
-    };
-    var res = {
-        'queryJson': $.toJSON(requestPOJO)
-    };
-    $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/update', res, "galleryRemoveSuccess", "galleryRemoveFail", "galleryRemoveWrong", "POST", true, {'TAG': 'MATRIX_UPDATE'});
 
+function scroll_env_setup() {
+    ScrollPOJO.listener = default_retrive_api;
+    ScrollPOJO.setup();
 }
+
+function show_data(data, status) {
+    var tip = data.stringtheta;
+    if (data.type == 'SOURCE_SQL_CONFIGURATION') {
+        window.open($.getRootPath() + '/business_kit_db.html' + '?status=' + status + '&token=' + tip);
+    } else {
+        window.open($.getRootPath() + '/business_kit.html' + '?status=' + status + '&token=' + tip);
+    }
+}
+
+
 $.subscribe("galleryRemoveSuccess", successRemove);
-
 function successRemove() {
-    ModalUtil.modal_close('myModal')
-    filterData(vm.businessPOJO().dataSourceType());
-
-
+    ScrollPOJO.reset();
+     filterData(vm.businessPOJO().dataSourceType());
+     setTimeout(function() {
+        LoaderUtil.remove_v3('genericModalDiv');
+         ModalUtil.modal_close('popupModalPro')
+      }, 2000);
+   
 }

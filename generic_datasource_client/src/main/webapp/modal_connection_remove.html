@@ -1,0 +1,165 @@
+<div id="genericModalDiv">
+    <!--LOADER DIV BEGIN-->
+    <div class="loader-container text-center">
+        <div class="icon">
+            <div class="sk-wave">
+                <div class="sk-rect sk-rect1"></div>
+                <div class="sk-rect sk-rect2"></div>
+                <div class="sk-rect sk-rect3"></div>
+                <div class="sk-rect sk-rect4"></div>
+                <div class="sk-rect sk-rect5"></div>
+            </div>
+        </div>
+        <div class="title">Loading</div>
+    </div>
+    <!--LOADER DIV BEGIN-->
+
+    <!--RESULT DISPLAY DIV BEGIN-->
+    <div class="flat-matrix">
+        <div id="resultDIV" data-bind="visible: hasResult,css: styleClass" class="alert fresh-color">
+            <button type="button" class="close" data-bind="click:function(){hasResult(!hasResult)}" aria-label="Close"><i class="fa fa-close"></i></button>
+            <strong>
+                <span data-bind="text:resultTitle"></span>
+            </strong>
+            <span data-bind="text:resultSubTitle"></span>
+            <div data-bind="text:resultContent"></div>
+        </div>
+    </div>
+    <!--RESULT DISPLAY DIV END-->
+
+    <!--Validation DIV BEGIN-->
+    <div class="flat-matrix">
+        <div data-bind="visible: hasError" class="alert alert-warning alert-dismissible fresh-color" role="alert">
+            <button type="button" data-bind="click:function(){hasError(!hasError)}" class="close" aria-label="Close">
+                <i class="fa fa-close"></i>
+            </button>
+            <strong>Warning:</strong>
+            <div id="errorMessagesDIV" data-bind="foreach:errorMessage">
+                <div data-bind="text:$data"></div>
+            </div>
+        </div>
+    </div>
+    <!--Validation DIV END-->
+
+    <div class="business_div_class" >
+        <div>
+            <p>
+                This operation will remove the connection, please confirm to continue...
+            </p>
+            <div class="row">
+                <div class="col-xs-12">
+                    Data Source Name: <span data-bind="text:ModalUtil.businessPOJO[0]"></span>
+                </div>
+            </div>
+            <br>
+            <div class="pull-right">
+                <!-- <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button> -->
+                <button class="btn btn-sm btn-default" type="button" onclick="(function () {
+                            ModalUtil.modal_close('popupModalPro');
+                        })()">Close</button>
+                <button id="confirm_button" type="button" onclick="checkDataSourceForConnection(ModalUtil.businessPOJO)" class="btn btn-sm btn-success">Confirm</button>
+            </div>
+
+            <br>
+        </div>
+    </div>
+</div>
+<script>
+    // Initialize the View Model
+    // Clean the paging binding nodes
+    // Binding the view Model
+    var genericModalViewModel = new GenericModalViewModel();
+    ko.cleanNode($('#genericModalDiv')[0]);
+    ko.applyBindings(genericModalViewModel, document.getElementById('genericModalDiv'));
+    function checkDataSourceForConnection(data) {
+        var url = data[2];
+        console.log(url)
+        var id = data[3];
+        console.log('id ' + id)
+        var requestPOJO = {
+            "className": "v2.service.generic.query.entity.Genericentity",
+            "aliasMap": {},
+            "groupMap": {"stringalpha": "stringalpha"},
+            "pageMaxSize": 1000000,
+            "currentPageNumber": 1,
+            "eqMap": {
+                "stringalpha": url,
+                "deleted": false,
+                "type": "SOURCE_SQL_CONFIGURATION"
+            },
+            "inMap": {},
+        };
+        var data = {
+            'queryJson': $.toJSON(requestPOJO)
+        };
+        $.serverRequest($.getServerRoot() + "/service_generic_query/api/query", data, "successCheckDatabase",
+                "failedCheckDatabase", "serverCheckDatabase", "POST", true, {'TAG': id, 'URL': url});
+
+    }
+    $.subscribe("successCheckDatabase", removeConnection);
+
+    function removeConnection() {
+        if (arguments && arguments[1]) {
+            if (arguments[1].response.result.length > 0) {
+                var result = arguments[1].response.result[0];
+                var num = result[0];
+                var url = result[1];
+                if (num > 0) {
+                    genericModalViewModel.response(false, "删除数据库链接", "[失败]", "有依赖于该链接的数据源");
+                }
+            } else {
+                var url = arguments[1].addtion.URL;
+                var requestPOJO = {
+                    "className": "v2.service.generic.query.entity.Genericentity",
+                    "attributes": {
+                        "id": arguments[1].addtion.TAG,
+                        "deleted": true
+                    }
+                };
+                var request = {
+                    'queryJson': $.toJSON(requestPOJO)
+                };
+                $.serverRequest($.getServerRoot() + '/service_generic_query/api/cud/update', request, "CONNECTION_REMOVE_SUCCESS", "CONNECTION_REMOVE_FAIL", "CONNECTION_REMOVE_EXCEPTION", "POST", true, {'TAG': 'CONNECTION_UPDATE', 'URL': url});
+        }
+
+    }
+
+}
+$.subscribe("CONNECTION_REMOVE_SUCCESS", successRemoveConnection);
+$.subscribe("CONNECTION_REMOVE_FAIL", failedRemoveConnection);
+$.subscribe("CONNECTION_REMOVE_EXCEPTION", failedServerRemoveConnection);
+
+function successRemoveConnection() {
+    var url = arguments[1].addtion.URL;
+
+    var requestPOJO = {
+        "dbUrl": url
+    };
+
+    var data = {
+        "DBConfig": $.toJSON(requestPOJO)
+    };
+    $.serverRequest($.getServerRoot() + "/generic_datasource_client/api/connection/deleteconnection", data, "successRemoveConnection", "failedRemoveConnection",
+            "failedServerRemoveConnection");
+}
+
+$.subscribe("successRemoveConnection", successRemoveConnection);
+
+function successRemoveConnection(){
+   ModalUtil.modal_close('popupModalPro');
+    retrieveDatabase();
+}
+
+
+function failedRemoveConnection() {
+    if (arguments && arguments[1]) {
+        var errorMessage = arguments[1].data;
+         genericModalViewModel.response(false, "删除数据库链接", "[失败]","请检查信息是否有误");
+    }
+}
+
+function failedServerRemoveConnection() {
+     genericModalViewModel.response(false, "删除数据库链接", "[失败]","数据库连接删除失败,服务器错误");
+}
+
+</script>

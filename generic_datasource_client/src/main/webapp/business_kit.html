@@ -31,11 +31,6 @@
                 border-radius: 3px;
                 border-left-color: #39c3da;
             }
-            .col_name{
-                border:1px solid #369;background:#fff; padding-left:5px;
-                height:30px; line-height:30px; width:300px
-            } 
-
         </style>
     </head>
 
@@ -61,7 +56,22 @@
                 </div>
                 <!--LOADER DIV FINISHED-->
 
-
+                <!--RESPONSE DIV BEGIN-->
+                <div class="row" data-bind="with:response_vm">
+                    <div class="col-sm-12" style="margin-bottom:12px" style="display:none" data-bind="visible: resultVisible">
+                        <div class="flat-matrix">
+                            <div class="alert fresh-color " data-bind="css:styleClass,visible: resultVisible" style="display:none">
+                                <button type="button" class="close" data-bind="click:function(){resultVisible(false)}" aria-label="Close"><i class="fa fa-close"></i></button>
+                                <strong>
+                                    <span data-bind="text:resultTitle"></span>
+                                </strong>
+                                <span data-bind="text:resultSubTitle"></span>
+                                <div data-bind="text:resultContent"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--RESPONSE DIV FINISHED-->
 
                 <!--VALIDATION DIV BEGIN-->
                 <div class="row">
@@ -238,22 +248,7 @@
                     </div>
                 </div>
 
-                <!--RESPONSE DIV BEGIN-->
-                <div class="row" data-bind="with:response_vm">
-                    <div class="col-sm-12" style="margin-bottom:12px" style="display:none" data-bind="visible: resultVisible">
-                        <div class="flat-matrix">
-                            <div class="alert fresh-color " data-bind="css:styleClass,visible: resultVisible" style="display:none">
-                                <button type="button" class="close" data-bind="click:function(){resultVisible(false)}" aria-label="Close"><i class="fa fa-close"></i></button>
-                                <strong>
-                                    <span data-bind="text:resultTitle"></span>
-                                </strong>
-                                <span data-bind="text:resultSubTitle"></span>
-                                <div data-bind="text:resultContent"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--RESPONSE DIV FINISHED-->
+
 
                 <div class="row" id="datasource-setting" data-bind="with:businessPOJO">
                     <div class="col-md-12" data-bind="visible: setVisible">
@@ -353,6 +348,7 @@
                                                 <div class="col-xs-2 text-right">
                                                     <label style="margin-top:0px;">Request Params:
                                                     </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
                                                 <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
                                                     <textarea data-bind="value: stringzeta_request_params" rows="3" class="form-control"></textarea>
@@ -638,6 +634,7 @@
                                                 <div class="col-xs-2 text-right">
                                                     <label style="margin-top:8px;">Name:
                                                     </label>
+                                                    <i class="fa fa-asterisk" style="color: #E74C3C;"></i>
                                                 </div>
                                                 <div class="col-xs-8" style="padding-left: 0px;padding-right: 0px;">
                                                     <input type="text" data-bind="value: name" class="form-control" placeholder="">

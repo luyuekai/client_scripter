@@ -259,9 +259,6 @@ function vm_env_setup() {
     businessPOJO.creator(UserPOJO.user.userName);
     vm.businessPOJO(businessPOJO);
     var status = $.urlParamValue('status');
-    var style = $.urlParamValue('style');
-
-
 
     if (status == null) {
         vm.businessPOJO().setVisible(true);
@@ -274,9 +271,9 @@ function vm_env_setup() {
         vm.businessPOJO().setVisible(true);
     }
 }
-;
 
-// *******YOUR SHOULD CODING IN HERE:*******
+
+
 var businessValidation = function () {
     var errorMessages = [];
     //validate logic...
@@ -295,22 +292,17 @@ var businessValidation = function () {
 
     return errorMessages;
 }
-var settingValidation = function () {
-
-}
+//var settingValidation = function () {}
 
 
-// *******YOUR SHOULD CODING IN HERE:*******
+
 var runService = function () {
-    // default_add_logic();
     if (vm.businessPOJO().id()) {
         default_update_logic();
     } else {
         default_add_logic();
     }
 }
-
-
 $.subscribe("MATRIX_API_SUCCESS_EVENT", MATRIX_API_SUCCESS_EVENT_HANDLER);
 
 function MATRIX_API_SUCCESS_EVENT_HANDLER() {
@@ -321,20 +313,12 @@ function MATRIX_API_SUCCESS_EVENT_HANDLER() {
             vm.businessPOJO().stringzeta_ds_response(res);
             vm.businessPOJO().stringzeta_ds_response_data = server_data;
             if (arguments[1].addtion['TAG'] == 'MATRIX_DATA_SOURCE_RETRIEVE') {
-                //continue to reload table
                 vm.businessPOJO().reload_table();
             }
         }
-
         if (arguments[1].addtion && (arguments[1].addtion['TAG'] == 'MATRIX_ADD' || arguments[1].addtion['TAG'] == 'MATRIX_UPDATE')) {
             var server_data = arguments[1].response.result[0];
             vm.businessPOJO().reload(server_data);
-
-
-
-
-            // var ds = JSON.parse(server_data.stringzeta);
-            // reload_dynamic_table(ds);
         }
     }
 }
@@ -379,7 +363,6 @@ var check_data_source = function (type) {
 var gen_table = function () {
     var server_data = vm.businessPOJO().stringzeta_ds_response_data;
     var json_rule = vm.businessPOJO().stringzeta_json_rule();
-    console.log($.toJSON(server_data))
     if (!server_data) {
         return;
     }
@@ -435,8 +418,4 @@ function Remove() {
     vm.businessPOJO().deleted(true);
     default_update_logic();
     window.location.href = $.getRootPath() + '/business_gallery.html';
-}
-
-function changeColName(data) {
-    console.log(data);
 }

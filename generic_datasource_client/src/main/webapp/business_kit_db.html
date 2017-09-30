@@ -19,47 +19,6 @@
         <link rel="stylesheet" type="text/css" href="assets/reference/fuelux/fuelux.min.css">
         <link rel="stylesheet" type="text/css" href="assets/reference/gridstack/gridstack.css" />
         <link rel="stylesheet" type="text/css" href="assets/reference/gridstack/gridstack-extra.css" />
-
-
-        <style>
-            .compile_mode_focus_in {
-                padding: 8px 20px;
-                margin: 6px 0;
-                border: 1px solid #eee;
-                border-left-width: 5px;
-                border-radius: 3px;
-                border-left-color: #39c3da;
-            }
-
-            .compile_mode_focus_in {
-                padding: 8px 20px;
-                margin: 6px 0;
-                border: 1px solid #eee;
-                border-left-width: 5px;
-                border-radius: 3px;
-                border-left-color: #39c3da;
-            }
-
-            .compile_mode_focus_out {
-                padding: 8px 20px 8px 25px;
-                margin: 6px 0;
-            }
-
-            .edit_mode_focus_in {
-                padding: 5px 20px;
-                margin: 6px 0;
-                border: 1px solid #eee;
-                border-left-width: 5px;
-                border-radius: 3px;
-                border-left-color: #1abc9c;
-            }
-
-            .edit_mode_focus_out {
-                padding: 8px 20px 8px 25px;
-                margin: 6px 0;
-            }
-        </style>
-
     </head>
 
     <body>
@@ -131,7 +90,7 @@
                                 <div class="card-title">
                                     <i class="fa fa-diamond">&nbsp;Database Connection  &nbsp;&nbsp;&nbsp;</i>                    
                                 </div>
-                                <button type="button" class="btn btn-xs btn-default" title="新增"  data-bind="click:(function(){addConnection();})">
+                                <button type="button" class="btn btn-xs btn-default" title="新增"  onclick="addConnection()">
                                     <i class="fa fa-plus fa-1x"></i>
                                 </button>      
                             </div>
@@ -157,10 +116,10 @@
                                                             <td data-bind="text: data[0]"></td> 
                                                             <td data-bind="text: data[1]"></td> 
                                                             <td data-bind="text: data[2]"></td> 
-<!--                                                            <td data-bind=""> 
-                                                                <span class="label label-success" style="margin-left: -200px;">Success</span>
-                                                                <span class="label label-danger" style="margin-left: -200px;"> &nbsp;Wrong &nbsp;</span>
-                                                            </td>-->
+                                                            <!--                                                            <td data-bind=""> 
+                                                                                                                            <span class="label label-success" style="margin-left: -200px;">Success</span>
+                                                                                                                            <span class="label label-danger" style="margin-left: -200px;"> &nbsp;Wrong &nbsp;</span>
+                                                                                                                        </td>-->
                                                             <td>
                                                                 <button type="button" class="btn btn-xs btn-default" title=" 新增數據源"  data-bind="click:(function(){chooseDataBase($data.data);})">
                                                                     <i class="fa fa-check fa-1x"></i>
@@ -169,8 +128,8 @@
                                                                 <button type="button" class="btn btn-xs btn-default" title="编辑" data-bind="click:(function(){detailConnection($data.data);})">
                                                                     <i class="fa fa-wrench fa-1x"></i>
                                                                 </button>
-                                                                <button type="button" class="btn btn-xs btn-default" title="删除" data-bind="click:(function(){checkDataSourceForConnection($data.data);})">
-                                                                    <i class="fa fa-trash fa-1x"></i>
+                                                                <button title="Remove" data-bind="click:function(){ModalUtil.popup_modal_with_businessPOJO('DELETE CONNECTION', '/modal_connection_remove.html', $data.data, null,null);}" type="button" class="btn btn-xs btn-default" >
+                                                                    <i class="fa fa-trash-o"></i>
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -498,9 +457,9 @@
                                             <div class="row">
                                                 <div class="pull-right">
                                                     <button id="testUpdate" type="button" class="btn btn-sm btn-info" style="display:none" onclick="runTest()">Check</button>
-                                                    <button id="excuteUpdate" type="button" class="btn btn-sm btn-success" style="display:none" onclick="excuteUpdate()">Update</button>
+                                                    <button id="excuteUpdate" type="button" class="btn btn-sm btn-success" style="display:none" onclick="excuteUpdateConnection()">Update</button>
                                                     <button id="testConnection" type="button" class="btn btn-sm btn-info" onclick="testConnection()">Check</button>
-                                                    <button id="excuteNew" type="button" class="btn btn-sm btn-success"  onclick="default_execute()">Execute</button>
+                                                    <button id="excuteNew" type="button" class="btn btn-sm btn-success"  onclick="excuteAddConnection()">Execute</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -721,7 +680,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div role="tabpanel" class="tab-pane" id="step3-v3-horizantal-table">s
+                                        <div role="tabpanel" class="tab-pane" id="step3-v3-horizantal-table">
                                             <div class="row">
                                                 <div class="col-xs-12">
                                                     <div class="flat-matrix">
