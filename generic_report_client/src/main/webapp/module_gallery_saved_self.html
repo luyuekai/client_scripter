@@ -54,27 +54,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="row" id="content_div">
-        <!--ko foreach: viewData-->
-        <div class="col-xs-12" style="margin-bottom:18px;">
-          <a class="card card-banner card-blue-light" data-bind="event:{dblclick:function(){redirect2editor($data)}}">
-            <div class="card-body">
-              <i class="icon fa fa-edit fa-4x"></i>
-              <div class="content">
-                <div class="title">
-                  <span data-bind="if:stringbeta">
-                    <!-- ko foreach: stringbeta.split(',') -->
-                    <span class="label label-info" data-bind="text:$data"></span> &nbsp;
-                    <!-- /ko -->
-                  </span>
-                  <span data-bind="text:(function(){return new Date(parseInt(createtime)).toLocaleString()})()" style="margin-right: 8px;"></span>
-                  <!--<button type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Up to ODA', '/assets/self-owned/html/report/modal_to_oda.html',$data);})" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-caret-square-o-up "></i>&nbsp;</button>-->
-                  <button type="button" data-bind="event:{click:function(){redirect2editor($data)}}" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-pencil "></i>&nbsp;</button>
-                  <button type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Remove report draft', '/assets/self-owned/html/report/modal_content_remove_draft.html',$data);})" class="btn btn-default btn-xs" style="margin-right: 3px;"><i class="fa fa-trash "></i>&nbsp;</button>
-                </div>
-                <div class="value">
 
         <div class="row" id="content_div">
           <!--ko foreach: viewData-->
