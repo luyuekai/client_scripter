@@ -1,0 +1,133 @@
+<div id="genericModalDiv">
+
+
+    <!--RESULT DISPLAY DIV BEGIN-->
+    <div class="flat-matrix">
+        <div id="resultDIV" data-bind="visible: hasResult,css: styleClass" class="alert fresh-color">
+            <button type="button" class="close" data-bind="click:function(){hasResult(!hasResult)}" aria-label="Close"><i class="fa fa-close"></i></button>
+            <strong>
+                <span data-bind="text:resultTitle"></span>
+            </strong>
+            <span data-bind="text:resultSubTitle"></span>
+            <div data-bind="text:resultContent"></div>
+        </div>
+    </div>
+    <!--RESULT DISPLAY DIV END-->
+
+    <div class="business_div_class" >
+        <div >
+            <p>
+                报告将展示在ODA中
+            </p>
+            <div class="row" >
+                <div class="col-xs-12">
+                    <div class="row flat-matrix">
+                        <div class="col-md-12">
+                            <!--              <div class="alert alert-warning alert-dismissible fresh-color" role="alert" style="margin-top: 16px;">
+                                            <button type="button" onclick="save_report()"  class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-save"></i></button>
+                                          </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="pull-right">
+                <button id="new_modal_clost_button" type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+                <button type="button" onclick="check_report()" class="btn btn-sm btn-success" id="confirm_button">Confirm</button>
+            </div>
+            <br>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script>
+
+    var genericModalViewModel = new GenericModalViewModel();
+    ko.applyBindings(genericModalViewModel, document.getElementById('genericModalDiv'));
+
+
+    function check_report() {
+        var shareJson = {
+            "id": ModalUtil.businessPOJO.data.id,
+            "booleanalpha": true,
+            "booleanbeta": true,
+            "booleangamma": true,
+        }
+        var data = {
+            'shareJson': $.toJSON(shareJson)
+        };
+        console.log("check report");
+        $.serverRequest($.getServerRoot() + '/service_generic_query/api/share/checkreport', data, "SUCCESS_LISTENER", "FAILED_LISTENER", "SERVER_FAILED_LISTENER");
+        updateExampleInfo();
+    }
+
+    function updateExampleInfo() {
+        var datasetname = "datasetname";
+        var info = reportViewModel.data;
+        var code_cells = JSON.parse(info.codejson).cells;
+        var codelength = code_cells.length - 1;
+//        debugger
+        var codes = "";
+        for (var i = 1; i <= codelength; i++) {
+            codes += "&code" + (i - 1) + "=" + code_cells[i].code_source;
+        }
+        var data = {
+            'content': reportViewModel.getMarkdownContent(),
+            'rootpath': $.getServerRoot(),
+            'htmlSavePath': "/opt/matrix/report/test/",
+            'datasetPath': "/opt/matrix/report/test/example",
+            'title': info.stringalpha,
+            'summary': "summary_demo",
+            'author': info.username,
+            'authorlink': "users/" + info.username + "/",
+            'time': info.createtime,
+            'src': "img/team/3.jpg",
+            'ref': "examples/",
+            'mdSavePath': "/opt/matrix/report/test/",
+            'datasetname': datasetname,
+            'par': "examples/" + info.stringalpha + ".html",
+            'href': "/datasets/" + datasetname,
+            'background': "img/wave.jpg",
+            'img': "img/demo.jpg",
+            'imgtext': datasetname + " Dataset",
+            'authorimg': "img/team/demo.jpg",
+            'head': info.stringalpha,
+            'updatetime': info.checktime,
+            'keyword': "文本自然语言处理",
+            'code': $.getServerRoot() + "/scripter_client_v4/notebook.html?oda=y&option=report&dataset=" + datasetname + "&codelength=" + codelength + codes,
+        }
+        $.serverRequest($.getServerRoot() + '/service_scripter_report/api/generic/updateExampleInfo', data, "SUCCESS_LISTENER", "FAILED_LISTENER", "SERVER_FAILED_LISTENER");
+    }
+
+</script>
+
+<script>
+    $.subscribe("SUCCESS_LISTENER", successAddListener_modal);
+    $.subscribe("FAILED_LISTENER", failedAddListener_modal);
+    $.subscribe("SERVER_FAILED_LISTENER", failedServiceListener_modal);
+
+    function successAddListener_modal() {
+        if (arguments && arguments[1]) {
+            // responseViewModel.correctResponse(arguments[1]);
+            genericModalViewModel.response(true, "同意申请", "[成功]", "Operation Successed, please close the console and reload the data.");
+            $('#confirm_button').attr("disabled", true);
+        }
+    }
+
+    function failedAddListener_modal() {
+        if (arguments && arguments[1]) {
+            console.log(arguments);
+            var errorMessage = arguments[1].errorMessage;
+            genericModalViewModel.response(false, "同意申请", "[失败]", errorMessage);
+            $('#confirm_button').attr("disabled", true);
+        }
+    }
+
+    function failedServiceListener_modal() {
+      genericModalViewModel.response(false, "同意申请", "[失败]", "SERVICE 'GENERIC XXX' FAILED! Please contact with the system admin for more information...");
+      $('#confirm_button').attr("disabled",true);
+  }
+</script>

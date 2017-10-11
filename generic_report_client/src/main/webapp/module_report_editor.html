@@ -112,6 +112,83 @@
               <div class="card-body no-padding table-responsive">
 
 
+                <div class="row" id="menubar_div" style="position:fixed;top:118px;left: 180px;right: 0px;z-index:100006">
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0px;">
+                        <div class="card card-mini" id="tools">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <button title="New report(shift+n)" type="button" onclick="ModalUtil.popup_modal('New report', '/assets/self-owned/html/report/modal_content_new.html', null, null, null);" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-edit"></i></button>
+                                    <button id="button_save" title="Save(shift+s)" type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Save report draft', '/assets/self-owned/html/report/modal_content_save_draft.html',$data);})" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-save"></i></button>
+                                    <!-- <button title="Save as template" onclick="ModalUtil.popup_modal('Save report as template', '/assets/self-owned/html/report/modal_content_save_template.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-bookmark-o"></i></button> -->
+                                    <button title="Cut selected cell(shift+x)" type="button" data-bind="click:cutCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-cut"></i></button>
+                                    <button title="Copy selected cell(shift+c)" type="button" data-bind="click:copyCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-copy"></i></button>
+                                    <button title="Paste selected cell(shift+v)" type="button" data-bind="click:pasteCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-paste"></i></button>
+                                    <button title="Drop selected cell(shift+d)" type="button" data-bind="click:dropCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-trash"></i></button>
+                                    <button title="Up selected cell(shift+up)" type="button" data-bind="click:upCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-arrow-up"></i></button>
+                                    <button title="Down selected cell(shift+down)" type="button" data-bind="click:downCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-arrow-down"></i></button>
+                                    <button title="Insert a markdown cell below selected cell(shift+a)" type="button" data-bind="click:addCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-plus"></i></button>
+                                    <button title="Insert a image cell(shift+i)" onclick="ModalUtil.popup_modal('Insert a new image', '/assets/self-owned/html/report/modal_content_upload_image.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-image"></i></button>
+                                    <button title="Insert a table cell(shift+t)" onclick="ModalUtil.popup_modal('Insert a new table cell', '/assets/self-owned/html/report/modal_content_insert_table.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-table"></i></button>
+                                    <button title="Insert a chart cell(shift+e)" onclick="ModalUtil.popup_modal('Insert a new chart', '/assets/self-owned/html/report/modal_content_insert_chart.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-bar-chart"></i></button>
+                                    <button id="add_ds_btn" title="Insert a Data Source (shift+e)" data-bind="visible: name()" onclick="ModalUtil.popup_modal('Insert a new Data Source', '/assets/self-owned/html/report/modal_content_insert_datasource.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-file-archive-o"></i></button>
+
+                                    <button title="Run cell(shift+r)" type="button" data-bind="click:compileCell" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-play"></i></button>
+                                    <button title="Export PDF" type="button" data-bind="click:function(){reportViewModel.download('PDF')}" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-file-pdf-o"></i></button>
+                                    <button title="Export HTML" type="button" data-bind="click:function(){reportViewModel.download('HTML')}" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-html5"></i></button>
+                                    <button title="Export Markdown" type="button" data-bind="click:function(){reportViewModel.download('MD')}" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-file-code-o"></i></button>
+                                    <button id="up2oda_btn" title="Up to ODA " type="button" data-bind="visible: name(),click:(function(){ModalUtil.popup_modal_with_businessPOJO('Up to ODA', '/assets/self-owned/html/report/modal_to_oda.html',$data);})" class="btn btn-default "  style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-caret-square-o-up "></i>&nbsp;</button>
+                                    <span class="pull-right" style="margin-right:">
+                                        <button type="button" class="btn btn-warning" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:hasNewContent">Modified</button>
+                                        <button type="button" class="btn btn-danger" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:!name()">Unsaved</button>
+                                        <button type="button" class="btn btn-success" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:name()">Saved</button>
+                                        <!--                                        <span class="" style="margin-right:18px">
+                                            <button type="button" class="btn btn-success" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:name()">Saved as: <span data-bind="text:name"></span></button>
+                                        </span>-->
+                                        <button id="hide_report_info_btn" type="button" title="Infomation" onclick="hide_report_info_div()" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;border: 0px solid;box-shadow: none;"><i class="fa fa-angle-double-up"></i></button>
+                                        <button id="show_report_info_btn" type="button" title="Infomation" onclick="show_report_info_div()" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;border: 0px solid;box-shadow: none;display: none"><i class="fa fa-angle-double-down"></i></button>
+
+                                        <script>
+                                            function hide_report_info_div() {
+                                                hide_div('report_info_div');
+                                                show_div('show_report_info_btn');
+                                                hide_div('hide_report_info_btn');
+                                            }
+                                            function show_report_info_div() {
+                                                show_div('report_info_div');
+                                                show_div('hide_report_info_btn');
+                                                hide_div('show_report_info_btn');
+                                            }
+                                        </script>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-body no-padding table-responsive">
+                            </div>
+                            <div class="card-body" id="report_info_div" style="">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row col-xs-2" style="color: #666;font-size: 14px;font-weight:500;">
+                                            <strong>Name</strong>
+                                        </div>
+                                        <div class="row col-xs-10">
+                                            <span class="label label-success" style="margin-right: 12px" data-bind="text:name"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-bind="visible: related_datasets_json" style="margin-top:10px">
+                                        <div class="row col-xs-2" style="color: #666;font-size: 14px;font-weight:500;">
+                                            <strong>Related Datasets</strong>
+                                        </div>
+                                        <div class="row col-xs-10">
+                                            <span class="" style="margin-right: 12px" data-bind="text: related_datasets_json">aaa</span>
+                                            <button id="remove_dataset_btn" type="button" title="删除数据集" onclick="removeDataset()" class="btn btn-default" style="padding: 0px 12px;margin-bottom: 0px;"><i class="fa fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
               </div>
             </div>
@@ -207,6 +284,9 @@
     <script src="assets/reference/bootstrap-fileinput/js/locales/zh.js"></script>
 
     <!-- Javascript for Matrix Self Owned -->
+    <script src="assets/self-owned/js/module/gallery/codeoda.js"></script>
+    <script src="assets/reference/codemirror/mode/sql/sql.js"></script>
+
     <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
     <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
     <script src="assets/self-owned/js/generic/generic_cache.js"></script>
@@ -219,23 +299,24 @@
     <script src="assets/self-owned/js/generic/generic_util.js"></script>
     <script src="assets/self-owned/js/generic/generic_validation.js"></script>
     <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
+    <script src="assets/self-owned/js/generic/generic_vm.js"></script>
     <script src="assets/self-owned/js/generic/generic_upload.js"></script>
     <!-- Javascript for Matrix Report Editor Self Owned -->
     <script src="assets/self-owned/js/module/kits/vm.js"></script>
     <script src="assets/self-owned/js/module/kits/logic.js"></script>
 
     <script>
-              var reportViewModel = new ReportViewModel();
-              reportViewModel.addCell();
-              ko.applyBindings(reportViewModel, document.getElementById('main_content_div'));
+     var reportViewModel = new ReportViewModel();
+     reportViewModel.addCell();
+     ko.applyBindings(reportViewModel, document.getElementById('main_content_div'));
     </script>
 
 
 
     <script>
-      $(document).ready(function () {
-          current_mode = 'EDIT';
-          $('#sidebar').load($.getRootPath() + '/components/left_side.html');
+     $(document).ready(function () {
+         current_mode = 'EDIT';
+         $('#sidebar').load($.getRootPath() + '/components/left_side.html');
           $('#navbar').load($.getRootPath() + '/components/header.html', function() {
               $('#navbar_title_li').html('Matrix Report Editor');
               $('#navbar_search_li').css('display', 'none');
@@ -260,7 +341,27 @@
 //
 //            });
 
+            </script>
 
+            <script>
+                function removeDataset() {
+                    reportViewModel.related_datasets().pop();
+                    getDatasetJson();
+                }
+
+                function getDatasetJson() {
+                    var datasetJson = {};
+                    $.each(reportViewModel.related_datasets(), function (index, value) {
+                        datasetJson["" + value.id] = value.name;
+                    });
+                    if (reportViewModel.related_datasets().length === 0) {
+                        reportViewModel.related_datasets_json(null);
+                    } else {
+                        reportViewModel.related_datasets_json($.toJSON(datasetJson));
+                    }
+                    reportViewModel.data.stringgamma = reportViewModel.related_datasets_json();
+                    reportViewModel.hasNewContent(true);
+                }
     </script>
 
   </body>

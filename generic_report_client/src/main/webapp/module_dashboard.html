@@ -332,52 +332,49 @@
       </div>
     </div>
 
-    <script type="text/javascript" src="assets/reference/flat-admin/assets/js/vendor_min.js"></script>
-    <script type="text/javascript" src="assets/reference/flat-admin/assets/js/app.js"></script>
+        <script type="text/javascript" src="assets/reference/flat-admin/assets/js/vendor_min.js"></script>
+        <script type="text/javascript" src="assets/reference/flat-admin/assets/js/app.js"></script>
 
-    <script src="assets/reference/codemirror/codemirror.js"></script>
-    <script src="assets/reference/codemirror/mode/javascript/javascript.js"></script>
-    <script src="assets/reference/codemirror/mode/markdown/markdown.js"></script>
+        <script src="assets/reference/codemirror/codemirror.js"></script>
+        <script src="assets/reference/codemirror/mode/javascript/javascript.js"></script>
+        <script src="assets/reference/codemirror/mode/markdown/markdown.js"></script>
 
-    <script src="assets/reference/jquery/jquery.json.js"></script>
-    <script src="assets/reference/jquery/jquery.blockUI.js"></script>
-    <script src="assets/reference/knockout.js/knockout-3.3.0.js"></script>
-    <script src="assets/reference/jquery-tiny-pubsub/tiny-pubsub.js"></script>
-    <script src="assets/reference/markdown/markdown.min.js"></script>
+        <script src="assets/reference/jquery/jquery.json.js"></script>
+        <script src="assets/reference/jquery/jquery.blockUI.js"></script>
+        <script src="assets/reference/knockout.js/knockout-3.3.0.js"></script>
+        <script src="assets/reference/jquery-tiny-pubsub/tiny-pubsub.js"></script>
+        <script src="assets/reference/markdown/markdown.min.js"></script>
 
-    <!-- Javascript for Matrix Self Owned -->
-    <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
-    <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
-    <script src="assets/self-owned/js/generic/generic_cache.js"></script>
-    <script src="assets/self-owned/js/generic/generic_charting.js"></script>
-    <script src="assets/self-owned/js/generic/generic_csv.js"></script>
-    <script src="assets/self-owned/js/generic/generic_cud.js"></script>
-    <script src="assets/self-owned/js/generic/generic_modal.js"></script>
-    <script src="assets/self-owned/js/generic/generic_query.js"></script>
-    <script src="assets/self-owned/js/generic/generic_table.js"></script>
-    <script src="assets/self-owned/js/generic/generic_util.js"></script>
-    <script src="assets/self-owned/js/generic/generic_validation.js"></script>
-    <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
+        <!-- Javascript for Matrix Self Owned -->
+        <script src="assets/self-owned/js/generic/generic_prototype.js"></script>
+        <script src="assets/self-owned/js/generic/generic_algorithm.js"></script>
+        <script src="assets/self-owned/js/generic/generic_cache.js"></script>
+        <script src="assets/self-owned/js/generic/generic_charting.js"></script>
+        <script src="assets/self-owned/js/generic/generic_csv.js"></script>
+        <script src="assets/self-owned/js/generic/generic_cud.js"></script>
+        <script src="assets/self-owned/js/generic/generic_modal.js"></script>
+        <script src="assets/self-owned/js/generic/generic_query.js"></script>
+        <script src="assets/self-owned/js/generic/generic_table.js"></script>
+        <script src="assets/self-owned/js/generic/generic_util.js"></script>
+        <script src="assets/self-owned/js/generic/generic_validation.js"></script>
+        <script src="assets/self-owned/js/generic/generic_workbench.js"></script>
 
-    <script src="assets/self-owned/js/module/dashboard/logic.js"></script>
-    <script src="assets/self-owned/js/module/dashboard/vm.js"></script>
+        <script src="assets/self-owned/js/module/dashboard/logic.js"></script>
+        <script src="assets/self-owned/js/module/dashboard/vm.js"></script>
 
+        <script>
+         $(document).ready(function() {
+             $('#sidebar').load($.getRootPath() + '/components/left_side.html', function() {
+                 resetCssClass('li_dashboard', 'active');
+             });
+             $('#navbar').load($.getRootPath() + '/components/header.html', function() {
+                 $('#navbar_title_li').html('Matrix Report Dashboard');
+             });
+         });
+         var viewModel = new DashboardViewModel();
+         ko.applyBindings(viewModel, document.getElementById('main_content_div'));
+        </script>
 
-
-
-    <script>
-      $(document).ready(function() {
-        $('#sidebar').load($.getRootPath() + '/components/left_side.html', function() {
-          resetCssClass('li_dashboard', 'active');
-        });
-        $('#navbar').load($.getRootPath() + '/components/header.html', function() {
-          $('#navbar_title_li').html('Matrix Report Dashboard');
-        });
-      });
-
-      var viewModel = new DashboardViewModel();
-      ko.applyBindings(viewModel, document.getElementById('main_content_div'));
-    </script>
 
   </body>
 
