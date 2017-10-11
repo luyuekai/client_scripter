@@ -48,9 +48,9 @@
                                     <button title="Clean" type="button" onclick="ModalUtil.popup_modal('New Chart', '/assets/self-owned/html/chart/modal/modal_content_new_chart.html', null, null, null);" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-edit"></i></button>
                                     <button id="button_save" title="Save" type="button" data-bind="click:(function(){ModalUtil.popup_modal_with_businessPOJO('Save Chart', '/assets/self-owned/html/chart/modal/modal_content_save_chart.html',$data);})" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-save"></i></button>
                                     <span class="pull-right" style="margin-right:0px">
-                                        <!--<button type="button" class="btn btn-warning" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:!hasNewContent">Modified</button>-->
-                                        <!--                                        <button type="button" class="btn btn-danger" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:!name()">Unsaved</button>
-                                                                                <button type="button" class="btn btn-success" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:name()">Saved as: <span data-bind="text:name"></span></button>-->
+                                        <button type="button" class="btn btn-warning" style="padding: 6px 12px;margin-bottom: 0px;display:none" d>Modified</button>
+                                        <button type="button" class="btn btn-danger" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:!name()">Unsaved</button>
+                                        <button type="button" class="btn btn-success" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:name()">Saved as: <span data-bind="text:name"></span></button>
                                         <button id="dispaly_config_button" onclick="show_configuration_panel();" title="Refresh" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;display:none"><i class="fa fa-wrench"></i></button>
                                         <button id="undispaly_config_button" onclick="hide_configuration_panel();" title="Hide" type="button" class="btn btn-default btn-xs" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-eye-slash"></i></button>
                                     </span>
@@ -330,16 +330,20 @@
     <script src="assets/self-owned/js/module/kits/logic.js"></script>
 
 
-
     <script>
-                                                $(document).ready(function () {
-                                                    $('#sidebar').load($.getRootPath() + '/components/left_side.html');
-                                                    $('#navbar').load($.getRootPath() + '/components/header.html');
-                                                    setTimeout(function () {
-                                                        $('#navbar_title_li').html('Matrix Chart Editor');
-                                                        $('#navbar_search_li').css('display', 'none');
-                                                    }, 200);
-                                                });
+                                                var chartViewModel = new ChartViewModel();
+                                                var chart;       //tutorial chart object
+                                                ko.applyBindings(chartViewModel, document.getElementById('main_content_div'));
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#sidebar').load($.getRootPath() + '/components/left_side.html');
+            $('#navbar').load($.getRootPath() + '/components/header.html');
+            setTimeout(function () {
+                $('#navbar_title_li').html('Matrix Chart Editor');
+                $('#navbar_search_li').css('display', 'none');
+            }, 200);
+        });
     </script>
 
 </body>

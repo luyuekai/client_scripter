@@ -72,7 +72,7 @@
       <br>
       <div class="pull-right">
         <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
-        <button type="button" onclick="execute()" class="btn btn-sm btn-success">Confirm</button>
+        <button type="button" onclick="execute()" class="btn btn-sm btn-success" id="execute_save">Confirm</button>
       </div>
 
       <br>
@@ -187,6 +187,7 @@
 
   function successListener() {
       if (arguments && arguments[1]) {
+          $("#execute_save").attr("disabled",true)
           var json = arguments[1].result[0];
           setTimeout(function() {
             genericModalViewModel.response(true, "Entity Operation", "[Successed]", "Operation Successed, please close the console and reload the data.");
