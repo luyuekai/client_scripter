@@ -95,11 +95,11 @@
   function reset_grid_heatmap_x() {
     var data_prototype = ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.data_prototype);
     data_prototype.x_data = $('#x_axis_value_input').val().split(',');
+//    data_prototype.x_data.forEach(function(element){element.trim()})
     reset_grid_heatmap(data_prototype);
   }
 
   function reset_grid_heatmap_y() {
-      debugger
     var data_prototype = ClonePOJO.deepClone(HeatMap_Grid_ChartPOJO.data_prototype);
     data_prototype.y_data = $('#y_axis_value_input').val().split(',');
     reset_grid_heatmap(data_prototype);
@@ -127,8 +127,8 @@
   }
 
   function add_grid_heatmap_data() {
-    var x = $('#add_x_value_input').val();
-    var y = $('#add_y_value_input').val();
+    var x = Number($('#add_x_value_input').val());
+    var y = Number($('#add_y_value_input').val());
     var num = Number($('#add_value_value_input').val())
     if (chartViewModel && chartViewModel.chart) {
       var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());

@@ -18,35 +18,35 @@
                 This operation will save the chart into persist layer, please fulfill the information and confirm to continue...
             </p>-->
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-12" data-bind="with:chart.getOption().title[0]">
                     <div class="form-group" style="margin-bottom: 20px">
                         <label class="col-sm-2 control-label">Text</label>
                         <div class="col-sm-4">
-                            <input id="title_text_input" type="text" class="form-control"  aria-describedby="basic-addon1">
+                            <input id="title_text_input" type="text" class="form-control"  aria-describedby="basic-addon1" data-bind="value:text">
                         </div>
                         <label class="col-sm-2 control-label">Subtext</label>
                         <div class="col-sm-4">
-                            <input id="title_subtext_input" type="text" class="form-control"  aria-describedby="basic-addon1">
+                            <input id="title_subtext_input" type="text" class="form-control"  aria-describedby="basic-addon1" data-bind="value:subtext">
                         </div>
                     </div>
                     <div class="form-group" style="margin-bottom: 20px">
                         <label class="col-sm-2 control-label">Color</label>
                         <div class="col-sm-4">
-                            <input id="title_color_input" type="text" class="form-control"  aria-describedby="basic-addon1" placeholder="#333333">
+                            <input id="title_color_input" type="text" class="form-control"  aria-describedby="basic-addon1" placeholder="#333333" data-bind="value:textStyle.color">
                         </div>
                         <label class="col-sm-2 control-label">FontSize</label>
                         <div class="col-sm-4">
-                            <input id="title_fontsize_input" type="text" class="form-control"  aria-describedby="basic-addon1">
+                            <input id="title_fontsize_input" type="text" class="form-control"  aria-describedby="basic-addon1" data-bind="value:textStyle.fontSize">
                         </div>
                     </div>
                     <div class="form-group" style="margin-bottom: 20px">
                         <label class="col-sm-2 control-label">Left</label>
                         <div class="col-sm-4">
-                            <input id="title_left_input" type="text" class="form-control"  aria-describedby="basic-addon1" placeholder="left,center,right or 20 or 20%">
+                            <input id="title_left_input" type="text" class="form-control"  aria-describedby="basic-addon1" placeholder="left,center,right or 20 or 20%" data-bind="value:left">
                         </div>
                         <label class="col-sm-2 control-label">Top</label>
                         <div class="col-sm-4">
-                            <input id="title_top_input" type="text" class="form-control"  aria-describedby="basic-addon1" placeholder="top,middle,bottom or 20 or 20%">
+                            <input id="title_top_input" type="text" class="form-control"  aria-describedby="basic-addon1" placeholder="top,middle,bottom or 20 or 20%" data-bind="value:top">
                         </div>
                     </div>
                 </div>
@@ -63,6 +63,8 @@
 </div>
 
 <script>
+     ko.cleanNode($('#genericModalDiv'));
+    ko.applyBindings(chartViewModel, document.getElementById('genericModalDiv'));
     function run_title_config() {
         if (chartViewModel && chartViewModel.chart) {
             chartViewModel.chart.setOption({
