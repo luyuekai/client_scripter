@@ -141,7 +141,7 @@ function vm_env_setup() {
 
         self.stringzeta_ds_response = ko.observable();
         self.stringzeta_ds_response_data = null;
-        self.stringzeta_ds = ko.observable('http://localhost:8080/generic_datasource_client/api/connection/query')
+        self.stringzeta_ds = ko.observable($.getRootPath()+'/api/connection/query')
 
         self.stringzeta_refresh_interval = ko.observable('30');
         self.stringzeta_refresh_interval_tooltip = ko.computed(function () {
