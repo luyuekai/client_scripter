@@ -30,7 +30,7 @@
         <error-code>404</error-code>  
         <location>/404.html</location>  
     </error-page>
-    <security-constraint>
+<!--    <security-constraint>
         <display-name>Constraint1</display-name>
         <web-resource-collection>
             <web-resource-name>OpenDsgWebResource</web-resource-name>
@@ -41,5 +41,5 @@
             <description/>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
-    </security-constraint>
+    </security-constraint>-->
 </web-app>
