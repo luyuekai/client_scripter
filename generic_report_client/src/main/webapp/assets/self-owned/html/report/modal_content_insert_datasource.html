@@ -1,0 +1,173 @@
+<div>
+    <div id="dataset_list_div">
+
+        <div class="row" id="content_div1">
+            <!--ko foreach: viewData-->
+            <div class="col-xs-12" style="margin-top: 1px">
+                <div class="card card-banner card-blue-light" data-bind="event:{dblclick:function(){choose($data)}}">
+                    <div class="card-body">
+                        <div class="col-xs-1" style="padding: 5px;">
+                            <img class="img img-thumbnail pull-right" src="assets/self-owned/img/backgrounds/default-thumb.png" style="height: 60px;">
+                        </div>
+
+                        <div class="col-xs-9" style="padding-left: 20px;margin-top: 10px;">
+                            <div class="row col-xs-12" style="">
+                                <p class="pull-left" data-bind="text:name" style="font-size: 15px;font-stretch: true;color: #131111"></p>
+                            </div>
+                            <div class="row row col-xs-12" style="">
+                                <p style="color: rgba(0,0,0,.4);font-size: 12px;display: inline"><span data-bind="text:description"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/ko--> 
+        </div>
+        <br>
+        <div class="pull-right">
+            <!--<button type="button" class="btn btn-sm btn-success" data-dismiss="modal">Close</button>-->
+            <button type="button" onclick="closeModal()" class="btn btn-sm btn-default">Close</button>
+        </div>
+
+        <br>
+    </div>
+</div>
+
+<script>
+    function initialize() {
+        $(window).bind('scroll', function () {
+            ScrollPOJO.scrollListener();
+        });
+        // retrieveData(1);
+        ScrollPOJO.listener();
+    }
+
+//    var search_dataset_all = function () {
+//        ScrollPOJO.reset();
+//        retrieve_Dataset_all();
+//    }
+
+    var retrieve_Dataset_all = function () {
+//        debugger;
+        var keyword = SearchPOJO.keywords;
+        var likeOrMap = {
+        };
+        if (keyword) {
+            likeOrMap = {
+                "name": keyword,
+            }
+        }
+        var requestPOJO = {
+            "className": "Genericentity",
+            "orderMap": {
+                "id": false
+            },
+            "pageMaxSize": ScrollPOJO.pageMaxSize,
+            "currentPageNumber": ScrollPOJO.page || 1,
+            "likeORMap": likeOrMap,
+            "eqMap": {
+                "type": "SCRIPTER_KAGGLE_DATASET",
+                "booleanbeta": true,
+                "booleandelta": true,
+                "booleangamma": true,
+                "deleted": false
+            },
+            "inMap": {},
+        };
+        var data = {
+            'queryJson': $.toJSON(requestPOJO)
+        };
+        console.log(JSON.stringify(data));
+        $.serverRequest($.getServerRoot() + '/service_generic_query/api/query', data, "DATASET_API_SUCCESS_LISTENER", "DATASET_API_FAILED_LISTENER", "DATASET_API_EXCEPTION_LISTENER", "POST", true, {'TAG': 'RETRIEVE_ALL'});
+    }
+
+    function dataset_server_error_listener() {
+        console.log("dataset retrieve erro : Please contact with the system admin for more information...");
+    }
+
+    function dataset_service_failed_listener() {
+        console.log("dataset retrieve failed : Please contact with the system admin for more information...");
+    }
+
+    function dataset_service_success_listener() {
+//        debugger;
+        if (datasource_vm && arguments && arguments[1]) {
+            var response = arguments[1];
+            var addtion = null;
+            if (arguments[1].response) {
+                response = arguments[1].response;
+                addtion = arguments[1].addtion;
+            }
+            if (response.result) {
+                var data = response.result;
+                if (addtion) {
+                    //MATRIX SEARCH DEFAULT HANDLER
+                    ScrollPOJO.displayResult = ScrollPOJO.displayResult.concat(data);
+                    if (data.length < ScrollPOJO.pageMaxSize) {
+                        ScrollPOJO.hasNewData = false;
+                    }
+                    var results = ScrollPOJO.displayResult.sort(SearchPOJO.sort);
+                    datasource_vm.viewData(results);
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+
+    // *******Data Bind JS Code*******
+    var datasource_vm = new ServerPagingViewModel();
+    ko.cleanNode($('#content_div1')[0]);
+    ko.applyBindings(datasource_vm, document.getElementById('content_div1'));
+
+    ScrollPOJO.reset();
+//    SearchPOJO.likeOrMap = ["creator", "stringalpha", "name", "description"];
+//    SearchPOJO.sortKey = ['numberalpha'];
+//    SearchPOJO.listener = search_dataset_all;
+    ScrollPOJO.listener = retrieve_Dataset_all;
+    initialize();
+
+    $.subscribe("DATASET_API_SUCCESS_LISTENER", dataset_service_success_listener);
+    $.subscribe("DATASET_API_FAILED_LISTENER", dataset_service_failed_listener);
+    $.subscribe("DATASET_API_EXCEPTION_LISTENER", dataset_server_error_listener);
+
+</script>
+
+<script>
+
+    function closeModal() {
+        $.unsubscribe("DATASET_API_SUCCESS_LISTENER", dataset_service_success_listener);
+        $.unsubscribe("DATASET_API_FAILED_LISTENER", dataset_service_failed_listener);
+        $.unsubscribe("DATASET_API_EXCEPTION_LISTENER", dataset_server_error_listener);
+        $('#popupModalPro').modal('hide');
+    }
+
+
+    function choose(data) {
+        console.log('choosed dataset name,id：' + data.name + ',' + data.id);
+        reportViewModel.data.stringgamma = data.name + '';
+        var dataset_item = {"id": data.id, "name": data.name};
+        if (!containsDataset(dataset_item)) {
+            reportViewModel.related_datasets().push(dataset_item);
+            console.log('pushed dataset name,id：' + data.name + ',' + data.id);
+            getDatasetJson();
+        }
+        reportViewModel.hasNewContent(true);
+        $.unsubscribe("DATASET_API_SUCCESS_LISTENER", dataset_service_success_listener);
+        $.unsubscribe("DATASET_API_FAILED_LISTENER", dataset_service_failed_listener);
+        $.unsubscribe("DATASET_API_EXCEPTION_LISTENER", dataset_server_error_listener);
+        $('#popupModalPro').modal('hide');
+    }
+
+    function containsDataset(dataset_item) {
+        var flag = false;
+        $.each(reportViewModel.related_datasets(), function (index, value) {
+            if (value.id === dataset_item.id) {
+                flag = true;
+            }
+        });
+        return flag;
+    }
+
+</script>

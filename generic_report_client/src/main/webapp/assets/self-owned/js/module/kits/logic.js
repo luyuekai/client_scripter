@@ -1,5 +1,6 @@
 var template_tag_list = ["TEMPLATE"];
-var tag_list = ["TEXT", " NATURAL_LANGUAGE", " IMAGE", " VIDEO", " VOICE", " MACHINE_LEARNING", " INTERNET", " ECONOMY", " TRANSPORTATION", " HEALTH", " REAL_ESTATE"];
+//var tag_list = ["TEXT", " NATURAL_LANGUAGE", " IMAGE", " VIDEO", " VOICE", " MACHINE_LEARNING", " INTERNET", " ECONOMY", " TRANSPORTATION", " HEALTH", " REAL_ESTATE"];
+var tag_list = ["TEXT", "IMAGE", "VOICE", "INTERNET", "ECONOMY", "TRANSPORTATION", "HEALTH", "REAL_ESTATE"];
 var isView = false;
 var current_mode = null; //EDIT && VIEW
 function switchMode(){
@@ -100,9 +101,20 @@ function environment_check(){
 
 function successListener() {
   if (arguments && arguments[1]) {
+      
     var json = arguments[1].result[0];
     if (reportViewModel) {
       reportViewModel.deserialize_report(json);
+      
+      var datasetsStr = json.stringgamma;
+      reportViewModel.related_datasets_json(datasetsStr);
+      if(datasetsStr !== null || datasetsStr !== ""){
+          var datasetsJson = JSON.parse(datasetsStr);
+          $.each(datasetsJson, function (index, value) {
+              reportViewModel.related_datasets().push({"id": index, "name": value});
+          });
+      }
+      
       reportViewModel.hasNewContent(false);
       if(current_mode == 'EDIT'){
         userCheck();
@@ -235,14 +247,31 @@ function sortTime(a, b) {
 
 
 function add_shortcut_key_listener(){
-  document.onkeydown = keyDownSearch;
+//  document.onkeydown = keyDownSearch;
+  $(document).on('keydown',command_mode)
+}
+function command_to_edit(){
+//    console.log($(document))
+  $(document).unbind("keydown");
+  $(document).on('keydown',edit_mode)
+}
+function edit_mode(e){
+//    console.log("edit mode")
+    if (event.keyCode==27) {
+        //esc
+//        edit_to_command();
+  }
+}
+function edit_to_command(){
+    $(document).unbind("keydown");
+    $(document).on('keydown',command_mode);
 }
 
 function add_shortcut_key_listener_view(){
   document.onkeydown = keyDownSearch_view;
 }
 
-function keyDownSearch(e) {
+function command_mode(e) {
   // 兼容FF和IE和Opera
   var theEvent = e || window.event;
   var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
@@ -293,7 +322,7 @@ function keyDownSearch(e) {
     }
   }
   if (event.keyCode == 68 && event.shiftKey && event.altKey) {
-    // alt+shift+v
+    // alt+shift+d
     if(reportViewModel){
       reportViewModel.dropCell();
     }
@@ -328,6 +357,10 @@ function keyDownSearch(e) {
       reportViewModel.compileCell();
     }
   }
+//  if (event.keyCode==13&& event.shiftKey) {
+//    // enter+shift
+//    command_to_edit();
+//  }
 
   // return true;
 }
