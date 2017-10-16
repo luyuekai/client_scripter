@@ -64,7 +64,6 @@ $.subscribe("MATRIX_SHARE_SERVICE_FAILED", failedServiceListener);
 function successListener() {
     if (arguments && arguments[1]) {
         var json = arguments[1].result[0];
-        debugger
         chartViewModel.name(json.stringalpha);
         var json_chart = json.json;
         var option = ChartPOJO.deserialize_chart_option(json_chart);
@@ -210,6 +209,10 @@ function successListener() {
                     }
                     break;
                 case 'wordCloud':
+                    if (typeof cloudViewModel != "undefined") {
+                        cloudViewModel.shape(option.series[0].shape);
+                        cloudViewModel.series(JSON.stringify(option.series[0].data));
+                    }
                     var a = option.series;
                     a[0].textStyle.normal.color = function () {
                         var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];

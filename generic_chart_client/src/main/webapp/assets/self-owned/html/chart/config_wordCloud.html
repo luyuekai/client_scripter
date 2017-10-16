@@ -1,23 +1,23 @@
-<div id="boxplot_content">
+<div id="cloud_content">
     <form class="form-horizontal">
         <div class="form-group">
             <label class="col-sm-3 control-label">Cloud Shape</label>
             <div class="col-sm-9">
                 <div>
                     <div class="radio radio-inline">
-                        <input type="radio" name="radio_shape_config" id="radio_axis_circle" value="circle"  checked>
+                        <input type="radio" name="radio_shape_config" id="radio_axis_circle" value="circle" data-bind="checked:shape" checked>
                         <label for="radio_axis_circle" title="left">
                             &nbsp;Circle
                         </label>
                     </div>
                     <div class="radio radio-inline">
-                        <input type="radio" name="radio_shape_config" id="radio_axis_cardioid" value="cardioid">
+                        <input type="radio" name="radio_shape_config" id="radio_axis_cardioid" value="cardioid" data-bind="checked:shape">
                         <label for="radio_axis_cardioid" title="center">
                             &nbsp;Cardioid
                         </label>
                     </div>
                     <div class="radio radio-inline">
-                        <input type="radio" name="radio_shape_config" id="radio_axis_diamond" value="diamond">
+                        <input type="radio" name="radio_shape_config" id="radio_axis_diamond" value="diamond" data-bind="checked:shape">
                         <label for="radio_axis_diamond" title="right">
                             &nbsp;Diamond
                         </label>
@@ -27,19 +27,19 @@
             <div class="col-sm-offset-3 col-sm-9">
                 <div>
                     <div class="radio radio-inline">
-                        <input type="radio" name="radio_shape_config" id="radio_axis_star" value="star">
+                        <input type="radio" name="radio_shape_config" id="radio_axis_star" value="star" data-bind="checked:shape">
                         <label for="radio_axis_star" title="left" style="padding-right: 10px;">
                             &nbsp;Star
                         </label>
                     </div>
                     <div class="radio radio-inline">
-                        <input type="radio" name="radio_shape_config" id="radio_axis_triangle" value="triangle">
+                        <input type="radio" name="radio_shape_config" id="radio_axis_triangle" value="triangle" data-bind="checked:shape">
                         <label for="radio_axis_triangle" title="center" style="padding-right: 5px;">
                             &nbsp;Triangle
                         </label>
                     </div>
                     <div class="radio radio-inline">
-                        <input type="radio" name="radio_shape_config" id="radio_axis_pentagon" value="pentagon">
+                        <input type="radio" name="radio_shape_config" id="radio_axis_pentagon" value="pentagon" data-bind="checked:shape">
                         <label for="radio_axis_pentagon" title="right" style="padding-left: 24px;">
                             &nbsp; Pentagon
                         </label>
@@ -62,6 +62,12 @@
     </form>
 </div>
 <script>
+    var cloudViewModel = {
+        shape: ko.observable('circle'),
+        series: ko.observable('')
+    }
+    ko.cleanNode($('#cloud_content'))
+    ko.applyBindings(cloudViewModel, document.getElementById('cloud_content'))
     function reset_series() {
         var tmp = $('#data_value_input').val();
 //        var cloud_shape = $("[name='radio_shape_config']").filter(":checked").val();
