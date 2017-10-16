@@ -40,7 +40,7 @@ var retrieveData_saved_self = function () {
         "currentPageNumber": ScrollPOJO.page || 1,
         "likeORMap": likeOrMap,
         "eqMap": {
-//      "username": UserPOJO.user.userName,
+            "username": UserPOJO.user.userName,
             "type": "MATRIX_CHART",
             "deleted": false
         },

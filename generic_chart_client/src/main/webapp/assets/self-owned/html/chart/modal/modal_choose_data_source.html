@@ -353,6 +353,7 @@
                 "likeORMap": {
                 },
                 "eqMap": {
+                    "creator":UserPOJO.user.userName,
                     "deleted": false,
                 },
                 "inMap": {
@@ -396,7 +397,6 @@
                         var tmp = 'server_data.' + json_rule;
                         server_data = eval(tmp);
                     }
-                    debugger
                     var rawData = DataTransferPOJO.serverJsonData2TableData(server_data);
                     rawData.result.unshift(rawData.header)
                     genericModalViewModel.businessPOJO().rawDataForTransferT = ClonePOJO.deepCloneTwoDimentionArray(rawData.result);
