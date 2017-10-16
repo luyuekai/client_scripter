@@ -169,7 +169,11 @@
     <script src="assets/self-owned/js/module/kits/logic.js"></script>
 
 
-
+    <script>
+                                                var chartViewModel = new ChartViewModel();
+                                                var chart;       //tutorial chart object
+                                                ko.applyBindings(chartViewModel, document.getElementById('main_content_div'));
+    </script>
     <script>
                                                 $(document).ready(function () {
                                                     $('#sidebar').load($.getRootPath() + '/components/left_side.html');
