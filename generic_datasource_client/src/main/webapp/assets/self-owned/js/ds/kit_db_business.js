@@ -141,7 +141,7 @@ function vm_env_setup() {
 
         self.stringzeta_ds_response = ko.observable();
         self.stringzeta_ds_response_data = null;
-        self.stringzeta_ds = ko.observable($.getRootPath()+'/api/connection/query')
+        self.stringzeta_ds = ko.observable('/generic_datasource_client/api/connection/query')
 
         self.stringzeta_refresh_interval = ko.observable('30');
         self.stringzeta_refresh_interval_tooltip = ko.computed(function () {
@@ -780,7 +780,7 @@ var check_data_source = function (type) {
         // do your business...
         var data = vm.businessPOJO().stringzeta_request_params() || null;
         var mode = vm.businessPOJO().stringzeta_rest_mode();
-        $.serverRequest(vm.businessPOJO().stringzeta_ds(), JSON.parse(data), "DEFAULT_RETRIEVE_API_SUCCESS_LISTENER", "DEFAULT_RETRIEVE_API_FAILED_LISTENER", "DEFAULT_RETRIEVE_API_EXCEPTION_LISTENER", mode, true, {'TAG': type_current});
+        $.serverRequest($.getServerRoot()+vm.businessPOJO().stringzeta_ds(), JSON.parse(data), "DEFAULT_RETRIEVE_API_SUCCESS_LISTENER", "DEFAULT_RETRIEVE_API_FAILED_LISTENER", "DEFAULT_RETRIEVE_API_EXCEPTION_LISTENER", mode, true, {'TAG': type_current});
     }
 
 }
