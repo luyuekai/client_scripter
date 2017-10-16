@@ -500,7 +500,7 @@
                                             </a>
                                         </li>    
                                         <li role="step" class="">
-                                            <a href="#step3-v3-horizantal-table" role="tab" id="step4-data-v3-horizantal" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                            <a href="#step3-v3-horizantal-table" role="tab" id="step4-data-v3-horizantal" data-toggle="tab" aria-controls="profile" aria-expanded="false" data-bind ="click:function(){getSql()}" >
                                                 <div class="icon fa fa-flag-checkered "></div>
                                                 <div class="heading">
                                                     <div class="title">Fresh Time</div>
@@ -509,7 +509,7 @@
                                             </a>
                                         </li>
                                         <li role="step" class="">
-                                            <a href="#step4-v3-horizantal-table" role="tab" id="step4-data-v3-horizantal" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                            <a href="#step4-v3-horizantal-table" role="tab" id="step4-data-v3-horizantal" data-toggle="tab" aria-controls="profile" aria-expanded="false"  data-bind ="click:function(){getSql()}" >
                                                 <div class="icon fa fa-flag-checkered "></div>
                                                 <div class="heading">
                                                     <div class="title">Persist</div>
@@ -676,7 +676,7 @@
                                             </div>
                                             <div class="row" >
                                                 <div class="col-xs-12">
-                                                    <textarea  class="animated" id="sql_div" data-bind="value:sql"  rows="10" placeholder="请在这里键入sql" spellcheck="false" style="font-family: monospace; width: 100%; border: 1px solid #eee; height: 28px"></textarea>
+                                                    <textarea  class="animated" id="sql_div" data-bind="value:sql,valueUpdate:'input'"  rows="10" placeholder="请在这里键入sql" spellcheck="false" style="font-family: monospace; width: 100%; border: 1px solid #eee; height: 28px"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -921,7 +921,6 @@
                                                     });
                                                     
         </script>
-
         <script>
             var firstTimeToStep2= true;
          function applyCodeMirror(){
@@ -941,6 +940,10 @@
             $.subscribe("get_user_detail_chain_finished", env_setup);
         </script>
         <script>
+            function getSql(){
+                var excute_sql =$.trim(vm.businessPOJO().codeMirror.getValue())
+                vm.businessPOJO().sql(excute_sql)
+            }
             
         </script>
 

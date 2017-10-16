@@ -86,10 +86,10 @@
                     <div class="col-sm-12" data-bind="with:businessPOJO()">
                         <div class="card card-mini">
                             <div class="card-body flat-matrix " style="padding-top: 0px;padding-bottom: 0px ">
-                                <span >Filter by&nbsp;:&nbsp;</span>
+                                <span >Filtered by&nbsp;:&nbsp;</span>
                                 <div class="btn-group">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span data-bind="text:dataSourceType()"></span> <span class="caret"></span></button>
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-top: 4px;"><span data-bind="text:dataSourceType()"></span> <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu" data-bind="foreach: type()">
                                             <li><a data-bind="click:function(){$parent.dataSourceType($data)}" href="#"><span data-bind="text:$data"></span></a></li>
                                         </ul>

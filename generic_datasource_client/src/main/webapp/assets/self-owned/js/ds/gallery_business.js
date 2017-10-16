@@ -40,6 +40,7 @@ function filterData(type) {
                 "pageMaxSize": ScrollPOJO.pageMaxSize,
                 "currentPageNumber": ScrollPOJO.page || 1,
                 "eqMap": {
+                    "creator": UserPOJO.user.userName,
                     "deleted": false
                 },
 
@@ -60,6 +61,7 @@ function filterData(type) {
                 "pageMaxSize": ScrollPOJO.pageMaxSize,
                 "currentPageNumber": ScrollPOJO.page || 1,
                 "eqMap": {
+                    "creator": UserPOJO.user.userName,
                     "deleted": false
                 },
 
@@ -80,6 +82,7 @@ function filterData(type) {
                 "pageMaxSize": ScrollPOJO.pageMaxSize,
                 "currentPageNumber": ScrollPOJO.page || 1,
                 "eqMap": {
+                    "creator": UserPOJO.user.userName,
                     "deleted": false
                 },
 
@@ -106,6 +109,7 @@ function search_env_setup() {
             "pageMaxSize": ScrollPOJO.pageMaxSize,
             "currentPageNumber": ScrollPOJO.page || 1,
             "eqMap": {
+                "creator": UserPOJO.user.userName,
                 "deleted": false
             },
 
