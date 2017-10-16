@@ -67,14 +67,14 @@ function WORKBENCH_EVENT_CHANGE_LISTENER(){
 function addCell_chart(json) {
     if (json) {
         var option = ChartPOJO.deserialize_chart_option(json);
-        // if (option.series[0].type == 'wordCloud') {
-        //     var a = option.series;
-        //     a[0].textStyle.normal.color = function () {
-        //         var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
-        //         return colors[parseInt(Math.random() * 10)];
-        //     };
-        //     option.series = a;
-        // }
+        if (option.series[0].type == 'wordCloud') {
+            var a = option.series;
+            a[0].textStyle.normal.color = function () {
+                var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+                return colors[parseInt(Math.random() * 10)];
+            };
+            option.series = a;
+        }
         //
         //update cache
         WorkbenchCache.updateCache();
@@ -112,6 +112,7 @@ var retrieveData_chart = function (page) {
         "likeORMap": {
         },
         "eqMap": {
+            "username": UserPOJO.user.userName,
             "type": "MATRIX_CHART",
             "deleted": false
         },
