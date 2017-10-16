@@ -60,7 +60,6 @@ var layout;
         var origin_data = eval($('#data_value_input').val()) || [];
         console.log(origin_data)
         var fill = d3.scale.category20();
-debugger
         layout = d3.layout.cloud(origin_data)
                 .size([1400, 800])
                 .words(origin_data)
