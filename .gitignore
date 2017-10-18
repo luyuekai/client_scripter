@@ -1,2 +1,7 @@
 /generic_report_admin/target/
 /generic_report_client/target/
+/generic_chart_client/target/
+/generic_charting_client/target/
+/generic_dashboard_client/target/
+/generic_datasource_client/target/
+/generic_portal_client/target/
