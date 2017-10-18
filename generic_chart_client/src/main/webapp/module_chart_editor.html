@@ -107,7 +107,7 @@
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label" style="padding-top: 15px;">Type</label>
                                             <div class="col-sm-8">
-                                                <select id="chart_type_select" class="select2" onchange="rerender_children_dom(this.options[this.options.selectedIndex].value)" style="z-index:100016;">
+                                                <select id="chart_type_select" class="select2" onchange="rerender_children_dom(this.options[this.options.selectedIndex].value);checkDynamicButton()" style="z-index:100016;">
                                                     <option value="bar">Descartes Bar</option>
                                                     <option value="line">Descartes Line</option>
                                                     <option value="area">Descartes Area</option>
@@ -344,6 +344,17 @@
                 $('#navbar_search_li').css('display', 'none');
             }, 200);
         });
+        function checkDynamicButton() {
+            
+            var chartType = $('#chart_type_select').val();
+            var supportType = {"bar":'', "line":'', "scatter":'', "area":'',"parallel":'',"pie":'', "radar":'',"themeRiver":'', "boxplot":''}
+            if(chartType in supportType) {
+                $('#radio_dynamic_data').attr('disabled', false);
+                return;
+            }
+            $('#radio_manual_add').prop('checked', true);
+            $('#radio_dynamic_data').attr('disabled', true);
+        }
     </script>
 
 </body>
