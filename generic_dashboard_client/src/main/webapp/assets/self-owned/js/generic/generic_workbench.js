@@ -201,7 +201,7 @@ var addWidget_chart = function (option, x, y, x_width, y_height) {
     // $draggableTemplateContext.css('height', '320px');
     // template.find('.draggableTemplateContext').append(context_div_clone);
     //step 4: add template into grid as widget
-   
+
     var a = option.series;
     if(a[0].type == 'wordCloud'){
           a[0].textStyle.normal.color = function () {
