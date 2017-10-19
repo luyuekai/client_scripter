@@ -201,29 +201,35 @@ var addWidget_chart = function (option, x, y, x_width, y_height) {
     // $draggableTemplateContext.css('height', '320px');
     // template.find('.draggableTemplateContext').append(context_div_clone);
     //step 4: add template into grid as widget
-   
+
+
     var a = option.series;
-    if(a[0].type == 'wordCloud'){
-          a[0].textStyle.normal.color = function () {
+    if (a[0].type == 'wordCloud') {
+        a[0].textStyle.normal.color = function () {
             var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
             return colors[parseInt(Math.random() * 10)];
         };
-    option.series = a;
+        option.series = a;
     }
     var widget = $('<div></div>').append(template);
     grid.addWidget(widget, x, y, x_width, y_height);
 
-    var chart = echarts.init(document.getElementById($draggableTemplateContext_id));
+    var chart = ChartPOJO.generate_default_chart($draggableTemplateContext_id)
+//    var chart = echarts.init(document.getElementById($draggableTemplateContext_id));
     // 使用刚指定的配置项和数据显示图表。
-    chart.setOption(option);
-
-
+    if (option.ds_setting && option.ds_setting.refreshInterval) {
+        option.ds_setting.ds = JSON.parse(option.ds_setting.ds);
+        renderDynamicDash(option.ds_setting, chart, $draggableTemplateContext_id)
+//        var interval = setInterval(retrieveDataSourceDash(chart, ),1000 * refresh);    
+    }else{
+        chart.setOption(option)
+    }
 
     $draggableTemplateContext.attr('chart', chart);
 
     chartCache[$draggableTemplateContext_id] = chart;
 
-    widget.attr('id', (new Date()).getTime() + '_widget');
+    widget.attr('id', $draggableTemplateContext_id + '_widget');
     var element_prototype = {
         "id": $draggableTemplateContext_id,
         "isWidget": true,
@@ -238,6 +244,7 @@ var addWidget_chart = function (option, x, y, x_width, y_height) {
         widget_id: widget.attr('id'),
         widget_element: element_prototype
     }
+    
     WorkbenchCache.array_elements.push(widget_prototype_element);
 
     return chart;
@@ -284,9 +291,11 @@ var initialize_workbench = function () {
 
     $('body').on('click', '.remove-drag', function (e) {
         e.preventDefault();
+
         var grid = $('.grid-stack').data('gridstack'),
                 el = $(this).closest('.grid-stack-item')
-
+        clearInterval(vm.businessPOJO().refreshIntervalArray[el[0].id])
+        delete vm.businessPOJO().refreshIntervalArray[el[0].id]
         grid.removeWidget(el);
         $.publish("WORKBENCH_EVENT_CHANGE");
     });
