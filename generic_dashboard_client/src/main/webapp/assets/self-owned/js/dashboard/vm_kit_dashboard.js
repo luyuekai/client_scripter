@@ -5,6 +5,7 @@ function DashboardViewModel(parent) {
   self.cells = ko.observableArray();
   self.name = ko.observable();
   self.hasNewContent = ko.observable(false);
+  self.refreshIntervalArray = {};
 
   self.reset = function() {
     self.data = null;
@@ -68,3 +69,4 @@ function DashboardViewModel(parent) {
     $.serverRequest($.getServerRoot() + '/service_generic_query/api/share/generate/' + 10000, data, "TOKEN_SUCCESS", "TOKEN_FAILED", "TOKEN_SERVICE_FAILED");
   };
 }
+
