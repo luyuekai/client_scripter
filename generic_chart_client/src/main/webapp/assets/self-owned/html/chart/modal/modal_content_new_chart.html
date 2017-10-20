@@ -16,7 +16,7 @@
 
   function reset(){
     if(chart && chartViewModel){
-
+      clearInterval(interval);
       // ChartPOJO.newChart('main');
       ChartPOJO.cleanChart('main_chart');
       chartViewModel.chart = null;
