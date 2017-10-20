@@ -64,7 +64,9 @@ $.subscribe("MATRIX_SHARE_SERVICE_FAILED", failedServiceListener);
 function successListener() {
     if (arguments && arguments[1]) {
         var json = arguments[1].result[0];
+        debugger
         chartViewModel.name(json.stringalpha);
+        chartViewModel.data = json;
         var json_chart = json.json;
         var option = ChartPOJO.deserialize_chart_option(json_chart);
         console.log(option)

@@ -71,10 +71,13 @@
     function reset_series() {
         var tmp = $('#data_value_input').val();
 //        var cloud_shape = $("[name='radio_shape_config']").filter(":checked").val();
-        tmp = $.parseJSON(tmp); 
+        tmp = $.parseJSON(tmp);
         if (tmp && chartViewModel && chartViewModel.chart) {
             var option = _setWordCloud(tmp);
             chartViewModel.chart.setOption(option);
+            window.onresize = function () {
+                chartViewModel.chart.resize();
+            }
         }
     }
 
