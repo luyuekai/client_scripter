@@ -1438,19 +1438,27 @@ $.subscribe("successGetDashData", successGetDashData);
 
 function successGetDashData() {
     if (arguments && arguments[1]) {
+        var server_data = arguments[1].response;
+        var ds = arguments[1].addtion.ds;
+        var tableData;
         console.log(arguments[1]);
-        var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].response.result[0]);
-        if (arguments[1].addtion.ds.isTransferT) {
-            rawData = DataTransferPOJO.transferT(rawData.result);
-            //做数据转置
-            // } else {
-            //     tableData = DataTransferPOJO.serverData2TableData(arguments[1].response.result[0]);
+        if (ds.ds.mode == 'database') {
+            var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].response.result[0]);
+            if (arguments[1].addtion.ds.isTransferT) {
+                rawData = DataTransferPOJO.transferT(rawData.result);
+                //做数据转置
+            }
+            tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
+        } else if (ds.ds.mode == 'api') {
+            var tmp = 'server_data.' + ds.ds.attr.json_rule
+            server_data = eval(tmp);
+            tableData = DataTransferPOJO.serverJsonData2TableData(server_data);
         }
-        var tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
         ChartPOJO.reset_chart_type(arguments[1].addtion.chart, arguments[1].addtion.ds.chartType);
         ChartPOJO.removeAllSeries(arguments[1].addtion.chart);
-        ChartPOJO.dataSourceRenderDash(arguments[1].addtion.ds.chartType, tableData.result, JSON.parse(arguments[1].addtion.ds.header), arguments[1].addtion.chart);
+        ChartPOJO.dataSourceRenderDash(arguments[1].addtion.ds.chartType, tableData.result, JSON.parse(arguments[1].addtion.ds.header),arguments[1].addtion.chart)
 //        LoaderUtil.remove_v3('chart_content_body_div')
     }
+   
 }
 
