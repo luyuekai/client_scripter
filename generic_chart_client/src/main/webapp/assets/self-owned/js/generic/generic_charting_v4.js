@@ -637,7 +637,7 @@ function successGetChartData() {
             }
             tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
         } else if (ds.ds.mode == 'api') {
-            var tmp = 'server_data.' + ds.ds.attr.json_rule
+            var tmp = ds.ds.attr.json_rule=="" ? 'server_data' : 'server_data.' + ds.ds.attr.json_rule
             server_data = eval(tmp);
             tableData = DataTransferPOJO.serverJsonData2TableData(server_data);
         }
