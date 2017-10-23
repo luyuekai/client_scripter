@@ -326,7 +326,7 @@ ChartPOJO = {
         var tmp_series = [];
         var tmp_legends = [];
         option.series = tmp_series;
-        option.legend[0].data = tmp_legends;
+        option.legend.data = tmp_legends;
 
         return ChartPOJO.reset_chart_option(chart, option, true);
     },

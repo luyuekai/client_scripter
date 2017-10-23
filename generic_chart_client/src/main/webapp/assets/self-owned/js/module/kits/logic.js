@@ -270,7 +270,7 @@ function successListener() {
                     chartViewModel.chart = main_chart;
                     chartCache['main_chart'] = chartViewModel.chart;
                 }
-                ChartPOJO.renderDynamicChart(option.ds_setting, chart);
+                ChartPOJO.renderDynamicChart(option.ds_setting, chartViewModel.chart);
             }
         }, 500);
     }
