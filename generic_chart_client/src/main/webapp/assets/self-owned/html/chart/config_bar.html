@@ -120,49 +120,28 @@
 
     function add_label_bar() {
         var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
-        if (option.xAxis[0].data) {
+
             option.series.forEach(function (element) {
                 element.label = {
                     normal: {
-                        position: 'top',
+                        position: 'inside',
                         show: true
                     }
                 }
             })
-        } else {
-            option.series.forEach(function (element) {
-                element.label = {
-                    normal: {
-                        position: 'right',
-                        show: true
-                    }
-                }
-            })
-        }
         chartViewModel.chart.setOption(option);
     }
     
     function remove_label_bar() {
         var option = ClonePOJO.deepClone(chartViewModel.chart.getOption());
-        if (option.xAxis[0].data) {
             option.series.forEach(function (element) {
                 element.label = {
                     normal: {
-                        position: 'top',
+                        position: 'inside',
                         show: false
                     }
                 }
             })
-        } else {
-            option.series.forEach(function (element) {
-                element.label = {
-                    normal: {
-                        position: 'right',
-                        show: false
-                    }
-                }
-            })
-        }
         chartViewModel.chart.setOption(option);
     }
 </script>
