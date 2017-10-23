@@ -397,6 +397,9 @@
                         var tmp = 'server_data.' + json_rule;
                         server_data = eval(tmp);
                     }
+                    if (arguments[1].addtion.attr.mock) {
+                        data = UtilPOJO.shuffleArray(data);
+                    }
                     var rawData = DataTransferPOJO.serverJsonData2TableData(server_data);
                     rawData.result.unshift(rawData.header)
                     genericModalViewModel.businessPOJO().rawDataForTransferT = ClonePOJO.deepCloneTwoDimentionArray(rawData.result);
@@ -450,40 +453,40 @@
     <script>
         getAvailableDataSource();
     </script>
-        <!--    <script>
-            function getSqlResult() {
-                var requestPOJO = {
-                    "dbName": genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringalpha,
-                    "sql": genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringbeta
-                };
-                var data = {
-                    'queryInfo': $.toJSON(requestPOJO)
-                };
-                $.serverRequest($.getServerRoot() + '/generic_charting_client/api/connection/query', data, "successGetSqlResult", "failedGetSqlResult", "serverGetSqlResult");
+    <!--    <script>
+        function getSqlResult() {
+            var requestPOJO = {
+                "dbName": genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringalpha,
+                "sql": genericModalViewModel.businessPOJO().dataSource.selectedDataSource().stringbeta
             };
-    
-            $.subscribe("successGetSqlResult", successGetSqlResult);
-            $.subscribe("failedGetSqlResult", failedGetSqlResult);
-            $.subscribe("successGetSqlResult", serverGetSqlResult);
-            function successGetSqlResult() {
-                if(arguments && arguments[1]) {
-                    genericModalViewModel.businessPOJO().dataSource.sqlResult(arguments[1].result[0])
-                    // var data = DataTransferPOJO.transferHiveDataRaw(arguments[1].result[0]);
-                    // console.log(data);
-                    // console.log(DataTransferPOJO.transferT(data.result))
-                    var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].result[0]);
-                    genericModalViewModel.businessPOJO().rawDataForTransferT = ClonePOJO.deepCloneTwoDimentionArray(rawData.result);
-                    var tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
-                    var tableModel = new ThinListViewModel();
-                    tableModel.buildData(tableData.result);
-                    tableModel.columnNames(tableData.header);
-                    tableModel.isDisplayPager(true);
-                    tableModel.buildView();
-                    tableModel.pageMaxSize(5);
-                    genericModalViewModel.businessPOJO().table(tableModel);
-                    genericModalViewModel.businessPOJO().table_header(tableModel.headerViewData());
-                }
+            var data = {
+                'queryInfo': $.toJSON(requestPOJO)
             };
-            function failedGetSqlResult() {};
-            function serverGetSqlResult() {};
-        </script>-->
+            $.serverRequest($.getServerRoot() + '/generic_charting_client/api/connection/query', data, "successGetSqlResult", "failedGetSqlResult", "serverGetSqlResult");
+        };
+
+        $.subscribe("successGetSqlResult", successGetSqlResult);
+        $.subscribe("failedGetSqlResult", failedGetSqlResult);
+        $.subscribe("successGetSqlResult", serverGetSqlResult);
+        function successGetSqlResult() {
+            if(arguments && arguments[1]) {
+                genericModalViewModel.businessPOJO().dataSource.sqlResult(arguments[1].result[0])
+                // var data = DataTransferPOJO.transferHiveDataRaw(arguments[1].result[0]);
+                // console.log(data);
+                // console.log(DataTransferPOJO.transferT(data.result))
+                var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].result[0]);
+                genericModalViewModel.businessPOJO().rawDataForTransferT = ClonePOJO.deepCloneTwoDimentionArray(rawData.result);
+                var tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
+                var tableModel = new ThinListViewModel();
+                tableModel.buildData(tableData.result);
+                tableModel.columnNames(tableData.header);
+                tableModel.isDisplayPager(true);
+                tableModel.buildView();
+                tableModel.pageMaxSize(5);
+                genericModalViewModel.businessPOJO().table(tableModel);
+                genericModalViewModel.businessPOJO().table_header(tableModel.headerViewData());
+            }
+        };
+        function failedGetSqlResult() {};
+        function serverGetSqlResult() {};
+    </script>-->
