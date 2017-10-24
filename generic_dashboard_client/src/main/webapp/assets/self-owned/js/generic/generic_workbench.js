@@ -162,7 +162,7 @@ var add_content_div = function (content, x, y, x_width, y_height) {
     //add template into grid as widget
     var widget = $('<div></div>').append(template);
     widget = grid.addWidget(widget, x, y, x_width, y_height);
-    widget.attr('id', (new Date()).getTime() + '_widget');
+    widget.attr('id', (new Date()).getTime());
     var element_prototype = {
         "id": $(content).attr('id'),
         "isWidget": true,
@@ -181,19 +181,17 @@ var add_content_div = function (content, x, y, x_width, y_height) {
     return widget;
 }
 
-var addWidget_chart = function (option, x, y, x_width, y_height) {
+var addWidget_chart = function (option, x, y, x_width, y_height, id) {
     x = x || 0;
     y = y || 0;
     x_width = x_width || 6;
     y_height = y_height || 6;
-debugger
     var grid = $('.grid-stack').data('gridstack');
-
     //step 2: clone draggableTemplate, and remove attribute of id
     var template = $('#draggableTemplate').clone().removeAttr('id');
     //step 3: find draggableTemplateContext DIV in the template, append the context into it
     var $draggableTemplateContext = template.find('.draggableTemplateContext');
-    var $draggableTemplateContext_id = (new Date()).getTime();
+    var $draggableTemplateContext_id = id || (new Date()).getTime();
     $draggableTemplateContext.attr('id', $draggableTemplateContext_id);
     // style="min-height:380px; max-height:380px;"
     // $draggableTemplateContext.css('min-height', '320px');
@@ -217,10 +215,13 @@ debugger
 //    var chart = echarts.init(document.getElementById($draggableTemplateContext_id));
     // 使用刚指定的配置项和数据显示图表。
     if (option.ds_setting && option.ds_setting.refreshInterval) {
-        option.ds_setting.ds = JSON.parse(option.ds_setting.ds);
+        if (typeof option.ds_setting.ds == 'string') {
+            option.ds_setting.ds = JSON.parse(option.ds_setting.ds);
+        }
+
         renderDynamicDash(option.ds_setting, chart, $draggableTemplateContext_id)
 //        var interval = setInterval(retrieveDataSourceDash(chart, ),1000 * refresh);    
-    }else{
+    } else {
         chart.setOption(option)
     }
 
@@ -228,7 +229,7 @@ debugger
 
     chartCache[$draggableTemplateContext_id] = chart;
 
-    widget.attr('id', $draggableTemplateContext_id + '_widget');
+    widget.attr('id', $draggableTemplateContext_id);
     var element_prototype = {
         "id": $draggableTemplateContext_id,
         "isWidget": true,
@@ -243,7 +244,7 @@ debugger
         widget_id: widget.attr('id'),
         widget_element: element_prototype
     }
-    
+
     WorkbenchCache.array_elements.push(widget_prototype_element);
 
     return chart;
@@ -251,6 +252,9 @@ debugger
 
 var cleanWidget = function () {
     var grid = $('.grid-stack').data('gridstack');
+    for (var i in vm.businessPOJO().refreshIntervalArray) {
+        clearInterval(vm.businessPOJO().refreshIntervalArray[i])
+    }
     grid.removeAll();
 }
 var setup_default_workbench = function () {
@@ -290,11 +294,11 @@ var initialize_workbench = function () {
 
     $('body').on('click', '.remove-drag', function (e) {
         e.preventDefault();
-
         var grid = $('.grid-stack').data('gridstack'),
                 el = $(this).closest('.grid-stack-item')
         clearInterval(vm.businessPOJO().refreshIntervalArray[el[0].id])
         delete vm.businessPOJO().refreshIntervalArray[el[0].id]
+        delete chartCache[el[0].id]
         grid.removeWidget(el);
         $.publish("WORKBENCH_EVENT_CHANGE");
     });

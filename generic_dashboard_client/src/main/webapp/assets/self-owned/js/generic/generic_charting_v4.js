@@ -1405,13 +1405,11 @@ function renderDynamicDash(ds, chart, id) {
         console.log('refresh chart');
         retrieveDataSourceDash(chart, ds);
     }, 1000 * ds.refreshInterval)
-    id = id+"_widget"
     vm.businessPOJO().refreshIntervalArray[id] = interval;
 }
 
 function retrieveDataSourceDash(chart, ds) {
     console.log("retrieveChartData");
-
     var url = ds.ds.attr.ds;
     var rest_mode = ds.ds.attr.rest_mode;
     var request_params = ds.ds.attr.request_params || null;

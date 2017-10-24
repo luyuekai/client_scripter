@@ -24,7 +24,6 @@ function DashboardViewModel(parent) {
     result.data = persist_data;
     result.name = self.name();
     var json = ko.toJSON(result);
-    console.log(json);
     tmp = json;
     return json;
   };
@@ -42,7 +41,7 @@ function DashboardViewModel(parent) {
           var widget = value.widget_element;
           if(widget.isChart){
             var content = $.parseJSON(widget.data);
-            var chart = addWidget_chart(content,widget.widget_x,widget.widget_y,widget.widget_width,widget.widget_height);
+            var chart = addWidget_chart(content,widget.widget_x,widget.widget_y,widget.widget_width,widget.widget_height,widget.id);
           }else{
             var cont = deserialize_dom(widget.data);
             add_content_div(cont,widget.widget_x,widget.widget_y,widget.widget_width,widget.widget_height);
