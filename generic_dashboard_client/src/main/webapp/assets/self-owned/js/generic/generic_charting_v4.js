@@ -1021,6 +1021,7 @@ Pie_ChartPOJO = {
         }
         var chart_parent_div_id = chart.parent_div_id;
         var option = chart.getOption();
+        chart.clear();
         option.series = [];
         option.series.push({
             name: 'Matrix Pie',
@@ -1439,6 +1440,7 @@ function successGetDashData() {
         var server_data = arguments[1].response;
         var ds = arguments[1].addtion.ds;
         var tableData;
+        var ds_header = JSON.parse(arguments[1].addtion.ds.header);
         console.log(arguments[1]);
         if (ds.ds.mode == 'database') {
             var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].response.result[0]);
@@ -1447,6 +1449,24 @@ function successGetDashData() {
                 //做数据转置
             }
             tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
+            var header = tableData.header;
+            var old_header = []
+            
+            for (var i in ds_header) {
+                old_header.push(ds_header[i].data)
+            }
+            for (var i in header) {
+                if (old_header.indexOf(header[i]) < 0) {
+                    var headerView = {
+                        "data": header[i],
+                        "index": i,
+                        "isChecked": true,
+                        "isDisplay": true,
+                        "isLegend": false
+                    };
+                    ds_header.push(headerView);
+                }
+            }
         } else if (ds.ds.mode == 'api') {
             var tmp = 'server_data.' + ds.ds.attr.json_rule
             server_data = eval(tmp);
@@ -1454,9 +1474,9 @@ function successGetDashData() {
         }
         ChartPOJO.reset_chart_type(arguments[1].addtion.chart, arguments[1].addtion.ds.chartType);
         ChartPOJO.removeAllSeries(arguments[1].addtion.chart);
-        ChartPOJO.dataSourceRenderDash(arguments[1].addtion.ds.chartType, tableData.result, JSON.parse(arguments[1].addtion.ds.header),arguments[1].addtion.chart)
+        ChartPOJO.dataSourceRenderDash(arguments[1].addtion.ds.chartType, tableData.result, ds_header, arguments[1].addtion.chart)
 //        LoaderUtil.remove_v3('chart_content_body_div')
     }
-   
+
 }
 
