@@ -64,7 +64,6 @@ $.subscribe("MATRIX_SHARE_SERVICE_FAILED", failedServiceListener);
 function successListener() {
     if (arguments && arguments[1]) {
         var json = arguments[1].result[0];
-        debugger
         chartViewModel.name(json.stringalpha);
         chartViewModel.data = json;
         var json_chart = json.json;
@@ -152,6 +151,7 @@ function successListener() {
                 case 'boxplot':
                     break;
                 case 'pie':
+                    pieViewModel.series (JSON.stringify(option.series[0].data))
                     break;
                 case 'radar':
                     if (typeof radarViewModel != "undefined") {
