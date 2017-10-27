@@ -32,11 +32,11 @@
                     <div class="form-group" style="margin-bottom: 20px">
                         <label class="col-sm-2 control-label">Width</label>
                         <div class="col-sm-4">
-                            <input id="title_width_input" type="text" class="form-control"  aria-describedby="basic-addon1" placeholder="#333333" data-bind="value:width">
+                            <input id="title_width_input" type="text" class="form-control"  aria-describedby="basic-addon1" placeholder="#333333" data-bind="value:itemWidth">
                         </div>
                         <label class="col-sm-2 control-label">Height</label>
                         <div class="col-sm-4">
-                            <input id="title_height_input" type="text" class="form-control"  aria-describedby="basic-addon1" data-bind="value:height">
+                            <input id="title_height_input" type="text" class="form-control"  aria-describedby="basic-addon1" data-bind="value:itemHeight">
                         </div>
                     </div>
                     <div class="form-group" style="margin-bottom: 20px">
@@ -67,14 +67,15 @@
     ko.applyBindings(chartViewModel, document.getElementById('genericModalDiv'));
     function run_legend_config() {
         if (chartViewModel && chartViewModel.chart) {
+
             chartViewModel.chart.setOption({
                 legend: {
                     orient: $('#title_orient_input').val() || "vertical",
-                    itemGap: $('#title_itemgap_input').val() || 10,
+                    itemGap: parseInt($('#title_itemgap_input').val()) || 10,
                     left: $('#title_left_input').val(),
                     top: $('#title_top_input').val(),
-                    width: $('#title_width_input').val(),
-                    height: $('#title_height_input').val()
+                    itemWidth: parseInt($('#title_width_input').val()),
+                    itemHeight:parseInt( $('#title_height_input').val())
                 }
             });
             ModalUtil.modal_close('popupModalPro');
