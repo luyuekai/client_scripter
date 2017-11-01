@@ -965,7 +965,7 @@ River_ChartPOJO = {
             }
         }
     },
-    initialize_chart: function (chart, data, river_type) {
+    initialize_chart: function (chart, data, river_type,legend) {
         if (!chart) {
             return null;
         }
@@ -976,6 +976,9 @@ River_ChartPOJO = {
         option.tooltip = ClonePOJO.deepClone(River_ChartPOJO.default_tooltip);
         if (data) {
             option.series[0].data = data;
+        }
+        if (legend) {
+            option.legend={data:legend};
         }
         if (river_type) {
             option.singleAxis.type = river_type;
