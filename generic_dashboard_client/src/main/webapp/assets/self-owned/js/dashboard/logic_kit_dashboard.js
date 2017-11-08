@@ -8,35 +8,35 @@ current_vm = vm;
 current_max_x = 0;
 
 function env_setup() {
-  cookie_env_setup();
-  vm_env_setup();
-  setup_default_workbench();
+    cookie_env_setup();
+    vm_env_setup();
+    setup_default_workbench();
 
 }
-function cookie_env_setup(){
-  var token_lag = $.hasUrlParam('token');
-  if (token_lag) {
-    var token = $.urlParamValue('token');
-    if(token){
-      CachePOJO.businessPOJO = token;
+function cookie_env_setup() {
+    var token_lag = $.hasUrlParam('token');
+    if (token_lag) {
+        var token = $.urlParamValue('token');
+        if (token) {
+            CachePOJO.businessPOJO = token;
+        }
     }
-  }
 }
 
 // Setup the business model with view model
 function vm_env_setup() {
-  var businessPOJO = new DashboardViewModel(vm);
-  vm.businessPOJO(businessPOJO);
-  if(CachePOJO.businessPOJO){
-    $.serverRequest($.getServerRoot() + '/service_generic_query/api/share/fetch/' + CachePOJO.businessPOJO, null, "MATRIX_SHARE_SUCCESS","DEFAULT_RETRIEVE_API_FAILED_LISTENER", "DEFAULT_RETRIEVE_API_EXCEPTION_LISTENER");
-  }
-  window.addEventListener("beforeunload", function(e) {
-    if (vm.businessPOJO().hasNewContent()) {
-      var confirmationMessage = 'if you see this, you are definitely the chosen one';
-      (e || window.event).returnValue = confirmationMessage; // Gecko and Trident
-      return confirmationMessage; // Gecko and WebKit
+    var businessPOJO = new DashboardViewModel(vm);
+    vm.businessPOJO(businessPOJO);
+    if (CachePOJO.businessPOJO) {
+        $.serverRequest($.getServerRoot() + '/service_generic_query/api/share/fetch/' + CachePOJO.businessPOJO, null, "MATRIX_SHARE_SUCCESS", "DEFAULT_RETRIEVE_API_FAILED_LISTENER", "DEFAULT_RETRIEVE_API_EXCEPTION_LISTENER");
     }
-  });
+    window.addEventListener("beforeunload", function (e) {
+        if (vm.businessPOJO().hasNewContent()) {
+            var confirmationMessage = 'if you see this, you are definitely the chosen one';
+            (e || window.event).returnValue = confirmationMessage; // Gecko and Trident
+            return confirmationMessage; // Gecko and WebKit
+        }
+    });
 }
 
 $.subscribe("MATRIX_SHARE_SUCCESS", successListener);
@@ -44,11 +44,11 @@ function successListener() {
     if (arguments && arguments[1]) {
         var json = arguments[1].result[0];
         if (vm && vm.businessPOJO()) {
-          vm.businessPOJO().deserialize_dashboard(json);
-          vm.businessPOJO().hasNewContent(false);
-          // if(current_mode == 'EDIT'){
-          //   userCheck();
-          // }
+            vm.businessPOJO().deserialize_dashboard(json);
+            vm.businessPOJO().hasNewContent(false);
+            // if(current_mode == 'EDIT'){
+            //   userCheck();
+            // }
         }
         // console.log(json);
         // deserialize_dashboard(json);
@@ -59,19 +59,24 @@ function successListener() {
 
 $.subscribe("WORKBENCH_EVENT_CHANGE", WORKBENCH_EVENT_CHANGE_LISTENER);
 
-function WORKBENCH_EVENT_CHANGE_LISTENER(){
-  if (vm && vm.businessPOJO()) {
-    vm.businessPOJO().hasNewContent(true);
-  }
+function WORKBENCH_EVENT_CHANGE_LISTENER() {
+    if (vm && vm.businessPOJO()) {
+        vm.businessPOJO().hasNewContent(true);
+    }
 }
-function addCell_chart(json) {
+function addCell_chart(json, theme) {
     if (json) {
-        var option = ChartPOJO.deserialize_chart_option(json);
+        if (typeof json == 'string') {
+            var option = ChartPOJO.deserialize_chart_option(json);
+        } else {
+            var option = json;
+        }
+        registerTheme(theme, option);
         if (option.series[0].type == 'wordCloud') {
             var a = option.series;
             a[0].textStyle.normal.color = function () {
-                var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
-                return colors[parseInt(Math.random() * 10)];
+                var color = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+                return color[parseInt(Math.random() * 10)];
             };
             option.series = a;
         }
@@ -81,15 +86,16 @@ function addCell_chart(json) {
         var max_widget_y = 0;
         var max_widget_y_height = null;
 
-        $.each(WorkbenchCache.array_elements,function(i,v){
-          if(max_widget_y<=v.widget_element.widget_y){
-            max_widget_y = v.widget_element.widget_y;
-            max_widget_y_height = v.widget_element.widget_height;
-          }
+        $.each(WorkbenchCache.array_elements, function (i, v) {
+            if (max_widget_y <= v.widget_element.widget_y) {
+                max_widget_y = v.widget_element.widget_y;
+                max_widget_y_height = v.widget_element.widget_height;
+            }
         });
         max_widget_y_height = max_widget_y_height || 6;
         max_widget_y = max_widget_y + max_widget_y_height;
-        addWidget_chart(option,0,max_widget_y);
+
+        addWidget_chart(option, 0, max_widget_y, '', '', '', theme);
         WORKBENCH_EVENT_CHANGE_LISTENER();
     }
 }
@@ -168,7 +174,12 @@ function sortTime(a, b) {
     return b.createtime - a.createtime;
 }
 
+function changeTheme(e) {
+    var json = vm.businessPOJO().serialize_dashboard();
+    vm.businessPOJO().deserialize_dashboard(json, e);
+    WorkbenchCache.updateCache();
 
+}
 
 
 

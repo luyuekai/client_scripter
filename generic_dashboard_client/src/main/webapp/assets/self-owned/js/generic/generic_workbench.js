@@ -129,6 +129,7 @@ var WorkbenchCache = {
         $.each(grid_nodes, function (index, value) {
             var id = value.el[0].id;
             $.each(WorkbenchCache.array_elements, function (i, v) {
+                console.log(v)
                 if (v.widget_id == id) {
                     v.widget_element.widget_x = value.x;
                     v.widget_element.widget_y = value.y;
@@ -181,7 +182,7 @@ var add_content_div = function (content, x, y, x_width, y_height) {
     return widget;
 }
 
-var addWidget_chart = function (option, x, y, x_width, y_height, id) {
+var addWidget_chart = function (option, x, y, x_width, y_height, id, theme) {
     x = x || 0;
     y = y || 0;
     x_width = x_width || 6;
@@ -211,7 +212,7 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id) {
     var widget = $('<div></div>').append(template);
     grid.addWidget(widget, x, y, x_width, y_height);
 
-    var chart = ChartPOJO.generate_default_chart($draggableTemplateContext_id)
+    var chart = ChartPOJO.generate_default_chart($draggableTemplateContext_id,theme)
 //    var chart = echarts.init(document.getElementById($draggableTemplateContext_id));
     // 使用刚指定的配置项和数据显示图表。
     if (option.ds_setting && option.ds_setting.refreshInterval) {
@@ -221,9 +222,10 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id) {
 
         renderDynamicDash(option.ds_setting, chart, $draggableTemplateContext_id)
 //        var interval = setInterval(retrieveDataSourceDash(chart, ),1000 * refresh);    
-    } else {
+    } 
+//    else {
         chart.setOption(option)
-    }
+//    }
 
     $draggableTemplateContext.attr('chart', chart);
 
@@ -238,11 +240,16 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id) {
         "widget_width:": 6,
         "widget_height": 6,
         "isChart": true,
-        "data": $.toJSON(option)
+        "data": $.toJSON(option),
+        "theme": theme
     }
     var widget_prototype_element = {
         widget_id: widget.attr('id'),
         widget_element: element_prototype
+    }
+    if (theme == 'black') {
+        $('#dragContainer_div').find('.grid-stack-item-content').css({'background-color': 'rgba(41,52,65,1)'});
+        $('#dragContainer_div').find('.card').css({'background-color': 'rgba(41,52,65,1)'});
     }
 
     WorkbenchCache.array_elements.push(widget_prototype_element);
@@ -360,3 +367,5 @@ var initialize_workbench = function () {
 
     });
 }
+
+
