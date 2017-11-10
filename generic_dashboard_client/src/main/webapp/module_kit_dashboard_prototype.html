@@ -117,6 +117,7 @@
                 <button id="button_save" title="Save(alt+shift+s)" type="button" onclick="ModalUtil.popup_modal('Save Dashboard', '/assets/self-owned/html/dashboard/modal_content_save.html');" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-save"></i></button>
                 <button title="Insert a chart cell(alt+shift+e)" onclick="ModalUtil.popup_modal('Insert a new chart', '/assets/self-owned/html/dashboard/modal_content_insert_chart.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-bar-chart"></i></button>
                 <button title="Refresh(alt+shift+r)" type="button" onclick="refresh_workbench()" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-refresh"></i></button>
+                <button title="Prototype" type="button" onclick="hi()" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-gamepad"></i></button>
                 <span class="pull-right" style="margin-right:18px" data-bind="if:vm.businessPOJO()">
                   <button type="button" class="btn btn-warning" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:vm.businessPOJO().hasNewContent">Modified</button>
                   <button type="button" class="btn btn-danger" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:!vm.businessPOJO().name()">Unsaved</button>
@@ -130,8 +131,35 @@
 
       <div id="report_content_seperate_div" class="seperate_div_class" style="margin-top:110px"></div>
 
+
+      <div class="row" style="display:none">
+        <div class="col-md-6">
+          <img id="d0" src="assets/self-owned/img/d0.png" alt="..." class="img-rounded" style="width:100%;">
+        </div>
+        <div class="col-md-3">
+          <img id="d1" src="assets/self-owned/img/d1.png" alt="..." class="img-rounded" style="width:100%;">
+        </div>
+        <div class="col-md-3">
+          <img id="d2" src="assets/self-owned/img/d2.png" alt="..." class="img-rounded" style="width:100%;">
+        </div>
+      </div>
+      <div class="row" style="display:none">
+        <div class="col-md-3">
+          <img id="d3" src="assets/self-owned/img/d3.png" alt="..." class="img-rounded" style="width:100%;">
+        </div>
+        <div class="col-md-3">
+          <img id="d4" src="assets/self-owned/img/d4.png" alt="..." class="img-rounded" style="width:100%;">
+        </div>
+        <div class="col-md-3">
+          <img id="d5" src="assets/self-owned/img/d5.png" alt="..." class="img-rounded" style="width:100%;">
+        </div>
+        <div class="col-md-3">
+          <img id="d6" src="assets/self-owned/img/d6.png" alt="..." class="img-rounded" style="width:100%;">
+        </div>
+      </div>
+
       <div class="row">
-        <div class="col-md-12" style="margin-top:0px">
+        <div class="col-md-12" style="margin-top:10px">
           <div class="dragContainer" id='dragContainer_div'>
             <div id="workbench_div" style="padding:0px 0px;min-height:760px">
               <div class="grid-stack" data-gs-width="12" data-gs-animate="yes" style="margin:0px -9px">
