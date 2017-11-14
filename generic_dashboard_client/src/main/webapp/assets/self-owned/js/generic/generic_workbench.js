@@ -212,7 +212,7 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme) {
     var widget = $('<div></div>').append(template);
     grid.addWidget(widget, x, y, x_width, y_height);
 
-    var chart = ChartPOJO.generate_default_chart($draggableTemplateContext_id,theme)
+    var chart = ChartPOJO.generate_default_chart($draggableTemplateContext_id, theme)
 //    var chart = echarts.init(document.getElementById($draggableTemplateContext_id));
     // 使用刚指定的配置项和数据显示图表。
     if (option.ds_setting && option.ds_setting.refreshInterval) {
@@ -222,9 +222,9 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme) {
 
         renderDynamicDash(option.ds_setting, chart, $draggableTemplateContext_id)
 //        var interval = setInterval(retrieveDataSourceDash(chart, ),1000 * refresh);    
-    } 
+    }
 //    else {
-        chart.setOption(option)
+    chart.setOption(option)
 //    }
 
     $draggableTemplateContext.attr('chart', chart);
@@ -248,13 +248,65 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme) {
         widget_element: element_prototype
     }
     if (theme == 'black') {
-        $('#dragContainer_div').find('.grid-stack-item-content').css({'background-color': 'rgba(41,52,65,1)'});
-        $('#dragContainer_div').find('.card').css({'background-color': 'rgba(41,52,65,1)'});
+        $('#dragContainer_div').find('.grid-stack-item-content').css({'background-color': 'rgba(0,0,0,1)'});
+        $('#dragContainer_div').find('.card').css({'background-color': 'rgba(0,0,0,1)'});
     }
 
     WorkbenchCache.array_elements.push(widget_prototype_element);
 
     return chart;
+}
+var addWidget_table = function (json, x, y, x_width, y_height, id, theme) {
+    x = x || 0;
+    y = y || 0;
+    x_width = x_width || 6;
+    y_height = y_height || 6;
+    var grid = $('.grid-stack').data('gridstack');
+    json = $.parseJSON(json);
+    //step 2: clone draggableTemplate, and remove attribute of id
+    var template = $('#draggableTemplate').clone().removeAttr('id');
+    //step 3: find draggableTemplateContext DIV in the template, append the context into it
+    var $draggableTemplateContext = template.find('.draggableTemplateContext');
+    var $draggableTemplateContext_id = id || (new Date()).getTime();
+    $draggableTemplateContext.attr('id', $draggableTemplateContext_id);
+    // style="min-height:380px; max-height:380px;"
+    // $draggableTemplateContext.css('min-height', '320px');
+    // $draggableTemplateContext.css('max-height', '960px');
+    // $draggableTemplateContext.css('height', '320px');
+    // template.find('.draggableTemplateContext').append(context_div_clone);
+    //step 4: add template into grid as widget
+
+    var widget = $('<div></div>').append(template);
+    grid.addWidget(widget, x, y, x_width, y_height);
+    widget.attr('id', 'dashtable_'+$draggableTemplateContext_id);
+
+    var ds = json.attr;
+    create_dynamic_table(ds, $draggableTemplateContext_id,'table_' + $draggableTemplateContext_id)
+
+
+    var element_prototype = {
+        "id": $draggableTemplateContext_id,
+        "isWidget": true,
+        "widget_x": 0,
+        "widget_y": 0,
+        "widget_width:": 6,
+        "widget_height": 6,
+        "isChart": true,
+        "data": $.toJSON(json),
+        "theme": theme
+    }
+    var widget_prototype_element = {
+        widget_id: widget.attr('id'),
+        widget_element: element_prototype
+    }
+    if (theme == 'black') {
+        $('#dragContainer_div').find('.grid-stack-item-content').css({'background-color': 'rgba(0,0,0,1)'});
+        $('#dragContainer_div').find('.card').css({'background-color': 'rgba(0,0,0,1)'});
+    }
+
+    WorkbenchCache.array_elements.push(widget_prototype_element);
+
+//    return chart;
 }
 
 var cleanWidget = function () {

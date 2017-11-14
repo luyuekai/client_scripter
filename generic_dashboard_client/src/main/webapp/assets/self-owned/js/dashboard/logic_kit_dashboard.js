@@ -6,12 +6,11 @@ ko.applyBindings(vm, document.getElementById('template-matrix-main-div'));
 // Refrence the entire page view model to current view model as cache
 current_vm = vm;
 current_max_x = 0;
-
 function env_setup() {
     cookie_env_setup();
     vm_env_setup();
     setup_default_workbench();
-
+     DASHBOARD_DYNAMIC_TABLE_ENV_SETUP();
 }
 function cookie_env_setup() {
     var token_lag = $.hasUrlParam('token');
@@ -58,7 +57,6 @@ function successListener() {
 
 
 $.subscribe("WORKBENCH_EVENT_CHANGE", WORKBENCH_EVENT_CHANGE_LISTENER);
-
 function WORKBENCH_EVENT_CHANGE_LISTENER() {
     if (vm && vm.businessPOJO()) {
         vm.businessPOJO().hasNewContent(true);
@@ -80,12 +78,11 @@ function addCell_chart(json, theme) {
             };
             option.series = a;
         }
-        //
-        //update cache
+//
+//update cache
         WorkbenchCache.updateCache();
         var max_widget_y = 0;
         var max_widget_y_height = null;
-
         $.each(WorkbenchCache.array_elements, function (i, v) {
             if (max_widget_y <= v.widget_element.widget_y) {
                 max_widget_y = v.widget_element.widget_y;
@@ -94,7 +91,6 @@ function addCell_chart(json, theme) {
         });
         max_widget_y_height = max_widget_y_height || 6;
         max_widget_y = max_widget_y + max_widget_y_height;
-
         addWidget_chart(option, 0, max_widget_y, '', '', '', theme);
         WORKBENCH_EVENT_CHANGE_LISTENER();
     }
@@ -103,11 +99,65 @@ function addCell_chart(json, theme) {
 
 
 
+//$.subscribe("MATRIX_API_SUCCESS_EVENT", MATRIX_API_SUCCESS_EVENT_HANDLER);
+//
+//function MATRIX_API_SUCCESS_EVENT_HANDLER() {
+//    if (arguments && arguments[1]) {
+//        var response = arguments[1].response;
+//        var addtion = arguments[1].addtion.param;
+//        if (addtion.json_rule) {
+//            var tmp = 'response.' + addtion.json_rule;
+//            response = eval(tmp);
+//        }
+//
+//        var tableData = DataTransferPOJO.serverJsonData2TableData(response);
+//        var header = tableData.header;
+//        var l = header.length;
+//        for (var i = 0; i < l; i++) {
+//            header[i] = "col " + header[i];
+//        }
+//        var tableModel = new ThinListViewModel();
+//        tableModel.buildData(tableData.result);
+//        tableModel.columnNames(header);
+////        tableModel.isDisplayPager(true);
+//        tableModel.buildView();
+////        tableModel.pageMaxSize(vm.businessPOJO().tableModel().pageMaxSize());
+////        vm.businessPOJO().tableModel(tableModel);
+////        vm.businessPOJO().showTable(true);
+//        addCell_table(tableModel);
+//    }
+//}
+
+
+function addCell_table(json, theme) {
+
+
+//update cache
+    WorkbenchCache.updateCache();
+    var max_widget_y = 0;
+    var max_widget_y_height = null;
+    $.each(WorkbenchCache.array_elements, function (i, v) {
+        if (max_widget_y <= v.widget_element.widget_y) {
+            max_widget_y = v.widget_element.widget_y;
+            max_widget_y_height = v.widget_element.widget_height;
+        }
+    });
+    max_widget_y_height = max_widget_y_height || 6;
+    max_widget_y = max_widget_y + max_widget_y_height;
+   
+    addWidget_table(json, 0, max_widget_y, '', '', '', theme);
+    WORKBENCH_EVENT_CHANGE_LISTENER();
+}
+
+
+
+
+
 
 
 // *******Server Side Retrieve Data JS Code*******
 var retrieveData_chart = function (page) {
-    //        LoaderUtil.add('tableDIV');
+//        LoaderUtil.add('tableDIV');
     var requestPOJO = {
         "className": "Share",
         "orderMap": {
@@ -135,8 +185,6 @@ var retrieveData_chart = function (page) {
 $.subscribe("CHART_SEARCH_SUCCESS_LISTENER", successListener_chart);
 $.subscribe("CHART_PAGING_SEARCH_FAILED", failedListener_chart);
 $.subscribe("CHART_SERVICE_GENERIC_QUERY_FAILED", failedServiceListener_chart);
-
-
 function failedServiceListener_chart() {
     if (!genericModalViewModel) {
         return;
@@ -165,10 +213,76 @@ function successListener_chart() {
             hasNewData = false;
         }
         var history_scripts = displayResult.sort(sortTime);
-
         genericModalViewModel.businessPOJO().serverPagingViewModel.viewData(history_scripts);
     }
 }
+
+
+// *******Server Side Retrieve Table*******
+var retrieveData_table = function (page) {
+//        LoaderUtil.add('tableDIV');
+    var requestPOJO = {
+        "className": "Genericentity",
+        "orderMap": {
+            "id": false
+        },
+        "pageMaxSize": pageMaxSize,
+        "currentPageNumber": page || 1,
+        "likeORMap": {
+        },
+        "eqMap": {
+            "creator": UserPOJO.user.userName,
+            "deleted": false
+        },
+        "inMap": {
+            "type": ["GENERIC_MATRIX_DATA_SOURCE", "SOURCE_SQL_CONFIGURATION"]
+        }
+    };
+    var data = {
+        'queryJson': $.toJSON(requestPOJO)
+    };
+    $.serverRequest($.getServerRoot() + '/service_generic_query/api/query', data, "TABLE_SEARCH_SUCCESS_LISTENER", "TABLE_PAGING_SEARCH_FAILED", "TABLE_SERVICE_GENERIC_QUERY_FAILED");
+}
+
+
+// *******Server Side Retrieve Data Listener JS Code*******
+$.subscribe("TABLE_SEARCH_SUCCESS_LISTENER", successListener_table);
+$.subscribe("TABLE_PAGING_SEARCH_FAILED", failedListener_table);
+$.subscribe("TABLE_SERVICE_GENERIC_QUERY_FAILED", failedServiceListener_table);
+function failedServiceListener_table() {
+    if (!genericModalViewModel) {
+        return;
+    }
+    genericModalViewModel.response(false, "SERVICE 'GENERIC QUERY", "[Failed]", "SERVICE 'GENERIC CUD' FAILED! Please contact with the system admin for more information...");
+}
+
+function failedListener_table() {
+    if (!genericModalViewModel) {
+        return;
+    }
+    if (arguments && arguments[1]) {
+        var errorMessage = arguments[1].errorMessage;
+        genericModalViewModel.response(false, "SERVICE 'GENERIC QUERY", "[Failed]", errorMessage);
+    }
+}
+
+function successListener_table() {
+    if (!genericModalViewModel) {
+        return;
+    }
+    if (arguments && arguments[1]) {
+        var data = arguments[1].result;
+        console.log(data)
+        displayResult = displayResult.concat(data);
+        if (data.length < pageMaxSize) {
+            hasNewData = false;
+        }
+        var history_scripts = displayResult.sort(sortTime);
+        genericModalViewModel.businessPOJO().serverPagingViewModel.viewData(history_scripts);
+    }
+}
+
+
 
 function sortTime(a, b) {
     return b.createtime - a.createtime;
@@ -178,8 +292,8 @@ function changeTheme(e) {
     var json = vm.businessPOJO().serialize_dashboard();
     vm.businessPOJO().deserialize_dashboard(json, e);
     WorkbenchCache.updateCache();
-
 }
+
 
 
 
@@ -243,31 +357,3 @@ function changeTheme(e) {
 //
 //
 //
-// $.subscribe("MATRIX_API_SUCCESS_EVENT", MATRIX_API_SUCCESS_EVENT_HANDLER);
-//
-// function MATRIX_API_SUCCESS_EVENT_HANDLER() {
-//   if (arguments && arguments[1]) {
-//     var response = arguments[1];
-//     var addtion = null;
-//     if (arguments[1].response) {
-//       response = arguments[1].response;
-//       addtion = arguments[1].addtion;
-//     }
-//     if (response.result) {
-//       var data = response.result;
-//       if (addtion) {
-//         if (addtion['TAG'] == 'MATRIX_SEARCH') {
-//           //MATRIX SEARCH DEFAULT HANDLER
-//           if (genericModalViewModel.businessPOJO() && genericModalViewModel.businessPOJO().elements) {
-//             ScrollPOJO.displayResult = ScrollPOJO.displayResult.concat(data);
-//             if (data.length < ScrollPOJO.pageMaxSize) {
-//               ScrollPOJO.hasNewData = false;
-//             }
-//             var results = ScrollPOJO.displayResult.sort(SearchPOJO.sort);
-//             genericModalViewModel.businessPOJO().elements.viewData(results);
-//           }
-//         }
-//       }
-//     }
-//   }
-// }

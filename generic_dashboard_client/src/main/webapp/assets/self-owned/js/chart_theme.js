@@ -6,16 +6,7 @@
 
 function registerTheme(theme, option) {
     var black = {
-        "color": [
-            "#fc97af",
-            "#87f7cf",
-            "#f7f494",
-            "#72ccff",
-            "#f7c5a0",
-            "#d4a4eb",
-            "#d2f5a6",
-            "#76f2f2"
-        ],
+        "color": ["#893448","#d95850","#eb8146","#ffb248","#f2d643","#ebdba4"],
         "backgroundColor": "rgba(41,52,65,1)",
         "textStyle": {},
         "title": {
@@ -515,11 +506,11 @@ function registerTheme(theme, option) {
                 fontSize: '12'
             }
         };
-        option.color = ["#fc97af", "#87f7cf", "#f7f494", "#72ccff", "#f7c5a0", "#d4a4eb", "#d2f5a6", "#76f2f2"];
+        option.color = ["#893448","#d95850","#eb8146","#ffb248","#f2d643","#ebdba4"];
         option.title[0].textStyle.color = "#ffffff";
         option.title[0].subtextStyle.color = "#dddddd";
         option.legend[0].textStyle.color = '#999999';
-        option.backgroundColor = 'rgba(41,52,65,1)';
+        option.backgroundColor = 'rgba(0,0,0,0.1)';//255
         if (option.dataZoom && option.dataZoom.length > 0) {
             option.dataZoom[0].backgroundColor = "rgba(255,255,255,0)";
             option.dataZoom[0].dataBackgroundColor = "rgba(114,204,255,1)";
