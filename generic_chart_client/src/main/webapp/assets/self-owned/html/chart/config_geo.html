@@ -1,0 +1,151 @@
+<div id="geo_content">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" style="padding-top: 15px;">Type</label>
+            <div class="col-sm-7">
+                <select id="geo_type_select" class="select2" style="z-index:100016;">
+                    <option value="china">China</option>
+                    <option value="world">World</option>
+                    <option value="anhui">AnHui</option>
+                    <option value="aomen">AoMen</option>
+                    <option value="beijing">BeiJing</option>
+                    <option value="chongqing">ChongQing</option>
+                    <option value="fujian">FuJian</option>
+                    <option value="gansu">GanSu</option>
+                    <option value="guangdong">GuangDong</option>
+                    <option value="guangxi">GuangXi</option>
+                    <option value="guizhou">GuiZhou</option>
+                    <option value="hainan">HaiNan</option>
+                    <option value="hebei">HeBei</option>
+                    <option value="heilongjiang">HeiLongJiang</option>
+                    <option value="henan">HeNan</option>
+                    <option value="hubei">HuBei</option>
+                    <option value="jiangsu">JiangSu</option>
+                    <option value="jiangxi">JiangXi</option>
+                    <option value="jilin">JiLin</option>
+                    <option value="liaoning">LiaoNing</option>
+                    <option value="neimenggu">NeiMengGu</option>
+                    <option value="ningxia">NingXia</option>
+                    <option value="qinghai">QingHai</option>
+                    <option value="shandong">ShanDong</option>
+                    <option value="shanghai">ShangHai</option>
+                    <option value="shanxi">ShanXi</option>
+                    <option value="shanxi1">ShanXi1</option>
+                    <option value="sichuan">SiChuan</option>
+                    <option value="taiwan">TaiWan</option>
+                    <option value="tianjin">TianJin</option>
+                    <option value="xianggan">XiangGan</option>
+                    <option value="xinjiang">XinJiang</option>
+                    <option value="xizang">XiZang</option>
+                    <option value="yunnan">YunNan</option>
+                    <option value="zhejiang">ZheJiang</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Area Data</label>
+            <div class="col-sm-7">
+                <div class="input-group" title="From Source">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
+                    <input id="add_area_data_input" type="text" class="form-control" placeholder="Series Name" aria-describedby="basic-addon2">
+                </div>
+                <div class="input-group" title="From Source">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+                    <input id="add_area_value_input" type="text" class="form-control" placeholder="Series Value" aria-describedby="basic-addon2">
+                </div>
+                <div class="input-group" title="From Source">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+                    <input id="add_area_color_input" type="text" class="form-control" placeholder="Series Color" aria-describedby="basic-addon2">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button onclick="add_area_series_data()" title="Add area series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+                <button onclick="remove_area_series_data()" title="remove area series" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Pin Data</label>
+            <div class="col-sm-7">
+                <div class="input-group" title="From Source">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="fa fa-key" aria-hidden="true"></i>&nbsp;</span>
+                    <input id="add_pin_data_input" type="text" class="form-control" placeholder="Pin Name" aria-describedby="basic-addon2">
+                </div>
+                <div class="input-group" title="From Source">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+                    <input id="add_pin_value_input" type="text" class="form-control" placeholder="Pin Value" aria-describedby="basic-addon2">
+                </div>
+                <div class="input-group" title="From Source">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;</span>
+                    <input id="add_pin_location_input" type="text" class="form-control" placeholder="Pin Location" aria-describedby="basic-addon2">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button onclick="add_pin_series_data()" title="Add area series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-plus"></i></button>
+                <button onclick="remove_pin_series_data()" title="remove area series" type="button" class="btn btn-danger btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Area Series</label>
+            <div class="col-sm-7">
+                <textarea id="area_series_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+            </div>
+
+            <div class="col-sm-1">
+                <button onclick="reset_area_series()" title="reset series" type="button" class="btn btn-success btn-xs" style="padding: 6px 12px;margin-top: 3px;"><i class="fa fa-refresh"></i></button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Pin Series</label>
+            <div class="col-sm-7">
+                <textarea id="pin_series_value_input" rows="3" class="form-control" style="margin: 0px -22px 15px 0px; height: 180px;"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="./assets/reference/echarts/geo/province/anhui.js"></script>
+<script src="./assets/reference/echarts/geo/province/aomen.js"></script>
+
+<script>
+                    var geoViewModel = {
+//                        xOry: ko.observable('x'),
+//                        axis: ko.observable(''),
+//                        series: ko.observable('')
+                    }
+                    $('.select2').select2();
+                    ko.cleanNode($('#geo_content'))
+                    ko.applyBindings(geoViewModel, document.getElementById('geo_content'))
+
+                    function reset_area_series() {
+                        var data = eval($('#area_series_value_input').val()) || [];
+                        var pin_data = eval($('#pin_series_value_input').val()) || [];
+                        chartViewModel.chart = Geo_ChartPOJO.initialize_chart(chartViewModel.chart, $('#geo_type_select').val(), data, pin_data);
+                    }
+
+                    function add_area_series_data() {
+                        var name = eval($('#add_area_data_input').val()) || [];
+                        var value = eval($('#add_area_value_input').val()) || [];
+                        var color = eval($('#add_area_color_input').val()) || [];
+
+                        if (chartViewModel.chart && name && value) {
+                            Geo_ChartPOJO.add_area_data(chartViewModel.chart, name, value, color);
+                        }
+                    }
+
+                    function add_pin_series_data() {
+                        var name = eval($('#add_pin_data_input').val()) || [];
+                        var value = eval($('#add_pin_value_input').val()) || [];
+                        var location = eval($('#add_pin_location_input').val()) || [];
+                        
+                        if (chartViewModel.chart && name && value && location) {
+                            Geo_ChartPOJO.add_pin_data(chartViewModel.chart, name, value, location);
+                        }
+                    }
+</script>

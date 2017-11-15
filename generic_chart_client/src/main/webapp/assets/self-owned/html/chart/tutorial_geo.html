@@ -1,0 +1,317 @@
+<div id="tutorial_chart" style="width: 100%;height:100%;min-height:660px"></div>
+<br>
+
+<span class="cell_div_view markdown-body" ><h2 id="">Geo</h2>
+    <p>用于展现基于地图元素的数据</p>
+    <h3 id="-1">数据模型样例</h3>
+    <ul>
+        <li>type: "map"<br>
+        </li>
+        <li>mapType: "china"<br>
+        </li>
+        <li>area_series: [{
+            "value": 3997830,
+            "name": "广西",
+            "color": "#726fb4"
+            },
+            {
+            "value": 3102814,
+            "name": "湖南",
+            "color": "#8985d2"
+            },{
+            "value": 1610236,
+            "name": "江西",
+            "color": "#9baded"
+            },{
+            "value": 1239130,
+            "name": "湖北",
+            "color": "#88d2df"
+            },{
+            "value": 1238579,
+            "name": "河南",
+            "color": "#7ccaa2"
+            },{
+            "value": 1022569,
+            "name": "四川",
+            "color": "#9fdd7a"
+            },{
+            "value": 856402,
+            "name": "福建",
+            "color": "#ceec70"
+            },{
+            "value": 742714,
+            "name": "北京",
+            "color": "#f7e16a"
+            },{
+            "value": 735547,
+            "name": "贵州",
+            "color": "#ffc569"
+            },{
+            "value": 586687,
+            "name": "浙江",
+            "color": "#ff986b"
+            }]<br>
+        </li>
+        <li>pin_series: [{
+                                "name": "广东",
+                                "value": 400,
+                                "location": [113.23, 23.16]
+                            }]<br>
+        </li>
+    </ul>
+</span>
+
+
+<script>
+
+
+
+    function initialize() {
+        chart = ChartPOJO.generate_default_chart('tutorial_chart');
+        chartCache['tutorial_chart'] = chart;
+        var uploadedDataURL = "assets/self-owned/data/geo/china.json";
+        $.getJSON(uploadedDataURL, function (geoJson) {
+            echarts.registerMap('china', geoJson);
+            var option = {
+                "tooltip": {
+                    "show": true,
+                    "padding": 0,
+                    "backgroundColor": "rgba(25,255,255,0.5)"
+                },
+                geo: {
+                    show: true,
+                    map: 'china',
+                    zoom: 1.2,
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false,
+                        }
+                    },
+                    roam: false,
+                    itemStyle: {
+                        normal: {
+                            "areaColor": "#D3D3D3",
+                            "borderWidth": 0.5,
+                            "borderColor": "#1f5c94",
+                        },
+                        emphasis: {
+                            "areaColor": "#74c0ed",
+                            "label": {
+                                "show": true
+                            }
+                        }
+                    }
+                },
+                "series": [
+                    {
+                        "name": "中国",
+                        "type": "map",
+                        "map": "china",
+                        geoIndex: 0,
+                        "selectedMode": false,
+                        "data": [
+                            {
+                                "value": 3997830,
+                                "name": "广西",
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": "#726fb4",
+                                        "label": {
+                                            "show": true,
+                                            "textStyle": {
+                                                "color": "#000",
+                                                "fontSize": 12
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "value": 3102814,
+                                "name": "湖南",
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": "#8985d2",
+                                        "label": {
+                                            "show": true,
+                                            "textStyle": {
+                                                "color": "#000",
+                                                "fontSize": 12
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "value": 1610236,
+                                "name": "江西",
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": "#9baded",
+                                        "label": {
+                                            "show": true,
+                                            "textStyle": {
+                                                "color": "#000",
+                                                "fontSize": 12
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "value": 1239130,
+                                "name": "湖北",
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": "#88d2df",
+                                        "label": {
+                                            "show": true,
+                                            "textStyle": {
+                                                "color": "#000",
+                                                "fontSize": 12
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "value": 1238579,
+                                "name": "河南",
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": "#7ccaa2",
+                                        "label": {
+                                            "show": true,
+                                            "textStyle": {
+                                                "color": "#000",
+                                                "fontSize": 12
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "value": 1022569,
+                                "name": "四川",
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": "#9fdd7a",
+                                        "label": {
+                                            "show": true,
+                                            "textStyle": {
+                                                "color": "#000",
+                                                "fontSize": 12
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "value": 856402,
+                                "name": "福建",
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": "#ceec70",
+                                        "label": {
+                                            "show": true,
+                                            "textStyle": {
+                                                "color": "#000",
+                                                "fontSize": 12
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "value": 742714,
+                                "name": "北京",
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": "#f7e16a",
+                                        "label": {
+                                            "show": true,
+                                            "textStyle": {
+                                                "color": "#000",
+                                                "fontSize": 12
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "value": 735547,
+                                "name": "贵州",
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": "#ffc569",
+                                        "label": {
+                                            "show": true,
+                                            "textStyle": {
+                                                "color": "#000",
+                                                "fontSize": 12
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "value": 586687,
+                                "name": "浙江",
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": "#ff986b",
+                                        "label": {
+                                            "show": true,
+                                            "textStyle": {
+                                                "color": "#000",
+                                                "fontSize": 12
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: '点',
+                        type: 'scatter',
+                        coordinateSystem: 'geo',
+                        symbol: 'pin',
+                        symbolSize: 80,
+                        label: {
+                            normal: {
+                                show: true,
+                                textStyle: {
+                                    color: '#fff',
+                                    fontSize: 9,
+                                }
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: '#F62157', //标志颜色
+                            }
+                        },
+                        zlevel: 6,
+                        data: [
+                            {
+                                "name": "广东",
+                                "value": [
+                                    113.23,
+                                    23.16,
+                                    400
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+            chart.setOption(option);
+        })
+    }
+
+    initialize();
+</script>

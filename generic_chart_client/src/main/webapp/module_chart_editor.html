@@ -109,6 +109,7 @@
                                             <div class="col-sm-8">
                                                 <select id="chart_type_select" class="select2" onchange="rerender_children_dom(this.options[this.options.selectedIndex].value);checkDynamicButton()" style="z-index:100016;">
                                                     <option value="bar">Descartes Bar</option>
+                                                    <option value="geo">Geo</option>
                                                     <option value="line">Descartes Line</option>
                                                     <option value="area">Descartes Area</option>
                                                     <option value="scatter">Descartes Scatter</option>
@@ -303,7 +304,6 @@
     <script src="assets/reference/jquery-tiny-pubsub/tiny-pubsub.js"></script>
     <script src="assets/reference/markdown/showdown.js"></script>
     <script src="assets/reference/echarts/echarts.js"></script>
-    <!--<script src='https://cdn.bootcss.com/echarts/3.7.2/echarts.simple.js'></script>-->
     <script src="assets/reference/echarts/echarts-wordcloud.js"></script>
 
     <script src="assets/reference/echarts/dataTools.js"></script>
@@ -348,7 +348,6 @@
             }, 200);
         });
         function checkDynamicButton() {
-
             var chartType = $('#chart_type_select').val();
             var supportType = {"bar": '', "line": '', "scatter": '', "area": '', "parallel": '', "pie": '', "radar": '', "themeRiver": '', "boxplot": ''}
             if (chartType in supportType) {
@@ -359,6 +358,10 @@
             $('#data_from_manual').css('display', '');
             $('#data_from_dynamic').css('display', 'none');
             $('#radio_dynamic_data').attr('disabled', true);
+            $('#geo_select').css('display', 'none');
+            if(chartType == "geo") {
+                $('#geo_select').css('display', '');
+            }
         }
     </script>
 
