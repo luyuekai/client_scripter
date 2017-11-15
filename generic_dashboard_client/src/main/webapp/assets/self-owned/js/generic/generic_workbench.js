@@ -209,6 +209,14 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme) {
         };
         option.series = a;
     }
+    if (a[0].type == 'map') {
+        var uploadedDataURL = "./assets/self-owned/data/geo/" + a[0].map + ".json";
+        $.ajaxSettings.async = false;
+        $.getJSON(uploadedDataURL, function (geoJson) {
+            echarts.registerMap(a[0].map, geoJson);
+        })
+        $.ajaxSettings.async = true;
+    }
     var widget = $('<div></div>').append(template);
     grid.addWidget(widget, x, y, x_width, y_height);
 
