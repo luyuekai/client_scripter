@@ -223,6 +223,9 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme) {
         renderDynamicDash(option.ds_setting, chart, $draggableTemplateContext_id)
 //        var interval = setInterval(retrieveDataSourceDash(chart, ),1000 * refresh);    
     }
+    if(option.dataZoom){
+        delete option.dataZoom;
+    }
 //    else {
     chart.setOption(option)
 //    }
