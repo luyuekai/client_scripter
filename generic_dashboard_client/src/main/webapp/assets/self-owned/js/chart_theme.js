@@ -510,7 +510,7 @@ function registerTheme(theme, option) {
         option.title[0].textStyle.color = "#ffffff";
         option.title[0].subtextStyle.color = "#dddddd";
         option.legend[0].textStyle.color = '#999999';
-        option.backgroundColor = 'rgba(0,0,0,0.1)';//255
+        option.backgroundColor = 'rgba(255,255,255,0.15)';//255
         if (option.dataZoom && option.dataZoom.length > 0) {
             option.dataZoom[0].backgroundColor = "rgba(255,255,255,0)";
             option.dataZoom[0].dataBackgroundColor = "rgba(114,204,255,1)";
