@@ -10,6 +10,30 @@ function hi(){
   add_content_div(clone_component_v2('d6'),9,5,3,5);
 }
 
+function hi2(){
+  remove_css_class('dragContainer_div', 'dragContainer');
+  $('.grid-stack-item-header').css('display','none');
+  add_content_div(clone_component_v2('b0'),0,0,2,3);
+  add_content_div(clone_component_v2('b1'),2,0,2,3);
+  add_content_div(clone_component_v2('b2'),4,0,2,3);
+  add_content_div(clone_component_v2('b3'),0,3,2,3);
+  add_content_div(clone_component_v2('b4'),2,3,2,3);
+  add_content_div(clone_component_v2('b5'),4,3,2,3);
+  add_content_div(clone_component_v2('b6'),0,6,6,3);
+
+  // add_content_div(clone_component_v2('b7'),4,0,3,2);
+  // add_content_div(clone_component_v2('b8'),4,3,3,2);
+  // add_content_div(clone_component_v2('b9'),4,6,3,2);
+  // add_content_div(clone_component_v2('b10'),4,9,3,2);
+}
+
+function test(){
+  remove_css_class('dragContainer_div', 'dragContainer');
+  $('.grid-stack-item-header').css('display','none');
+  add_content_div(clone_component_v2('b0'),0,0,2,3);
+}
+
+
 
 var isView = false;
 function switchMode(){
