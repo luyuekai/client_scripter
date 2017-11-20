@@ -105,6 +105,7 @@ var interval;      //Dynamic Datasource interval        考虑放在chart editor
 
 var ChartPOJO = ChartPOJO || {};
 ChartPOJO = {
+    pendingResizingEvent : [],
     generate_default_chart: function (chart_div_id,theme) {
         $('#' + chart_div_id).empty();
         var option_chart = {};
@@ -125,9 +126,22 @@ ChartPOJO = {
         }
         chart.setOption(option);
         $(window).resize(function () {
-            setTimeout(function () {
+          var evt = {
+            chart : chart,
+            timeout : setTimeout(function () {
                 chart.resize();
-            }, 500);
+            }, 500)
+          };
+          var events = [];
+          $.each(ChartPOJO.pendingResizingEvent, function(i, e) {
+            if(e.chart === chart) {
+              clearTimeout(e.timeout);
+            } else {
+              events.push(e);
+            }
+          });
+          events.push(evt);
+          ChartPOJO.pendingResizingEvent = events;
         });
         return chart;
     },
