@@ -185,6 +185,7 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme, elem
     y = y || 0;
     x_width = x_width || 6;
     y_height = y_height || 6;
+    theme = theme||'white';
     var grid = $('.grid-stack').data('gridstack');
     //step 2: clone draggableTemplate, and remove attribute of id
     var template = $('#draggableTemplate').clone().removeAttr('id');
@@ -243,6 +244,7 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme, elem
     widget.attr('id', $draggableTemplateContext_id);
     var element_prototype;
     if (element_attr) {
+        element_attr.theme = theme;
         element_attr.data = $.toJSON(option);
         element_prototype = element_attr;
 
@@ -260,8 +262,8 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme, elem
             "isRight": false,
             "isUp": false,
             "isDown": false,
-            "data": $.toJSON(option),
-            "theme": theme
+            "theme": theme,
+            "data": $.toJSON(option)
         }
     }
 

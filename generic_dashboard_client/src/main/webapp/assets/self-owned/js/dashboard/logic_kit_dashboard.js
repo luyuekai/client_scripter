@@ -68,13 +68,14 @@ function WORKBENCH_EVENT_CHANGE_LISTENER() {
     }
 }
 
-function addCell_chart(json, theme) {
+function addCell_chart(json) {
     if (json) {
         if (typeof json == 'string') {
             var option = ChartPOJO.deserialize_chart_option(json);
         } else {
             var option = json;
         }
+        var theme = vm.businessPOJO().theme();
         registerTheme(theme, option);
         if (option.series[0].type == 'wordCloud') {
             var a = option.series;
@@ -95,6 +96,7 @@ function addCell_chart(json, theme) {
                 max_widget_y_height = v.widget_element.widget_height;
             }
         });
+        
         max_widget_y_height = max_widget_y_height || 6;
         max_widget_y = max_widget_y + max_widget_y_height;
         addWidget_chart(option, 0, max_widget_y, '', '', '', theme);
@@ -103,7 +105,7 @@ function addCell_chart(json, theme) {
 }
 
 
-function addCell_table(json, theme) {
+function addCell_table(json) {
 
 
     //update cache
@@ -118,6 +120,7 @@ function addCell_table(json, theme) {
     });
     max_widget_y_height = max_widget_y_height || 6;
     max_widget_y = max_widget_y + max_widget_y_height;
+    var theme = vm.businessPOJO().theme();
 
     addWidget_table(json, 0, max_widget_y, '', '', '', theme);
     WORKBENCH_EVENT_CHANGE_LISTENER();
@@ -261,6 +264,7 @@ function sortTime(a, b) {
 function changeTheme(e) {
     var json = vm.businessPOJO().serialize_dashboard();
     vm.businessPOJO().deserialize_dashboard(json, e);
+    vm.businessPOJO().theme(e);
     WorkbenchCache.updateCache();
 }
 

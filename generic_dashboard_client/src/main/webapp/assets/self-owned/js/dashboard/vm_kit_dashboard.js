@@ -5,6 +5,7 @@ function DashboardViewModel(parent) {
     self.cells = ko.observableArray();
     self.name = ko.observable();
     self.hasNewContent = ko.observable(false);
+    self.theme = ko.observable('white');
     self.refreshIntervalArray = {};
 
     //commit div setting params
@@ -23,12 +24,14 @@ function DashboardViewModel(parent) {
     self.serialize_dashboard = function () {
         var result = {
             'name': null,
-            'data': null
+            'data': null,
+            'theme': null
         };
         WorkbenchCache.updateCache();
         var persist_data = WorkbenchCache.array_elements;
         result.data = persist_data;
         result.name = self.name();
+        result.theme = self.theme();
         var json = ko.toJSON(result);
         tmp = json;
         return json;
@@ -45,6 +48,7 @@ function DashboardViewModel(parent) {
             self.name(inputData.stringalpha);
         }
         var result = $.parseJSON(json);
+        self.theme(result.theme)
         if (result.data) {
             cleanWidget();
             $.each(result.data, function (index, value) {
