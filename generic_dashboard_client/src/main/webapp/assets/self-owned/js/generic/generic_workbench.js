@@ -180,7 +180,7 @@ var add_content_div = function (content, x, y, x_width, y_height) {
     return widget;
 }
 
-var addWidget_chart = function (option, x, y, x_width, y_height, id, theme) {
+var addWidget_chart = function (option, x, y, x_width, y_height, id, theme, element_attr) {
     x = x || 0;
     y = y || 0;
     x_width = x_width || 6;
@@ -241,20 +241,30 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme) {
     chartCache[$draggableTemplateContext_id] = chart;
 
     widget.attr('id', $draggableTemplateContext_id);
-    var element_prototype = {
-        "id": $draggableTemplateContext_id,
-        "isWidget": true,
-        "widget_x": 0,
-        "widget_y": 0,
-        "widget_width:": 6,
-        "widget_height": 6,
-        "isChart": true,
-        "isClick": false,
-        "isUp":false,
-        "isDown":false,
-        "data": $.toJSON(option),
-        "theme": theme
+    var element_prototype;
+    if (element_attr) {
+        element_attr.data = $.toJSON(option);
+        element_prototype = element_attr;
+
+    } else {
+        element_prototype = {
+            "id": $draggableTemplateContext_id,
+            "isWidget": true,
+            "widget_x": 0,
+            "widget_y": 0,
+            "widget_width:": 6,
+            "widget_height": 6,
+            "isChart": true,
+            "isClick": false,
+            "isLeft": false,
+            "isRight": false,
+            "isUp": false,
+            "isDown": false,
+            "data": $.toJSON(option),
+            "theme": theme
+        }
     }
+
     var widget_prototype_element = {
         widget_id: widget.attr('id'),
         widget_element: element_prototype
@@ -316,8 +326,8 @@ var addWidget_table = function (json, x, y, x_width, y_height, id, theme) {
         "widget_height": 6,
         "isChart": false,
         "isClick": false,
-        "isUp":false,
-        "isDown":false,
+        "isUp": false,
+        "isDown": false,
         "data": $.toJSON(json),
         "theme": theme
     }
@@ -419,28 +429,47 @@ var initialize_workbench = function () {
     $('.grid-stack').on('resizestop', function (event, ui) {
         var grid = this;
         var element = event.target;
-        console.log(grid);
-        console.log(element);
         var height_$draggableTemplateContext = 0;
+        console.log(element);
 
         var $draggableTemplateContext = $(element).find('.draggableTemplateContext');
+        var $draggableTemplateContext_id = $draggableTemplateContext.attr('id');
+        var $draggableTemplateContext_chart = $draggableTemplateContext.attr('chart');
+        console.log($draggableTemplateContext_id);
+
         setTimeout(function () {
             var height = $(element).height() / 60
 
             if (vm.businessPOJO().viewHeader() == true) {
-                var height_cardbody = Math.round(height) * 60  - 45;
+                var height_cardbody = Math.round(height) * 60 - 45;
                 height_$draggableTemplateContext = height_cardbody - 16; //- 80;
             } else {
                 var height_cardbody = Math.round(height) * 60;
                 height_$draggableTemplateContext = height_cardbody - 40; //- 80;
             }
-
+            var widget_element;
+            WorkbenchCache.array_elements.forEach(function (e) {
+                if (e.widget_id == $draggableTemplateContext_id) {
+                    widget_element = e.widget_element
+                }
+            });
+            if (widget_element.isLeft) {
+                $('#' + $draggableTemplateContext_id).find('.card-body').css('padding-left', '0px');
+            }
+            if (widget_element.isRight) {
+                $('#' + $draggableTemplateContext_id).find('.card-body').css('padding-right', '0px');
+            }
+            if (widget_element.isUp) {
+                $('#' + $draggableTemplateContext_id).find('.card-body').css('padding-top', '0px');
+                height_$draggableTemplateContext = height_$draggableTemplateContext + 20;
+            }
+            if (widget_element.isDown) {
+                $('#' + $draggableTemplateContext_id).find('.card-body').css('padding-bottom', '0px');
+                height_$draggableTemplateContext = height_$draggableTemplateContext + 20;
+            }
             $('#' + $draggableTemplateContext_id).find('.card-body').css('height', height_cardbody);
         }, 500)
 
-        var $draggableTemplateContext_id = $draggableTemplateContext.attr('id');
-        var $draggableTemplateContext_chart = $draggableTemplateContext.attr('chart');
-        console.log($draggableTemplateContext_id);
 
         if ($draggableTemplateContext_id && $draggableTemplateContext_chart) {
 
@@ -456,6 +485,8 @@ var initialize_workbench = function () {
 
             }, 1000);
         }
+
+
         $.publish("WORKBENCH_EVENT_CHANGE");
     });
 
@@ -464,4 +495,26 @@ var initialize_workbench = function () {
     });
 }
 
-
+function resize_setting($draggableTemplateContext_id, height_$draggableTemplateContext) {
+    var widget_element;
+    WorkbenchCache.array_elements.forEach(function (e) {
+        if (e.widget_id == $draggableTemplateContext_id) {
+            widget_element = e.widget_element
+        }
+    });
+    if (widget_element.isLeft) {
+        $('#' + $draggableTemplateContext_id).find('.card-body').css('padding-left', '0px');
+    }
+    if (widget_element.isRight) {
+        $('#' + $draggableTemplateContext_id).find('.card-body').css('padding-right', '0px');
+    }
+    if (widget_element.isUp) {
+        $('#' + $draggableTemplateContext_id).find('.card-body').css('padding-top', '0px');
+        height_$draggableTemplateContext = height_$draggableTemplateContext + 20;
+    }
+    if (widget_element.isDown) {
+        $('#' + $draggableTemplateContext_id).find('.card-body').css('padding-bottom', '0px');
+        height_$draggableTemplateContext = height_$draggableTemplateContext + 20;
+    }
+    return height_$draggableTemplateContext;
+}

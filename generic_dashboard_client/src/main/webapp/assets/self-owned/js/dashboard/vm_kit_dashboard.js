@@ -13,14 +13,14 @@ function DashboardViewModel(parent) {
 //    self.domList = {};
     self.domChoose = {};
 
-    self.reset = function() {
+    self.reset = function () {
         self.data = null;
         self.name();
         self.hasNewContent(true);
         cleanWidget();
     };
 
-    self.serialize_dashboard = function() {
+    self.serialize_dashboard = function () {
         var result = {
             'name': null,
             'data': null
@@ -34,7 +34,7 @@ function DashboardViewModel(parent) {
         return json;
     };
 
-    self.deserialize_dashboard = function(inputData, e) {
+    self.deserialize_dashboard = function (inputData, e) {
         WorkbenchCache.array_elements = [];
         var json;
         if (typeof inputData == 'string') {
@@ -47,7 +47,7 @@ function DashboardViewModel(parent) {
         var result = $.parseJSON(json);
         if (result.data) {
             cleanWidget();
-            $.each(result.data, function(index, value) {
+            $.each(result.data, function (index, value) {
                 if (value.widget_id) {
                     var widget = value.widget_element;
                     if (widget.isChart) {
@@ -58,18 +58,31 @@ function DashboardViewModel(parent) {
                         } else {
                             theme = '';
                         }
-                        var chart = addWidget_chart(content, widget.widget_x, widget.widget_y, widget.widget_width, widget.widget_height, widget.id, theme);
+                        var chart = addWidget_chart(content, widget.widget_x, widget.widget_y, widget.widget_width, widget.widget_height, widget.id, theme, widget);
+                        var height = $('#' + value.widget_id).height() / 60;
+                        var height_cardbody = Math.round(height) * 60;
+                        var height_cont = height_cardbody - 40; //- 80;
+                        height_cont = resize_setting(value.widget_id, height_cont);
+                        $('#' + value.widget_id).find('.card-body').css('height', height_cardbody);
+                        setTimeout(function () {
+                            if (value.isChart) {
+                                $('#' + value.widget_id).find('.draggableTemplateContext').height(height_cont);
+                                chart.resize();
+                            }
+                        }, 500);
                     } else {
                         var cont = deserialize_dom(widget.data);
                         add_content_div(cont, widget.widget_x, widget.widget_y, widget.widget_width, widget.widget_height);
                     }
+
                 }
             });
+            refresh_workbench();
         }
     };
 
 
-    self.persist2server = function() {
+    self.persist2server = function () {
         //'type': 'MATRIX_DASHBOARD'
         //'tag': SAVE,SHARE
         var shareJson = {

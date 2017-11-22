@@ -103,37 +103,6 @@ function addCell_chart(json, theme) {
 }
 
 
-
-//$.subscribe("MATRIX_API_SUCCESS_EVENT", MATRIX_API_SUCCESS_EVENT_HANDLER);
-//
-//function MATRIX_API_SUCCESS_EVENT_HANDLER() {
-//    if (arguments && arguments[1]) {
-//        var response = arguments[1].response;
-//        var addtion = arguments[1].addtion.param;
-//        if (addtion.json_rule) {
-//            var tmp = 'response.' + addtion.json_rule;
-//            response = eval(tmp);
-//        }
-//
-//        var tableData = DataTransferPOJO.serverJsonData2TableData(response);
-//        var header = tableData.header;
-//        var l = header.length;
-//        for (var i = 0; i < l; i++) {
-//            header[i] = "col " + header[i];
-//        }
-//        var tableModel = new ThinListViewModel();
-//        tableModel.buildData(tableData.result);
-//        tableModel.columnNames(header);
-////        tableModel.isDisplayPager(true);
-//        tableModel.buildView();
-////        tableModel.pageMaxSize(vm.businessPOJO().tableModel().pageMaxSize());
-////        vm.businessPOJO().tableModel(tableModel);
-////        vm.businessPOJO().showTable(true);
-//        addCell_table(tableModel);
-//    }
-//}
-
-
 function addCell_table(json, theme) {
 
 
@@ -347,7 +316,7 @@ function togetherDiv() {
         return;
     }
 
-    var dom = Object.keys(domList)
+    var dom = Object.keys(domList);
     domList[dom[0]].isClick = false;
     domList[dom[1]].isClick = false;
     var id_1_x = domList[dom[0]].widget_x;
@@ -363,9 +332,13 @@ function togetherDiv() {
     if (id_1_x == id_2_w) {
         $('#' + dom[0]).find('.card-body').css('padding-left', '0px');
         $('#' + dom[1]).find('.card-body').css('padding-right', '0px');
+        domList[dom[0]].isLeft = true;
+        domList[dom[1]].isRight = true;
     } else if (id_2_x == id_1_w) {
         $('#' + dom[1]).find('.card-body').css('padding-left', '0px');
         $('#' + dom[0]).find('.card-body').css('padding-right', '0px');
+        domList[dom[1]].isLeft = true;
+        domList[dom[0]].isRight = true;
     } else if (id_1_y == id_2_h) {
         $('#' + dom[0]).find('.card-body').css('padding-top', '0px');
         $('#' + dom[1]).find('.card-body').css('padding-bottom', '0px');
@@ -394,13 +367,34 @@ function togetherDiv() {
             domList[dom[0]].isDown = true;
         }
     } else {
-
+        alert('They can not commit!')
     }
-    $('#' + dom[0]).find('.card-body').css('border', '');
-    $('#' + dom[1]).find('.card-body').css('border', '');
+    setTimeout(function () {
+        dom.forEach(function (e) {
+            var chart = chartCache[e];
+            if (chart) {
+                chart.resize();
+            }
+        });
+    }, 1000);
+
+
+    dom.forEach(function (e) {
+        domList[e].isClick = false;
+        $('#' + e).find('.card-body').css('border', '');
+    });
+    WorkbenchCache.updateCache();
 }
 
+function view_header() {
+    $('.grid-stack-item-header').css('display', '');
+    vm.businessPOJO().viewHeader(true);
+}
 
+function unview_header() {
+    $('.grid-stack-item-header').css('display', 'none');
+    vm.businessPOJO().viewHeader(false);
+}
 // function modal_env_setup() {
 //   modal_vm_env_setup();
 //   modal_search_env_setup();
