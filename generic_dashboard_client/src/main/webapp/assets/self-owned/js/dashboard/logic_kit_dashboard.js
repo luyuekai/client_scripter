@@ -6,12 +6,14 @@ ko.applyBindings(vm, document.getElementById('template-matrix-main-div'));
 // Refrence the entire page view model to current view model as cache
 current_vm = vm;
 current_max_x = 0;
+
 function env_setup() {
     cookie_env_setup();
     vm_env_setup();
     setup_default_workbench();
-     DASHBOARD_DYNAMIC_TABLE_ENV_SETUP();
+    DASHBOARD_DYNAMIC_TABLE_ENV_SETUP();
 }
+
 function cookie_env_setup() {
     var token_lag = $.hasUrlParam('token');
     if (token_lag) {
@@ -39,6 +41,7 @@ function vm_env_setup() {
 }
 
 $.subscribe("MATRIX_SHARE_SUCCESS", successListener);
+
 function successListener() {
     if (arguments && arguments[1]) {
         var json = arguments[1].result[0];
@@ -57,11 +60,14 @@ function successListener() {
 
 
 $.subscribe("WORKBENCH_EVENT_CHANGE", WORKBENCH_EVENT_CHANGE_LISTENER);
+
 function WORKBENCH_EVENT_CHANGE_LISTENER() {
     if (vm && vm.businessPOJO()) {
+
         vm.businessPOJO().hasNewContent(true);
     }
 }
+
 function addCell_chart(json, theme) {
     if (json) {
         if (typeof json == 'string') {
@@ -78,8 +84,8 @@ function addCell_chart(json, theme) {
             };
             option.series = a;
         }
-//
-//update cache
+        //
+        //update cache
         WorkbenchCache.updateCache();
         var max_widget_y = 0;
         var max_widget_y_height = null;
@@ -95,7 +101,6 @@ function addCell_chart(json, theme) {
         WORKBENCH_EVENT_CHANGE_LISTENER();
     }
 }
-
 
 
 
@@ -132,7 +137,7 @@ function addCell_chart(json, theme) {
 function addCell_table(json, theme) {
 
 
-//update cache
+    //update cache
     WorkbenchCache.updateCache();
     var max_widget_y = 0;
     var max_widget_y_height = null;
@@ -144,20 +149,16 @@ function addCell_table(json, theme) {
     });
     max_widget_y_height = max_widget_y_height || 6;
     max_widget_y = max_widget_y + max_widget_y_height;
-   
+
     addWidget_table(json, 0, max_widget_y, '', '', '', theme);
     WORKBENCH_EVENT_CHANGE_LISTENER();
 }
 
 
 
-
-
-
-
 // *******Server Side Retrieve Data JS Code*******
 var retrieveData_chart = function (page) {
-//        LoaderUtil.add('tableDIV');
+    //        LoaderUtil.add('tableDIV');
     var requestPOJO = {
         "className": "Share",
         "orderMap": {
@@ -165,8 +166,7 @@ var retrieveData_chart = function (page) {
         },
         "pageMaxSize": pageMaxSize,
         "currentPageNumber": page || 1,
-        "likeORMap": {
-        },
+        "likeORMap": {},
         "eqMap": {
             "username": UserPOJO.user.userName,
             "type": "MATRIX_CHART",
@@ -185,6 +185,7 @@ var retrieveData_chart = function (page) {
 $.subscribe("CHART_SEARCH_SUCCESS_LISTENER", successListener_chart);
 $.subscribe("CHART_PAGING_SEARCH_FAILED", failedListener_chart);
 $.subscribe("CHART_SERVICE_GENERIC_QUERY_FAILED", failedServiceListener_chart);
+
 function failedServiceListener_chart() {
     if (!genericModalViewModel) {
         return;
@@ -220,7 +221,7 @@ function successListener_chart() {
 
 // *******Server Side Retrieve Table*******
 var retrieveData_table = function (page) {
-//        LoaderUtil.add('tableDIV');
+    //        LoaderUtil.add('tableDIV');
     var requestPOJO = {
         "className": "Genericentity",
         "orderMap": {
@@ -228,8 +229,7 @@ var retrieveData_table = function (page) {
         },
         "pageMaxSize": pageMaxSize,
         "currentPageNumber": page || 1,
-        "likeORMap": {
-        },
+        "likeORMap": {},
         "eqMap": {
             "creator": UserPOJO.user.userName,
             "deleted": false
@@ -249,6 +249,7 @@ var retrieveData_table = function (page) {
 $.subscribe("TABLE_SEARCH_SUCCESS_LISTENER", successListener_table);
 $.subscribe("TABLE_PAGING_SEARCH_FAILED", failedListener_table);
 $.subscribe("TABLE_SERVICE_GENERIC_QUERY_FAILED", failedServiceListener_table);
+
 function failedServiceListener_table() {
     if (!genericModalViewModel) {
         return;
@@ -294,14 +295,110 @@ function changeTheme(e) {
     WorkbenchCache.updateCache();
 }
 
+function clickDiv() {
+
+    if (!vm.businessPOJO().viewHeader()) {
+        var num = 2;
+        vm.businessPOJO().domChoose = {};
+        var domList = vm.businessPOJO().domChoose;
+        $('.grid-stack-item-content').on('click', function (e) {
+            e.preventDefault();
+            var grid = $('.grid-stack').data('gridstack'),
+                    el = $(this).closest('.grid-stack-item')
+            var id = el[0].id;
+            var div = {};
+            if (num <= 0) {
+                var dom = Object.keys(domList)
+                if (dom.indexOf(id) < 0) {
+                    return;
+                }
+            }
+            WorkbenchCache.array_elements.forEach(function (e) {
+                if (e.widget_id == id) {
+                    div = e.widget_element
+                }
+            });
+            if (!div.isClick) {
+                $('#' + id).find('.card-body').css('border', '5px solid red')
+                num = num - 1;
+                domList[id] = div;
+            } else {
+                $('#' + id).find('.card-body').css('border', '');
+                num = num + 1;
+                delete domList[id];
+            }
+            div.isClick = !div.isClick;
+            console.log(vm.businessPOJO().domChoose)
+            console.log(num);
+        })
+    }
+}
 
 
+function togetherDiv() {
+    $('.grid-stack-item-content').off('click');
+    WorkbenchCache.updateCache();
+    var domList = vm.businessPOJO().domChoose;
+    if (Object.getOwnPropertyNames(domList).length < 2) {
+        alert('Please choose two div');
+        var dom = Object.keys(domList);
+        domList[dom[0]].isClick = false;
+        $('#' + dom[0]).find('.card-body').css('border', '');
+        return;
+    }
+
+    var dom = Object.keys(domList)
+    domList[dom[0]].isClick = false;
+    domList[dom[1]].isClick = false;
+    var id_1_x = domList[dom[0]].widget_x;
+    var id_2_x = domList[dom[1]].widget_x;
+    var id_1_y = domList[dom[0]].widget_y;
+    var id_2_y = domList[dom[1]].widget_y;
+    var id_1_h = domList[dom[0]].widget_y + domList[dom[0]].widget_height;
+    var id_2_h = domList[dom[1]].widget_y + domList[dom[1]].widget_height;
+    var id_1_w = domList[dom[0]].widget_x + domList[dom[0]].widget_width;
+    var id_2_w = domList[dom[1]].widget_x + domList[dom[1]].widget_width;
 
 
+    if (id_1_x == id_2_w) {
+        $('#' + dom[0]).find('.card-body').css('padding-left', '0px');
+        $('#' + dom[1]).find('.card-body').css('padding-right', '0px');
+    } else if (id_2_x == id_1_w) {
+        $('#' + dom[1]).find('.card-body').css('padding-left', '0px');
+        $('#' + dom[0]).find('.card-body').css('padding-right', '0px');
+    } else if (id_1_y == id_2_h) {
+        $('#' + dom[0]).find('.card-body').css('padding-top', '0px');
+        $('#' + dom[1]).find('.card-body').css('padding-bottom', '0px');
+        var height_1 = $('#' + dom[0]).find('.draggableTemplateContext').height();
+        var height_2 = $('#' + dom[1]).find('.draggableTemplateContext').height();
+        if (!domList[dom[0]].isUp) {
+            $('#' + dom[0]).find('.draggableTemplateContext').height(height_1 + 20);
+            domList[dom[0]].isUp = true;
+        }
+        if (!domList[dom[1]].isDown) {
+            $('#' + dom[1]).find('.draggableTemplateContext').height(height_2 + 20);
+            domList[dom[1]].isDown = true;
+        }
 
+    } else if (id_2_y == id_1_h) {
+        $('#' + dom[1]).find('.card-body').css('padding-top', '0px');
+        $('#' + dom[0]).find('.card-body').css('padding-bottom', '0px');
+        var height_1 = $('#' + dom[0]).find('.draggableTemplateContext').height();
+        var height_2 = $('#' + dom[1]).find('.draggableTemplateContext').height();
+        if (!domList[dom[1]].isUp) {
+            $('#' + dom[1]).find('.draggableTemplateContext').height(height_2 + 20);
+            domList[dom[1]].isUp = true;
+        }
+        if (!domList[dom[0]].isDown) {
+            $('#' + dom[0]).find('.draggableTemplateContext').height(height_1 + 20);
+            domList[dom[0]].isDown = true;
+        }
+    } else {
 
-
-
+    }
+    $('#' + dom[0]).find('.card-body').css('border', '');
+    $('#' + dom[1]).find('.card-body').css('border', '');
+}
 
 
 // function modal_env_setup() {

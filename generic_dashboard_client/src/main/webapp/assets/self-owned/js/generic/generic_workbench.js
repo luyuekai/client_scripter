@@ -1,5 +1,3 @@
-
-
 var serialize_dom = function (dom_id) {
     var s = new XMLSerializer();
     var d = document.getElementById(dom_id);
@@ -221,7 +219,7 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme) {
     grid.addWidget(widget, x, y, x_width, y_height);
 
     var chart = ChartPOJO.generate_default_chart($draggableTemplateContext_id, theme)
-//    var chart = echarts.init(document.getElementById($draggableTemplateContext_id));
+    //    var chart = echarts.init(document.getElementById($draggableTemplateContext_id));
     // 使用刚指定的配置项和数据显示图表。
     if (option.ds_setting && option.ds_setting.refreshInterval) {
         if (typeof option.ds_setting.ds == 'string') {
@@ -229,14 +227,14 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme) {
         }
 
         renderDynamicDash(option.ds_setting, chart, $draggableTemplateContext_id)
-//        var interval = setInterval(retrieveDataSourceDash(chart, ),1000 * refresh);    
+        //        var interval = setInterval(retrieveDataSourceDash(chart, ),1000 * refresh);    
     }
-    if(option.dataZoom){
+    if (option.dataZoom) {
         delete option.dataZoom;
     }
-//    else {
+    //    else {
     chart.setOption(option)
-//    }
+    //    }
 
     $draggableTemplateContext.attr('chart', chart);
 
@@ -251,6 +249,9 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme) {
         "widget_width:": 6,
         "widget_height": 6,
         "isChart": true,
+        "isClick": false,
+        "isUp":false,
+        "isDown":false,
         "data": $.toJSON(option),
         "theme": theme
     }
@@ -259,8 +260,19 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme) {
         widget_element: element_prototype
     }
     if (theme == 'black') {
-        $('#dragContainer_div').find('.grid-stack-item-content').css({'background-color': 'rgba(0,0,0,1)'});
-        $('#dragContainer_div').find('.card').css({'background-color': 'rgba(0,0,0,1)'});
+        $('#dragContainer_div').find('.grid-stack-item-content').css({
+            'background-color': 'rgba(0,0,0,1)'
+        });
+        $('#dragContainer_div').find('.card').css({
+            'background-color': 'rgba(0,0,0,1)'
+        });
+    } else {
+        $('#dragContainer_div').find('.grid-stack-item-content').css({
+            'background-color': 'rgb(211, 211, 211)'
+        });
+        $('#dragContainer_div').find('.card').css({
+            'background-color': 'rgb(211, 211, 211)'
+        });
     }
 
     WorkbenchCache.array_elements.push(widget_prototype_element);
@@ -289,10 +301,10 @@ var addWidget_table = function (json, x, y, x_width, y_height, id, theme) {
 
     var widget = $('<div></div>').append(template);
     grid.addWidget(widget, x, y, x_width, y_height);
-    widget.attr('id', 'dashtable_'+$draggableTemplateContext_id);
+    widget.attr('id', 'dashtable_' + $draggableTemplateContext_id);
 
     var ds = json.attr;
-    create_dynamic_table(ds, $draggableTemplateContext_id,'table_' + $draggableTemplateContext_id)
+    create_dynamic_table(ds, $draggableTemplateContext_id, 'table_' + $draggableTemplateContext_id)
 
 
     var element_prototype = {
@@ -302,7 +314,10 @@ var addWidget_table = function (json, x, y, x_width, y_height, id, theme) {
         "widget_y": 0,
         "widget_width:": 6,
         "widget_height": 6,
-        "isChart": true,
+        "isChart": false,
+        "isClick": false,
+        "isUp":false,
+        "isDown":false,
         "data": $.toJSON(json),
         "theme": theme
     }
@@ -311,13 +326,17 @@ var addWidget_table = function (json, x, y, x_width, y_height, id, theme) {
         widget_element: element_prototype
     }
     if (theme == 'black') {
-        $('#dragContainer_div').find('.grid-stack-item-content').css({'background-color': 'rgba(0,0,0,1)'});
-        $('#dragContainer_div').find('.card').css({'background-color': 'rgba(0,0,0,1)'});
+        $('#dragContainer_div').find('.grid-stack-item-content').css({
+            'background-color': 'rgba(0,0,0,1)'
+        });
+        $('#dragContainer_div').find('.card').css({
+            'background-color': 'rgba(0,0,0,1)'
+        });
     }
 
     WorkbenchCache.array_elements.push(widget_prototype_element);
 
-//    return chart;
+    //    return chart;
 }
 
 var cleanWidget = function () {
@@ -330,7 +349,7 @@ var cleanWidget = function () {
 var setup_default_workbench = function () {
     var options = {
         cellHeight: 60,
-        verticalMargin: 20,
+        verticalMargin: 0,
         alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
         resizable: {
             handles: 'e, se, s, sw, w'
@@ -402,13 +421,27 @@ var initialize_workbench = function () {
         var element = event.target;
         console.log(grid);
         console.log(element);
+        var height_$draggableTemplateContext = 0;
 
         var $draggableTemplateContext = $(element).find('.draggableTemplateContext');
-        var height_$draggableTemplateContext = $(element).height() - 80;
+        setTimeout(function () {
+            var height = $(element).height() / 60
+
+            if (vm.businessPOJO().viewHeader() == true) {
+                var height_cardbody = Math.round(height) * 60  - 45;
+                height_$draggableTemplateContext = height_cardbody - 16; //- 80;
+            } else {
+                var height_cardbody = Math.round(height) * 60;
+                height_$draggableTemplateContext = height_cardbody - 40; //- 80;
+            }
+
+            $('#' + $draggableTemplateContext_id).find('.card-body').css('height', height_cardbody);
+        }, 500)
 
         var $draggableTemplateContext_id = $draggableTemplateContext.attr('id');
         var $draggableTemplateContext_chart = $draggableTemplateContext.attr('chart');
         console.log($draggableTemplateContext_id);
+
         if ($draggableTemplateContext_id && $draggableTemplateContext_chart) {
 
             setTimeout(function () {
@@ -421,7 +454,7 @@ var initialize_workbench = function () {
                     chart.resize();
                 }
 
-            }, 500);
+            }, 1000);
         }
         $.publish("WORKBENCH_EVENT_CHANGE");
     });

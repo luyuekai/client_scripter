@@ -112,13 +112,15 @@
                                     <button title="New(alt+shift+n)" type="button" onclick="ModalUtil.popup_modal('New Dashboard Kit', '/assets/self-owned/html/dashboard/modal_content_new.html', null, null, null);" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-edit"></i></button>
                                     <button title="View Grid(alt+shift+v)" type="button" onclick="add_css_class('dragContainer_div', 'dragContainer')" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-eye"></i></button>
                                     <button title="Unview Grid(alt+shift+u)" type="button" onclick="remove_css_class('dragContainer_div', 'dragContainer')" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-eye-slash"></i></button>
-                                    <button title="View Header" type="button" onclick="$('#dragContainer_div').find('.grid-stack-item-content').css('top', '0px');$('#dragContainer_div').find('.grid-stack-item-content').css('left', '10px');$('#dragContainer_div').find('.grid-stack-item-content').css('right', '10px');$('#dragContainer_div').find('.grid-stack-item-content').css('bottom', '0px');$('.grid-stack-item-header').css('display', '');$('#dragContainer_div').find('.card-body').css('padding', '8px 10px');$('#dragContainer_div').find('.card-body').css('height', '90%');" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-bell-o"></i></button>
-                                    <button title="Unview Header" type="button" onclick="$('.grid-stack-item-header').css('display', 'none');$('#dragContainer_div').find('.card-body').css('padding', '40px 10px');$('#dragContainer_div').find('.card-body').css('height', '100%');$('#dragContainer_div').find('.grid-stack-item-content').css('top', '-10px');$('#dragContainer_div').find('.grid-stack-item-content').css('left', '0px');$('#dragContainer_div').find('.grid-stack-item-content').css('right', '0px');$('#dragContainer_div').find('.grid-stack-item-content').css('bottom', '-10px');" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-bell-slash-o"></i></button>
+                                    <button title="View Header" type="button" onclick="$('.grid-stack-item-header').css('display', '');$('#dragContainer_div').find('.card-body').css('padding', '8px 10px');vm.businessPOJO().viewHeader(true);" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-bell-o"></i></button>
+                                    <button title="Unview Header" type="button" onclick="$('.grid-stack-item-header').css('display', 'none');$('#dragContainer_div').find('.card-body').css('padding', '20px 10px');vm.businessPOJO().viewHeader(false);" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-bell-slash-o"></i></button>
                                     <button title="Dark" type="button" onclick="changeTheme('black')" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class=" fa fa-circle"></i></button>
                                     <button title="White" type="button" onclick="changeTheme('white')" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-circle-o"></i></button>
                                     <button id="button_save" title="Save(alt+shift+s)" type="button" onclick="ModalUtil.popup_modal('Save Dashboard', '/assets/self-owned/html/dashboard/modal_content_save.html');" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-save"></i></button>
                                     <button title="Insert a table(alt+shift+e)" onclick="ModalUtil.popup_modal('Insert a new table', '/assets/self-owned/html/dashboard/modal_content_insert_table.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-barcode"></i></button>
                                     <button title="Insert a chart cell(alt+shift+e)" onclick="ModalUtil.popup_modal('Insert a new chart', '/assets/self-owned/html/dashboard/modal_content_insert_chart.html', null, null, null);" type="button" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-bar-chart"></i></button>
+                                    <button title="Together" type="button" onclick="clickDiv()" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-arrows-h"></i></button>
+                                    <button title="TogetherAll" type="button" onclick="togetherDiv()" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-arrows-h"></i></button>
                                     <button title="Refresh(alt+shift+r)" type="button" onclick="refresh_workbench()" class="btn btn-default" style="padding: 6px 12px;margin-bottom: 0px;"><i class="fa fa-refresh"></i></button>
                                     <span class="pull-right" style="margin-right:18px" data-bind="if:vm.businessPOJO()">
                                         <button type="button" class="btn btn-warning" style="padding: 6px 12px;margin-bottom: 0px;display:none" data-bind="visible:vm.businessPOJO().hasNewContent">Modified</button>
@@ -145,9 +147,9 @@
                 </div>
                 <!-- Matrix Dashboard Grid Template Begin -->
                 <div style="display:none">
-                    <div class="grid-stack-item-content" id='draggableTemplate'>
+                    <div class="grid-stack-item-content" id='draggableTemplate' style="top: 0px;left: 0px;right: 0px;bottom: 0px;">
                         <div class="card card-mini" style="box-shadow: none;height:100%;overflow-y: hidden">
-                            <div class="card-header grid-stack-item-header" style="padding: 8px 0px 0px 16px;">
+                            <div class="card-header grid-stack-item-header" style="padding: 8px 0px 0px 16px;display: none">
                                 <div class="card-title">
                                     <i class="fa fa-plug">&nbsp;Drag Item&nbsp;</i>
                                     <span class="pull-right" style="margin-right:18px">
@@ -163,7 +165,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="card-body" style="height:90%;padding: 8px 10px;">
+                            <div class="card-body" style="height:360px;padding: 20px 10px;">
                                 <div class="draggableTemplateContext" style="height:100%"></div>
                             </div>
                         </div>
