@@ -6,7 +6,7 @@
 
 function registerTheme(theme, option) {
     var black = {
-        "color": ["#893448","#d95850","#eb8146","#ffb248","#f2d643","#ebdba4"],
+        "color": ["#893448", "#d95850", "#eb8146", "#ffb248", "#f2d643", "#ebdba4"],
         "backgroundColor": "rgba(41,52,65,1)",
         "textStyle": {},
         "title": {
@@ -489,7 +489,13 @@ function registerTheme(theme, option) {
             }
         }
     }
-    echarts.registerTheme('black', black)
+    echarts.registerTheme('black', black);
+//    option.grid = {
+//        left: '10%',
+//        right: '10%',
+//        top: '30%',
+//        bottom: '10%'
+//    };
     if (theme == "black") {
         default_legend = {
             type: 'scroll',
@@ -506,7 +512,7 @@ function registerTheme(theme, option) {
                 fontSize: '12'
             }
         };
-        option.color = ["#893448","#d95850","#eb8146","#ffb248","#f2d643","#ebdba4"];
+        option.color = ["#893448", "#d95850", "#eb8146", "#ffb248", "#f2d643", "#ebdba4"];
         option.title[0].textStyle.color = "#ffffff";
         option.title[0].subtextStyle.color = "#dddddd";
         option.legend[0].textStyle.color = '#999999';
@@ -545,8 +551,9 @@ function registerTheme(theme, option) {
                 fontSize: '12'
             }
         };
+
         option.color = ['#1ABC9C', '#5DADE2', '#FFC153', '#EC7063', '#CC99CC', '#666666', '#5E5E73', '#FFBC11'];
-        option.backgroundColor = '';
+        option.backgroundColor = 'rgba(255,255,255,1)';
         option.title[0].textStyle.color = "#333";
         option.title[0].subtextStyle.color = "#aaa";
         option.legend[0].textStyle.color = "#333";
