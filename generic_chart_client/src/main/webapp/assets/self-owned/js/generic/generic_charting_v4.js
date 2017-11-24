@@ -98,13 +98,15 @@ var default_series_object = {
     },
     data: []
 };
+
 //Echarts Default Configuration End
 
 var interval;      //Dynamic Datasource interval        考虑放在chart editor页面
 
 var ChartPOJO = ChartPOJO || {};
 ChartPOJO = {
-    generate_default_chart: function (chart_div_id) {
+    pendingResizingEvent: [],
+    generate_default_chart: function (chart_div_id, theme) {
         $('#' + chart_div_id).empty();
         var option_chart = {};
         // option_chart.color = ClonePOJO.deepClone(default_color);
@@ -112,10 +114,9 @@ ChartPOJO = {
         option_chart.title = ClonePOJO.deepClone(default_title);
         option_chart.tooltip = ClonePOJO.deepClone(default_tooltip);
         option_chart.legend = ClonePOJO.deepClone(default_legend);
-        // option_chart.legend.data.push([]);
+        option_chart.legend.data.push([]);
         option_chart.series = [];
-        var chart = echarts.init(document.getElementById(chart_div_id));
-
+        var chart = echarts.init(document.getElementById(chart_div_id), theme);
         chart.parent_div_id = chart_div_id;
         return ChartPOJO.reset_chart_option(chart, option_chart);
     },
@@ -125,18 +126,28 @@ ChartPOJO = {
         }
         chart.setOption(option);
         $(window).resize(function () {
-            setTimeout(function () {
-                chart.resize();
-            }, 500);
+            var evt = {
+                chart: chart,
+                timeout: setTimeout(function () {
+                    chart.resize();
+                }, 500)
+            };
+            var events = [];
+            $.each(ChartPOJO.pendingResizingEvent, function (i, e) {
+                if (e.chart === chart) {
+                    clearTimeout(e.timeout);
+                } else {
+                    events.push(e);
+                }
+            });
+            events.push(evt);
+            ChartPOJO.pendingResizingEvent = events;
         });
         return chart;
     },
     reset_chart_type: function (chart, chart_type) {
         if (!chart || !chart_type) {
             return null;
-        }
-        if (chart_type == 'geo') {
-            return Geo_ChartPOJO.initialize_chart(chart, "china");
         }
         if (chart_type == 'grid_heatmap') {
             return HeatMap_Grid_ChartPOJO.initialize_chart(chart);
@@ -329,7 +340,7 @@ ChartPOJO = {
         var tmp_series = [];
         var tmp_legends = [];
         option.series = tmp_series;
-        option.legend.data = tmp_legends;
+        option.legend[0].data = tmp_legends;
 
         return ChartPOJO.reset_chart_option(chart, option, true);
     },
@@ -455,7 +466,7 @@ ChartPOJO = {
     serialize_chart_option: function (option) {
         return $.toJSON(option);
     },
-    dataSourceRenderDash: function (chart_type, origin_data, headerViewModel, chart) {
+    dataSourceRenderChart: function (chart_type, origin_data, headerViewModel, chart) {
         switch (chart_type) {
             case 'bar':
                 var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
@@ -517,77 +528,17 @@ ChartPOJO = {
             default:
                 break;
         }
-    },
-    dataSourceRenderChart: function (chart_type, origin_data, headerViewModel) {
-        switch (chart_type) {
-            case 'bar':
-                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
-                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'bar');
-                break;
-            case 'line':
-                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
-                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'line');
-                break;
-            case 'scatter':
-                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
-                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'scatter');
-                break;
-            case 'area':
-                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
-                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'area');
-                break;
-            case 'pie':
-                var chartData = DataTransferPOJO.extractDataByHeaderPie(origin_data, headerViewModel);
-                chartViewModel.chart = Pie_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.result);
-                chartViewModel.chart.setOption({
-                    legend: {
-                        orient: 'vertical',
-                        x: 'right',
-                        data: chartData.legend
-                    }
-                })
-                break;
-            case 'radar':
-                var chartData = DataTransferPOJO.extractDataByHeaderRadar(origin_data, headerViewModel);
-                chartViewModel.chart = Radar_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.result, chartData.header);
-                chartViewModel.chart.setOption({
-                    legend: {
-                        orient: 'vertical',
-                        x: 'right',
-                        data: chartData.legend
-                    }
-                })
-                break;
-            case 'parallel':
-                var chartData = DataTransferPOJO.extractDataByHeaderParallel(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.generate_default_chart('main_chart');
-                chartViewModel.chart = Parallel_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.header);
-                chartViewModel.chart = ChartPOJO.addSeries(chartViewModel.chart, null, 'parallel', chartData.result);
-                break;
-            case 'themeRiver':
-                var chartData = DataTransferPOJO.extractDataByHeaderRiver(origin_data, headerViewModel);
-                chartViewModel.chart = River_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.result);
-                break;
-            case 'boxplot':
-                var chartData = DataTransferPOJO.extractDataByHeaderBoxplot(origin_data, headerViewModel);
-                console.log(chartData);
-                chartViewModel.chart = Boxplot_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.result, chartData.header);
-                break;
-            default:
-                break;
-        }
-    },
+    },    
     renderDynamicChart: function (ds, chart) {
-        ds.ds = JSON.parse(ds.ds);
+        if (typeof ds.ds == 'string') {
+            ds.ds = JSON.parse(ds.ds);
+        }
         ChartPOJO.retrieveDataSource(chart, ds);
-        interval = setInterval(function () {
+        var interval = setInterval(function () {
             console.log('refresh chart');
             ChartPOJO.retrieveDataSource(chart, ds);
         }, 1000 * ds.refreshInterval);
+        return interval;
     },
     retrieveDataSource: function (chart, ds) {
         console.log("retrieveChartData");
@@ -610,7 +561,6 @@ ChartPOJO = {
 //            'queryInfo': $.toJSON(requestPOJO)
 //        };
         $.serverRequest(url, request_params, "successGetChartData", "failedGetChartData", "serverGetChartData", rest_mode, true, wrapper)
-//        $.serverRequest($.getServerRoot() + '/generic_charting_client/api/connection/query', data, "successGetChartData", "failedGetChartData", "serverGetChartData", 'POST', true, wrapper);
     }
 }
 
@@ -627,10 +577,34 @@ function failedGetChartData() {
 
 }
 function successGetChartData() {
+//    if (arguments && arguments[1]) {
+//        var server_data = arguments[1].response;
+//        var ds = arguments[1].addtion.ds;
+//        var tableData;
+//        console.log(arguments[1]);
+//        if (ds.ds.mode == 'database') {
+//            var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].response.result[0]);
+//            if (arguments[1].addtion.ds.isTransferT) {
+//                rawData = DataTransferPOJO.transferT(rawData.result);
+//                //做数据转置
+//            }
+//            tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
+//        } else if (ds.ds.mode == 'api') {
+//            var tmp = 'server_data.' + ds.ds.attr.json_rule
+//            server_data = eval(tmp);
+//            tableData = DataTransferPOJO.serverJsonData2TableData(server_data);
+//        }
+//        ChartPOJO.reset_chart_type(arguments[1].addtion.chart, arguments[1].addtion.ds.chartType);
+//        ChartPOJO.removeAllSeries(arguments[1].addtion.chart);
+//        ChartPOJO.dataSourceRenderChart(arguments[1].addtion.ds.chartType, tableData.result, JSON.parse(arguments[1].addtion.ds.header))
+//        LoaderUtil.remove_v3('chart_content_body_div')
+//    }
+
     if (arguments && arguments[1]) {
         var server_data = arguments[1].response;
         var ds = arguments[1].addtion.ds;
         var tableData;
+        var ds_header = JSON.parse(arguments[1].addtion.ds.header);
         console.log(arguments[1]);
         if (ds.ds.mode == 'database') {
             var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].response.result[0]);
@@ -639,169 +613,37 @@ function successGetChartData() {
                 //做数据转置
             }
             tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
+            var header = tableData.header;
+            var old_header = []
+
+            for (var i in ds_header) {
+                old_header.push(ds_header[i].data)
+            }
+            for (var i in header) {
+                if (old_header.indexOf(header[i]) < 0) {
+                    var headerView = {
+                        "data": header[i],
+                        "index": i,
+                        "isChecked": true,
+                        "isDisplay": true,
+                        "isLegend": false
+                    };
+                    ds_header.push(headerView);
+                }
+            }
         } else if (ds.ds.mode == 'api') {
-            var tmp = ds.ds.attr.json_rule == "" ? 'server_data' : 'server_data.' + ds.ds.attr.json_rule
+            var tmp = 'server_data.' + ds.ds.attr.json_rule
             server_data = eval(tmp);
             tableData = DataTransferPOJO.serverJsonData2TableData(server_data);
         }
         ChartPOJO.reset_chart_type(arguments[1].addtion.chart, arguments[1].addtion.ds.chartType);
         ChartPOJO.removeAllSeries(arguments[1].addtion.chart);
-        ChartPOJO.dataSourceRenderChart(arguments[1].addtion.ds.chartType, tableData.result, JSON.parse(arguments[1].addtion.ds.header))
+        ChartPOJO.dataSourceRenderChart(arguments[1].addtion.ds.chartType, tableData.result, ds_header, arguments[1].addtion.chart)
         LoaderUtil.remove_v3('chart_content_body_div')
     }
 }
 
-var Geo_ChartPOJO = Geo_ChartPOJO || {};
-Geo_ChartPOJO = {
-    default_tooltip_map: {
-        "show": true,
-        "padding": 0,
-        "backgroundColor": "rgba(25,255,255,0.5)"
-    },
-    default_geo: {
-        show: true,
-        map: 'china',
-        zoom: 1.2,
-        label: {
-            normal: {
-                show: false
-            },
-            emphasis: {
-                show: false,
-            }
-        },
-        roam: false,
-        itemStyle: {
-            normal: {
-                "areaColor": "#D3D3D3",
-                "borderWidth": 0.5,
-                "borderColor": "#1f5c94",
-            },
-            emphasis: {
-                "areaColor": "#74c0ed",
-                "label": {
-                    "show": true
-                }
-            }
-        }
-    },
-    default_series_map: [
-        {
-            "name": "中国",
-            "type": "map",
-            "map": "china",
-            geoIndex: 0,
-            "roam": false,
-            "selectedMode": false,
-            "data": []
-        },
-        {
-            name: '点',
-            type: 'scatter',
-            coordinateSystem: 'geo',
-            symbol: 'pin',
-            symbolSize: 80,
-            label: {
-                normal: {
-                    show: true,
-                    textStyle: {
-                        color: '#fff',
-                        fontSize: 9,
-                    }
-                }
-            },
-            itemStyle: {
-                normal: {
-                    color: '#F62157', //标志颜色
-                }
-            },
-            zlevel: 6,
-            data: []
-        }
-    ],
-    initialize_chart: function (chart, mapType, data, pin_data) {
-        if (!chart) {
-            return null;
-        }
-        var chart_parent_div_id = chart.parent_div_id;
-        var option = ClonePOJO.deepClone(chart.getOption());
-        var uploadedDataURL = "./assets/self-owned/data/geo/" + mapType + ".json";
-        $.ajaxSettings.async = false;
-        $.getJSON(uploadedDataURL, function (geoJson) {
-            echarts.registerMap(mapType, geoJson);
-            var tooltip = ClonePOJO.deepClone(Geo_ChartPOJO.default_tooltip_map);
-            var geo = ClonePOJO.deepClone(Geo_ChartPOJO.default_geo);
-            geo.map = mapType;
-            var series = ClonePOJO.deepClone(Geo_ChartPOJO.default_series_map);
-            series.name = mapType;
-            series.map = mapType;
-            if (data) {
-                data.forEach(function (element) {
-                    series[0].data.push({
-                        "value": element.value,
-                        "name": element.name,
-                        "itemStyle": {
-                            "normal": {
-                                "color": element.color,
-                                "label": {
-                                    "show": true,
-                                    "textStyle": {
-                                        "color": "#000",
-                                        "fontSize": 12
-                                    }
-                                }
-                            }
-                        }
-                    })
-                })
-            }
-            if (pin_data) {
-                pin_data.forEach(function (element) {
-                    element.location.push(element.value)
-                    series[1].data.push({
-                        "name": element.name,
-                        "value": element.location
-                    })
-                })
-            }
-            option.tooltip = tooltip;
-            option.geo = geo;
-            option.series = series;
-        })
-        $.ajaxSettings.async = true;
-        return ChartPOJO.reset_chart_option(chart, option);
-    },
-    add_area_data: function (chart, name, value, color) {
-        var option = ClonePOJO.deepClone(chart.getOption());
-        option.series[0].data.forEach(function (element) {
-            if (element.name == name) {
-                element.value = value;
-                element.itemStyle = {
-                    "normal": {
-                        "color": color || "#39fada",
-                        "label": {
-                            "show": true,
-                            "textStyle": {
-                                "color": "#000",
-                                "fontSize": 12
-                            }
-                        }
-                    }
-                }
-            }
-        })
-        return ChartPOJO.reset_chart_option(chart, option);
-    },
-    add_pin_data: function (chart, name, value, location) {
-        var option = ClonePOJO.deepClone(chart.getOption());
-        location.push(value);
-        option.series[1].data.push({
-            "name": name,
-            "value": location
-        })
-        return ChartPOJO.reset_chart_option(chart, option);
-    }
-}
+
 
 
 var HeatMap_Grid_ChartPOJO = HeatMap_Grid_ChartPOJO || {};
@@ -1118,7 +960,7 @@ River_ChartPOJO = {
             }
         }
     },
-    initialize_chart: function (chart, data, river_type, legend) {
+    initialize_chart: function (chart, data, river_type) {
         if (!chart) {
             return null;
         }
@@ -1129,9 +971,6 @@ River_ChartPOJO = {
         option.tooltip = ClonePOJO.deepClone(River_ChartPOJO.default_tooltip);
         if (data) {
             option.series[0].data = data;
-        }
-        if (legend) {
-            option.legend = {data: legend};
         }
         if (river_type) {
             option.singleAxis.type = river_type;
@@ -1177,6 +1016,7 @@ Pie_ChartPOJO = {
         }
         var chart_parent_div_id = chart.parent_div_id;
         var option = chart.getOption();
+        chart.clear();
         option.series = [];
         option.series.push({
             name: 'Matrix Pie',
@@ -1423,40 +1263,6 @@ Parallel_ChartPOJO = {
 
 
 
-var schema = [{
-        name: 'date',
-        index: 0,
-        text: '日期'
-    }, {
-        name: 'AQIindex',
-        index: 1,
-        text: 'AQI'
-    }, {
-        name: 'PM25',
-        index: 2,
-        text: 'PM2.5'
-    }, {
-        name: 'PM10',
-        index: 3,
-        text: 'PM10'
-    }, {
-        name: 'CO',
-        index: 4,
-        text: ' CO'
-    }, {
-        name: 'NO2',
-        index: 5,
-        text: 'NO2'
-    }, {
-        name: 'SO2',
-        index: 6,
-        text: 'SO2'
-    }, {
-        name: '等级',
-        index: 7,
-        text: '等级'
-    }];
-
 var Cloud_ChartPOJO = Cloud_ChartPOJO || {};
 Cloud_ChartPOJO = {
     initialize_chart: function (chart) {
@@ -1547,60 +1353,4 @@ Descartes_ChartPOJO = {
     }
 }
 
-
-
-
-
-
-
-//有关dynamic dashboard
-
-function renderDynamicDash(ds, chart) {
-    retrieveDataSourceDash(chart, ds);
-    interval = setInterval(function () {
-        console.log('refresh chart');
-        retrieveDataSourceDash(chart, ds);
-    }, 1000 * ds.refreshInterval)
-}
-
-function retrieveDataSourceDash(chart, ds) {
-    console.log("retrieveChartData");
-
-    var requestPOJO = {
-        "dbName": ds.dbName,
-        "sql": ds.sql
-    };
-    var wrapper = {
-        'chart': chart,
-        'ds': ds
-    };
-    var data = {
-        'queryInfo': $.toJSON(requestPOJO)
-    };
-    $.serverRequest($.getServerRoot() + '/generic_charting_client/api/connection/query', data, "successGetDashData", "failedGetDashData", "serverGetDashData", 'POST', true, wrapper);
-}
-
-$.subscribe("successGetDashData", successGetDashData);
-
-
-// $.subscribe("failedGetChartData", failedGetChartData);
-// $.subscribe("serverGetChartData", serverGetChartData);
-
-function successGetDashData() {
-    if (arguments && arguments[1]) {
-        console.log(arguments[1]);
-        var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].response.result[0]);
-        if (arguments[1].addtion.ds.isTransferT) {
-            rawData = DataTransferPOJO.transferT(rawData.result);
-            //做数据转置
-            // } else {
-            //     tableData = DataTransferPOJO.serverData2TableData(arguments[1].response.result[0]);
-        }
-        var tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
-        ChartPOJO.reset_chart_type(arguments[1].addtion.chart, arguments[1].addtion.ds.chartType);
-        ChartPOJO.removeAllSeries(arguments[1].addtion.chart);
-        ChartPOJO.dataSourceRenderDash(arguments[1].addtion.ds.chartType, tableData.result, JSON.parse(arguments[1].addtion.ds.header), arguments[1].addtion.chart);
-//        LoaderUtil.remove_v3('chart_content_body_div')
-    }
-}
 

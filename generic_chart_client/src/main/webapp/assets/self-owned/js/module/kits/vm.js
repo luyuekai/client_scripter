@@ -8,6 +8,7 @@ function ChartViewModel(parent) {
     self.option = new ChartOptionViewModel(self);
     self.dynamic_config = new DynamicConfigViewModel(self);
     self.name = ko.observable('');
+    self.interval = ko.observable();
 
     self.initialize_chart = function () {
         self.chart = ChartPOJO.generate_default_chart(self.chart_parent_div_id);
@@ -43,7 +44,7 @@ function ChartViewModel(parent) {
         if (chartViewModel.chart) {
             chartViewModel.chart.dispose();
         }
-        clearInterval(interval);
+        clearInterval(self.interval());
         self.reset_chart_type();
         // self.render_tutorial();
     }

@@ -146,7 +146,7 @@
   function successAddListener_modal() {
     if (arguments && arguments[1]) {
       console.log(arguments[1]);
-      clearInterval(interval);
+      clearInterval(chartViewModel.interval());
       var json = arguments[1].result[0];
       setTimeout(function() {
         genericModalViewModel.response(true, "Entity Operation", "[Successed]", "Operation Successed, please close the console and reload the data.");
@@ -158,7 +158,7 @@
   function successAddListener_share() {
     if (arguments && arguments[1]) {
       console.log(arguments[1]);
-      clearInterval(interval);
+      clearInterval(chartViewModel.interval());
       var token = arguments[1].result[0]; //ab38e4a4ede0768a8e1b8bde73b3e7a6a893d048a0f3882a68217733ce314240
 
       $.serverRequest($.getServerRoot() + '/service_generic_query/api/share/fetch/' + token, null, "MATRIX_SHARE_SUCCESS", "FAILED_LISTENER", "SERVER_FAILED_LISTENER");

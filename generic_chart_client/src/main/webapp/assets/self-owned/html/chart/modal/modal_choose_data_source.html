@@ -310,7 +310,7 @@
 
         var runService = function() {
             console.log("run service function invoked!");
-            clearInterval(interval);
+            clearInterval(chartViewModel.interval());
             var chartType = $('#chart_type_select').val();
             if(genericModalViewModel.businessPOJO().selectedLegend()){
                 genericModalViewModel.businessPOJO().table().headerViewData()[genericModalViewModel.businessPOJO().selectedLegend().index()].isLegend(true);
@@ -338,7 +338,8 @@
             console.log(genericModalViewModel.businessPOJO().table().originalData())
             //extract data by choosen header
             LoaderUtil.add_v3('chart_content_body_div');
-            ChartPOJO.renderDynamicChart(ds_setting, chartViewModel.chart);
+            var i = ChartPOJO.renderDynamicChart(ds_setting, chartViewModel.chart);
+            chartViewModel.interval(i);
             ModalUtil.modal_close('popupModalPro');
         }
     </script>
