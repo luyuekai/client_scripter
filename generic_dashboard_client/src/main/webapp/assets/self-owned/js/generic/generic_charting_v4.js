@@ -105,8 +105,8 @@ var interval;      //Dynamic Datasource interval        考虑放在chart editor
 
 var ChartPOJO = ChartPOJO || {};
 ChartPOJO = {
-    pendingResizingEvent : [],
-    generate_default_chart: function (chart_div_id,theme) {
+    pendingResizingEvent: [],
+    generate_default_chart: function (chart_div_id, theme) {
         $('#' + chart_div_id).empty();
         var option_chart = {};
         // option_chart.color = ClonePOJO.deepClone(default_color);
@@ -116,7 +116,7 @@ ChartPOJO = {
         option_chart.legend = ClonePOJO.deepClone(default_legend);
         option_chart.legend.data.push([]);
         option_chart.series = [];
-        var chart = echarts.init(document.getElementById(chart_div_id),theme);
+        var chart = echarts.init(document.getElementById(chart_div_id), theme);
         chart.parent_div_id = chart_div_id;
         return ChartPOJO.reset_chart_option(chart, option_chart);
     },
@@ -126,22 +126,22 @@ ChartPOJO = {
         }
         chart.setOption(option);
         $(window).resize(function () {
-          var evt = {
-            chart : chart,
-            timeout : setTimeout(function () {
-                chart.resize();
-            }, 500)
-          };
-          var events = [];
-          $.each(ChartPOJO.pendingResizingEvent, function(i, e) {
-            if(e.chart === chart) {
-              clearTimeout(e.timeout);
-            } else {
-              events.push(e);
-            }
-          });
-          events.push(evt);
-          ChartPOJO.pendingResizingEvent = events;
+            var evt = {
+                chart: chart,
+                timeout: setTimeout(function () {
+                    chart.resize();
+                }, 500)
+            };
+            var events = [];
+            $.each(ChartPOJO.pendingResizingEvent, function (i, e) {
+                if (e.chart === chart) {
+                    clearTimeout(e.timeout);
+                } else {
+                    events.push(e);
+                }
+            });
+            events.push(evt);
+            ChartPOJO.pendingResizingEvent = events;
         });
         return chart;
     },
@@ -466,7 +466,7 @@ ChartPOJO = {
     serialize_chart_option: function (option) {
         return $.toJSON(option);
     },
-    dataSourceRenderDash: function (chart_type, origin_data, headerViewModel, chart) {
+    dataSourceRenderChart: function (chart_type, origin_data, headerViewModel, chart) {
         switch (chart_type) {
             case 'bar':
                 var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
@@ -528,77 +528,17 @@ ChartPOJO = {
             default:
                 break;
         }
-    },
-    dataSourceRenderChart: function (chart_type, origin_data, headerViewModel) {
-        switch (chart_type) {
-            case 'bar':
-                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
-                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'bar');
-                break;
-            case 'line':
-                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
-                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'line');
-                break;
-            case 'scatter':
-                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
-                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'scatter');
-                break;
-            case 'area':
-                var chartData = DataTransferPOJO.extractDataByHeader(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.reset_Axis(chartViewModel.chart, 'x', chartData.header);
-                chartViewModel.chart = Descartes_ChartPOJO.reset_series_data(chartViewModel.chart, chartData.result, 'area');
-                break;
-            case 'pie':
-                var chartData = DataTransferPOJO.extractDataByHeaderPie(origin_data, headerViewModel);
-                chartViewModel.chart = Pie_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.result);
-                chartViewModel.chart.setOption({
-                    legend: {
-                        orient: 'vertical',
-                        x: 'right',
-                        data: chartData.legend
-                    }
-                })
-                break;
-            case 'radar':
-                var chartData = DataTransferPOJO.extractDataByHeaderRadar(origin_data, headerViewModel);
-                chartViewModel.chart = Radar_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.result, chartData.header);
-                chartViewModel.chart.setOption({
-                    legend: {
-                        orient: 'vertical',
-                        x: 'right',
-                        data: chartData.legend
-                    }
-                })
-                break;
-            case 'parallel':
-                var chartData = DataTransferPOJO.extractDataByHeaderParallel(origin_data, headerViewModel);
-                chartViewModel.chart = ChartPOJO.generate_default_chart('main_chart');
-                chartViewModel.chart = Parallel_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.header);
-                chartViewModel.chart = ChartPOJO.addSeries(chartViewModel.chart, null, 'parallel', chartData.result);
-                break;
-            case 'themeRiver':
-                var chartData = DataTransferPOJO.extractDataByHeaderRiver(origin_data, headerViewModel);
-                chartViewModel.chart = River_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.result);
-                break;
-            case 'boxplot':
-                var chartData = DataTransferPOJO.extractDataByHeaderBoxplot(origin_data, headerViewModel);
-                console.log(chartData);
-                chartViewModel.chart = Boxplot_ChartPOJO.initialize_chart(chartViewModel.chart, chartData.result, chartData.header);
-                break;
-            default:
-                break;
-        }
-    },
+    },    
     renderDynamicChart: function (ds, chart) {
-        ds.ds = JSON.parse(ds.ds);
+        if (typeof ds.ds == 'string') {
+            ds.ds = JSON.parse(ds.ds);
+        }
         ChartPOJO.retrieveDataSource(chart, ds);
-        interval = setInterval(function () {
+        var interval = setInterval(function () {
             console.log('refresh chart');
             ChartPOJO.retrieveDataSource(chart, ds);
         }, 1000 * ds.refreshInterval);
+        return interval;
     },
     retrieveDataSource: function (chart, ds) {
         console.log("retrieveChartData");
@@ -621,7 +561,6 @@ ChartPOJO = {
 //            'queryInfo': $.toJSON(requestPOJO)
 //        };
         $.serverRequest(url, request_params, "successGetChartData", "failedGetChartData", "serverGetChartData", rest_mode, true, wrapper)
-//        $.serverRequest($.getServerRoot() + '/generic_charting_client/api/connection/query', data, "successGetChartData", "failedGetChartData", "serverGetChartData", 'POST', true, wrapper);
     }
 }
 
@@ -638,10 +577,34 @@ function failedGetChartData() {
 
 }
 function successGetChartData() {
+//    if (arguments && arguments[1]) {
+//        var server_data = arguments[1].response;
+//        var ds = arguments[1].addtion.ds;
+//        var tableData;
+//        console.log(arguments[1]);
+//        if (ds.ds.mode == 'database') {
+//            var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].response.result[0]);
+//            if (arguments[1].addtion.ds.isTransferT) {
+//                rawData = DataTransferPOJO.transferT(rawData.result);
+//                //做数据转置
+//            }
+//            tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
+//        } else if (ds.ds.mode == 'api') {
+//            var tmp = 'server_data.' + ds.ds.attr.json_rule
+//            server_data = eval(tmp);
+//            tableData = DataTransferPOJO.serverJsonData2TableData(server_data);
+//        }
+//        ChartPOJO.reset_chart_type(arguments[1].addtion.chart, arguments[1].addtion.ds.chartType);
+//        ChartPOJO.removeAllSeries(arguments[1].addtion.chart);
+//        ChartPOJO.dataSourceRenderChart(arguments[1].addtion.ds.chartType, tableData.result, JSON.parse(arguments[1].addtion.ds.header))
+//        LoaderUtil.remove_v3('chart_content_body_div')
+//    }
+
     if (arguments && arguments[1]) {
         var server_data = arguments[1].response;
         var ds = arguments[1].addtion.ds;
         var tableData;
+        var ds_header = JSON.parse(arguments[1].addtion.ds.header);
         console.log(arguments[1]);
         if (ds.ds.mode == 'database') {
             var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].response.result[0]);
@@ -650,6 +613,24 @@ function successGetChartData() {
                 //做数据转置
             }
             tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
+            var header = tableData.header;
+            var old_header = []
+
+            for (var i in ds_header) {
+                old_header.push(ds_header[i].data)
+            }
+            for (var i in header) {
+                if (old_header.indexOf(header[i]) < 0) {
+                    var headerView = {
+                        "data": header[i],
+                        "index": i,
+                        "isChecked": true,
+                        "isDisplay": true,
+                        "isLegend": false
+                    };
+                    ds_header.push(headerView);
+                }
+            }
         } else if (ds.ds.mode == 'api') {
             var tmp = 'server_data.' + ds.ds.attr.json_rule
             server_data = eval(tmp);
@@ -657,7 +638,7 @@ function successGetChartData() {
         }
         ChartPOJO.reset_chart_type(arguments[1].addtion.chart, arguments[1].addtion.ds.chartType);
         ChartPOJO.removeAllSeries(arguments[1].addtion.chart);
-        ChartPOJO.dataSourceRenderChart(arguments[1].addtion.ds.chartType, tableData.result, JSON.parse(arguments[1].addtion.ds.header))
+        ChartPOJO.dataSourceRenderChart(arguments[1].addtion.ds.chartType, tableData.result, ds_header, arguments[1].addtion.chart)
         LoaderUtil.remove_v3('chart_content_body_div')
     }
 }
@@ -1282,40 +1263,6 @@ Parallel_ChartPOJO = {
 
 
 
-var schema = [{
-        name: 'date',
-        index: 0,
-        text: '日期'
-    }, {
-        name: 'AQIindex',
-        index: 1,
-        text: 'AQI'
-    }, {
-        name: 'PM25',
-        index: 2,
-        text: 'PM2.5'
-    }, {
-        name: 'PM10',
-        index: 3,
-        text: 'PM10'
-    }, {
-        name: 'CO',
-        index: 4,
-        text: ' CO'
-    }, {
-        name: 'NO2',
-        index: 5,
-        text: 'NO2'
-    }, {
-        name: 'SO2',
-        index: 6,
-        text: 'SO2'
-    }, {
-        name: '等级',
-        index: 7,
-        text: '等级'
-    }];
-
 var Cloud_ChartPOJO = Cloud_ChartPOJO || {};
 Cloud_ChartPOJO = {
     initialize_chart: function (chart) {
@@ -1407,592 +1354,3 @@ Descartes_ChartPOJO = {
 }
 
 
-
-
-
-
-
-//有关dynamic dashboard
-
-function renderDynamicDash(ds, chart, id) {
-    retrieveDataSourceDash(chart, ds);
-    var interval = setInterval(function () {
-        console.log('refresh chart');
-        retrieveDataSourceDash(chart, ds);
-    }, 1000 * ds.refreshInterval)
-    vm.businessPOJO().refreshIntervalArray[id] = interval;
-}
-
-function retrieveDataSourceDash(chart, ds) {
-    console.log("retrieveChartData");
-    var url = ds.ds.attr.ds;
-    var rest_mode = ds.ds.attr.rest_mode;
-    var request_params = ds.ds.attr.request_params || null;
-    if (request_params) {
-        request_params = JSON.parse(request_params);
-    }
-
-//        var requestPOJO = {
-//            "dbName": ds.ds,
-//            "sql": ds.sql
-//        };
-    var wrapper = {
-        'chart': chart,
-        'ds': ds
-    };
-    $.serverRequest(url, request_params, "successGetDashData", "failedGetDashData", "serverGetDashData", rest_mode, true, wrapper);
-}
-
-$.subscribe("successGetDashData", successGetDashData);
-
-
-// $.subscribe("failedGetChartData", failedGetChartData);
-// $.subscribe("serverGetChartData", serverGetChartData);
-
-function successGetDashData() {
-    if (arguments && arguments[1]) {
-        var server_data = arguments[1].response;
-        var ds = arguments[1].addtion.ds;
-        var tableData;
-        var ds_header = JSON.parse(arguments[1].addtion.ds.header);
-        console.log(arguments[1]);
-        if (ds.ds.mode == 'database') {
-            var rawData = DataTransferPOJO.transferHiveDataRaw(arguments[1].response.result[0]);
-            if (arguments[1].addtion.ds.isTransferT) {
-                rawData = DataTransferPOJO.transferT(rawData.result);
-                //做数据转置
-            }
-            tableData = DataTransferPOJO.divideHeaderFromData(rawData.result);
-            var header = tableData.header;
-            var old_header = []
-
-            for (var i in ds_header) {
-                old_header.push(ds_header[i].data)
-            }
-            for (var i in header) {
-                if (old_header.indexOf(header[i]) < 0) {
-                    var headerView = {
-                        "data": header[i],
-                        "index": i,
-                        "isChecked": true,
-                        "isDisplay": true,
-                        "isLegend": false
-                    };
-                    ds_header.push(headerView);
-                }
-            }
-        } else if (ds.ds.mode == 'api') {
-            var tmp = 'server_data.' + ds.ds.attr.json_rule
-            server_data = eval(tmp);
-            tableData = DataTransferPOJO.serverJsonData2TableData(server_data);
-        }
-        ChartPOJO.reset_chart_type(arguments[1].addtion.chart, arguments[1].addtion.ds.chartType);
-        ChartPOJO.removeAllSeries(arguments[1].addtion.chart);
-        ChartPOJO.dataSourceRenderDash(arguments[1].addtion.ds.chartType, tableData.result, ds_header, arguments[1].addtion.chart)
-//        LoaderUtil.remove_v3('chart_content_body_div')
-    }
-
-}
-
-function Theme() {
-    var black = {
-        "color": [
-            "#fc97af",
-            "#87f7cf",
-            "#f7f494",
-            "#72ccff",
-            "#f7c5a0",
-            "#d4a4eb",
-            "#d2f5a6",
-            "#76f2f2"
-        ],
-        "backgroundColor": "rgba(41,52,65,1)",
-        "textStyle": {},
-        "title": {
-            "textStyle": {
-                "color": "#ffffff"
-            },
-            "subtextStyle": {
-                "color": "#dddddd"
-            }
-        },
-        "line": {
-            "itemStyle": {
-                "normal": {
-                    "borderWidth": "4"
-                }
-            },
-            "lineStyle": {
-                "normal": {
-                    "width": "3"
-                }
-            },
-            "symbolSize": "0",
-            "symbol": "circle",
-            "smooth": true
-        },
-        "radar": {
-            "itemStyle": {
-                "normal": {
-                    "borderWidth": "4"
-                }
-            },
-            "lineStyle": {
-                "normal": {
-                    "width": "3"
-                }
-            },
-            "symbolSize": "0",
-            "symbol": "circle",
-            "smooth": true
-        },
-        "bar": {
-            "itemStyle": {
-                "normal": {
-                    "barBorderWidth": 0,
-                    "barBorderColor": "#ccc"
-                },
-                "emphasis": {
-                    "barBorderWidth": 0,
-                    "barBorderColor": "#ccc"
-                }
-            }
-        },
-        "pie": {
-            "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            }
-        },
-        "scatter": {
-            "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            }
-        },
-        "boxplot": {
-            "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            }
-        },
-        "parallel": {
-            "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            }
-        },
-        "sankey": {
-            "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            }
-        },
-        "funnel": {
-            "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            }
-        },
-        "gauge": {
-            "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            }
-        },
-        "candlestick": {
-            "itemStyle": {
-                "normal": {
-                    "color": "#fc97af",
-                    "color0": "transparent",
-                    "borderColor": "#fc97af",
-                    "borderColor0": "#87f7cf",
-                    "borderWidth": "2"
-                }
-            }
-        },
-        "graph": {
-            "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            },
-            "lineStyle": {
-                "normal": {
-                    "width": "1",
-                    "color": "#ffffff"
-                }
-            },
-            "symbolSize": "0",
-            "symbol": "circle",
-            "smooth": true,
-            "color": [
-                "#fc97af",
-                "#87f7cf",
-                "#f7f494",
-                "#72ccff",
-                "#f7c5a0",
-                "#d4a4eb",
-                "#d2f5a6",
-                "#76f2f2"
-            ],
-            "label": {
-                "normal": {
-                    "textStyle": {
-                        "color": "#293441"
-                    }
-                }
-            }
-        },
-        "map": {
-            "itemStyle": {
-                "normal": {
-                    "areaColor": "#f3f3f3",
-                    "borderColor": "#999999",
-                    "borderWidth": 0.5
-                },
-                "emphasis": {
-                    "areaColor": "rgba(255,178,72,1)",
-                    "borderColor": "#eb8146",
-                    "borderWidth": 1
-                }
-            },
-            "label": {
-                "normal": {
-                    "textStyle": {
-                        "color": "#893448"
-                    }
-                },
-                "emphasis": {
-                    "textStyle": {
-                        "color": "rgb(137,52,72)"
-                    }
-                }
-            }
-        },
-        "geo": {
-            "itemStyle": {
-                "normal": {
-                    "areaColor": "#f3f3f3",
-                    "borderColor": "#999999",
-                    "borderWidth": 0.5
-                },
-                "emphasis": {
-                    "areaColor": "rgba(255,178,72,1)",
-                    "borderColor": "#eb8146",
-                    "borderWidth": 1
-                }
-            },
-            "label": {
-                "normal": {
-                    "textStyle": {
-                        "color": "#893448"
-                    }
-                },
-                "emphasis": {
-                    "textStyle": {
-                        "color": "rgb(137,52,72)"
-                    }
-                }
-            }
-        },
-        "categoryAxis": {
-            "axisLine": {
-                "show": true,
-                "lineStyle": {
-                    "color": "#666666"
-                }
-            },
-            "axisTick": {
-                "show": false,
-                "lineStyle": {
-                    "color": "#333"
-                }
-            },
-            "axisLabel": {
-                "show": true,
-                "textStyle": {
-                    "color": "#aaaaaa"
-                }
-            },
-            "splitLine": {
-                "show": false,
-                "lineStyle": {
-                    "color": [
-                        "#e6e6e6"
-                    ]
-                }
-            },
-            "splitArea": {
-                "show": false,
-                "areaStyle": {
-                    "color": [
-                        "rgba(250,250,250,0.05)",
-                        "rgba(200,200,200,0.02)"
-                    ]
-                }
-            }
-        },
-        "valueAxis": {
-            "axisLine": {
-                "show": true,
-                "lineStyle": {
-                    "color": "#666666"
-                }
-            },
-            "axisTick": {
-                "show": false,
-                "lineStyle": {
-                    "color": "#333"
-                }
-            },
-            "axisLabel": {
-                "show": true,
-                "textStyle": {
-                    "color": "#aaaaaa"
-                }
-            },
-            "splitLine": {
-                "show": false,
-                "lineStyle": {
-                    "color": [
-                        "#e6e6e6"
-                    ]
-                }
-            },
-            "splitArea": {
-                "show": false,
-                "areaStyle": {
-                    "color": [
-                        "rgba(250,250,250,0.05)",
-                        "rgba(200,200,200,0.02)"
-                    ]
-                }
-            }
-        },
-        "logAxis": {
-            "axisLine": {
-                "show": true,
-                "lineStyle": {
-                    "color": "#666666"
-                }
-            },
-            "axisTick": {
-                "show": false,
-                "lineStyle": {
-                    "color": "#333"
-                }
-            },
-            "axisLabel": {
-                "show": true,
-                "textStyle": {
-                    "color": "#aaaaaa"
-                }
-            },
-            "splitLine": {
-                "show": false,
-                "lineStyle": {
-                    "color": [
-                        "#e6e6e6"
-                    ]
-                }
-            },
-            "splitArea": {
-                "show": false,
-                "areaStyle": {
-                    "color": [
-                        "rgba(250,250,250,0.05)",
-                        "rgba(200,200,200,0.02)"
-                    ]
-                }
-            }
-        },
-        "timeAxis": {
-            "axisLine": {
-                "show": true,
-                "lineStyle": {
-                    "color": "#666666"
-                }
-            },
-            "axisTick": {
-                "show": false,
-                "lineStyle": {
-                    "color": "#333"
-                }
-            },
-            "axisLabel": {
-                "show": true,
-                "textStyle": {
-                    "color": "#aaaaaa"
-                }
-            },
-            "splitLine": {
-                "show": false,
-                "lineStyle": {
-                    "color": [
-                        "#e6e6e6"
-                    ]
-                }
-            },
-            "splitArea": {
-                "show": false,
-                "areaStyle": {
-                    "color": [
-                        "rgba(250,250,250,0.05)",
-                        "rgba(200,200,200,0.02)"
-                    ]
-                }
-            }
-        },
-        "toolbox": {
-            "iconStyle": {
-                "normal": {
-                    "borderColor": "#999999"
-                },
-                "emphasis": {
-                    "borderColor": "#666666"
-                }
-            }
-        },
-        "legend": {
-            "textStyle": {
-                "color": "#999999"
-            }
-        },
-        "tooltip": {
-            "axisPointer": {
-                "lineStyle": {
-                    "color": "#cccccc",
-                    "width": 1
-                },
-                "crossStyle": {
-                    "color": "#cccccc",
-                    "width": 1
-                }
-            }
-        },
-        "timeline": {
-            "lineStyle": {
-                "color": "#87f7cf",
-                "width": 1
-            },
-            "itemStyle": {
-                "normal": {
-                    "color": "#87f7cf",
-                    "borderWidth": 1
-                },
-                "emphasis": {
-                    "color": "#f7f494"
-                }
-            },
-            "controlStyle": {
-                "normal": {
-                    "color": "#87f7cf",
-                    "borderColor": "#87f7cf",
-                    "borderWidth": 0.5
-                },
-                "emphasis": {
-                    "color": "#87f7cf",
-                    "borderColor": "#87f7cf",
-                    "borderWidth": 0.5
-                }
-            },
-            "checkpointStyle": {
-                "color": "#fc97af",
-                "borderColor": "rgba(252,151,175,0.3)"
-            },
-            "label": {
-                "normal": {
-                    "textStyle": {
-                        "color": "#87f7cf"
-                    }
-                },
-                "emphasis": {
-                    "textStyle": {
-                        "color": "#87f7cf"
-                    }
-                }
-            }
-        },
-        "visualMap": {
-            "color": [
-                "#fc97af",
-                "#87f7cf"
-            ]
-        },
-        "dataZoom": {
-            "backgroundColor": "rgba(255,255,255,0)",
-            "dataBackgroundColor": "rgba(114,204,255,1)",
-            "fillerColor": "rgba(114,204,255,0.2)",
-            "handleColor": "#72ccff",
-            "handleSize": "100%",
-            "textStyle": {
-                "color": "#333333"
-            }
-        },
-        "markPoint": {
-            "label": {
-                "normal": {
-                    "textStyle": {
-                        "color": "#293441"
-                    }
-                },
-                "emphasis": {
-                    "textStyle": {
-                        "color": "#293441"
-                    }
-                }
-            }
-        }
-    }
-//    var option = chartViewModel.chart.getOption()
-//    option.title[0].textStyle.color = black.title.textStyle.color;
-//    option.title[0].subtextStyle.color = black.title.subtextStyle.color;
-//    option.color = black.color;
-//    option.backgroundColor = black.backgroundColor;
-//    chartViewModel.chart.setOption(option)
-    echarts.registerTheme('black', black);
-}

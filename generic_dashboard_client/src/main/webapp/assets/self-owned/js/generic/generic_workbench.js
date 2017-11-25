@@ -227,7 +227,8 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme, elem
             option.ds_setting.ds = JSON.parse(option.ds_setting.ds);
         }
 
-        renderDynamicDash(option.ds_setting, chart, $draggableTemplateContext_id)
+        var interval = ChartPOJO.renderDynamicChart(option.ds_setting, chart);
+        vm.businessPOJO().refreshIntervalArray[$draggableTemplateContext_id] = interval;
         //        var interval = setInterval(retrieveDataSourceDash(chart, ),1000 * refresh);    
     }
     if (option.dataZoom) {
