@@ -149,6 +149,9 @@ ChartPOJO = {
         if (!chart || !chart_type) {
             return null;
         }
+        if (chart_type == 'geo') {
+            return Geo_ChartPOJO.initialize_chart(chart, "china");
+        }
         if (chart_type == 'grid_heatmap') {
             return HeatMap_Grid_ChartPOJO.initialize_chart(chart);
         }
@@ -528,7 +531,7 @@ ChartPOJO = {
             default:
                 break;
         }
-    },    
+    },
     renderDynamicChart: function (ds, chart) {
         if (typeof ds.ds == 'string') {
             ds.ds = JSON.parse(ds.ds);
@@ -643,6 +646,158 @@ function successGetChartData() {
     }
 }
 
+
+var Geo_ChartPOJO = Geo_ChartPOJO || {};
+Geo_ChartPOJO = {
+    default_tooltip_map: {
+        "show": true,
+        "padding": 0,
+        "backgroundColor": "rgba(25,255,255,0.5)"
+    },
+    default_geo: {
+        show: true,
+        map: 'china',
+        zoom: 1.2,
+        label: {
+            normal: {
+                show: false
+            },
+            emphasis: {
+                show: false,
+            }
+        },
+        roam: false,
+        itemStyle: {
+            normal: {
+                "areaColor": "#D3D3D3",
+                "borderWidth": 0.5,
+                "borderColor": "#1f5c94",
+            },
+            emphasis: {
+                "areaColor": "#74c0ed",
+                "label": {
+                    "show": true
+                }
+            }
+        }
+    },
+    default_series_map: [
+        {
+            "name": "中国",
+            "type": "map",
+            "map": "china",
+            geoIndex: 0,
+            "roam": false,
+            "selectedMode": false,
+            "data": []
+        },
+        {
+            name: '点',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            symbol: 'pin',
+            symbolSize: 80,
+            label: {
+                normal: {
+                    show: true,
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: 9,
+                    }
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#F62157', //标志颜色
+                }
+            },
+            zlevel: 6,
+            data: []
+        }
+    ],
+    initialize_chart: function (chart, mapType, data, pin_data) {
+        if (!chart) {
+            return null;
+        }
+        var chart_parent_div_id = chart.parent_div_id;
+        var option = ClonePOJO.deepClone(chart.getOption());
+        var uploadedDataURL = "./assets/self-owned/data/geo/" + mapType + ".json";
+        $.ajaxSettings.async = false;
+        $.getJSON(uploadedDataURL, function (geoJson) {
+            echarts.registerMap(mapType, geoJson);
+            var tooltip = ClonePOJO.deepClone(Geo_ChartPOJO.default_tooltip_map);
+            var geo = ClonePOJO.deepClone(Geo_ChartPOJO.default_geo);
+            geo.map = mapType;
+            var series = ClonePOJO.deepClone(Geo_ChartPOJO.default_series_map);
+            series.name = mapType;
+            series.map = mapType;
+            if (data) {
+                data.forEach(function (element) {
+                    series[0].data.push({
+                        "value": element.value,
+                        "name": element.name,
+                        "itemStyle": {
+                            "normal": {
+                                "color": element.color,
+                                "label": {
+                                    "show": true,
+                                    "textStyle": {
+                                        "color": "#000",
+                                        "fontSize": 12
+                                    }
+                                }
+                            }
+                        }
+                    })
+                })
+            }
+            if (pin_data) {
+                pin_data.forEach(function (element) {
+                    element.location.push(element.value)
+                    series[1].data.push({
+                        "name": element.name,
+                        "value": element.location
+                    })
+                })
+            }
+            option.tooltip = tooltip;
+            option.geo = geo;
+            option.series = series;
+        })
+        $.ajaxSettings.async = true;
+        return ChartPOJO.reset_chart_option(chart, option);
+    },
+    add_area_data: function (chart, name, value, color) {
+        var option = ClonePOJO.deepClone(chart.getOption());
+        option.series[0].data.forEach(function (element) {
+            if (element.name == name) {
+                element.value = value;
+                element.itemStyle = {
+                    "normal": {
+                        "color": color || "#39fada",
+                        "label": {
+                            "show": true,
+                            "textStyle": {
+                                "color": "#000",
+                                "fontSize": 12
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        return ChartPOJO.reset_chart_option(chart, option);
+    },
+    add_pin_data: function (chart, name, value, location) {
+        var option = ClonePOJO.deepClone(chart.getOption());
+        location.push(value);
+        option.series[1].data.push({
+            "name": name,
+            "value": location
+        })
+        return ChartPOJO.reset_chart_option(chart, option);
+    }
+}
 
 
 
