@@ -174,7 +174,7 @@ function successListener_dynamic_table() {
             var tableModel = new ThinListViewModel();
             tableModel.buildData(tableData.result);
             tableModel.columnNames(tableData.header);
-            tableModel.isDisplayPager(true);
+            tableModel.isDisplayPager(false);
             tableModel.buildView();
             tableModel.pageMaxSize(matrix_dynamic_table.tableModel().pageMaxSize());
 //            if (matrix_dynamic_table.header) {
@@ -197,7 +197,7 @@ function successListener_dynamic_table() {
 
             tableModel.buildData(data);
             tableModel.columnNames(tableData.header);
-            tableModel.isDisplayPager(true);
+            tableModel.isDisplayPager(false);
             tableModel.buildView();
             tableModel.pageMaxSize(matrix_dynamic_table.tableModel().pageMaxSize());
             if (matrix_dynamic_table.header) {

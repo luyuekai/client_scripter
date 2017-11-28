@@ -11,7 +11,7 @@ $.subscribe("get_user_detail_chain_finished", initialize);
 
 function initialize() {
     if ($.hasUrlParam('token')) {
-        
+
         SharePOJO.environmentCheck();
     } else {
         rerender_children_dom('bar')
@@ -151,7 +151,7 @@ function successListener() {
                 case 'boxplot':
                     break;
                 case 'pie':
-                    pieViewModel.series (JSON.stringify(option.series[0].data))
+                    pieViewModel.series(JSON.stringify(option.series[0].data))
                     break;
                 case 'radar':
                     if (typeof radarViewModel != "undefined") {
@@ -221,6 +221,15 @@ function successListener() {
                         return colors[parseInt(Math.random() * 10)];
                     };
                     option.series = a;
+                    break;
+                case 'map':
+                    var a = option.series;
+                    var uploadedDataURL = "./assets/self-owned/data/geo/" + a[0].map + ".json";
+                    $.ajaxSettings.async = false;
+                    $.getJSON(uploadedDataURL, function (geoJson) {
+                        echarts.registerMap(a[0].map, geoJson);
+                    })
+                    $.ajaxSettings.async = true;
                     break;
                 case 'graph':
                     var layout = option.series[0].layout;
