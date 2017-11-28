@@ -185,7 +185,7 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme, elem
     y = y || 0;
     x_width = x_width || 6;
     y_height = y_height || 6;
-    theme = theme||'white';
+    theme = theme || 'white';
     var grid = $('.grid-stack').data('gridstack');
     //step 2: clone draggableTemplate, and remove attribute of id
     var template = $('#draggableTemplate').clone().removeAttr('id');
@@ -244,6 +244,8 @@ var addWidget_chart = function (option, x, y, x_width, y_height, id, theme, elem
 
     widget.attr('id', $draggableTemplateContext_id);
     var element_prototype;
+
+    //判断是否拼接
     if (element_attr) {
         element_attr.theme = theme;
         element_attr.data = $.toJSON(option);
@@ -329,6 +331,8 @@ var addWidget_table = function (json, x, y, x_width, y_height, id, theme) {
         "widget_height": 6,
         "isChart": false,
         "isClick": false,
+        "isLeft": false,
+        "isRight": false,
         "isUp": false,
         "isDown": false,
         "data": $.toJSON(json),
@@ -338,14 +342,30 @@ var addWidget_table = function (json, x, y, x_width, y_height, id, theme) {
         widget_id: widget.attr('id'),
         widget_element: element_prototype
     }
-    if (theme == 'black') {
-        $('#dragContainer_div').find('.grid-stack-item-content').css({
-            'background-color': 'rgba(0,0,0,1)'
-        });
-        $('#dragContainer_div').find('.card').css({
-            'background-color': 'rgba(0,0,0,1)'
-        });
-    }
+    setTimeout(function () {
+        if (theme == 'black') {
+            $('#dragContainer_div').find('.grid-stack-item-content').css({
+                'background-color': 'rgba(0,0,0,1)'
+            });
+            $('#dragContainer_div').find('.card').css({
+                'background-color': 'rgba(0,0,0,1)'
+            });
+            $('#table_' + $draggableTemplateContext_id).find('.table_div_class').css({
+                'background-color': 'rgba(255,255,255,0.15)'
+            });
+        } else {
+            $('#dragContainer_div').find('.grid-stack-item-content').css({
+                'background-color': 'rgb(211, 211, 211)'
+            });
+            $('#dragContainer_div').find('.card').css({
+                'background-color': 'rgb(211, 211, 211)'
+            });
+            $('#table_' + $draggableTemplateContext_id).find('.table_div_class').css({
+                'background-color': 'rgba(255,255,255,1)'
+            });
+        }
+    }, 500);
+
 
     WorkbenchCache.array_elements.push(widget_prototype_element);
 
@@ -452,7 +472,7 @@ var initialize_workbench = function () {
             }
             var widget_element;
             WorkbenchCache.array_elements.forEach(function (e) {
-                if (e.widget_id == $draggableTemplateContext_id) {
+                if (e.widget_id == $draggableTemplateContext_id || e.widget_id == 'dashtable_' + $draggableTemplateContext_id) {
                     widget_element = e.widget_element
                 }
             });
