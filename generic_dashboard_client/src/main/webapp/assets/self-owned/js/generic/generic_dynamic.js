@@ -123,15 +123,24 @@ function DASHBOARD_DYNAMIC_TABLE_ENV_SETUP() {
 
                 if (ds) {
                     var url = ds.ds;
+                    var query;
                     // self.header = self.ds().header;
-                    var pageMaxSize = ds.pageMaxSize || 10;
-                    self.tableModel().pageMaxSize(pageMaxSize);
+
+
                     self.header = self.tableModel().json2header(ds.header_json);
                     self.source_data = ds.source_data;
                     var rest_mode = ds.rest_mode;
                     var request_params = ds.request_params || null;
                     if (request_params) {
                         request_params = JSON.parse(request_params);
+                        if (ds.source_data == 'database') {
+                            query = $.parseJSON(request_params.queryInfo);
+                            var pageMaxSize = ds.pageMaxSize || 10;
+                        } else {
+                            query = $.parseJSON(request_params.queryJson);
+                            var pageMaxSize = query.pageMaxSize || 10;
+                        }
+                        self.tableModel().pageMaxSize(pageMaxSize);
                     }
                     $.serverRequest(url, request_params, "SUCCESS_LISTENER_DYNAMIC_TABLE", "FAILED_LISTENER_DYNAMIC_TABLE", "SERVER_FAILED_LISTENER_DYNAMIC_TABLE", rest_mode, true, self);
                 }
@@ -176,7 +185,7 @@ function successListener_dynamic_table() {
             tableModel.columnNames(tableData.header);
             tableModel.isDisplayPager(false);
             tableModel.buildView();
-            tableModel.pageMaxSize(matrix_dynamic_table.tableModel().pageMaxSize());
+            tableModel.pageMaxSize(tableData.result.length);//
 //            if (matrix_dynamic_table.header) {
 //                tableModel.headerViewData(matrix_dynamic_table.header);
 //            }
@@ -199,7 +208,7 @@ function successListener_dynamic_table() {
             tableModel.columnNames(tableData.header);
             tableModel.isDisplayPager(false);
             tableModel.buildView();
-            tableModel.pageMaxSize(matrix_dynamic_table.tableModel().pageMaxSize());
+            tableModel.pageMaxSize(matrix_dynamic_table.tableModel().pageMaxSize());//
             if (matrix_dynamic_table.header) {
                 tableModel.headerViewData(matrix_dynamic_table.header);
             }

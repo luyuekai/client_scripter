@@ -51,37 +51,42 @@ function DashboardViewModel(parent) {
         self.theme(result.theme)
         if (result.data) {
             cleanWidget();
-            $.each(result.data, function (index, value) {
-                if (value.widget_id) {
-                    var widget = value.widget_element;
-                    if (widget.isChart) {
-                        var content = $.parseJSON(widget.data);
-                        var theme = e || widget.theme;
-                        if (theme) {
-                            registerTheme(theme, content);
-                        } else {
-                            theme = '';
-                        }
-                        var chart = addWidget_chart(content, widget.widget_x, widget.widget_y, widget.widget_width, widget.widget_height, widget.id, theme, widget);
-                        var height = $('#' + value.widget_id).height() / 60;
-                        var height_cardbody = Math.round(height) * 60;
-                        var height_cont = height_cardbody - 40; //- 80;
-                        height_cont = resize_setting(value.widget_id, height_cont);
-                        $('#' + value.widget_id).find('.card-body').css('height', height_cardbody);
-                        setTimeout(function () {
-                            if (value.isChart) {
-                                $('#' + value.widget_id).find('.draggableTemplateContext').height(height_cont);
-                                chart.resize();
+            setTimeout(function () {
+                $.each(result.data, function (index, value) {
+                    if (value.widget_id) {
+                        var widget = value.widget_element;
+                        if (widget.isChart) {
+                            var content = $.parseJSON(widget.data);
+                            var theme = e || widget.theme;
+                            if (theme) {
+                                registerTheme(theme, content);
+                            } else {
+                                theme = '';
                             }
-                        }, 500);
-                    } else {
-                        var cont = deserialize_dom(widget.data);
-                        add_content_div(cont, widget.widget_x, widget.widget_y, widget.widget_width, widget.widget_height);
-                    }
+                            var chart = addWidget_chart(content, widget.widget_x, widget.widget_y, widget.widget_width, widget.widget_height, widget.id, theme, widget);
+                            var height = $('#' + value.widget_id).height() / 60;
+                            var height_cardbody = Math.round(height) * 60;
+                            var height_cont = height_cardbody - 40; //- 80;
+                            height_cont = resize_setting(value.widget_id, height_cont);
+                            $('#' + value.widget_id).find('.card-body').css('height', height_cardbody);
+                            setTimeout(function () {
+                                if (value.isChart) {
+                                    $('#' + value.widget_id).find('.draggableTemplateContext').height(height_cont);
+                                    chart.resize();
+                                }
+                            }, 500);
+                        } else {
+                            var cont = deserialize_dom(widget.data);
+                            var theme = e || widget.theme;
+                            addWidget_table(cont[0].data, widget.widget_x, widget.widget_y, widget.widget_width, widget.widget_height, widget.id, theme);
+                        }
 
-                }
-            });
-            refresh_workbench();
+                    }
+                });
+                refresh_workbench();
+            }, 500)
+
+
         }
     };
 
