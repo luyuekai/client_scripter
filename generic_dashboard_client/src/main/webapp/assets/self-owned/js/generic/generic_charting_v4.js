@@ -341,6 +341,9 @@ ChartPOJO = {
         var tmp_legends = [];
         option.series = tmp_series;
         option.legend[0].data = tmp_legends;
+        if(option.dataZoom){
+            delete option.dataZoom;
+        }
 
         return ChartPOJO.reset_chart_option(chart, option, true);
     },
