@@ -457,6 +457,10 @@ var initialize_workbench = function () {
 
         var $draggableTemplateContext = $(element).find('.draggableTemplateContext');
         var $draggableTemplateContext_id = $draggableTemplateContext.attr('id');
+        var element_id = $(element).attr('id');
+        if (element_id.indexOf('dashtable') >= 0) {
+            $draggableTemplateContext_id = element_id;
+        } 
         var $draggableTemplateContext_chart = $draggableTemplateContext.attr('chart');
         console.log($draggableTemplateContext_id);
 

@@ -515,7 +515,10 @@ function registerTheme(theme, option) {
         option.color = ["#893448", "#d95850", "#eb8146", "#ffb248", "#f2d643", "#ebdba4"];
         option.title[0].textStyle.color = "#ffffff";
         option.title[0].subtextStyle.color = "#dddddd";
-        option.legend[0].textStyle.color = '#999999';
+        if (option.legend[0]) {
+            option.legend[0].textStyle.color = '#999999';
+        }
+
         option.backgroundColor = 'rgba(255,255,255,0.15)';//255
         if (option.dataZoom && option.dataZoom.length > 0) {
             option.dataZoom[0].backgroundColor = "rgba(255,255,255,0)";
@@ -556,7 +559,10 @@ function registerTheme(theme, option) {
         option.backgroundColor = 'rgba(255,255,255,1)';
         option.title[0].textStyle.color = "#333";
         option.title[0].subtextStyle.color = "#aaa";
-        option.legend[0].textStyle.color = "#333";
+        if (option.legend[0]) {
+            option.legend[0].textStyle.color = "#333";
+        }
+
         if (option.dataZoom && option.dataZoom.length > 0) {
             option.dataZoom[0].backgroundColor = "rgba(47,69,84,0)";
             option.dataZoom[0].dataBackgroundColor = "rgba(47,69,84,0.3)";
